@@ -1,0 +1,68 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block title %}Ultras Lions – FC Fleury 91 - Page Admin{% endblock %}
+
+{% block content %}
+
+<h1 class="admin-title">🔥 Ultras Lions – Dashboard</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>Articles</h3>
+        <p class="stat-number">{{ stats.posts }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Événements</h3>
+        <p class="stat-number">{{ stats.events }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Galeries</h3>
+        <p class="stat-number">{{ stats.galleries }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Médias</h3>
+        <p class="stat-number">{{ stats.media }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Visites</h3>
+        <p class="stat-number">{{ stats.visits }}</p>
+    </div>
+</div>
+
+<hr class="divider">
+
+<h2 class="section-title">📈 Évolution des articles</h2>
+
+<canvas id="postsChart"
+        height="80"
+        data-labels='{{ chartData|map(d => d.month)|json_encode }}'
+        data-values='{{ chartData|map(d => d.total)|json_encode }}'>
+</canvas>
+
+<hr class="divider">
+
+<h2 class="section-title">📰 Derniers articles publiés</h2>
+
+<div class="latest-posts">
+    {% for post in lastPosts %}
+        <div class="latest-post-card">
+            <h4>{{ post.title }}</h4>
+            <p class="small">{{ post.createdAt|date('d/m/Y') }}</p>
+        </div>
+    {% else %}
+        <p>Aucun article pour le moment.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ asset('assets/js/dashboard.js') }}" defer></script>
+{% endblock %}

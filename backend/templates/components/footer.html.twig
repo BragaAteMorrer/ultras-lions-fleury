@@ -1,0 +1,34 @@
+<footer class="ultra-footer">
+
+    <div class="footer-band"></div>
+
+    <div class="container footer-content">
+
+        <div class="footer-left">
+            <img 
+                src="{{ asset('assets/img/logo/Logo Texte.png') }}" 
+                alt="Ultras Lions" 
+                class="footer-logo-ultra"
+            >
+            <p class="footer-text">Tribune, drapeaux, fumigènes, chants : la ville est rouge et noire.</p>
+        </div>
+
+        <div class="footer-right">
+            <span class="footer-follow">Suivez-nous :</span>
+            <div class="footer-socials">
+                <a href="#" aria-label="Instagram">IG</a>
+                <a href="#" aria-label="Twitter">X</a>
+                <a href="#" aria-label="Facebook">FB</a>
+            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_admin_dashboard_index') }}" class="footer-admin-link">Espace Admin</a>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © {{ "now"|date("Y") }} Ultras Lions — Site des Ultras FC Fleury 91.
+    </div>
+
+</footer>

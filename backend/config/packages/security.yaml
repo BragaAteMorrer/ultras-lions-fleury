@@ -1,0 +1,44 @@
+security:
+    password_hashers:
+        App\Entity\User:
+            algorithm: auto
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email   # login par l'email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            lazy: true
+            provider: app_user_provider
+
+            form_login:
+                login_path: app_login
+                check_path: app_login
+
+            logout:
+                path: app_logout
+                target: /
+
+            # nécessaire pour se souvenir de la session
+            remember_me:
+                secret: '%kernel.secret%'
+
+    access_control:
+        # Admin uniquement
+        - { path: ^/admin, roles: ROLE_ADMIN }
+
+        # Pages utilisateur connectées
+        - { path: ^/profile, roles: ROLE_USER }
+
+        # Page d'inscription accessible si pas connecté
+        - { path: ^/register, roles: PUBLIC_ACCESS }
+
+        # Page de login accessible si pas connecté
+        - { path: ^/login, roles: PUBLIC_ACCESS }

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Le groupe – Ultras Lions{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Le groupe</h1>
+        <p class="hero-subtitle">Identité, valeurs, histoire, tribune</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+
+        <div class="group-content">
+            {{ group.description|raw }}
+        </div>
+
+        {% if group.banner %}
+            <div style="margin-top:2rem;">
+                <img class="group-banner"
+                     src="{{ asset('uploads/media/' ~ group.banner.path) }}"
+                     alt="">
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

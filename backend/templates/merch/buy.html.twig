@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Achat – {{ item.title }}{% endblock %}
+
+{% block body %}
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Achat</h1>
+            <p class="hero-subtitle">{{ item.title }}</p>
+        </div>
+    </section>
+
+    <div class="section">
+        <div class="container" style="max-width: 42rem;">
+            <div class="card p-4 bg-dark text-light border-0 shadow">
+                <p class="mb-3">
+                    Prix unitaire : <strong>{{ item.price|number_format(2, ',', ' ') }} €</strong>
+                </p>
+
+                {% if not stockConfigured %}
+                    <div class="alert alert-warning mb-3">Stock non configuré pour cet article (contacte un admin).</div>
+                {% endif %}
+
+                {{ form_start(form) }}
+                    {% if form.email is defined %}
+                        {{ form_row(form.email) }}
+                    {% endif %}
+                    {% if form.size is defined %}
+                        {{ form_row(form.size) }}
+                    {% endif %}
+                    {{ form_row(form.quantity) }}
+                    {{ form_row(form.note) }}
+
+                    <button class="btn btn-danger w-100 mt-3" type="submit">Valider et recevoir mon récapitulatif</button>
+                {{ form_end(form) }}
+
+                <p class="mt-3 text-muted" style="font-size: 0.9rem;">
+                    Paiement et remise à la table de vente (ou selon consignes du groupe).
+                </p>
+            </div>
+
+            <a href="{{ path('merch_show', { id: item.id }) }}" class="btn btn-outline-light mt-4">← Retour</a>
+        </div>
+    </div>
+{% endblock %}

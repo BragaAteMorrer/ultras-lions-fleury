@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ event.title }} – Déplacement – Ultras Lions{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ event.title }}</h1>
+        {% if event.date %}
+            <p class="hero-subtitle">📅 {{ event.date|date('d/m/Y') }}</p>
+        {% endif %}
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+
+        <article class="event-show">
+            {% set cover = event.image ?: (event.media|first) %}
+            {% if cover or event.media|length > 0 %}
+                <div class="cards gallery-grid mb-4">
+                    {% if cover and cover.path %}
+                        <a href="{{ asset('uploads/media/' ~ cover.path) }}" class="card" data-lightbox="event-gallery">
+                            <img src="{{ asset('uploads/media/' ~ cover.path) }}" alt="{{ event.title }}">
+                        </a>
+                    {% endif %}
+
+                    {% for media in event.media %}
+                        {% if media.path and (not cover or media.id != cover.id) %}
+                            <a href="{{ asset('uploads/media/' ~ media.path) }}" class="card" data-lightbox="event-gallery">
+                                <img src="{{ asset('uploads/media/' ~ media.path) }}" alt="{{ event.title }}">
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if event.description %}
+                <div class="event-show-body">
+                    {{ event.description|raw }}
+                </div>
+            {% endif %}
+
+        </article>
+
+    </div>
+</div>
+{% endblock %}

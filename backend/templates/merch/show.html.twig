@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ item.title }} – Table de Vente{% endblock %}
+
+{% block body %}
+
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ item.title }}</h1>
+        <p class="hero-subtitle">Table de Vente officielle Ultras Lions</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+        <div class="row g-4">
+
+            <div class="col-md-6">
+                {% set cover = item.image ?: (item.media|first) %}
+                {% if cover %}
+                    <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="img-fluid rounded shadow" alt="{{ item.title }}">
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <h2>{{ item.title }}</h2>
+                {% if item.category %}
+                    <p class="text-muted mb-2">{{ item.category.name }}</p>
+                {% endif %}
+                {% if item.stocks is not empty %}
+                    <p class="text-muted mb-2">Stock total : {{ item.totalStock }}</p>
+                    <div class="text-muted" style="font-size: 0.95rem;">
+                        {% for stock in item.stocks %}
+                            <div>{{ stock.size }} : {{ stock.quantity }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <p class="product-price display-6">{{ item.price|number_format(2, ',', ' ') }} €</p>
+
+                <div class="product-description">
+                    {{ item.description|raw }}
+                </div>
+
+                <a href="{{ path('merch_buy', { id: item.id }) }}" class="btn btn-danger mt-4 w-100">Acheter</a>
+                <a href="{{ path('merch_index') }}" class="btn btn-outline-light mt-4">← Retour</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

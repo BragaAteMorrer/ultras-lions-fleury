@@ -1,0 +1,31 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %}Bienvenue chez les Ultras Lions{% endblock %}
+
+{% block content %}
+    <h1>
+        Bienvenue
+        {% if user.prenom or user.nom %}
+            {{ user.prenom }} {{ user.nom }}
+        {% else %}
+            {{ user.pseudo }}
+        {% endif %}
+    </h1>
+
+    <p>
+        Félicitations, tu rejoins officiellement la
+        <strong>famille ULTRAS LIONS</strong>.
+        Ton compte vient d’être créé avec succès et tu peux maintenant accéder
+        aux contenus privés : déplacements, galeries, infos internes, table de vente,
+        et plus encore.
+    </p>
+
+    <p>
+        L’équipe est ravie de t’accueillir parmi les nôtres.
+        Si tu as la moindre question, tu peux répondre directement à cet email.
+    </p>
+
+    <a href="{{ url('home') }}" class="btn">
+        Accéder au site
+    </a>
+{% endblock %}

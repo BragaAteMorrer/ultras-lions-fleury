@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<section class="hero hero-small">
+    <div class="hero-inner">
+        <h1 class="hero-title">Rejoindre les Ultras Lions</h1>
+        <p class="hero-subtitle">Lors de votre Cartage à la table de vente, un code vous à été remis pour pouvoir créer un compte de membre sur le site, attention ce dernier n'est valable qu'une semaine ! En cas d'oubli d'inscription au bout de cet semaine ou de perte de ce dernier, veuillez contacter les responsables du groupe pour qu'un nouveau vous soit donnée, ce code est à usage unique !</p>
+    </div>
+</section>
+
+<section class="section">
+
+    {% for msg in app.flashes('error') %}
+        <div class="alert alert-danger">{{ msg }}</div>
+    {% endfor %}
+
+    <div class="cards cards-single">
+        <div class="card card-form">
+
+            <form method="POST">
+
+                <div class="form-group">
+                    <label class="hero-subtitle" for="inviteCode">Code d’invitation</label>
+                    <input type="text" id="inviteCode" name="inviteCode" class="form-control" required>
+                </div>
+
+                <button class="btn-ul mt-2">Valider</button>
+
+            </form>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

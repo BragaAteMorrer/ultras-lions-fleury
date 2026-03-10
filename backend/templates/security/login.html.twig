@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<section class="auth-hero">
+    <h1 class="hero-title">Connexion</h1>
+</section>
+    <div class="cards cards-single">
+        <div class="card card-form">
+
+            {% if error %}
+                <div class="alert-error">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
+
+            <form method="post" class="auth-form">
+                <input type="email" name="_username" value="{{ last_username }}" placeholder="Email" required>
+
+                <input type="password" name="_password" placeholder="Mot de passe" required>
+
+                <button class="btn-ul">Connexion</button>
+            </form>
+
+            <a href="{{ path('forgot_password') }}" class="link-small">
+                Mot de passe oublié ?
+            </a>
+
+        </div>
+    </div>
+
+{% endblock %}

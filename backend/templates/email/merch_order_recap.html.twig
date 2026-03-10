@@ -1,0 +1,62 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %}Récapitulatif de commande{% endblock %}
+
+{% block content %}
+    <h1>Récapitulatif de commande</h1>
+
+    <p>
+        Merci pour ta commande{% if user and (user.prenom or user.nom) %}, {{ user.prenom }} {{ user.nom }}{% endif %}.
+        Voici le récapitulatif :
+    </p>
+
+    <p>
+        <strong>N° commande :</strong> {{ order.number }}<br>
+        <strong>Date :</strong> {{ order.orderedAt|date('d/m/Y H:i') }}
+    </p>
+
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; margin: 1rem 0;">
+        <thead>
+        <tr>
+            <th align="left" style="padding: 0.5rem; border-bottom: 1px solid #333;">Produit</th>
+            <th align="center" style="padding: 0.5rem; border-bottom: 1px solid #333;">Qté</th>
+            <th align="right" style="padding: 0.5rem; border-bottom: 1px solid #333;">Prix</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for line in order.lines %}
+            <tr>
+                <td style="padding: 0.5rem; border-bottom: 1px solid #222;">
+                    {{ line.title }}
+                    {% if line.size is defined and line.size %}
+                        <br><span style="color:#999;">Taille : {{ line.size }}</span>
+                    {% endif %}
+                </td>
+                <td align="center" style="padding: 0.5rem; border-bottom: 1px solid #222;">{{ line.quantity }}</td>
+                <td align="right" style="padding: 0.5rem; border-bottom: 1px solid #222;">
+                    {{ line.totalPrice|number_format(2, ',', ' ') }} €
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="2" align="right" style="padding: 0.75rem 0.5rem; font-weight: bold;">Total</td>
+            <td align="right" style="padding: 0.75rem 0.5rem; font-weight: bold; color: #D40000;">
+                {{ order.total|number_format(2, ',', ' ') }} €
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+
+    {% if order.note %}
+        <p><strong>Note :</strong> {{ order.note }}</p>
+    {% endif %}
+
+    <p>
+        La remise et le paiement se font à la table de vente (ou selon les consignes du groupe).
+        Si tu as une question, tu peux répondre à cet email.
+    </p>
+
+    <a href="{{ url('merch_index') }}" class="btn">Voir la table de vente</a>
+{% endblock %}

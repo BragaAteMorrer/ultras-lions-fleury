@@ -1,0 +1,626 @@
+/* RESET GLOBAL ULTRA LIONS */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    color: #f2f2f2;
+    background:
+        linear-gradient(120deg, rgba(0,0,0,0.85), rgba(0,0,0,0.4)),
+        url('/assets/img/fond/fond1a.jpg') bottom center / cover no-repeat;
+    font-family: "Oswald", sans-serif;
+    line-height: 1.5;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* ==============================================
+   HERO GENERAL
+============================================== */
+
+.hero {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    min-height: 60vh; /* légèrement plus haut */
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* CENTRE VERTICALEMENT */
+    text-align: center;
+    gap: 0.8rem;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 0 0.625rem #000; /* 10px → 0.625rem */
+    text-align: center;
+}
+
+.hero-subtitle {
+    margin-top: 0.5rem; /* 8px → 0.5rem */
+    font-size: 0.95rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+    text-align: center;
+}
+
+.hero-ultra-logo {
+    width: 25rem;
+    max-width: 45vw;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 0.25rem rgba(0,0,0,0.4));
+}
+
+/* ==============================================
+   SECTIONS
+============================================== */
+
+.section {
+    padding: 3rem 0;
+}
+
+.section-title {
+    text-transform: uppercase;
+    font-size: 1.3rem;
+    padding-left: 1.2rem;
+    border-left: 0.25rem solid #D40000; /* 4px → 0.25rem */
+    margin-bottom: 1.8rem;
+    color: #fff;
+}
+
+/* ==============================================
+   CARDS ULTRA LIONS
+============================================== */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+@media (max-width: 60.625rem) { /* 970px */
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 37.5rem) { /* 600px */
+    .cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    color: #FFF;
+    background: #111;
+    border: 0.0625rem solid #222; /* 1px → 0.0625rem */
+    border-radius: 0.625rem; /* 10px → 0.625rem */
+    overflow: hidden;
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-0.1875rem); /* 3px → 0.1875rem */
+    border-color: #D40000;
+    box-shadow: 0 0.5rem 1.375rem rgba(0,0,0,.6); /* 8px 22px */
+}
+
+.event-card img {
+    height: auto;
+    object-fit: cover;
+}
+
+.event-item .card .event-card-img-top {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 14rem;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+.card-content {
+    padding: 1.1rem;
+    color: white;
+}
+
+/* ==============================================
+   ULTRA LIONS — BOUTONS
+============================================== */
+
+.btn-ul {
+    display: inline-block;
+    background: #D40000;
+    padding: 0.625rem 1.125rem; /* 10px 18px */
+    border-radius: 0.375rem; /* 6px */
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-ul:hover {
+    background: #ff3d2f;
+}
+
+/* ==============================================
+   PROFIL / COMPTE
+============================================== */
+
+.cards-single {
+    grid-template-columns: 1fr !important;
+}
+
+.profile-card {
+    display: flex;
+    gap: 2rem;
+    padding: 1.5rem;
+    align-items: center;
+}
+
+.profile-left {
+    flex-shrink: 0;
+}
+
+.profile-picture {
+    width: 10rem; /* 160px */
+    height: 10rem;
+    border-radius: 0.5rem; /* 8px */
+    object-fit: cover;
+}
+
+@media (max-width: 43.75rem) { /* 700px */
+    .profile-card {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* ==============================================
+   BANNIÈRE DE PROFIL
+============================================== */
+
+.profile-banner {
+    width: 100%;
+    height: 15rem; /* 240px */
+    background-size: cover;
+    background-position: center;
+    border-bottom: 0.25rem solid #D40000; /* 4px */
+    margin-bottom: 2rem;
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+
+/* ==============================================
+   FORMULAIRES AUTH
+============================================== */
+
+.card-form {
+    padding: 2rem;
+}
+
+.card-form form input,
+.card-form form select,
+.card-form form textarea,
+.auth-form input {
+    width: 100%;
+    padding: 0.75rem; /* 12px */
+    border-radius: 0.375rem; /* 6px */
+    border: none;
+    margin-bottom: 1rem;
+    background: #222;
+    color: #fff;
+}
+
+.card-form form input:focus,
+.auth-form input:focus {
+    outline: 0.125rem solid #D40000; /* 2px */
+}
+
+/* ==============================================
+   MESSAGES / LIENS
+============================================== */
+
+.alert-error {
+    background: #D40000;
+    padding: 0.625rem; /* 10px */
+    border-radius: 0.375rem;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.link-small {
+    display: block;
+    margin-top: 0.8rem;
+    color: #aaa;
+    font-size: 0.85rem;
+    text-align: center;
+    transition: 0.2s;
+}
+
+.link-small:hover {
+    color: #fff;
+}
+
+/* ==============================================
+   HERO AUTH
+============================================== */
+
+.auth-hero {
+    position: relative;
+    background:
+        linear-gradient(0deg, rgba(0,0,0,0.8), rgba(0,0,0,0.75)),
+        url('/assets/img/fond/fond1a.jpg') center / cover;
+    height: 15rem; /* 260px → approx 15rem */
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 2rem;
+    border-bottom: 0.25rem solid #D40000; /* 4px */
+}
+
+.auth-hero .hero-title {
+    text-transform: uppercase;
+    color: white;
+    text-shadow: 0 0 0.9375rem black; /* 15px */
+    font-size: clamp(2rem, 4vw, 3rem);
+}
+
+/* ==============================================
+   LISTE DES MEMBRES
+============================================== */
+
+.member-card img {
+    height: 12.5rem; /* 200px */
+    object-fit: cover;
+}
+
+.member-info {
+    padding: 1rem;
+}
+
+.member-name {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.member-meta {
+    color: #aaa;
+    font-size: 0.85rem;
+}
+
+.staff-card {
+    border: 0.125rem solid #D40000 !important; /* 2px */
+}
+
+/* ==============================================
+   MENU UTILISATEUR
+============================================== */
+
+.user-menu {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* =============================
+   LIGHTBOX
+============================= */
+
+.lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 2rem;
+}
+
+.lightbox-inner {
+    max-width: min(92vw, 75rem);
+    max-height: 88vh;
+}
+
+.lightbox-inner img {
+    max-width: 100%;
+    max-height: 88vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 0.5rem;
+    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.55);
+}
+
+.lightbox-btn {
+    position: fixed;
+    z-index: 2001;
+    border: none;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.lightbox-close {
+    top: 1rem;
+    right: 1rem;
+}
+
+.lightbox-prev {
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.lightbox-next {
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.user-menu a {
+    color: #fff;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+}
+
+.user-menu a:hover {
+    color: #D40000;
+}
+
+.user-avatar-menu {
+    width: 2.375rem; /* 38px */
+    height: 2.375rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 0.125rem solid #D40000; /* 2px */
+}
+
+/* ------------------------------- */
+/*    HEADER DU PROFIL            */
+/* ------------------------------- */
+.profile-header {
+    text-align: center;
+    padding: 2.5rem 1rem 1rem;
+}
+
+/* ------------------------------- */
+/*    AVATAR CENTRÉ               */
+/* ------------------------------- */
+.profile-avatar-wrapper {
+    width: 100%;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-bottom: 1rem;
+}
+
+/* Avatar */
+.profile-avatar {
+    height: 9rem;
+    object-fit: cover;
+    border: 3px solid #D40000;
+    box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    margin-bottom: 1rem;
+}
+
+/* ------------------------------- */
+/*    TITRE + RÔLE                */
+/* ------------------------------- */
+.profile-name {
+    font-size: 2.4rem;
+    color: #fff;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(0,0,0,0.7);
+    margin-top: 0.5rem;
+}
+
+.profile-role {
+    font-size: 1rem;
+    color: #ccc;
+    margin-top: .3rem;
+    letter-spacing: 0.05rem;
+}
+
+/* ------------------------------- */
+/*    BLOC INFORMATIONS           */
+/* ------------------------------- */
+.profile-info-card {
+    background: #111;
+    border: 1px solid #222;
+    padding: 2rem;
+    margin: auto;
+    max-width: 45rem;
+    border-radius: 0.7rem;
+    box-shadow: 0 0 25px rgba(0,0,0,0.6);
+    font-size: 1.05rem;
+}
+
+.profile-info-card strong {
+    color: #D40000;
+}
+
+/* ------------------------------- */
+/*    BOUTON ÉDIT                 */
+/* ------------------------------- */
+.profile-edit-btn {
+    display: block;
+    width: fit-content;
+    margin: 2rem auto 0;
+}
+
+.user-avatar-menu {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #D40000;
+}
+
+.user-nav .dropdown-toggle::after {
+    margin-left: .5rem;
+}
+
+.ultra-dropdown {
+    background: #111;
+    border: 1px solid #222;
+}
+
+.ultra-dropdown .dropdown-item {
+    color: #fff;
+}
+
+.ultra-dropdown .dropdown-item:hover {
+    background: #D40000;
+    color: #fff;
+}
+
+.mobile-user-block {
+    text-align: center;
+    margin-bottom: .5rem;
+}
+
+.mobile-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #D40000;
+    margin-bottom: .3rem;
+}
+
+.form-section-title {
+    font-size: 1.4rem;
+    color: #D40000;
+    margin-bottom: .3rem;
+    margin-top: 1.5rem;
+}
+
+.form-section-hint {
+    font-size: .9rem;
+    color: #aaa;
+    margin-bottom: 1rem;
+}
+
+.alert-error {
+    background: #550000;
+    color: #ffbebe;
+    padding: .8rem 1rem;
+    border-left: 4px solid #D40000;
+    border-radius: .3rem;
+    margin-bottom: 1rem;
+}
+
+/* ===============================
+   BOOTSTRAP → ULTRAS OVERRIDE
+================================ */
+
+/* Labels */
+.form-label,
+label {
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: .03em;
+}
+
+/* Inputs / Select / Textarea */
+.form-control,
+.form-select,
+textarea {
+    background: #222 !important;
+    color: #fff !important;
+    border: 1px solid #333;
+}
+
+.form-control:focus,
+.form-select:focus,
+textarea:focus {
+    border-color: #D40000;
+    box-shadow: 0 0 0 0.15rem rgba(212,0,0,.25);
+}
+
+/* Placeholder */
+::placeholder {
+    color: #aaa;
+}
+
+.text-muted {
+    color: #aaa !important;
+}
+
+.btn-outline-light {
+    border-color: #D40000;
+    color: #D40000;
+}
+
+.btn-outline-light:hover {
+    background: #D40000;
+    color: #fff;
+}
+
+.alert {
+    background: #111;
+    border: 1px solid #222;
+    color: #fff;
+}
+
+.alert-secondary {
+    border-left: 4px solid #D40000;
+}
+
+.alert-warning {
+    border-left: 4px solid #ff9800;
+    background: #1a1a1a;
+    color: #ffd180;
+}
+
+.card-body {
+    color: #fff;
+}
+
+.card-title {
+    text-transform: uppercase;
+    font-size: 1.1rem;
+}
+
+.card-price {
+    color: #D40000;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+form .btn {
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: .05em;
+}

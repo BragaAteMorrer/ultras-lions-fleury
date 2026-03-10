@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ post.title }} – Ultras Lions{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ post.title }}</h1>
+        <p class="hero-subtitle">
+            Publié le {{ post.createdAt|date('d/m/Y') }}
+        </p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+        <article class="post-show">
+
+            {% if post.image %}
+                <div class="post-main-image">
+                    <img src="{{ asset('uploads/media/' ~ post.image.path) }}" alt="{{ post.title }}">
+                </div>
+            {% endif %}
+
+            <div class="post-body">
+                {{ post.content|raw }}
+            </div>
+
+        </article>
+    </div>
+</div>
+{% endblock %}

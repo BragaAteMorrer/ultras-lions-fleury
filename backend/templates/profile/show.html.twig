@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<section class="section">
+    <div class="container">
+
+        <div class="profile-header">
+            <div class="profile-avatar-wrapper">
+                {% if user.photoProfil %}
+                    <img src="/uploads/profils/{{ user.photoProfil }}" alt="{{ user.pseudo }}" class="profile-avatar">
+                {% else %}
+                    <img src="/assets/img/default-profile.png" alt="{{ user.pseudo }}" class="profile-avatar">
+                {% endif %}
+            </div>
+
+            <h1 class="profile-name">{{ user.pseudo }}</h1>
+            <p class="profile-role">
+                {% if 'ROLE_ADMIN' in user.roles %}
+                    Bureau - Ultras Lions
+                {% else %}
+                    Adhérant - Ultras Lions
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="profile-info-card">
+            <p><strong>Nom :</strong> {{ user.prenom }} {{ user.nom }}</p>
+            <p><strong>Email :</strong> {{ user.email }}</p>
+
+            {% if user.dateNaissance %}
+                <p><strong>Date de naissance :</strong> {{ user.dateNaissance|date('d/m/Y') }}</p>
+            {% endif %}
+
+            {% if user.telephone %}
+                <p><strong>Téléphone :</strong> {{ user.telephone }}</p>
+            {% endif %}
+
+            {% if user.adresse or user.ville or user.codePostal %}
+                <p><strong>Adresse :</strong>
+                    {{ user.adresse }}{% if user.adresse %}<br>{% endif %}
+                    {{ user.codePostal }} {{ user.ville }}
+                </p>
+            {% endif %}
+
+            <hr>
+
+            <p><strong>T-shirt :</strong> {{ user.tailleTshirt ?? '—' }}</p>
+            <p><strong>Polo :</strong> {{ user.taillePolo ?? '—' }}</p>
+            <p><strong>Pull :</strong> {{ user.taillePull ?? '—' }}</p>
+            <p><strong>Sweat :</strong> {{ user.tailleSweat ?? '—' }}</p>
+            <p><strong>Veste :</strong> {{ user.tailleVeste ?? '—' }}</p>
+            <p><strong>Short :</strong> {{ user.tailleShort ?? '—' }}</p>
+
+            {% if app.user and app.user.id == user.id %}
+                <a href="{{ path('profile_edit', { id: user.id }) }}" class="btn-ul profile-edit-btn">
+                    Modifier mon profil
+                </a>
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pages – Ultras Lions{% endblock %}
+
+{% block body %}
+
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Pages</h1>
+        <p class="hero-subtitle">Pages informatives du groupe</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+
+        <h2 class="section-title">Toutes les pages</h2>
+
+        <div class="cards">
+            {% for page in pages %}
+                <a href="{{ path('page_show', { slug: page.slug }) }}" class="card">
+
+                    {% if page.image %}
+                        <img src="{{ asset('uploads/media/' ~ page.image.path) }}"
+                             alt="{{ page.title }}">
+                    {% endif %}
+
+                    <div class="card-content">
+                        <h3>{{ page.title }}</h3>
+
+                        {% if page.content %}
+                            <p>{{ page.content|striptags|slice(0, 120) ~ '…' }}</p>
+                        {% endif %}
+                    </div>
+                </a>
+            {% else %}
+                <p>Aucune page disponible.</p>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

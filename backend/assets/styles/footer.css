@@ -1,0 +1,101 @@
+/* ==============================================
+   FOOTER ULTRA — Bande rouge / noir / blanc
+============================================== */
+
+.ultra-footer {
+    margin-top: 3rem;
+    background: #000;
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    border-top: 0.187rem solid #111;
+}
+
+/* Bande Ultra (comme la navbar) */
+.ultra-footer .footer-band {
+    width: 100%;
+    height: 2.5rem;
+    background: linear-gradient(
+        to bottom,
+        #D40000 0%,
+        #D40000 33%,
+        #000000 33%,
+        #000000 66%,
+        #FFFFFF 66%,
+        #FFFFFF 100%
+    );
+    border-bottom: 0.187rem solid #111;
+}
+
+.footer-logo-ultra {
+    width: 12rem;
+    max-width: 60vw;
+    height: auto;
+    filter: drop-shadow(0 0 0.25rem rgba(0,0,0,0.4));
+    margin-bottom: 0.5rem;
+}
+
+/* Contenu principal */
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem 0;
+    gap: 2rem;
+}
+
+.footer-title {
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.footer-text {
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+/* Réseaux sociaux */
+.footer-follow {
+    display: block;
+    margin-bottom: 0.6rem;
+    font-size: 1rem;
+}
+
+.footer-socials a {
+    display: inline-block;
+    margin-right: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    background: #D40000;
+    border-radius: 0.25rem;
+    color: #fff;
+    font-weight: 700;
+    transition: 0.2s;
+}
+
+.footer-socials a:hover {
+    background: #ff3d3d;
+}
+
+/* Bas du footer */
+.footer-bottom {
+    text-align: center;
+    padding: 1rem 0;
+    background: #111;
+    font-size: 0.9rem;
+    color: #aaa;
+    border-top: 1px solid #222;
+}
+
+/* ==============================================
+   RESPONSIVE
+============================================== */
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-socials a {
+        margin: 0.3rem;
+    }
+}

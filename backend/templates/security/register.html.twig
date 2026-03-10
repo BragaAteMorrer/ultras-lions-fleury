@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<section class="section">
+    <div class="container">
+
+        <h2 class="section-title">Inscription</h2>
+
+        <div class="cards cards-single">
+            <div class="card card-form">
+
+                {% for type, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert-error">{{ message }}</div>
+                    {% endfor %}
+                {% endfor %}
+
+                {{ form_start(form) }}
+
+                    <h3 class="form-section-title">Identité</h3>
+                    <div class="row">
+                        <div class="col-md-6">{{ form_row(form.prenom) }}</div>
+                        <div class="col-md-6">{{ form_row(form.nom) }}</div>
+                    </div>
+
+                    <hr>
+
+                    <h3 class="form-section-title">Informations de connexion</h3>
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.pseudo) }}
+                    {{ form_row(form.plainPassword) }}
+                    {{ form_row(form.confirmPassword) }}
+
+                    <hr>
+
+                    <h3 class="form-section-title">Coordonnées</h3>
+                    {{ form_row(form.telephone) }}
+                    {{ form_row(form.adresse) }}
+                    {{ form_row(form.ville) }}
+                    {{ form_row(form.codePostal) }}
+
+                    <hr>
+
+                    <h3 class="form-section-title">Tailles</h3>
+                    <div class="row">
+                        <div class="col-md-6">{{ form_row(form.tailleTshirt) }}</div>
+                        <div class="col-md-6">{{ form_row(form.tailleSweat) }}</div>
+                        <div class="col-md-6">{{ form_row(form.tailleVeste) }}</div>
+                        <div class="col-md-6">{{ form_row(form.tailleShort) }}</div>
+                    </div>
+
+                    <hr>
+
+                    <h3 class="form-section-title">Photo</h3>
+                    {{ form_row(form.photoProfil) }}
+
+                    <button class="btn-ul mt-3">Créer mon compte</button>
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

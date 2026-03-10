@@ -1,0 +1,16 @@
+:root {
+    --ea-primary-color: #D40000;
+    --ea-bg: #000;
+    --ea-card-bg: #111;
+    --ea-text: #fff;
+}
+
+body, .content-wrapper {
+    background: var(--ea-bg);
+    color: var(--ea-text);
+}
+
+.card {
+    background: var(--ea-card-bg) !important;
+    border-color: #D40000 !important;
+}

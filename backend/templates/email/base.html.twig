@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Ultras Lions{% endblock %}</title>
+
+    <style>
+        /* ===============================
+           RESET & BASE
+        =============================== */
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+        }
+
+        img {
+            border: 0;
+            outline: none;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* ===============================
+           CONTAINER
+        =============================== */
+        .email-container {
+            max-width: 37.5rem; /* 600px */
+            margin: 0 auto;
+            background: #111;
+            border-radius: 0.625rem; /* 10px */
+            overflow: hidden;
+            border: 0.0625rem solid #222;
+        }
+
+        /* ===============================
+           HEADER ULTRAS
+        =============================== */
+        .header-ultras {
+            width: 100%;
+            background: linear-gradient(
+                to bottom,
+                #D40000 0%,
+                #D40000 33.33%,
+                #000000 33.33%,
+                #000000 66.66%,
+                #FFFFFF 66.66%,
+                #FFFFFF 100%
+            );
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .header-ultras img {
+            margin: 0 auto;
+            width: 12.5rem; /* 200px */
+            height: auto;
+            filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.8));
+        }
+
+        /* ===============================
+           CONTENT
+        =============================== */
+        .content {
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: #D40000;
+            font-size: 1.75rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            letter-spacing: 0.0625rem;
+        }
+
+        p {
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            color: #dddddd;
+            margin-bottom: 1rem;
+        }
+
+        /* ===============================
+           BUTTON
+        =============================== */
+        .btn {
+            display: block;
+            width: 65%;
+            margin: 2rem auto;
+            padding: 0.875rem;
+            background: #D40000;
+            color: #ffffff !important;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9375rem;
+            border-radius: 0.375rem;
+            box-shadow: 0 0 0.75rem rgba(212, 0, 0, 0.5);
+        }
+
+        /* ===============================
+           FOOTER
+        =============================== */
+        .footer {
+            text-align: center;
+            color: #777777;
+            font-size: 0.75rem;
+            padding: 0 2rem 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="email-container">
+
+    {# ===== HEADER ===== #}
+    <div class="header-ultras">
+        <img
+            src="https://i.imgur.com/sQgIMqg.png"
+            alt="Ultras Lions"
+        >
+    </div>
+
+    {# ===== CONTENT ===== #}
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    {# ===== FOOTER ===== #}
+    <div class="footer">
+        {% block footer %}
+            Ultras Lions – FC Fleury 91<br>
+            Ceci est un email automatique, merci de ne pas répondre directement.
+        {% endblock %}
+    </div>
+
+</div>
+
+</body>
+</html>

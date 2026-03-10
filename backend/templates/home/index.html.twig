@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ultras Lions – FC Fleury 91{% endblock %}
+
+{% block body %}
+
+<div class="hero" id="heroSlider">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <img src="{{ asset('assets/img/logo/Logo Final - Ultras Lions - Autre Présentation.png') }}" class="hero-ultra-logo" alt="Ultras Lions">
+        <h1 class="hero-title">ULTRAS LIONS</h1>
+        <p class="hero-subtitle">Le site web du groupe ultras du FC Fleury 91</p>
+    </div>
+</div>
+
+{# ------------------------------
+   DERNIÈRES ACTUALITÉS (POSTS)
+   ------------------------------ #}
+<section class="section latest-news">
+    <div class="container">
+        <h2 class="section-title">Dernières actualités</h2>
+
+        <div class="row g-4">
+            {% for post in last_posts %}
+                <div class="col-md-4">
+                    <a href="{{ path('post_show', { slug: post.slug }) }}" class="card h-100">
+
+                        {% if post.image %}
+                            <img src="{{ asset('uploads/media/' ~ post.image.path) }}" class="card-img-top" alt="{{ post.title }}">
+                        {% endif %}
+
+                        <div class="card-body">
+                            <h3 class="card-title">{{ post.title }}</h3>
+                            <p class="card-text">{{ post.content|striptags|slice(0,120) ~ '...' }}</p>
+                        </div>
+
+                    </a>
+                </div>
+            {% else %}
+                <p>Aucune actualité disponible.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ------------------------------
+   PROCHAIN EVENT
+   ------------------------------ #}
+<section class="section next-event">
+    <div class="container">
+        <h2 class="section-title">Prochain déplacement</h2>
+
+        {% if event %}
+            <div class="event-box">
+                {% set eventCover = event.image ?: (event.media|first) %}
+                {% if eventCover %}
+                    <img src="{{ asset('uploads/media/' ~ eventCover.path) }}" class="img-fluid rounded shadow mb-3" alt="{{ event.title }}">
+                {% endif %}
+                <h3>{{ event.title }}</h3>
+                <p class="event-date">📅 {{ event.date|date("d/m/Y") }}</p>
+
+                <a href="{{ path('event_index') }}" class="btn-ul">Voir les événements</a>
+            </div>
+        {% else %}
+            <p>Aucun événement prévu.</p>
+        {% endif %}
+    </div>
+</section>
+
+{# ------------------------------
+   GALERIES
+   ------------------------------ #}
+<section class="section galleries">
+    <div class="container">
+    <h2 class="section-title">Galeries photos</h2>
+        <div class="cards">
+            {% for gal in galleries %}
+                <a href="{{ path('gallery_show', { id: gal.id }) }}" class="card">
+
+                    {% set cover = gal.media|first %}
+                    {% if cover %}
+                        <img src="{{ asset('uploads/media/' ~ cover.path) }}" alt="{{ gal.title }}">
+                    {% endif %}
+
+                    <div class="card-content">
+                        <h3>{{ gal.title }}</h3>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ------------------------------
+   LE GROUPE
+   ------------------------------ #}
+<section class="section about-group">
+    <div class="container">
+        <h2 class="section-title">Le Groupe</h2>
+
+        {% if group %}
+            <div class="group-content">
+                {{ group.description|raw }}
+            </div>
+
+            {% if group.banner %}
+                <img class="group-banner" 
+                    src="{{ asset('uploads/media/' ~ group.banner.path) }}" 
+                    alt="Bannière du groupe">
+            {% endif %}
+        {% else %}
+            <p>Aucune information de groupe n’a encore été ajoutée.</p>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

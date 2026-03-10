@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<section class="section">
+    <h2 class="section-title">Membres Ultras Lions</h2>
+
+    <div class="cards">
+        {% for user in members %}
+            <a href="{{ path('profile_show', {id: user.id}) }}" class="card member-card">
+
+                {% if user.photoProfil %}
+                    <img src="/uploads/profils/{{ user.photoProfil }}" alt="">
+                {% else %}
+                    <img src="/assets/img/default-profile.png" alt="">
+                {% endif %}
+
+                <div class="member-info">
+                    <div class="member-name">{{ user.pseudo }}</div>
+                    <div class="member-meta">Taille veste : {{ user.tailleVeste ?? '—' }}</div>
+                    <div class="member-meta">Taille short : {{ user.tailleShort ?? '—' }}</div>
+                </div>
+
+            </a>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

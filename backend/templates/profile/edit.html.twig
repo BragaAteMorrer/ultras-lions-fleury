@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">Modifier mon compte</h2>
+
+        <div class="cards cards-single">
+            <div class="card card-form">
+
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert-error">{{ message }}</div>
+                    {% endfor %}
+                {% endfor %}
+
+                {{ form_start(form) }}
+
+                    {{ form_row(form.pseudo) }}
+                    {{ form_row(form.email) }}
+
+                    <hr>
+                    {{ form_row(form.prenom) }}
+                    {{ form_row(form.nom) }}
+                    {{ form_row(form.dateNaissance) }}
+
+                    <hr>
+                    {{ form_row(form.telephone) }}
+
+                    {{ form_row(form.adresse) }}
+                    {{ form_row(form.ville) }}
+                    {{ form_row(form.codePostal) }}
+
+                    <hr>
+                    {{ form_row(form.photoProfil) }}
+
+                    <hr>
+                    {{ form_row(form.tailleTshirt) }}
+                    {{ form_row(form.taillePolo) }}
+                    {{ form_row(form.taillePull) }}
+                    {{ form_row(form.tailleSweat) }}
+                    {{ form_row(form.tailleVeste) }}
+                    {{ form_row(form.tailleShort) }}
+
+                    <button class="btn-ul">Mettre à jour</button>
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

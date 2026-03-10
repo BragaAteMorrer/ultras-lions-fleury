@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ gallery.title }} – Galeries – Ultras Lions{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ gallery.title }}</h1>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+
+        {% if gallery.media|length > 0 %}
+            <div class="cards gallery-grid">
+                {% for media in gallery.media %}
+                    <a href="{{ asset('uploads/media/' ~ media.path) }}" class="card" data-lightbox="gallery">
+                        <img src="{{ asset('uploads/media/' ~ media.path) }}" alt="">
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Aucune photo disponible pour cette galerie.</p>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

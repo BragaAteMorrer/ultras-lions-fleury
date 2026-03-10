@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Actualités – Ultras Lions{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Actualités</h1>
+        <p class="hero-subtitle">Infos, communiqués, actions en tribune</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+        <h2 class="section-title">Derniers articles</h2>
+
+        <div class="cards">
+            {% for post in posts %}
+                <a href="{{ path('post_show', { slug: post.slug }) }}" class="card">
+
+                    {% if post.image %}
+                        <img src="{{ asset('uploads/media/' ~ post.image.path) }}" alt="{{ post.title }}">
+                    {% endif %}
+
+                    <div class="card-content">
+                        <h3>{{ post.title }}</h3>
+
+                        <p class="card-meta">
+                            {{ post.createdAt|date('d/m/Y') }}
+                        </p>
+
+                        <p>{{ post.content|striptags|slice(0, 140) ~ '…' }}</p>
+                    </div>
+                </a>
+            {% else %}
+                <p>Aucune actu pour l’instant.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
