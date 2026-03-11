@@ -1,38 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User{% endblock %}
+{% block title %}{{ 'user_show.html.user'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>User</h1>
+    <h1>{{ 'user_show.html.user'|trans }}</h1>
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
+                <th>{{ 'user_index.html.id'|trans }}</th>
                 <td>{{ user.id }}</td>
             </tr>
             <tr>
-                <th>Email</th>
+                <th>{{ 'security_login.html.email'|trans }}</th>
                 <td>{{ user.email }}</td>
             </tr>
             <tr>
-                <th>Roles</th>
+                <th>{{ 'user_index.html.roles'|trans }}</th>
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
             </tr>
             <tr>
-                <th>Password</th>
+                <th>{{ 'user_index.html.password'|trans }}</th>
                 <td>{{ user.password }}</td>
             </tr>
             <tr>
-                <th>IsVerified</th>
+                <th>{{ 'user_index.html.isverified'|trans }}</th>
                 <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+    <a href="{{ path('app_user_index') }}">{{ 'user_edit.html.back_to_list'|trans }}</a>
 
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+    <a href="{{ path('app_user_edit', {'id': user.id}) }}">{{ 'user_index.html.edit'|trans }}</a>
 
     {{ include('user/_delete_form.html.twig') }}
 {% endblock %}

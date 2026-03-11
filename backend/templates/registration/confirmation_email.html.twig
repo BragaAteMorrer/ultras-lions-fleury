@@ -1,11 +1,8 @@
-<h1>Hi! Please confirm your email!</h1>
+<h1>{{ 'registration_confirmation_email.html.hi_please_confirm_your_email'|trans }}</h1>
 
-<p>
-    Please confirm your email address by clicking the following link: <br><br>
-    <a href="{{ signedUrl|raw }}">Confirm my Email</a>.
+<p>{{ 'registration_confirmation_email.html.please_confirm_your_email_address_by_clicking_the_following_link'|trans }}<br><br>
+    <a href="{{ signedUrl|raw }}">{{ 'registration_confirmation_email.html.confirm_my_email'|trans }}</a>.
     This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
 </p>
 
-<p>
-    Cheers!
-</p>
+<p>{{ 'registration_confirmation_email.html.cheers'|trans }}</p>

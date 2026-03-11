@@ -5,7 +5,7 @@
 <section class="section">
     <div class="container">
 
-        <h2 class="section-title">Inscription</h2>
+        <h2 class="section-title">{{ 'security_register.html.inscription'|trans }}</h2>
 
         <div class="cards cards-single">
             <div class="card card-form">
@@ -18,7 +18,7 @@
 
                 {{ form_start(form) }}
 
-                    <h3 class="form-section-title">Identité</h3>
+                    <h3 class="form-section-title">{{ 'security_register.html.identite'|trans }}</h3>
                     <div class="row">
                         <div class="col-md-6">{{ form_row(form.prenom) }}</div>
                         <div class="col-md-6">{{ form_row(form.nom) }}</div>
@@ -26,7 +26,7 @@
 
                     <hr>
 
-                    <h3 class="form-section-title">Informations de connexion</h3>
+                    <h3 class="form-section-title">{{ 'security_register.html.informations_de_connexion'|trans }}</h3>
                     {{ form_row(form.email) }}
                     {{ form_row(form.pseudo) }}
                     {{ form_row(form.plainPassword) }}
@@ -34,7 +34,7 @@
 
                     <hr>
 
-                    <h3 class="form-section-title">Coordonnées</h3>
+                    <h3 class="form-section-title">{{ 'security_register.html.coordonnees'|trans }}</h3>
                     {{ form_row(form.telephone) }}
                     {{ form_row(form.adresse) }}
                     {{ form_row(form.ville) }}
@@ -42,7 +42,7 @@
 
                     <hr>
 
-                    <h3 class="form-section-title">Tailles</h3>
+                    <h3 class="form-section-title">{{ 'security_register.html.tailles'|trans }}</h3>
                     <div class="row">
                         <div class="col-md-6">{{ form_row(form.tailleTshirt) }}</div>
                         <div class="col-md-6">{{ form_row(form.tailleSweat) }}</div>
@@ -52,10 +52,10 @@
 
                     <hr>
 
-                    <h3 class="form-section-title">Photo</h3>
+                    <h3 class="form-section-title">{{ 'security_register.html.photo'|trans }}</h3>
                     {{ form_row(form.photoProfil) }}
 
-                    <button class="btn-ul mt-3">Créer mon compte</button>
+                    <button class="btn-ul mt-3">{{ 'security_register.html.creer_mon_compte'|trans }}</button>
 
                 {{ form_end(form) }}
 

@@ -1,33 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Déplacements & événements – Ultras Lions{% endblock %}
+{% block title %}{{ 'events_list.html.deplacements_evenements_ultras_lions'|trans }}{% endblock %}
 
 {% block body %}
 <section class="hero">
     <div class="hero-content">
-        <h1 class="hero-title">Déplacements & événements</h1>
-        <p class="hero-subtitle">Prochains matchs, rassemblements, actions</p>
+        <h1 class="hero-title">{{ 'events_list.html.deplacements_evenements'|trans }}</h1>
+        <p class="hero-subtitle">{{ 'events_list.html.prochains_matchs_rassemblements_actions'|trans }}</p>
     </div>
 </section>
 
 <div class="section">
     <div class="container">
         <form method="get" class="mb-4" style="max-width: 22rem;">
-            <label class="form-label text-light" for="season">Saison</label>
+            <label class="form-label text-light" for="season">{{ 'events_list.html.saison'|trans }}</label>
             <div class="d-flex gap-2">
                 <select id="season" name="season" class="form-select">
-                    <option value="" {% if selectedSeason is empty %}selected{% endif %}>Toutes les saisons</option>
+                    <option value="" {% if selectedSeason is empty %}selected{% endif %}>{{ 'components_navbar.html.toutes_les_saisons'|trans }}</option>
                     {% for season in seasons %}
                         <option value="{{ season }}" {% if selectedSeason == season %}selected{% endif %}>
                             {{ season|replace({'-': '/'}) }}
                         </option>
                     {% endfor %}
                 </select>
-                <button class="btn btn-outline-light" type="submit">Filtrer</button>
+                <button class="btn btn-outline-light" type="submit">{{ 'events_list.html.filtrer'|trans }}</button>
             </div>
         </form>
 
-        <h2 class="section-title">Photos de match</h2>
+        <h2 class="section-title">{{ 'components_navbar.html.photos_de_match'|trans }}</h2>
 
         <div class="event-list">
             {% for event in deplacements %}
@@ -63,11 +63,11 @@
 
                 </article>
             {% else %}
-                <p>Aucune photo de match pour le moment.</p>
+                <p>{{ 'events_list.html.aucune_photo_de_match_pour_le_moment'|trans }}</p>
             {% endfor %}
         </div>
 
-        <h2 class="section-title mt-5">Événements</h2>
+        <h2 class="section-title mt-5">{{ 'admin_dashboard.html.evenements'|trans }}</h2>
 
         <div class="event-list">
             {% for event in events %}
@@ -98,7 +98,7 @@
                     </div>
                 </article>
             {% else %}
-                <p>Aucun événement pour le moment.</p>
+                <p>{{ 'events_list.html.aucun_evenement_pour_le_moment'|trans }}</p>
             {% endfor %}
         </div>
     </div>

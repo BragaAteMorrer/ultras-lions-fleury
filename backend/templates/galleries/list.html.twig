@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Galeries – Ultras Lions{% endblock %}
+{% block title %}{{ 'galleries_list.html.galeries_ultras_lions'|trans }}{% endblock %}
 
 {% block body %}
 <section class="hero">
     <div class="hero-content">
-        <h1 class="hero-title">Galeries</h1>
-        <p class="hero-subtitle">Tribunes, déplacements, tifos, vie du groupe</p>
+        <h1 class="hero-title">{{ 'admin_dashboard.html.galeries'|trans }}</h1>
+        <p class="hero-subtitle">{{ 'galleries_list.html.tribunes_deplacements_tifos_vie_du_groupe'|trans }}</p>
     </div>
 </section>
 
 <div class="section">
     <div class="container">
-        <h2 class="section-title">Dernières galeries</h2>
+        <h2 class="section-title">{{ 'galleries_list.html.dernieres_galeries'|trans }}</h2>
 
         <div class="cards">
             {% for gallery in galleries %}
@@ -30,7 +30,7 @@
                 </a>
 
             {% else %}
-                <p>Aucune galerie pour l’instant.</p>
+                <p>{{ 'galleries_list.html.aucune_galerie_pour_linstant'|trans }}</p>
             {% endfor %}
         </div>
     </div>

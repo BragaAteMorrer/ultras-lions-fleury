@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Ultras Lions{% endblock %}</title>
+    <title>{% block title %}{{ 'components_footer.html.ultras_lions'|trans }}{% endblock %}</title>
 
     <style>
         /* ===============================
@@ -121,7 +121,7 @@
     <div class="header-ultras">
         <img
             src="https://i.imgur.com/sQgIMqg.png"
-            alt="Ultras Lions"
+            alt="{{ 'components_footer.html.ultras_lions'|trans }}"
         >
     </div>
 
@@ -133,8 +133,8 @@
     {# ===== FOOTER ===== #}
     <div class="footer">
         {% block footer %}
-            Ultras Lions – FC Fleury 91<br>
-            Ceci est un email automatique, merci de ne pas répondre directement.
+            {{ 'email_base.html.footer_brand'|trans }}<br>
+            {{ 'email_base.html.footer_notice'|trans }}
         {% endblock %}
     </div>
 

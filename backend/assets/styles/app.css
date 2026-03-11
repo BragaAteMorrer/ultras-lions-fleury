@@ -45,6 +45,7 @@ img {
     justify-content: center; /* CENTRE VERTICALEMENT */
     text-align: center;
     gap: 0.8rem;
+    margin-top: 4rem;
 }
 
 .hero-title {

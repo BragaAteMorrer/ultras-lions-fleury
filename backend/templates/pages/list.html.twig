@@ -1,20 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Pages – Ultras Lions{% endblock %}
+{% block title %}{{ 'pages_list.html.pages_ultras_lions'|trans }}{% endblock %}
 
 {% block body %}
 
 <section class="hero">
     <div class="hero-content">
-        <h1 class="hero-title">Pages</h1>
-        <p class="hero-subtitle">Pages informatives du groupe</p>
+        <h1 class="hero-title">{{ 'pages_list.html.pages'|trans }}</h1>
+        <p class="hero-subtitle">{{ 'pages_list.html.pages_informatives_du_groupe'|trans }}</p>
     </div>
 </section>
 
 <div class="section">
     <div class="container">
 
-        <h2 class="section-title">Toutes les pages</h2>
+        <h2 class="section-title">{{ 'pages_list.html.toutes_les_pages'|trans }}</h2>
 
         <div class="cards">
             {% for page in pages %}
@@ -34,7 +34,7 @@
                     </div>
                 </a>
             {% else %}
-                <p>Aucune page disponible.</p>
+                <p>{{ 'pages_list.html.aucune_page_disponible'|trans }}</p>
             {% endfor %}
         </div>
 

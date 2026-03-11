@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Actualités – Ultras Lions{% endblock %}
+{% block title %}{{ 'posts_list.html.actualites_ultras_lions'|trans }}{% endblock %}
 
 {% block body %}
 <section class="hero">
     <div class="hero-content">
-        <h1 class="hero-title">Actualités</h1>
-        <p class="hero-subtitle">Infos, communiqués, actions en tribune</p>
+        <h1 class="hero-title">{{ 'components_navbar.html.actualites'|trans }}</h1>
+        <p class="hero-subtitle">{{ 'posts_list.html.infos_communiques_actions_en_tribune'|trans }}</p>
     </div>
 </section>
 
 <div class="section">
     <div class="container">
-        <h2 class="section-title">Derniers articles</h2>
+        <h2 class="section-title">{{ 'posts_list.html.derniers_articles'|trans }}</h2>
 
         <div class="cards">
             {% for post in posts %}
@@ -33,7 +33,7 @@
                     </div>
                 </a>
             {% else %}
-                <p>Aucune actu pour l’instant.</p>
+                <p>{{ 'posts_list.html.aucune_actu_pour_linstant'|trans }}</p>
             {% endfor %}
         </div>
     </div>

@@ -7,28 +7,28 @@
         <div class="footer-left">
             <img 
                 src="{{ asset('img/logo/Logo Texte.png') }}" 
-                alt="Ultras Lions" 
+                alt="{{ 'components_footer.html.ultras_lions'|trans }}" 
                 class="footer-logo-ultra"
             >
-            <p class="footer-text">Tribune, drapeaux, fumigènes, chants : la ville est rouge et noire.</p>
+            <p class="footer-text">{{ 'components_footer.html.tribune_drapeaux_fumigenes_chants_la_ville_est_rouge_et_noire'|trans }}</p>
         </div>
 
         <div class="footer-right">
-            <span class="footer-follow">Suivez-nous :</span>
+            <span class="footer-follow">{{ 'components_footer.html.suivez_nous'|trans }}</span>
             <div class="footer-socials">
-                <a href="#" aria-label="Instagram">IG</a>
-                <a href="#" aria-label="Twitter">X</a>
-                <a href="#" aria-label="Facebook">FB</a>
+                <a href="#" aria-label="{{ 'components_footer.html.instagram'|trans }}">IG</a>
+                <a href="#" aria-label="{{ 'components_footer.html.twitter'|trans }}">X</a>
+                <a href="#" aria-label="{{ 'components_footer.html.facebook'|trans }}">FB</a>
             </div>
             {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('app_admin_dashboard_index') }}" class="footer-admin-link">Espace Admin</a>
+                <a href="{{ path('app_admin_dashboard_index') }}" class="footer-admin-link">{{ 'components_footer.html.espace_admin'|trans }}</a>
             {% endif %}
         </div>
 
     </div>
 
     <div class="footer-bottom">
-        © {{ "now"|date("Y") }} Ultras Lions — Site des Ultras FC Fleury 91.
+        {{ 'components_footer.html.copyright'|trans({'%year%': "now"|date("Y")}) }}
     </div>
 
 </footer>

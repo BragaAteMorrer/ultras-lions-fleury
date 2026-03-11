@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ item.title }} – Table de Vente{% endblock %}
+{% block title %}{{ 'merch_show.html.title'|trans({'%title%': item.title}) }}{% endblock %}
 
 {% block body %}
 
 <section class="hero">
     <div class="hero-content">
         <h1 class="hero-title">{{ item.title }}</h1>
-        <p class="hero-subtitle">Table de Vente officielle Ultras Lions</p>
+        <p class="hero-subtitle">{{ 'merch_show.html.table_de_vente_officielle_ultras_lions'|trans }}</p>
     </div>
 </section>
 
@@ -28,7 +28,7 @@
                     <p class="text-muted mb-2">{{ item.category.name }}</p>
                 {% endif %}
                 {% if item.stocks is not empty %}
-                    <p class="text-muted mb-2">Stock total : {{ item.totalStock }}</p>
+                    <p class="text-muted mb-2">{{ 'merch_show.html.stock_total'|trans({'%stock%': item.totalStock}) }}</p>
                     <div class="text-muted" style="font-size: 0.95rem;">
                         {% for stock in item.stocks %}
                             <div>{{ stock.size }} : {{ stock.quantity }}</div>
@@ -41,8 +41,8 @@
                     {{ item.description|raw }}
                 </div>
 
-                <a href="{{ path('merch_buy', { id: item.id }) }}" class="btn btn-danger mt-4 w-100">Acheter</a>
-                <a href="{{ path('merch_index') }}" class="btn btn-outline-light mt-4">← Retour</a>
+                <a href="{{ path('merch_buy', { id: item.id }) }}" class="btn btn-danger mt-4 w-100">{{ 'merch_show.html.acheter'|trans }}</a>
+                <a href="{{ path('merch_index') }}" class="btn btn-outline-light mt-4">{{ 'merch_buy.html.retour'|trans }}</a>
             </div>
 
         </div>

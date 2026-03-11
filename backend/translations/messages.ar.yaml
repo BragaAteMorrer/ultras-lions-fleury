@@ -1,0 +1,276 @@
+admin_dashboard:
+  html:
+    articles: أغراض
+    aucun_article_pour_le_moment: لا توجد مقالات في الوقت الراهن.
+    derniers_articles_publies: أحدث المقالات المنشورة
+    evenements: الأحداث
+    evolution_des_articles: تطور المقالات
+    galeries: المعارض
+    medias: وسائط
+    ultras_lions_dashboard: Ultras Lions – لوحة القيادة
+    ultras_lions_fc_fleury_91_page_admin: Ultras Lions – FC Fleury 91 - صفحة الإدارة
+    visites: الزيارات
+base:
+  html:
+    ultras_lions_fc_fleury_91: ألتراس لايونز – إف سي فلوري 91
+components_footer:
+  html:
+    copyright: © %year% Ultras Lions — موقع Ultras FC Fleury 91.
+    espace_admin: المنطقة الادارية
+    facebook: فيسبوك
+    instagram: انستغرام
+    suivez_nous: 'تابعنا:'
+    tribune_drapeaux_fumigenes_chants_la_ville_est_rouge_et_noire: 'منبر، أعلام، قنابل دخان، أغاني: المدينة حمراء وسوداء.'
+    twitter: تغريد
+    ultras_lions: ألتراس ليونز
+components_navbar:
+  html:
+    accueil: مرحباً
+    actualites: أخبار
+    billetterie: التذاكر
+    connexion: اتصال
+    deconnexion: قطع الاتصال
+    le_groupe: المجموعة
+    modifier_mon_compte: ️ تعديل حسابي
+    mon_profil: ملفي الشخصي
+    photos_de_match: تطابق الصور
+    saisir_un_code: أدخل رمزا
+    saison: الموسم %year_start%/%year_end%
+    se_connecter: تسجيل الدخول
+    sinscrire: يسجل
+    table_de_vente: جدول المبيعات
+    toutes_les_saisons: كل المواسم
+email_base:
+  html:
+    footer_brand: ألتراس لايونز – إف سي فلوري 91
+    footer_notice: هذه رسالة بريد إلكتروني تلقائية، يرجى عدم الرد مباشرة.
+email_merch_order_recap:
+  html:
+    date: 'تاريخ :'
+    la_remise_et_le_paiement_se_font_a_la_table_de_vente_ou_selon_les_cons: يتم التسليم والدفع على طاولة المبيعات (أو حسب تعليمات المجموعة). إذا كان لديك سؤال، يمكنك الرد على هذه الرسالة الإلكترونية.
+    n_commande: 'رقم الطلب:'
+    note: 'ملحوظة :'
+    prix: سعر
+    produit: منتج
+    qte: الكمية
+    recapitulatif_de_commande: ملخص الطلب
+    total: المجموع
+    voir_la_table_de_vente: انظر جدول المبيعات
+email_ticket_order_recap:
+  html:
+    here_is_summary: 'هنا هو الملخص:'
+    le_paiement_et_les_infos_de_remise_retrait_se_font_selon_les_consignes: يتم إجراء معلومات الدفع والتسليم/السحب وفقًا لتعليمات المجموعة. إذا كان لديك سؤال، يمكنك الرد على هذه الرسالة الإلكترونية.
+    match: مباراة
+    match_line: '%date% - مقابل %opponent%'
+    n_reservation: 'رقم الحجز:'
+    recapitulatif_de_reservation: ملخص الحجز
+    thanks_for_booking: شكرا لك على الحجز
+    voir_la_billetterie: راجع مكتب التذاكر
+email_welcome:
+  html:
+    acceder_au_site: الوصول إلى الموقع
+    bienvenue_chez_les_ultras_lions: مرحبًا بكم في ألتراس ليونز
+    famille_ultras_lions: عائلة ULTRAS LIONS
+    felicitations_tu_rejoins_officiellement_la: تهانينا، لقد انضممت رسميًا إلى
+    lequipe_est_ravie_de_taccueillir_parmi_les_notres_si_tu_as_la_moindre_: يسعد الفريق أن يرحب بكم بيننا. إذا كانت لديك أي أسئلة، يمكنك الرد مباشرة على هذه الرسالة الإلكترونية.
+    ton_compte_vient_detre_cree_avec_succes_et_tu_peux_maintenant_acceder_: '. لقد تم إنشاء حسابك للتو بنجاح ويمكنك الآن الوصول إلى المحتوى الخاص: الرحلات والمعارض والمعلومات الداخلية وجدول المبيعات والمزيد.'
+events_list:
+  html:
+    aucun_evenement_pour_le_moment: لا توجد أحداث في الوقت الراهن.
+    aucune_photo_de_match_pour_le_moment: لا توجد صور مطابقة بعد.
+    deplacements_evenements: السفر والأحداث
+    deplacements_evenements_ultras_lions: السفر والفعاليات – Ultras Lions
+    filtrer: فلتر
+    prochains_matchs_rassemblements_actions: المباريات القادمة والتجمعات والإجراءات
+    saison: موسم
+events_show:
+  html:
+    title: '%title% – سفر – أولتراس ليونز'
+galleries_list:
+  html:
+    aucune_galerie_pour_linstant: لا يوجد معرض بعد.
+    dernieres_galeries: أحدث المعارض
+    galeries_ultras_lions: المعارض – أولتراس ليونز
+    tribunes_deplacements_tifos_vie_du_groupe: المنابر، السفر، التيفوس، الحياة الجماعية
+galleries_show:
+  html:
+    aucune_photo_disponible_pour_cette_galerie: لا توجد صور متاحة لهذا المعرض.
+    title: '%title% – المعارض – ألتراس ليونز'
+group_show:
+  html:
+    identite_valeurs_histoire_tribune: الهوية، القيم، التاريخ، المنصة
+    le_groupe: المجموعة
+    le_groupe_ultras_lions: المجموعة – ألتراس ليونز
+home_index:
+  html:
+    aucun_evenement_prevu: لم يتم التخطيط لأي أحداث.
+    aucune_actualite_disponible: لا توجد أخبار متاحة.
+    aucune_information_de_groupe_na_encore_ete_ajoutee: لم تتم إضافة أي معلومات المجموعة حتى الآن.
+    banniere_du_groupe: راية المجموعة
+    dernieres_actualites: آخر الأخبار
+    galeries_photos: معارض الصور
+    le_site_web_du_groupe_ultras_du_fc_fleury_91: الموقع الإلكتروني لمجموعة FC Fleury 91 Ultras
+    prochain_deplacement: الرحلة القادمة
+    ultras_lions: الترا ليونز
+    ultras_lions_i_fc_fleury_91: ألتراس لايونز – إف سي فلوري 91
+    voir_les_evenements: عرض الأحداث
+members_list:
+  html:
+    membres_ultras_lions: أعضاء ألتراس ليونز
+merch_buy:
+  html:
+    achat: شراء
+    paiement_et_remise_a_la_table_de_vente_ou_selon_consignes_du_groupe: الدفع والتسليم على طاولة المبيعات (أو حسب تعليمات المجموعة).
+    prix_unitaire: 'سعر الوحدة:'
+    retour: ← العودة
+    stock_non_configure_pour_cet_article_contacte_un_admin: لم يتم تكوين المخزون لهذا العنصر (اتصل بالمسؤول).
+    valider_et_recevoir_mon_recapitulatif: التحقق من صحة واستلام الملخص الخاص بي
+merch_list:
+  html:
+    categorie: فئة
+    nos_produits: منتجاتنا
+    table_de_vente_ultras_lions: جدول المبيعات – Ultras Lions
+    textiles_accessoires_stickers_supports_du_groupe: المنسوجات والإكسسوارات والملصقات والدعم الجماعي
+    toutes: الجميع
+    trier: نوع
+merch_show:
+  html:
+    acheter: يشتري
+    stock_total: 'إجمالي المخزون: %stock%'
+    table_de_vente_officielle_ultras_lions: جدول مبيعات Ultras Lions الرسمي
+    title: '%title% – جدول المبيعات'
+pages_list:
+  html:
+    aucune_page_disponible: لا توجد صفحات متاحة.
+    pages: الصفحات
+    pages_informatives_du_groupe: صفحات معلومات المجموعة
+    pages_ultras_lions: الصفحات – أولتراس ليونز
+    toutes_les_pages: جميع الصفحات
+pages_show:
+  html:
+    published_on: تم النشر في %date%
+    title: '%title% – ألتراس ليونز'
+posts_list:
+  html:
+    actualites_ultras_lions: الأخبار – ألتراس ليونز
+    aucune_actu_pour_linstant: لا أخبار في الوقت الراهن.
+    derniers_articles: أحدث المقالات
+    infos_communiques_actions_en_tribune: الأخبار والبيانات الصحفية والإجراءات في المدرجات
+posts_show:
+  html:
+    published_on: تم النشر في %date%
+    title: '%title% – ألتراس ليونز'
+profile_edit:
+  html:
+    mettre_a_jour: للتحديث
+    modifier_mon_compte: تحرير حسابي
+profile_show:
+  html:
+    admin_role: مكتب - ألتراس ليونز
+    adresse: 'عنوان :'
+    date_de_naissance: 'تاريخ الميلاد :'
+    email: 'بريد إلكتروني:'
+    member_role: عضو - ألتراس ليونز
+    modifier_mon_profil: تحرير ملفي الشخصي
+    nom: 'اسم :'
+    polo: 'بولو:'
+    pull: 'سترة:'
+    short: 'سراويل:'
+    sweat: 'البلوز:'
+    t_shirt: 'تي شيرت:'
+    telephone: 'هاتف :'
+    veste: 'سترة :'
+registration_confirmation_email:
+  html:
+    cheers: هتافات!
+    confirm_my_email: تأكيد بريدي الإلكتروني
+    hi_please_confirm_your_email: أهلاً! يرجى تأكيد البريد الإلكتروني الخاص بك!
+    please_confirm_your_email_address_by_clicking_the_following_link: 'الرجاء تأكيد عنوان بريدك الإلكتروني بالضغط على الرابط التالي:'
+registration_register:
+  html:
+    register: يسجل
+security_forgot_password:
+  html:
+    entrez_votre_adresse_email_et_nous_vous_enverrons_un_lien_pour_reiniti: أدخل عنوان بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور الخاصة بك.
+    envoyer_le_lien: إرسال الرابط
+    mot_de_passe_oublie: نسيت كلمة المرور
+    retour_a_la_connexion: العودة إلى تسجيل الدخول
+    votre_email: البريد الإلكتروني الخاص بك
+security_invitation:
+  html:
+    code_dinvitation: رمز الدعوة
+    lors_de_votre_cartage_a_la_table_de_vente_un_code_vous_a_ete_remis_pou: أثناء تواجدك في Cartage على طاولة المبيعات، تم إعطاؤك رمزًا لتتمكن من إنشاء حساب عضو على الموقع، يرجى ملاحظة أن هذا صالح لمدة أسبوع واحد فقط! إذا نسيت التسجيل في نهاية هذا الأسبوع أو فقدته، فيرجى الاتصال بمديري المجموعة للحصول على رمز جديد لك، هذا الرمز مخصص للاستخدام مرة واحدة!
+    rejoindre_les_ultras_lions: انضم إلى Ultras Lions
+    valider: للتحقق من صحة
+security_login:
+  html:
+    email: بريد إلكتروني
+    mot_de_passe: كلمة المرور
+    mot_de_passe_oublie: هل نسيت كلمة المرور؟
+security_register:
+  html:
+    coordonnees: تفاصيل الاتصال
+    creer_mon_compte: إنشاء حسابي
+    identite: تعريف
+    informations_de_connexion: معلومات تسجيل الدخول
+    inscription: تسجيل
+    photo: صورة
+    tailles: الأحجام
+security_reset_password:
+  html:
+    nouveau_mot_de_passe: كلمة المرور الجديدة
+staff_index:
+  html:
+    staff: طاقم عمل
+    staff_ultras_lions: فريق عمل ألتراس ليونز
+ticket_buy:
+  html:
+    match: 'مباراة :'
+    paiement_et_remise_selon_les_consignes_du_groupe: الدفع والتسليم حسب تعليمات المجموعة.
+    reservation: حجز
+    stock: '- مخزون:'
+    title: الحجز - %title%
+    vs_opponent: مقابل %opponent%
+ticket_list:
+  html:
+    aucun_match_pour_le_moment: لا توجد مباريات حتى الآن.
+    billetterie_ultras_lions: حجز التذاكر - ألتراس ليونز
+    matchs_a_domicile_et_a_lexterieur: مباريات الذهاب والإياب
+    matchs_disponibles: المباريات المتاحة
+    stock: 'المخزون: %stock%'
+    vs_opponent: مقابل %opponent%
+ticket_show:
+  html:
+    adversaire: 'الخصم:'
+    complet: مكتمل
+    lieu: 'مكان :'
+    prix: 'سعر :'
+    reserver: للحجز
+    stock: 'المخزون: %stock%'
+    title: '%title% - مكتب التذاكر'
+user__delete_form:
+  html:
+    delete: يمسح
+user_edit:
+  html:
+    back_to_list: العودة إلى القائمة
+    edit_user: تحرير المستخدم
+user_index:
+  html:
+    actions: الإجراءات
+    create_new: إنشاء جديد
+    edit: يحرر
+    id: بطاقة تعريف
+    isverified: تم التحقق منه
+    no_records_found: لم يتم العثور على سجلات
+    password: كلمة المرور
+    roles: الأدوار
+    show: يعرض
+    user_index: فهرس المستخدم
+user_new:
+  html:
+    create_new_user: إنشاء مستخدم جديد
+    new_user: مستخدم جديد
+user_show:
+  html:
+    user: مستخدم

@@ -1,0 +1,276 @@
+admin_dashboard:
+  html:
+    articles: Elementos
+    aucun_article_pour_le_moment: No hay artículos por el momento.
+    derniers_articles_publies: Últimos artículos publicados
+    evenements: Eventos
+    evolution_des_articles: Evolución de los artículos
+    galeries: Galerías
+    medias: Medios de comunicación
+    ultras_lions_dashboard: Ultras Lions – Panel de control
+    ultras_lions_fc_fleury_91_page_admin: Ultras Lions – FC Fleury 91 - Página de administración
+    visites: Visitas
+base:
+  html:
+    ultras_lions_fc_fleury_91: Ultras Lions – FC Fleury 91
+components_footer:
+  html:
+    copyright: © %year% Ultras Lions — Sitio web de Ultras FC Fleury 91.
+    espace_admin: Área de administración
+    facebook: Facebook
+    instagram: Instagram
+    suivez_nous: 'Síganos:'
+    tribune_drapeaux_fumigenes_chants_la_ville_est_rouge_et_noire: 'Tribuna, banderas, bombas de humo, canciones: la ciudad es roja y negra.'
+    twitter: Gorjeo
+    ultras_lions: Ultras Lions
+components_navbar:
+  html:
+    accueil: Bienvenido
+    actualites: Noticias
+    billetterie: Venta de entradas
+    connexion: Conexión
+    deconnexion: Desconectar
+    le_groupe: El grupo
+    modifier_mon_compte: ️ Editar mi cuenta
+    mon_profil: mi perfil
+    photos_de_match: Fotos del partido
+    saisir_un_code: Introduce un código
+    saison: Temporada %year_start%/%year_end%
+    se_connecter: Acceso
+    sinscrire: Registro
+    table_de_vente: Tabla de ventas
+    toutes_les_saisons: Todas las estaciones
+email_base:
+  html:
+    footer_brand: Ultras Lions – FC Fleury 91
+    footer_notice: Este es un correo electrónico automático, no responda directamente.
+email_merch_order_recap:
+  html:
+    date: 'Fecha :'
+    la_remise_et_le_paiement_se_font_a_la_table_de_vente_ou_selon_les_cons: La entrega y el pago se realizan en la mesa de venta (o según las instrucciones del grupo). Si tienes alguna pregunta, puedes responder a este correo electrónico.
+    n_commande: 'Número de orden:'
+    note: 'Nota :'
+    prix: Precio
+    produit: Producto
+    qte: Cantidad
+    recapitulatif_de_commande: Resumen del pedido
+    total: Total
+    voir_la_table_de_vente: Ver la tabla de ventas
+email_ticket_order_recap:
+  html:
+    here_is_summary: 'Aquí está el resumen:'
+    le_paiement_et_les_infos_de_remise_retrait_se_font_selon_les_consignes: Los datos de pago y entrega/retiro se realizan según las instrucciones del grupo. Si tienes alguna pregunta, puedes responder a este correo electrónico.
+    match: Fósforo
+    match_line: '%date% - frente a %opponent%'
+    n_reservation: 'Número de reserva:'
+    recapitulatif_de_reservation: Resumen de reserva
+    thanks_for_booking: Gracias por tu reserva.
+    voir_la_billetterie: Ver taquilla
+email_welcome:
+  html:
+    acceder_au_site: Acceder al sitio
+    bienvenue_chez_les_ultras_lions: Bienvenidos a los Ultras Lions
+    famille_ultras_lions: Familia ULTRAS LIONS
+    felicitations_tu_rejoins_officiellement_la: Felicitaciones, te unes oficialmente al
+    lequipe_est_ravie_de_taccueillir_parmi_les_notres_si_tu_as_la_moindre_: El equipo está encantado de darle la bienvenida entre los nuestros. Si tienes alguna pregunta, puedes responder directamente a este correo electrónico.
+    ton_compte_vient_detre_cree_avec_succes_et_tu_peux_maintenant_acceder_: '. Tu cuenta acaba de ser creada exitosamente y ya puedes acceder a contenidos privados: viajes, galerías, información interna, tabla de ventas y más.'
+events_list:
+  html:
+    aucun_evenement_pour_le_moment: No hay eventos por el momento.
+    aucune_photo_de_match_pour_le_moment: Aún no hay fotos coincidentes.
+    deplacements_evenements: Viajes y eventos
+    deplacements_evenements_ultras_lions: Viajes y eventos – Ultras Lions
+    filtrer: Filtrar
+    prochains_matchs_rassemblements_actions: Próximos partidos, encuentros, acciones.
+    saison: Estación
+events_show:
+  html:
+    title: '%title% – Viajes – Ultras Lions'
+galleries_list:
+  html:
+    aucune_galerie_pour_linstant: Aún no hay galería.
+    dernieres_galeries: Últimas galerías
+    galeries_ultras_lions: Galerías – Ultras Lions
+    tribunes_deplacements_tifos_vie_du_groupe: Tribunas, viajes, tifos, vida grupal.
+galleries_show:
+  html:
+    aucune_photo_disponible_pour_cette_galerie: No hay fotos disponibles para esta galería.
+    title: '%title% – Galerías – Ultras Lions'
+group_show:
+  html:
+    identite_valeurs_histoire_tribune: Identidad, valores, historia, plataforma.
+    le_groupe: el grupo
+    le_groupe_ultras_lions: El grupo – Ultras Lions
+home_index:
+  html:
+    aucun_evenement_prevu: No hay eventos planeados.
+    aucune_actualite_disponible: No hay noticias disponibles.
+    aucune_information_de_groupe_na_encore_ete_ajoutee: Aún no se ha agregado información del grupo.
+    banniere_du_groupe: pancarta de grupo
+    dernieres_actualites: Últimas noticias
+    galeries_photos: Galerías de fotos
+    le_site_web_du_groupe_ultras_du_fc_fleury_91: El sitio web del grupo ultras FC Fleury 91
+    prochain_deplacement: Próximo viaje
+    ultras_lions: ULTRAS LIONS
+    ultras_lions_i_fc_fleury_91: Ultras Lions – FC Fleury 91
+    voir_les_evenements: Ver eventos
+members_list:
+  html:
+    membres_ultras_lions: Socios Ultras Lions
+merch_buy:
+  html:
+    achat: Compra
+    paiement_et_remise_a_la_table_de_vente_ou_selon_consignes_du_groupe: Pago y entrega en mesa de ventas (o según instrucciones del grupo).
+    prix_unitaire: 'Precio unitario:'
+    retour: ← Volver
+    stock_non_configure_pour_cet_article_contacte_un_admin: Stock no configurado para este artículo (contacte a un administrador).
+    valider_et_recevoir_mon_recapitulatif: Validar y recibir mi resumen
+merch_list:
+  html:
+    categorie: Categoría
+    nos_produits: Nuestros productos
+    table_de_vente_ultras_lions: Tabla de Ventas – Ultras Lions
+    textiles_accessoires_stickers_supports_du_groupe: Textiles, accesorios, pegatinas, soportes para grupos.
+    toutes: Todo
+    trier: Clasificar
+merch_show:
+  html:
+    acheter: Comprar
+    stock_total: 'Existencias totales: %stock%'
+    table_de_vente_officielle_ultras_lions: Tabla oficial de ventas de Ultras Lions
+    title: '%title% – Tabla de ventas'
+pages_list:
+  html:
+    aucune_page_disponible: No hay páginas disponibles.
+    pages: paginas
+    pages_informatives_du_groupe: Páginas de información del grupo.
+    pages_ultras_lions: Paginas – Ultras Lions
+    toutes_les_pages: Todas las páginas
+pages_show:
+  html:
+    published_on: Publicado el %date%
+    title: '%title% – Ultras Lions'
+posts_list:
+  html:
+    actualites_ultras_lions: Noticias – Ultras Lions
+    aucune_actu_pour_linstant: No hay noticias por el momento.
+    derniers_articles: Últimos artículos
+    infos_communiques_actions_en_tribune: Noticias, notas de prensa, acciones en las gradas.
+posts_show:
+  html:
+    published_on: Publicado el %date%
+    title: '%title% – Ultras Lions'
+profile_edit:
+  html:
+    mettre_a_jour: Para actualizar
+    modifier_mon_compte: Editar mi cuenta
+profile_show:
+  html:
+    admin_role: Oficina - Ultras Lions
+    adresse: 'DIRECCIÓN :'
+    date_de_naissance: 'Fecha de nacimiento :'
+    email: 'Correo electrónico:'
+    member_role: Miembro - Ultras Lions
+    modifier_mon_profil: Editar mi perfil
+    nom: 'Nombre :'
+    polo: 'Polo:'
+    pull: 'Suéter:'
+    short: 'Bermudas:'
+    sweat: 'Camisa de entrenamiento:'
+    t_shirt: 'Camiseta:'
+    telephone: 'Teléfono :'
+    veste: 'Chaqueta :'
+registration_confirmation_email:
+  html:
+    cheers: ¡Salud!
+    confirm_my_email: Confirmar mi correo electrónico
+    hi_please_confirm_your_email: ¡Hola! ¡Por favor confirma tu correo electrónico!
+    please_confirm_your_email_address_by_clicking_the_following_link: 'Por favor confirme su dirección de correo electrónico haciendo clic en el siguiente enlace:'
+registration_register:
+  html:
+    register: Registro
+security_forgot_password:
+  html:
+    entrez_votre_adresse_email_et_nous_vous_enverrons_un_lien_pour_reiniti: Ingrese su dirección de correo electrónico y le enviaremos un enlace para restablecer su contraseña.
+    envoyer_le_lien: Enviar enlace
+    mot_de_passe_oublie: Contraseña olvidada
+    retour_a_la_connexion: Volver a iniciar sesión
+    votre_email: Tu correo electrónico
+security_invitation:
+  html:
+    code_dinvitation: Código de invitación
+    lors_de_votre_cartage_a_la_table_de_vente_un_code_vous_a_ete_remis_pou: Durante su Cartage en la mesa de ventas, se le entregó un código para poder crear una cuenta de miembro en el sitio. ¡Tenga en cuenta que esto solo es válido por una semana! Si olvida registrarse al final de esta semana o lo pierde, comuníquese con los administradores del grupo para que le entreguen uno nuevo. ¡Este código es para usar una sola vez!
+    rejoindre_les_ultras_lions: Únete a los Ultras Lions
+    valider: para validar
+security_login:
+  html:
+    email: Correo electrónico
+    mot_de_passe: Contraseña
+    mot_de_passe_oublie: ¿Olvidaste tu contraseña?
+security_register:
+  html:
+    coordonnees: Detalles de contacto
+    creer_mon_compte: crear mi cuenta
+    identite: Identificar
+    informations_de_connexion: Información de inicio de sesión
+    inscription: Registro
+    photo: Foto
+    tailles: Tallas
+security_reset_password:
+  html:
+    nouveau_mot_de_passe: Nueva contraseña
+staff_index:
+  html:
+    staff: PERSONAL
+    staff_ultras_lions: Staff Ultras Lions
+ticket_buy:
+  html:
+    match: 'Fósforo :'
+    paiement_et_remise_selon_les_consignes_du_groupe: Pago y entrega según instrucciones del grupo.
+    reservation: Reserva
+    stock: '- Existencias:'
+    title: Reserva - %title%
+    vs_opponent: frente a %opponent%
+ticket_list:
+  html:
+    aucun_match_pour_le_moment: Aún no hay coincidencias.
+    billetterie_ultras_lions: Venta de entradas - Ultras Lions
+    matchs_a_domicile_et_a_lexterieur: Partidos de ida y vuelta
+    matchs_disponibles: Partidos disponibles
+    stock: 'Existencias: %stock%'
+    vs_opponent: frente a %opponent%
+ticket_show:
+  html:
+    adversaire: 'Adversario:'
+    complet: Completo
+    lieu: 'Lugar :'
+    prix: 'Precio :'
+    reserver: Para reservar
+    stock: 'Existencias: %stock%'
+    title: '%title% - Taquilla'
+user__delete_form:
+  html:
+    delete: Borrar
+user_edit:
+  html:
+    back_to_list: volver a la lista
+    edit_user: Editar usuario
+user_index:
+  html:
+    actions: comportamiento
+    create_new: Crear nuevo
+    edit: editar
+    id: IDENTIFICACIÓN
+    isverified: Está verificado
+    no_records_found: no se encontraron registros
+    password: Contraseña
+    roles: Roles
+    show: espectáculo
+    user_index: índice de usuarios
+user_new:
+  html:
+    create_new_user: Crear nuevo usuario
+    new_user: Nuevo usuario
+user_show:
+  html:
+    user: Usuario

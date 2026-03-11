@@ -1,26 +1,26 @@
 {% extends 'email/base.html.twig' %}
 
-{% block title %}Récapitulatif de réservation{% endblock %}
+{% block title %}{{ 'email_ticket_order_recap.html.recapitulatif_de_reservation'|trans }}{% endblock %}
 
 {% block content %}
-    <h1>Récapitulatif de réservation</h1>
+    <h1>{{ 'email_ticket_order_recap.html.recapitulatif_de_reservation'|trans }}</h1>
 
     <p>
-        Merci pour ta réservation{% if user and (user.prenom or user.nom) %}, {{ user.prenom }} {{ user.nom }}{% endif %}.
-        Voici le récapitulatif :
+        {{ 'email_ticket_order_recap.html.thanks_for_booking'|trans }}{% if user and (user.prenom or user.nom) %}, {{ user.prenom }} {{ user.nom }}{% endif %}.
+        {{ 'email_ticket_order_recap.html.here_is_summary'|trans }}
     </p>
 
     <p>
-        <strong>N° réservation :</strong> {{ order.number }}<br>
-        <strong>Date :</strong> {{ order.orderedAt|date('d/m/Y H:i') }}
+        <strong>{{ 'email_ticket_order_recap.html.n_reservation'|trans }}</strong> {{ order.number }}<br>
+        <strong>{{ 'email_merch_order_recap.html.date'|trans }}</strong> {{ order.orderedAt|date('d/m/Y H:i') }}
     </p>
 
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; margin: 1rem 0;">
         <thead>
         <tr>
-            <th align="left" style="padding: 0.5rem; border-bottom: 1px solid #333;">Match</th>
-            <th align="center" style="padding: 0.5rem; border-bottom: 1px solid #333;">Qté</th>
-            <th align="right" style="padding: 0.5rem; border-bottom: 1px solid #333;">Prix</th>
+            <th align="left" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_ticket_order_recap.html.match'|trans }}</th>
+            <th align="center" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_merch_order_recap.html.qte'|trans }}</th>
+            <th align="right" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_merch_order_recap.html.prix'|trans }}</th>
         </tr>
         </thead>
         <tbody>
@@ -28,7 +28,7 @@
             <tr>
                 <td style="padding: 0.5rem; border-bottom: 1px solid #222;">
                     {{ line.title }}<br>
-                    <span style="color:#999;">{{ line.matchDate|date('d/m/Y H:i') }} - vs {{ line.opponent }}</span>
+                    <span style="color:#999;">{{ 'email_ticket_order_recap.html.match_line'|trans({'%date%': line.matchDate|date('d/m/Y H:i'), '%opponent%': line.opponent}) }}</span>
                 </td>
                 <td align="center" style="padding: 0.5rem; border-bottom: 1px solid #222;">{{ line.quantity }}</td>
                 <td align="right" style="padding: 0.5rem; border-bottom: 1px solid #222;">
@@ -39,7 +39,7 @@
         </tbody>
         <tfoot>
         <tr>
-            <td colspan="2" align="right" style="padding: 0.75rem 0.5rem; font-weight: bold;">Total</td>
+            <td colspan="2" align="right" style="padding: 0.75rem 0.5rem; font-weight: bold;">{{ 'email_merch_order_recap.html.total'|trans }}</td>
             <td align="right" style="padding: 0.75rem 0.5rem; font-weight: bold; color: #D40000;">
                 {{ order.total|number_format(2, ',', ' ') }} €
             </td>
@@ -48,14 +48,10 @@
     </table>
 
     {% if order.note %}
-        <p><strong>Note :</strong> {{ order.note }}</p>
+        <p><strong>{{ 'email_merch_order_recap.html.note'|trans }}</strong> {{ order.note }}</p>
     {% endif %}
 
-    <p>
-        Le paiement et les infos de remise/retrait se font selon les consignes du groupe.
-        Si tu as une question, tu peux répondre à cet email.
-    </p>
+    <p>{{ 'email_ticket_order_recap.html.le_paiement_et_les_infos_de_remise_retrait_se_font_selon_les_consignes'|trans }}</p>
 
-    <a href="{{ url('ticket_index') }}" class="btn">Voir la billetterie</a>
+    <a href="{{ url('ticket_index') }}" class="btn">{{ 'email_ticket_order_recap.html.voir_la_billetterie'|trans }}</a>
 {% endblock %}
-

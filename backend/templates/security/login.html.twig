@@ -3,7 +3,7 @@
 {% block body %}
 
 <section class="auth-hero">
-    <h1 class="hero-title">Connexion</h1>
+    <h1 class="hero-title">{{ 'components_navbar.html.connexion'|trans }}</h1>
 </section>
     <div class="cards cards-single">
         <div class="card card-form">
@@ -15,16 +15,14 @@
             {% endif %}
 
             <form method="post" class="auth-form">
-                <input type="email" name="_username" value="{{ last_username }}" placeholder="Email" required>
+                <input type="email" name="_username" value="{{ last_username }}" placeholder="{{ 'security_login.html.email'|trans }}" required>
 
-                <input type="password" name="_password" placeholder="Mot de passe" required>
+                <input type="password" name="_password" placeholder="{{ 'security_login.html.mot_de_passe'|trans }}" required>
 
-                <button class="btn-ul">Connexion</button>
+                <button class="btn-ul">{{ 'components_navbar.html.connexion'|trans }}</button>
             </form>
 
-            <a href="{{ path('forgot_password') }}" class="link-small">
-                Mot de passe oublié ?
-            </a>
+            <a href="{{ path('forgot_password') }}" class="link-small">{{ 'security_login.html.mot_de_passe_oublie'|trans }}</a>
 
         </div>
     </div>

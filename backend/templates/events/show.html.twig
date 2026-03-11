@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ event.title }} – Déplacement – Ultras Lions{% endblock %}
+{% block title %}{{ 'events_show.html.title'|trans({'%title%': event.title}) }}{% endblock %}
 
 {% block body %}
 <section class="hero">

@@ -1,9 +1,9 @@
 {% extends 'email/base.html.twig' %}
 
-{% block title %}Récapitulatif de commande{% endblock %}
+{% block title %}{{ 'email_merch_order_recap.html.recapitulatif_de_commande'|trans }}{% endblock %}
 
 {% block content %}
-    <h1>Récapitulatif de commande</h1>
+    <h1>{{ 'email_merch_order_recap.html.recapitulatif_de_commande'|trans }}</h1>
 
     <p>
         Merci pour ta commande{% if user and (user.prenom or user.nom) %}, {{ user.prenom }} {{ user.nom }}{% endif %}.
@@ -11,16 +11,16 @@
     </p>
 
     <p>
-        <strong>N° commande :</strong> {{ order.number }}<br>
-        <strong>Date :</strong> {{ order.orderedAt|date('d/m/Y H:i') }}
+        <strong>{{ 'email_merch_order_recap.html.n_commande'|trans }}</strong> {{ order.number }}<br>
+        <strong>{{ 'email_merch_order_recap.html.date'|trans }}</strong> {{ order.orderedAt|date('d/m/Y H:i') }}
     </p>
 
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; margin: 1rem 0;">
         <thead>
         <tr>
-            <th align="left" style="padding: 0.5rem; border-bottom: 1px solid #333;">Produit</th>
-            <th align="center" style="padding: 0.5rem; border-bottom: 1px solid #333;">Qté</th>
-            <th align="right" style="padding: 0.5rem; border-bottom: 1px solid #333;">Prix</th>
+            <th align="left" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_merch_order_recap.html.produit'|trans }}</th>
+            <th align="center" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_merch_order_recap.html.qte'|trans }}</th>
+            <th align="right" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_merch_order_recap.html.prix'|trans }}</th>
         </tr>
         </thead>
         <tbody>
@@ -41,7 +41,7 @@
         </tbody>
         <tfoot>
         <tr>
-            <td colspan="2" align="right" style="padding: 0.75rem 0.5rem; font-weight: bold;">Total</td>
+            <td colspan="2" align="right" style="padding: 0.75rem 0.5rem; font-weight: bold;">{{ 'email_merch_order_recap.html.total'|trans }}</td>
             <td align="right" style="padding: 0.75rem 0.5rem; font-weight: bold; color: #D40000;">
                 {{ order.total|number_format(2, ',', ' ') }} €
             </td>
@@ -50,13 +50,10 @@
     </table>
 
     {% if order.note %}
-        <p><strong>Note :</strong> {{ order.note }}</p>
+        <p><strong>{{ 'email_merch_order_recap.html.note'|trans }}</strong> {{ order.note }}</p>
     {% endif %}
 
-    <p>
-        La remise et le paiement se font à la table de vente (ou selon les consignes du groupe).
-        Si tu as une question, tu peux répondre à cet email.
-    </p>
+    <p>{{ 'email_merch_order_recap.html.la_remise_et_le_paiement_se_font_a_la_table_de_vente_ou_selon_les_cons'|trans }}</p>
 
-    <a href="{{ url('merch_index') }}" class="btn">Voir la table de vente</a>
+    <a href="{{ url('merch_index') }}" class="btn">{{ 'email_merch_order_recap.html.voir_la_table_de_vente'|trans }}</a>
 {% endblock %}

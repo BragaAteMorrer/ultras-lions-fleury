@@ -1,31 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Billetterie - Ultras Lions{% endblock %}
+{% block title %}{{ 'ticket_list.html.billetterie_ultras_lions'|trans }}{% endblock %}
 
 {% block body %}
     <section class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Billetterie</h1>
-            <p class="hero-subtitle">Matchs à domicile et à l'extérieur</p>
+            <h1 class="hero-title">{{ 'components_navbar.html.billetterie'|trans }}</h1>
+            <p class="hero-subtitle">{{ 'ticket_list.html.matchs_a_domicile_et_a_lexterieur'|trans }}</p>
         </div>
     </section>
 
     <div class="section">
         <div class="container">
             <form method="get" class="mb-4" style="max-width: 24rem;">
-                <label class="form-label text-light" for="category">Catégorie</label>
+                <label class="form-label text-light" for="category">{{ 'merch_list.html.categorie'|trans }}</label>
                 <div class="d-flex gap-2">
                     <select id="category" name="category" class="form-select">
-                        <option value="" {% if selectedCategory is null %}selected{% endif %}>Toutes</option>
+                        <option value="" {% if selectedCategory is null %}selected{% endif %}>{{ 'merch_list.html.toutes'|trans }}</option>
                         {% for cat in categories %}
                             <option value="{{ cat.slug }}" {% if selectedCategory and selectedCategory.id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
                         {% endfor %}
                     </select>
-                    <button class="btn btn-outline-light" type="submit">Trier</button>
+                    <button class="btn btn-outline-light" type="submit">{{ 'merch_list.html.trier'|trans }}</button>
                 </div>
             </form>
 
-            <h2 class="section-title">Matchs disponibles</h2>
+            <h2 class="section-title">{{ 'ticket_list.html.matchs_disponibles'|trans }}</h2>
 
             <div class="row g-4">
                 {% for ticket in items %}
@@ -44,20 +44,19 @@
                                     <p class="text-muted mb-1">{{ ticket.category.name }}</p>
                                 {% endif %}
                                 <p class="mb-1">{{ ticket.matchDate|date('d/m/Y H:i') }}{% if ticket.venue %} - {{ ticket.venue }}{% endif %}</p>
-                                <p class="text-muted mb-1">vs {{ ticket.opponent }}</p>
+                                <p class="text-muted mb-1">{{ 'ticket_list.html.vs_opponent'|trans({'%opponent%': ticket.opponent}) }}</p>
                                 <p class="card-price">{{ ticket.price|number_format(2, ',', ' ') }} €</p>
-                                <p class="text-muted mb-0">Stock : {{ ticket.stock }}</p>
+                                <p class="text-muted mb-0">{{ 'ticket_list.html.stock'|trans({'%stock%': ticket.stock}) }}</p>
                             </div>
 
                         </a>
                     </div>
                 {% else %}
                     <div class="col-12">
-                        <div class="alert alert-secondary">Aucun match pour le moment.</div>
+                        <div class="alert alert-secondary">{{ 'ticket_list.html.aucun_match_pour_le_moment'|trans }}</div>
                     </div>
                 {% endfor %}
             </div>
         </div>
     </div>
 {% endblock %}
-

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ gallery.title }} – Galeries – Ultras Lions{% endblock %}
+{% block title %}{{ 'galleries_show.html.title'|trans({'%title%': gallery.title}) }}{% endblock %}
 
 {% block body %}
 <section class="hero">
@@ -21,7 +21,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p>Aucune photo disponible pour cette galerie.</p>
+            <p>{{ 'galleries_show.html.aucune_photo_disponible_pour_cette_galerie'|trans }}</p>
         {% endif %}
 
     </div>

@@ -1,15 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ page.title }} – Ultras Lions{% endblock %}
+{% block title %}{{ 'pages_show.html.title'|trans({'%title%': page.title}) }}{% endblock %}
 
 {% block body %}
 
 <section class="hero">
     <div class="hero-content">
         <h1 class="hero-title">{{ page.title }}</h1>
-        <p class="hero-subtitle">
-            Publié le {{ page.createdAt|date('d/m/Y') }}
-        </p>
+        <p class="hero-subtitle">{{ 'pages_show.html.published_on'|trans({'%date%': page.createdAt|date('d/m/Y')}) }}</p>
     </div>
 </section>
 
@@ -27,9 +25,7 @@
             {{ page.content|raw }}
         </div>
 
-        <a href="{{ path('home') }}" class="btn btn-secondary" style="margin-top: 2rem;">
-            ← Retour
-        </a>
+        <a href="{{ path('home') }}" class="btn btn-secondary" style="margin-top: 2rem;">{{ 'merch_buy.html.retour'|trans }}</a>
 
     </div>
 </div>

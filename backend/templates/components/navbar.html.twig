@@ -5,7 +5,7 @@
 
             {# LOGO #}
             <a href="{{ path('home') }}" class="ultra-brand d-flex align-items-center">
-                <img src="{{ asset('img/logo/Logo Texte.png') }}" class="ultra-logo" alt="Ultras Lions">
+                <img src="{{ asset('img/logo/Logo Texte.png') }}" class="ultra-logo" alt="{{ 'components_footer.html.ultras_lions'|trans }}">
             </a>
 
             {# BURGER MOBILE #}
@@ -17,35 +17,27 @@
             <nav class="ultra-nav d-none d-lg-flex align-items-center">
 
                 <a href="{{ path('home') }}"
-                   class="ultra-link {{ app.request.get('_route') == 'home' ? 'active' }}">
-                    Accueil
-                </a>
+                   class="ultra-link {{ app.request.get('_route') == 'home' ? 'active' }}">{{ 'components_navbar.html.accueil'|trans }}</a>
 
                 <a href="{{ path('post_index') }}"
-                   class="ultra-link {{ app.request.get('_route') starts with 'post_' ? 'active' }}">
-                    Actualités
-                </a>
+                   class="ultra-link {{ app.request.get('_route') starts with 'post_' ? 'active' }}">{{ 'components_navbar.html.actualites'|trans }}</a>
 
                 <div class="dropdown">
                     <a href="#"
                        class="ultra-link dropdown-toggle {{ app.request.get('_route') starts with 'event_' ? 'active' }}"
                        id="eventDropdown"
                        data-bs-toggle="dropdown"
-                       aria-expanded="false">
-                        Photos de match
-                    </a>
+                       aria-expanded="false">{{ 'components_navbar.html.photos_de_match'|trans }}</a>
                     <ul class="dropdown-menu ultra-dropdown" aria-labelledby="eventDropdown">
                         <li>
-                            <a class="dropdown-item" href="{{ path('event_index') }}">
-                                Toutes les saisons
-                            </a>
+                            <a class="dropdown-item" href="{{ path('event_index') }}">{{ 'components_navbar.html.toutes_les_saisons'|trans }}</a>
                         </li>
                         {% set currentYear = "now"|date("Y") %}
                         {% for year in (currentYear - 2)..(currentYear + 2) %}
                             {% set seasonValue = year ~ '-' ~ (year + 1) %}
                             <li>
                                 <a class="dropdown-item" href="{{ path('event_index', { season: seasonValue }) }}">
-                                    Saison {{ year }}/{{ year + 1 }}
+                                    {{ 'components_navbar.html.saison'|trans({'%year_start%': year, '%year_end%': year + 1}) }}
                                 </a>
                             </li>
                         {% endfor %}
@@ -53,24 +45,16 @@
                 </div>
 
                 <a href="{{ path('gallery_index') }}"
-                   class="ultra-link {{ app.request.get('_route') starts with 'gallery_' ? 'active' }}">
-                    Galeries
-                </a>
+                   class="ultra-link {{ app.request.get('_route') starts with 'gallery_' ? 'active' }}">{{ 'admin_dashboard.html.galeries'|trans }}</a>
 
                 <a href="{{ path('merch_index') }}"
-                   class="ultra-link {{ app.request.get('_route') starts with 'merch_' ? 'active' }}">
-                    Table de Vente
-                </a>
+                   class="ultra-link {{ app.request.get('_route') starts with 'merch_' ? 'active' }}">{{ 'components_navbar.html.table_de_vente'|trans }}</a>
 
                 <a href="{{ path('ticket_index') }}"
-                   class="ultra-link {{ app.request.get('_route') starts with 'ticket_' ? 'active' }}">
-                    Billetterie
-                </a>
+                   class="ultra-link {{ app.request.get('_route') starts with 'ticket_' ? 'active' }}">{{ 'components_navbar.html.billetterie'|trans }}</a>
 
                 <a href="{{ path('group_index') }}"
-                   class="ultra-link {{ app.request.get('_route') starts with 'group_' ? 'active' }}">
-                    Le Groupe
-                </a>
+                   class="ultra-link {{ app.request.get('_route') starts with 'group_' ? 'active' }}">{{ 'components_navbar.html.le_groupe'|trans }}</a>
 
                 {# ----- DROPDOWN USER ----- #}
                 {% if app.user %}
@@ -92,42 +76,30 @@
 
                         <ul class="dropdown-menu dropdown-menu-end ultra-dropdown" aria-labelledby="userDropdown">
                             <li>
-                                <a class="dropdown-item" href="{{ path('profile_show', { id: app.user.id }) }}">
-                                    👤 Mon profil
-                                </a>
+                                <a class="dropdown-item" href="{{ path('profile_show', { id: app.user.id }) }}">👤 {{ 'components_navbar.html.mon_profil'|trans }}</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ path('profile_edit', { id: app.user.id }) }}">
-                                    ✏️ Modifier mon compte
-                                </a>
+                                <a class="dropdown-item" href="{{ path('profile_edit', { id: app.user.id }) }}">✏{{ 'components_navbar.html.modifier_mon_compte'|trans }}</a>
                             </li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">
-                                    🚪 Déconnexion
-                                </a>
+                                <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">🚪 {{ 'components_navbar.html.deconnexion'|trans }}</a>
                             </li>
                         </ul>
                     </div>
                 {% else %}
                     <div class="ultra-user-menu dropdown">
                         <a class="ultra-link dropdown-toggle" href="#" id="loginDropdown"
-                        role="button" data-bs-toggle="dropdown">
-                            🔐 Connexion
-                        </a>
+                        role="button" data-bs-toggle="dropdown">🔐 {{ 'components_navbar.html.connexion'|trans }}</a>
 
                         <ul class="dropdown-menu dropdown-menu-end ultra-dropdown">
 
                             <li>
-                                <a class="dropdown-item" href="{{ path('app_login') }}">
-                                    🔑 Se connecter
-                                </a>
+                                <a class="dropdown-item" href="{{ path('app_login') }}">🔑 {{ 'components_navbar.html.se_connecter'|trans }}</a>
                             </li>
 
                             <li>
-                                <a class="dropdown-item" href="{{ path('invitation_check') }}">
-                                    🎟 S'Inscrire
-                                </a>
+                                <a class="dropdown-item" href="{{ path('invitation_check') }}">🎟 {{ 'components_navbar.html.sinscrire'|trans }}</a>
                             </li>
                         </ul>
                     </div>
@@ -139,22 +111,22 @@
         {# --- MENU MOBILE --- #}
         <nav class="ultra-nav-mobile d-lg-none" id="ultraNavMobile">
 
-            <a href="{{ path('home') }}" class="ultra-link">Accueil</a>
-            <a href="{{ path('post_index') }}" class="ultra-link">Actualités</a>
+            <a href="{{ path('home') }}" class="ultra-link">{{ 'components_navbar.html.accueil'|trans }}</a>
+            <a href="{{ path('post_index') }}" class="ultra-link">{{ 'components_navbar.html.actualites'|trans }}</a>
             <div class="mobile-submenu">
-                <a href="{{ path('event_index') }}" class="ultra-link">Photos de match</a>
+                <a href="{{ path('event_index') }}" class="ultra-link">{{ 'components_navbar.html.photos_de_match'|trans }}</a>
                 {% set currentYear = "now"|date("Y") %}
                 {% for year in (currentYear - 2)..(currentYear + 2) %}
                     {% set seasonValue = year ~ '-' ~ (year + 1) %}
                     <a href="{{ path('event_index', { season: seasonValue }) }}" class="ultra-link sub">
-                        Saison {{ year }}/{{ year + 1 }}
+                        {{ 'components_navbar.html.saison'|trans({'%year_start%': year, '%year_end%': year + 1}) }}
                     </a>
                 {% endfor %}
             </div>
-            <a href="{{ path('gallery_index') }}" class="ultra-link">Galeries</a>
-            <a href="{{ path('merch_index') }}" class="ultra-link">Table de Vente</a>
-            <a href="{{ path('ticket_index') }}" class="ultra-link">Billetterie</a>
-            <a href="{{ path('group_index') }}" class="ultra-link">Le Groupe</a>
+            <a href="{{ path('gallery_index') }}" class="ultra-link">{{ 'admin_dashboard.html.galeries'|trans }}</a>
+            <a href="{{ path('merch_index') }}" class="ultra-link">{{ 'components_navbar.html.table_de_vente'|trans }}</a>
+            <a href="{{ path('ticket_index') }}" class="ultra-link">{{ 'components_navbar.html.billetterie'|trans }}</a>
+            <a href="{{ path('group_index') }}" class="ultra-link">{{ 'components_navbar.html.le_groupe'|trans }}</a>
 
             <hr>
 
@@ -166,21 +138,15 @@
                     <p class="mobile-user-name">{{ app.user.pseudo }}</p>
                 </div>
 
-                <a href="{{ path('profile_show', { id: app.user.id }) }}" class="ultra-link">
-                    👤 Mon profil
-                </a>
-                <a href="{{ path('profile_edit', { id: app.user.id }) }}" class="ultra-link">
-                    ✏️ Modifier mon compte
-                </a>
-                <a href="{{ path('app_logout') }}" class="ultra-link text-danger">
-                    🚪 Déconnexion
-                </a>
+                <a href="{{ path('profile_show', { id: app.user.id }) }}" class="ultra-link">👤 {{ 'components_navbar.html.mon_profil'|trans }}</a>
+                <a href="{{ path('profile_edit', { id: app.user.id }) }}" class="ultra-link">✏{{ 'components_navbar.html.modifier_mon_compte'|trans }}</a>
+                <a href="{{ path('app_logout') }}" class="ultra-link text-danger">🚪 {{ 'components_navbar.html.deconnexion'|trans }}</a>
             {% else %}
                 <div class="mobile-submenu">
-                    <a class="ultra-link">🔐 Connexion</a>
+                    <a class="ultra-link">🔐 {{ 'components_navbar.html.connexion'|trans }}</a>
 
-                    <a href="{{ path('app_login') }}" class="ultra-link sub">🔑 Se connecter</a>
-                    <a href="{{ path('invitation_check') }}" class="ultra-link sub">🎟 Saisir un code</a>
+                    <a href="{{ path('app_login') }}" class="ultra-link sub">🔑 {{ 'components_navbar.html.se_connecter'|trans }}</a>
+                    <a href="{{ path('invitation_check') }}" class="ultra-link sub">🎟 {{ 'components_navbar.html.saisir_un_code'|trans }}</a>
                 </div>
             {% endif %}
         </nav>

@@ -5,7 +5,7 @@
 {% block body %}
     <section class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Achat</h1>
+            <h1 class="hero-title">{{ 'merch_buy.html.achat'|trans }}</h1>
             <p class="hero-subtitle">{{ item.title }}</p>
         </div>
     </section>
@@ -13,12 +13,11 @@
     <div class="section">
         <div class="container" style="max-width: 42rem;">
             <div class="card p-4 bg-dark text-light border-0 shadow">
-                <p class="mb-3">
-                    Prix unitaire : <strong>{{ item.price|number_format(2, ',', ' ') }} €</strong>
+                <p class="mb-3">{{ 'merch_buy.html.prix_unitaire'|trans }}<strong>{{ item.price|number_format(2, ',', ' ') }} €</strong>
                 </p>
 
                 {% if not stockConfigured %}
-                    <div class="alert alert-warning mb-3">Stock non configuré pour cet article (contacte un admin).</div>
+                    <div class="alert alert-warning mb-3">{{ 'merch_buy.html.stock_non_configure_pour_cet_article_contacte_un_admin'|trans }}</div>
                 {% endif %}
 
                 {{ form_start(form) }}
@@ -31,15 +30,13 @@
                     {{ form_row(form.quantity) }}
                     {{ form_row(form.note) }}
 
-                    <button class="btn btn-danger w-100 mt-3" type="submit">Valider et recevoir mon récapitulatif</button>
+                    <button class="btn btn-danger w-100 mt-3" type="submit">{{ 'merch_buy.html.valider_et_recevoir_mon_recapitulatif'|trans }}</button>
                 {{ form_end(form) }}
 
-                <p class="mt-3 text-muted" style="font-size: 0.9rem;">
-                    Paiement et remise à la table de vente (ou selon consignes du groupe).
-                </p>
+                <p class="mt-3 text-muted" style="font-size: 0.9rem;">{{ 'merch_buy.html.paiement_et_remise_a_la_table_de_vente_ou_selon_consignes_du_groupe'|trans }}</p>
             </div>
 
-            <a href="{{ path('merch_show', { id: item.id }) }}" class="btn btn-outline-light mt-4">← Retour</a>
+            <a href="{{ path('merch_show', { id: item.id }) }}" class="btn btn-outline-light mt-4">{{ 'merch_buy.html.retour'|trans }}</a>
         </div>
     </div>
 {% endblock %}

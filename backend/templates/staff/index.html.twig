@@ -3,7 +3,7 @@
 {% block body %}
 
 <section class="section">
-    <h2 class="section-title">Staff Ultras Lions</h2>
+    <h2 class="section-title">{{ 'staff_index.html.staff_ultras_lions'|trans }}</h2>
 
     <div class="cards">
         {% for user in staff %}
@@ -17,7 +17,7 @@
 
                 <div class="member-info">
                     <div class="member-name">{{ user.pseudo }}</div>
-                    <div class="ul-badge">STAFF</div>
+                    <div class="ul-badge">{{ 'staff_index.html.staff'|trans }}</div>
                 </div>
 
             </a>

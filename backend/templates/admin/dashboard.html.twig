@@ -1,41 +1,41 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
-{% block title %}Ultras Lions – FC Fleury 91 - Page Admin{% endblock %}
+{% block title %}{{ 'admin_dashboard.html.ultras_lions_fc_fleury_91_page_admin'|trans }}{% endblock %}
 
 {% block content %}
 
-<h1 class="admin-title">🔥 Ultras Lions – Dashboard</h1>
+<h1 class="admin-title">🔥 {{ 'admin_dashboard.html.ultras_lions_dashboard'|trans }}</h1>
 
 <div class="stats-grid">
     <div class="stat-card">
-        <h3>Articles</h3>
+        <h3>{{ 'admin_dashboard.html.articles'|trans }}</h3>
         <p class="stat-number">{{ stats.posts }}</p>
     </div>
 
     <div class="stat-card">
-        <h3>Événements</h3>
+        <h3>{{ 'admin_dashboard.html.evenements'|trans }}</h3>
         <p class="stat-number">{{ stats.events }}</p>
     </div>
 
     <div class="stat-card">
-        <h3>Galeries</h3>
+        <h3>{{ 'admin_dashboard.html.galeries'|trans }}</h3>
         <p class="stat-number">{{ stats.galleries }}</p>
     </div>
 
     <div class="stat-card">
-        <h3>Médias</h3>
+        <h3>{{ 'admin_dashboard.html.medias'|trans }}</h3>
         <p class="stat-number">{{ stats.media }}</p>
     </div>
 
     <div class="stat-card">
-        <h3>Visites</h3>
+        <h3>{{ 'admin_dashboard.html.visites'|trans }}</h3>
         <p class="stat-number">{{ stats.visits }}</p>
     </div>
 </div>
 
 <hr class="divider">
 
-<h2 class="section-title">📈 Évolution des articles</h2>
+<h2 class="section-title">📈 {{ 'admin_dashboard.html.evolution_des_articles'|trans }}</h2>
 
 <canvas id="postsChart"
         height="80"
@@ -45,7 +45,7 @@
 
 <hr class="divider">
 
-<h2 class="section-title">📰 Derniers articles publiés</h2>
+<h2 class="section-title">📰 {{ 'admin_dashboard.html.derniers_articles_publies'|trans }}</h2>
 
 <div class="latest-posts">
     {% for post in lastPosts %}
@@ -54,7 +54,7 @@
             <p class="small">{{ post.createdAt|date('d/m/Y') }}</p>
         </div>
     {% else %}
-        <p>Aucun article pour le moment.</p>
+        <p>{{ 'admin_dashboard.html.aucun_article_pour_le_moment'|trans }}</p>
     {% endfor %}
 </div>
 

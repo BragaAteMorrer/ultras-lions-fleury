@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ item.title }} - Billetterie{% endblock %}
+{% block title %}{{ 'ticket_show.html.title'|trans({'%title%': item.title}) }}{% endblock %}
 
 {% block body %}
     <section class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Billetterie</h1>
+            <h1 class="hero-title">{{ 'components_navbar.html.billetterie'|trans }}</h1>
             <p class="hero-subtitle">{{ item.title }}</p>
         </div>
     </section>
@@ -29,29 +29,28 @@
                             <p class="text-muted mb-2">{{ item.category.name }}</p>
                         {% endif %}
                         <h2 class="mb-2">{{ item.title }}</h2>
-                        <p class="mb-1"><strong>Date :</strong> {{ item.matchDate|date('d/m/Y H:i') }}</p>
-                        <p class="mb-1"><strong>Adversaire :</strong> {{ item.opponent }}</p>
+                        <p class="mb-1"><strong>{{ 'email_merch_order_recap.html.date'|trans }}</strong> {{ item.matchDate|date('d/m/Y H:i') }}</p>
+                        <p class="mb-1"><strong>{{ 'ticket_show.html.adversaire'|trans }}</strong> {{ item.opponent }}</p>
                         {% if item.venue %}
-                            <p class="mb-1"><strong>Lieu :</strong> {{ item.venue }}</p>
+                            <p class="mb-1"><strong>{{ 'ticket_show.html.lieu'|trans }}</strong> {{ item.venue }}</p>
                         {% endif %}
-                        <p class="mb-2"><strong>Prix :</strong> {{ item.price|number_format(2, ',', ' ') }} €</p>
-                        <p class="text-muted mb-3">Stock : {{ item.stock }}</p>
+                        <p class="mb-2"><strong>{{ 'ticket_show.html.prix'|trans }}</strong> {{ item.price|number_format(2, ',', ' ') }} €</p>
+                        <p class="text-muted mb-3">{{ 'ticket_show.html.stock'|trans({'%stock%': item.stock}) }}</p>
 
                         {% if item.description %}
                             <div class="mb-3">{{ item.description|raw }}</div>
                         {% endif %}
 
                         {% if item.stock > 0 %}
-                            <a class="btn btn-danger w-100" href="{{ path('ticket_buy', { id: item.id }) }}">Réserver</a>
+                            <a class="btn btn-danger w-100" href="{{ path('ticket_buy', { id: item.id }) }}">{{ 'ticket_show.html.reserver'|trans }}</a>
                         {% else %}
-                            <button class="btn btn-secondary w-100" disabled>Complet</button>
+                            <button class="btn btn-secondary w-100" disabled>{{ 'ticket_show.html.complet'|trans }}</button>
                         {% endif %}
                     </div>
 
-                    <a href="{{ path('ticket_index') }}" class="btn btn-outline-light mt-4">← Retour</a>
+                    <a href="{{ path('ticket_index') }}" class="btn btn-outline-light mt-4">{{ 'merch_buy.html.retour'|trans }}</a>
                 </div>
             </div>
         </div>
     </div>
 {% endblock %}
-

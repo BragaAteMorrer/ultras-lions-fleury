@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Réservation - {{ item.title }}{% endblock %}
+{% block title %}{{ 'ticket_buy.html.title'|trans({'%title%': item.title}) }}{% endblock %}
 
 {% block body %}
     <section class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Réservation</h1>
+            <h1 class="hero-title">{{ 'ticket_buy.html.reservation'|trans }}</h1>
             <p class="hero-subtitle">{{ item.title }}</p>
         </div>
     </section>
@@ -13,14 +13,11 @@
     <div class="section">
         <div class="container" style="max-width: 42rem;">
             <div class="card p-4 bg-dark text-light border-0 shadow">
-                <p class="mb-1">
-                    Match : <strong>vs {{ item.opponent }}</strong>
+                <p class="mb-1">{{ 'ticket_buy.html.match'|trans }}<strong>{{ 'ticket_buy.html.vs_opponent'|trans({'%opponent%': item.opponent}) }}</strong>
                 </p>
-                <p class="mb-1">
-                    Date : <strong>{{ item.matchDate|date('d/m/Y H:i') }}</strong>{% if item.venue %} ({{ item.venue }}){% endif %}
+                <p class="mb-1">{{ 'email_merch_order_recap.html.date'|trans }}<strong>{{ item.matchDate|date('d/m/Y H:i') }}</strong>{% if item.venue %} ({{ item.venue }}){% endif %}
                 </p>
-                <p class="mb-3">
-                    Prix unitaire : <strong>{{ item.price|number_format(2, ',', ' ') }} €</strong> - Stock : <strong>{{ item.stock }}</strong>
+                <p class="mb-3">{{ 'merch_buy.html.prix_unitaire'|trans }}<strong>{{ item.price|number_format(2, ',', ' ') }} €</strong>{{ 'ticket_buy.html.stock'|trans }}<strong>{{ item.stock }}</strong>
                 </p>
 
                 {{ form_start(form) }}
@@ -30,16 +27,13 @@
                     {{ form_row(form.quantity) }}
                     {{ form_row(form.note) }}
 
-                    <button class="btn btn-danger w-100 mt-3" type="submit">Valider et recevoir mon récapitulatif</button>
+                    <button class="btn btn-danger w-100 mt-3" type="submit">{{ 'merch_buy.html.valider_et_recevoir_mon_recapitulatif'|trans }}</button>
                 {{ form_end(form) }}
 
-                <p class="mt-3 text-muted" style="font-size: 0.9rem;">
-                    Paiement et remise selon les consignes du groupe.
-                </p>
+                <p class="mt-3 text-muted" style="font-size: 0.9rem;">{{ 'ticket_buy.html.paiement_et_remise_selon_les_consignes_du_groupe'|trans }}</p>
             </div>
 
-            <a href="{{ path('ticket_show', { id: item.id }) }}" class="btn btn-outline-light mt-4">← Retour</a>
+            <a href="{{ path('ticket_show', { id: item.id }) }}" class="btn btn-outline-light mt-4">{{ 'merch_buy.html.retour'|trans }}</a>
         </div>
     </div>
 {% endblock %}
-

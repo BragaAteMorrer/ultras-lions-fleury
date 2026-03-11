@@ -1,6 +1,6 @@
 ﻿{% extends 'base.html.twig' %}
 
-{% block title %}Ultras Lions ï¿½ FC Fleury 91{% endblock %}
+{% block title %}{{ 'home_index.html.ultras_lions_i_fc_fleury_91'|trans }}{% endblock %}
 
 {% block body %}
 
@@ -11,9 +11,9 @@
 ] %}
     <div class="hero-overlay"></div>
     <div class="hero-content">
-        <img src="{{ asset('img/logo/Logo Final - Ultras Lions - Autre Présentation.png') }}" class="hero-ultra-logo" alt="Ultras Lions">
-        <h1 class="hero-title">ULTRAS LIONS</h1>
-        <p class="hero-subtitle">Le site web du groupe ultras du FC Fleury 91</p>
+        <img src="{{ asset('img/logo/Logo Final - Ultras Lions - Autre Présentation.png') }}" class="hero-ultra-logo" alt="{{ 'components_footer.html.ultras_lions'|trans }}">
+        <h1 class="hero-title">{{ 'home_index.html.ultras_lions'|trans }}</h1>
+        <p class="hero-subtitle">{{ 'home_index.html.le_site_web_du_groupe_ultras_du_fc_fleury_91'|trans }}</p>
     </div>
 
 {# ------------------------------
@@ -21,7 +21,7 @@
    ------------------------------ #}
 <section class="section latest-news">
     <div class="container">
-        <h2 class="section-title">Dernières actualités</h2>
+        <h2 class="section-title">{{ 'home_index.html.dernieres_actualites'|trans }}</h2>
 
         <div class="row g-4">
             {% for post in last_posts %}
@@ -40,7 +40,7 @@
                     </a>
                 </div>
             {% else %}
-                <p>Aucune actualité disponible.</p>
+                <p>{{ 'home_index.html.aucune_actualite_disponible'|trans }}</p>
             {% endfor %}
         </div>
     </div>
@@ -51,7 +51,7 @@
    ------------------------------ #}
 <section class="section next-event">
     <div class="container">
-        <h2 class="section-title">Prochain déplacement</h2>
+        <h2 class="section-title">{{ 'home_index.html.prochain_deplacement'|trans }}</h2>
 
         {% if event %}
             <div class="event-box">
@@ -62,10 +62,10 @@
                 <h3>{{ event.title }}</h3>
                 <p class="event-date">ðŸ“… {{ event.date|date("d/m/Y") }}</p>
 
-                <a href="{{ path('event_index') }}" class="btn-ul">Voir les événements</a>
+                <a href="{{ path('event_index') }}" class="btn-ul">{{ 'home_index.html.voir_les_evenements'|trans }}</a>
             </div>
         {% else %}
-            <p>Aucun événement prévu.</p>
+            <p>{{ 'home_index.html.aucun_evenement_prevu'|trans }}</p>
         {% endif %}
     </div>
 </section>
@@ -75,7 +75,7 @@
    ------------------------------ #}
 <section class="section galleries">
     <div class="container">
-    <h2 class="section-title">Galeries photos</h2>
+    <h2 class="section-title">{{ 'home_index.html.galeries_photos'|trans }}</h2>
         <div class="cards">
             {% for gal in galleries %}
                 <a href="{{ path('gallery_show', { id: gal.id }) }}" class="card">
@@ -99,7 +99,7 @@
    ------------------------------ #}
 <section class="section about-group">
     <div class="container">
-        <h2 class="section-title">Le Groupe</h2>
+        <h2 class="section-title">{{ 'components_navbar.html.le_groupe'|trans }}</h2>
 
         {% if group %}
             <div class="group-content">
@@ -109,10 +109,10 @@
             {% if group.banner %}
                 <img class="group-banner" 
                     src="{{ asset('uploads/media/' ~ group.banner.path) }}" 
-                    alt="Bannière du groupe">
+                    alt="{{ 'home_index.html.banniere_du_groupe'|trans }}">
             {% endif %}
         {% else %}
-            <p>Aucune information de groupe n'a encore été ajoutée.</p>
+            <p>{{ 'home_index.html.aucune_information_de_groupe_na_encore_ete_ajoutee'|trans }}</p>
         {% endif %}
     </div>
 </section>
