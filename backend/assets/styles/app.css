@@ -9,7 +9,7 @@ body {
     color: #f2f2f2;
     background:
         linear-gradient(120deg, rgba(0,0,0,0.85), rgba(0,0,0,0.4)),
-        url('/assets/img/fond/fond1a.jpg') bottom center / cover no-repeat;
+        url('../img/fond/fond1a.jpg') bottom center / cover no-repeat;
     font-family: "Oswald", sans-serif;
     line-height: 1.5;
 }
@@ -274,7 +274,7 @@ img {
     position: relative;
     background:
         linear-gradient(0deg, rgba(0,0,0,0.8), rgba(0,0,0,0.75)),
-        url('/assets/img/fond/fond1a.jpg') center / cover;
+        url('../img/fond/fond1a.jpg') center / cover;
     height: 15rem; /* 260px → approx 15rem */
     display: flex;
     align-items: flex-end;

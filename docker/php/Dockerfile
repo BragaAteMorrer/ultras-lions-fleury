@@ -13,5 +13,8 @@ WORKDIR /var/www/html
 COPY docker/php/entrypoint.sh /usr/local/bin/docker-symfony-entrypoint
 RUN chmod +x /usr/local/bin/docker-symfony-entrypoint
 
+# Ensure php-fpm listens on all interfaces for nginx upstream
+COPY docker/php/php-fpm.d/zz-listen.conf /usr/local/etc/php-fpm.d/zz-listen.conf
+
 ENTRYPOINT ["docker-symfony-entrypoint"]
 CMD ["php-fpm"]
