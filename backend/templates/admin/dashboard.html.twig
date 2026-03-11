@@ -1,10 +1,10 @@
-{% extends '@EasyAdmin/page/content.html.twig' %}
+﻿{% extends '@EasyAdmin/page/content.html.twig' %}
 
-{% block title %}Ultras Lions – FC Fleury 91 - Page Admin{% endblock %}
+{% block title %}Ultras Lions â€“ FC Fleury 91 - Page Admin{% endblock %}
 
 {% block content %}
 
-<h1 class="admin-title">🔥 Ultras Lions – Dashboard</h1>
+<h1 class="admin-title">ðŸ”¥ Ultras Lions â€“ Dashboard</h1>
 
 <div class="stats-grid">
     <div class="stat-card">
@@ -13,7 +13,7 @@
     </div>
 
     <div class="stat-card">
-        <h3>Événements</h3>
+        <h3>Ã‰vÃ©nements</h3>
         <p class="stat-number">{{ stats.events }}</p>
     </div>
 
@@ -23,7 +23,7 @@
     </div>
 
     <div class="stat-card">
-        <h3>Médias</h3>
+        <h3>MÃ©dias</h3>
         <p class="stat-number">{{ stats.media }}</p>
     </div>
 
@@ -35,7 +35,7 @@
 
 <hr class="divider">
 
-<h2 class="section-title">📈 Évolution des articles</h2>
+<h2 class="section-title">ðŸ“ˆ Ã‰volution des articles</h2>
 
 <canvas id="postsChart"
         height="80"
@@ -45,7 +45,7 @@
 
 <hr class="divider">
 
-<h2 class="section-title">📰 Derniers articles publiés</h2>
+<h2 class="section-title">ðŸ“° Derniers articles publiÃ©s</h2>
 
 <div class="latest-posts">
     {% for post in lastPosts %}
@@ -66,3 +66,4 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('js/dashboard.js') }}" defer></script>
 {% endblock %}
+

@@ -1,4 +1,4 @@
-<header class="ultra-header">
+﻿<header class="ultra-header">
 
     <div class="ultra-topband">
         <div class="container d-flex align-items-center justify-content-between">
@@ -23,7 +23,7 @@
 
                 <a href="{{ path('post_index') }}"
                    class="ultra-link {{ app.request.get('_route') starts with 'post_' ? 'active' }}">
-                    Actualités
+                    ActualitÃ©s
                 </a>
 
                 <div class="dropdown">
@@ -93,18 +93,18 @@
                         <ul class="dropdown-menu dropdown-menu-end ultra-dropdown" aria-labelledby="userDropdown">
                             <li>
                                 <a class="dropdown-item" href="{{ path('profile_show', { id: app.user.id }) }}">
-                                    👤 Mon profil
+                                    ðŸ‘¤ Mon profil
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="{{ path('profile_edit', { id: app.user.id }) }}">
-                                    ✏️ Modifier mon compte
+                                    âœï¸ Modifier mon compte
                                 </a>
                             </li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">
-                                    🚪 Déconnexion
+                                    ðŸšª DÃ©connexion
                                 </a>
                             </li>
                         </ul>
@@ -113,20 +113,20 @@
                     <div class="ultra-user-menu dropdown">
                         <a class="ultra-link dropdown-toggle" href="#" id="loginDropdown"
                         role="button" data-bs-toggle="dropdown">
-                            🔐 Connexion
+                            ðŸ” Connexion
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-end ultra-dropdown">
 
                             <li>
                                 <a class="dropdown-item" href="{{ path('app_login') }}">
-                                    🔑 Se connecter
+                                    ðŸ”‘ Se connecter
                                 </a>
                             </li>
 
                             <li>
                                 <a class="dropdown-item" href="{{ path('invitation_check') }}">
-                                    🎟 S'Inscrire
+                                    ðŸŽŸ S'Inscrire
                                 </a>
                             </li>
                         </ul>
@@ -140,7 +140,7 @@
         <nav class="ultra-nav-mobile d-lg-none" id="ultraNavMobile">
 
             <a href="{{ path('home') }}" class="ultra-link">Accueil</a>
-            <a href="{{ path('post_index') }}" class="ultra-link">Actualités</a>
+            <a href="{{ path('post_index') }}" class="ultra-link">ActualitÃ©s</a>
             <div class="mobile-submenu">
                 <a href="{{ path('event_index') }}" class="ultra-link">Photos de match</a>
                 {% set currentYear = "now"|date("Y") %}
@@ -167,23 +167,24 @@
                 </div>
 
                 <a href="{{ path('profile_show', { id: app.user.id }) }}" class="ultra-link">
-                    👤 Mon profil
+                    ðŸ‘¤ Mon profil
                 </a>
                 <a href="{{ path('profile_edit', { id: app.user.id }) }}" class="ultra-link">
-                    ✏️ Modifier mon compte
+                    âœï¸ Modifier mon compte
                 </a>
                 <a href="{{ path('app_logout') }}" class="ultra-link text-danger">
-                    🚪 Déconnexion
+                    ðŸšª DÃ©connexion
                 </a>
             {% else %}
                 <div class="mobile-submenu">
-                    <a class="ultra-link">🔐 Connexion</a>
+                    <a class="ultra-link">ðŸ” Connexion</a>
 
-                    <a href="{{ path('app_login') }}" class="ultra-link sub">🔑 Se connecter</a>
-                    <a href="{{ path('invitation_check') }}" class="ultra-link sub">🎟 Saisir un code</a>
+                    <a href="{{ path('app_login') }}" class="ultra-link sub">ðŸ”‘ Se connecter</a>
+                    <a href="{{ path('invitation_check') }}" class="ultra-link sub">ðŸŽŸ Saisir un code</a>
                 </div>
             {% endif %}
         </nav>
 
     </div>
 </header>
+

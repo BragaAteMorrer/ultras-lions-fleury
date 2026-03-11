@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
 {% block body %}
 
@@ -19,7 +19,7 @@
                 {% if 'ROLE_ADMIN' in user.roles %}
                     Bureau - Ultras Lions
                 {% else %}
-                    Adhérant - Ultras Lions
+                    AdhÃ©rant - Ultras Lions
                 {% endif %}
             </p>
         </div>
@@ -33,7 +33,7 @@
             {% endif %}
 
             {% if user.telephone %}
-                <p><strong>Téléphone :</strong> {{ user.telephone }}</p>
+                <p><strong>TÃ©lÃ©phone :</strong> {{ user.telephone }}</p>
             {% endif %}
 
             {% if user.adresse or user.ville or user.codePostal %}
@@ -45,12 +45,12 @@
 
             <hr>
 
-            <p><strong>T-shirt :</strong> {{ user.tailleTshirt ?? '—' }}</p>
-            <p><strong>Polo :</strong> {{ user.taillePolo ?? '—' }}</p>
-            <p><strong>Pull :</strong> {{ user.taillePull ?? '—' }}</p>
-            <p><strong>Sweat :</strong> {{ user.tailleSweat ?? '—' }}</p>
-            <p><strong>Veste :</strong> {{ user.tailleVeste ?? '—' }}</p>
-            <p><strong>Short :</strong> {{ user.tailleShort ?? '—' }}</p>
+            <p><strong>T-shirt :</strong> {{ user.tailleTshirt ?? 'â€”' }}</p>
+            <p><strong>Polo :</strong> {{ user.taillePolo ?? 'â€”' }}</p>
+            <p><strong>Pull :</strong> {{ user.taillePull ?? 'â€”' }}</p>
+            <p><strong>Sweat :</strong> {{ user.tailleSweat ?? 'â€”' }}</p>
+            <p><strong>Veste :</strong> {{ user.tailleVeste ?? 'â€”' }}</p>
+            <p><strong>Short :</strong> {{ user.tailleShort ?? 'â€”' }}</p>
 
             {% if app.user and app.user.id == user.id %}
                 <a href="{{ path('profile_edit', { id: user.id }) }}" class="btn-ul profile-edit-btn">
@@ -63,3 +63,4 @@
 </section>
 
 {% endblock %}
+

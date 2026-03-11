@@ -1,11 +1,11 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
-{% block title %}Réservation - {{ item.title }}{% endblock %}
+{% block title %}RÃ©servation - {{ item.title }}{% endblock %}
 
 {% block body %}
     <section class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Réservation</h1>
+            <h1 class="hero-title">RÃ©servation</h1>
             <p class="hero-subtitle">{{ item.title }}</p>
         </div>
     </section>
@@ -20,7 +20,7 @@
                     Date : <strong>{{ item.matchDate|date('d/m/Y H:i') }}</strong>{% if item.venue %} ({{ item.venue }}){% endif %}
                 </p>
                 <p class="mb-3">
-                    Prix unitaire : <strong>{{ item.price|number_format(2, ',', ' ') }} €</strong> - Stock : <strong>{{ item.stock }}</strong>
+                    Prix unitaire : <strong>{{ item.price|number_format(2, ',', ' ') }} â‚¬</strong> - Stock : <strong>{{ item.stock }}</strong>
                 </p>
 
                 {{ form_start(form) }}
@@ -30,7 +30,7 @@
                     {{ form_row(form.quantity) }}
                     {{ form_row(form.note) }}
 
-                    <button class="btn btn-danger w-100 mt-3" type="submit">Valider et recevoir mon récapitulatif</button>
+                    <button class="btn btn-danger w-100 mt-3" type="submit">Valider et recevoir mon rÃ©capitulatif</button>
                 {{ form_end(form) }}
 
                 <p class="mt-3 text-muted" style="font-size: 0.9rem;">
@@ -38,8 +38,9 @@
                 </p>
             </div>
 
-            <a href="{{ path('ticket_show', { id: item.id }) }}" class="btn btn-outline-light mt-4">← Retour</a>
+            <a href="{{ path('ticket_show', { id: item.id }) }}" class="btn btn-outline-light mt-4">â† Retour</a>
         </div>
     </div>
 {% endblock %}
+
 

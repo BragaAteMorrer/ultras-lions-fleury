@@ -1,17 +1,17 @@
-{% extends 'email/base.html.twig' %}
+﻿{% extends 'email/base.html.twig' %}
 
-{% block title %}Récapitulatif de réservation{% endblock %}
+{% block title %}RÃ©capitulatif de rÃ©servation{% endblock %}
 
 {% block content %}
-    <h1>Récapitulatif de réservation</h1>
+    <h1>RÃ©capitulatif de rÃ©servation</h1>
 
     <p>
-        Merci pour ta réservation{% if user and (user.prenom or user.nom) %}, {{ user.prenom }} {{ user.nom }}{% endif %}.
-        Voici le récapitulatif :
+        Merci pour ta rÃ©servation{% if user and (user.prenom or user.nom) %}, {{ user.prenom }} {{ user.nom }}{% endif %}.
+        Voici le rÃ©capitulatif :
     </p>
 
     <p>
-        <strong>N° réservation :</strong> {{ order.number }}<br>
+        <strong>NÂ° rÃ©servation :</strong> {{ order.number }}<br>
         <strong>Date :</strong> {{ order.orderedAt|date('d/m/Y H:i') }}
     </p>
 
@@ -19,7 +19,7 @@
         <thead>
         <tr>
             <th align="left" style="padding: 0.5rem; border-bottom: 1px solid #333;">Match</th>
-            <th align="center" style="padding: 0.5rem; border-bottom: 1px solid #333;">Qté</th>
+            <th align="center" style="padding: 0.5rem; border-bottom: 1px solid #333;">QtÃ©</th>
             <th align="right" style="padding: 0.5rem; border-bottom: 1px solid #333;">Prix</th>
         </tr>
         </thead>
@@ -32,7 +32,7 @@
                 </td>
                 <td align="center" style="padding: 0.5rem; border-bottom: 1px solid #222;">{{ line.quantity }}</td>
                 <td align="right" style="padding: 0.5rem; border-bottom: 1px solid #222;">
-                    {{ line.totalPrice|number_format(2, ',', ' ') }} €
+                    {{ line.totalPrice|number_format(2, ',', ' ') }} â‚¬
                 </td>
             </tr>
         {% endfor %}
@@ -41,7 +41,7 @@
         <tr>
             <td colspan="2" align="right" style="padding: 0.75rem 0.5rem; font-weight: bold;">Total</td>
             <td align="right" style="padding: 0.75rem 0.5rem; font-weight: bold; color: #D40000;">
-                {{ order.total|number_format(2, ',', ' ') }} €
+                {{ order.total|number_format(2, ',', ' ') }} â‚¬
             </td>
         </tr>
         </tfoot>
@@ -53,9 +53,10 @@
 
     <p>
         Le paiement et les infos de remise/retrait se font selon les consignes du groupe.
-        Si tu as une question, tu peux répondre à cet email.
+        Si tu as une question, tu peux rÃ©pondre Ã  cet email.
     </p>
 
     <a href="{{ url('ticket_index') }}" class="btn">Voir la billetterie</a>
 {% endblock %}
+
 

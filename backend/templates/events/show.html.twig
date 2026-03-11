@@ -1,13 +1,13 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
-{% block title %}{{ event.title }} – Déplacement – Ultras Lions{% endblock %}
+{% block title %}{{ event.title }} â€“ DÃ©placement â€“ Ultras Lions{% endblock %}
 
 {% block body %}
 <section class="hero">
     <div class="hero-content">
         <h1 class="hero-title">{{ event.title }}</h1>
         {% if event.date %}
-            <p class="hero-subtitle">📅 {{ event.date|date('d/m/Y') }}</p>
+            <p class="hero-subtitle">ðŸ“… {{ event.date|date('d/m/Y') }}</p>
         {% endif %}
     </div>
 </section>
@@ -46,3 +46,4 @@
     </div>
 </div>
 {% endblock %}
+

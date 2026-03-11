@@ -21,7 +21,7 @@
    ------------------------------ #}
 <section class="section latest-news">
     <div class="container">
-        <h2 class="section-title">DerniÃ¨res actualitÃ©s</h2>
+        <h2 class="section-title">Dernières actualités</h2>
 
         <div class="row g-4">
             {% for post in last_posts %}
@@ -40,7 +40,7 @@
                     </a>
                 </div>
             {% else %}
-                <p>Aucune actualitÃ© disponible.</p>
+                <p>Aucune actualité disponible.</p>
             {% endfor %}
         </div>
     </div>
@@ -51,7 +51,7 @@
    ------------------------------ #}
 <section class="section next-event">
     <div class="container">
-        <h2 class="section-title">Prochain dÃ©placement</h2>
+        <h2 class="section-title">Prochain déplacement</h2>
 
         {% if event %}
             <div class="event-box">
@@ -62,10 +62,10 @@
                 <h3>{{ event.title }}</h3>
                 <p class="event-date">ðŸ“… {{ event.date|date("d/m/Y") }}</p>
 
-                <a href="{{ path('event_index') }}" class="btn-ul">Voir les Ã©vÃ©nements</a>
+                <a href="{{ path('event_index') }}" class="btn-ul">Voir les événements</a>
             </div>
         {% else %}
-            <p>Aucun Ã©vÃ©nement prÃ©vu.</p>
+            <p>Aucun événement prévu.</p>
         {% endif %}
     </div>
 </section>
@@ -109,15 +109,16 @@
             {% if group.banner %}
                 <img class="group-banner" 
                     src="{{ asset('uploads/media/' ~ group.banner.path) }}" 
-                    alt="BanniÃ¨re du groupe">
+                    alt="Bannière du groupe">
             {% endif %}
         {% else %}
-            <p>Aucune information de groupe nâ€™a encore Ã©tÃ© ajoutÃ©e.</p>
+            <p>Aucune information de groupe n'a encore été ajoutée.</p>
         {% endif %}
     </div>
 </section>
 
 {% endblock %}
+
 
 
 

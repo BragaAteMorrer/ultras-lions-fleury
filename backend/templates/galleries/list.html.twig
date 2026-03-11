@@ -1,18 +1,18 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
-{% block title %}Galeries – Ultras Lions{% endblock %}
+{% block title %}Galeries â€“ Ultras Lions{% endblock %}
 
 {% block body %}
 <section class="hero">
     <div class="hero-content">
         <h1 class="hero-title">Galeries</h1>
-        <p class="hero-subtitle">Tribunes, déplacements, tifos, vie du groupe</p>
+        <p class="hero-subtitle">Tribunes, dÃ©placements, tifos, vie du groupe</p>
     </div>
 </section>
 
 <div class="section">
     <div class="container">
-        <h2 class="section-title">Dernières galeries</h2>
+        <h2 class="section-title">DerniÃ¨res galeries</h2>
 
         <div class="cards">
             {% for gallery in galleries %}
@@ -30,9 +30,10 @@
                 </a>
 
             {% else %}
-                <p>Aucune galerie pour l’instant.</p>
+                <p>Aucune galerie pour lâ€™instant.</p>
             {% endfor %}
         </div>
     </div>
 </div>
 {% endblock %}
+
