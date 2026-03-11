@@ -1,6 +1,6 @@
-﻿{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}{{ item.title }} â€“ Table de Vente{% endblock %}
+{% block title %}{{ item.title }} – Table de Vente{% endblock %}
 
 {% block body %}
 
@@ -35,14 +35,14 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-                <p class="product-price display-6">{{ item.price|number_format(2, ',', ' ') }} â‚¬</p>
+                <p class="product-price display-6">{{ item.price|number_format(2, ',', ' ') }} €</p>
 
                 <div class="product-description">
                     {{ item.description|raw }}
                 </div>
 
                 <a href="{{ path('merch_buy', { id: item.id }) }}" class="btn btn-danger mt-4 w-100">Acheter</a>
-                <a href="{{ path('merch_index') }}" class="btn btn-outline-light mt-4">â† Retour</a>
+                <a href="{{ path('merch_index') }}" class="btn btn-outline-light mt-4">← Retour</a>
             </div>
 
         </div>
@@ -50,4 +50,3 @@
 </div>
 
 {% endblock %}
-

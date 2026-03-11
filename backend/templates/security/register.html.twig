@@ -1,4 +1,4 @@
-﻿{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
 
@@ -18,7 +18,7 @@
 
                 {{ form_start(form) }}
 
-                    <h3 class="form-section-title">IdentitÃ©</h3>
+                    <h3 class="form-section-title">Identité</h3>
                     <div class="row">
                         <div class="col-md-6">{{ form_row(form.prenom) }}</div>
                         <div class="col-md-6">{{ form_row(form.nom) }}</div>
@@ -34,7 +34,7 @@
 
                     <hr>
 
-                    <h3 class="form-section-title">CoordonnÃ©es</h3>
+                    <h3 class="form-section-title">Coordonnées</h3>
                     {{ form_row(form.telephone) }}
                     {{ form_row(form.adresse) }}
                     {{ form_row(form.ville) }}
@@ -55,7 +55,7 @@
                     <h3 class="form-section-title">Photo</h3>
                     {{ form_row(form.photoProfil) }}
 
-                    <button class="btn-ul mt-3">CrÃ©er mon compte</button>
+                    <button class="btn-ul mt-3">Créer mon compte</button>
 
                 {{ form_end(form) }}
 
@@ -65,4 +65,3 @@
 </section>
 
 {% endblock %}
-

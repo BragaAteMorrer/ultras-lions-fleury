@@ -1,4 +1,4 @@
-﻿{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}{{ item.title }} - Billetterie{% endblock %}
 
@@ -34,7 +34,7 @@
                         {% if item.venue %}
                             <p class="mb-1"><strong>Lieu :</strong> {{ item.venue }}</p>
                         {% endif %}
-                        <p class="mb-2"><strong>Prix :</strong> {{ item.price|number_format(2, ',', ' ') }} â‚¬</p>
+                        <p class="mb-2"><strong>Prix :</strong> {{ item.price|number_format(2, ',', ' ') }} €</p>
                         <p class="text-muted mb-3">Stock : {{ item.stock }}</p>
 
                         {% if item.description %}
@@ -42,17 +42,16 @@
                         {% endif %}
 
                         {% if item.stock > 0 %}
-                            <a class="btn btn-danger w-100" href="{{ path('ticket_buy', { id: item.id }) }}">RÃ©server</a>
+                            <a class="btn btn-danger w-100" href="{{ path('ticket_buy', { id: item.id }) }}">Réserver</a>
                         {% else %}
                             <button class="btn btn-secondary w-100" disabled>Complet</button>
                         {% endif %}
                     </div>
 
-                    <a href="{{ path('ticket_index') }}" class="btn btn-outline-light mt-4">â† Retour</a>
+                    <a href="{{ path('ticket_index') }}" class="btn btn-outline-light mt-4">← Retour</a>
                 </div>
             </div>
         </div>
     </div>
 {% endblock %}
-
 

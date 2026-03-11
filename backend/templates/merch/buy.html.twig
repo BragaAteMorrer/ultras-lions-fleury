@@ -1,6 +1,6 @@
-﻿{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Achat â€“ {{ item.title }}{% endblock %}
+{% block title %}Achat – {{ item.title }}{% endblock %}
 
 {% block body %}
     <section class="hero">
@@ -14,11 +14,11 @@
         <div class="container" style="max-width: 42rem;">
             <div class="card p-4 bg-dark text-light border-0 shadow">
                 <p class="mb-3">
-                    Prix unitaire : <strong>{{ item.price|number_format(2, ',', ' ') }} â‚¬</strong>
+                    Prix unitaire : <strong>{{ item.price|number_format(2, ',', ' ') }} €</strong>
                 </p>
 
                 {% if not stockConfigured %}
-                    <div class="alert alert-warning mb-3">Stock non configurÃ© pour cet article (contacte un admin).</div>
+                    <div class="alert alert-warning mb-3">Stock non configuré pour cet article (contacte un admin).</div>
                 {% endif %}
 
                 {{ form_start(form) }}
@@ -31,16 +31,15 @@
                     {{ form_row(form.quantity) }}
                     {{ form_row(form.note) }}
 
-                    <button class="btn btn-danger w-100 mt-3" type="submit">Valider et recevoir mon rÃ©capitulatif</button>
+                    <button class="btn btn-danger w-100 mt-3" type="submit">Valider et recevoir mon récapitulatif</button>
                 {{ form_end(form) }}
 
                 <p class="mt-3 text-muted" style="font-size: 0.9rem;">
-                    Paiement et remise Ã  la table de vente (ou selon consignes du groupe).
+                    Paiement et remise à la table de vente (ou selon consignes du groupe).
                 </p>
             </div>
 
-            <a href="{{ path('merch_show', { id: item.id }) }}" class="btn btn-outline-light mt-4">â† Retour</a>
+            <a href="{{ path('merch_show', { id: item.id }) }}" class="btn btn-outline-light mt-4">← Retour</a>
         </div>
     </div>
 {% endblock %}
-

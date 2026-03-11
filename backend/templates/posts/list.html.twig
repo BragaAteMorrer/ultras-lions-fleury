@@ -1,12 +1,12 @@
-﻿{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}ActualitÃ©s â€“ Ultras Lions{% endblock %}
+{% block title %}Actualités – Ultras Lions{% endblock %}
 
 {% block body %}
 <section class="hero">
     <div class="hero-content">
-        <h1 class="hero-title">ActualitÃ©s</h1>
-        <p class="hero-subtitle">Infos, communiquÃ©s, actions en tribune</p>
+        <h1 class="hero-title">Actualités</h1>
+        <p class="hero-subtitle">Infos, communiqués, actions en tribune</p>
     </div>
 </section>
 
@@ -29,14 +29,13 @@
                             {{ post.createdAt|date('d/m/Y') }}
                         </p>
 
-                        <p>{{ post.content|striptags|slice(0, 140) ~ 'â€¦' }}</p>
+                        <p>{{ post.content|striptags|slice(0, 140) ~ '…' }}</p>
                     </div>
                 </a>
             {% else %}
-                <p>Aucune actu pour lâ€™instant.</p>
+                <p>Aucune actu pour l’instant.</p>
             {% endfor %}
         </div>
     </div>
 </div>
 {% endblock %}
-

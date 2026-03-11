@@ -1,4 +1,4 @@
-﻿{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
 
@@ -17,8 +17,8 @@
 
                 <div class="member-info">
                     <div class="member-name">{{ user.pseudo }}</div>
-                    <div class="member-meta">Taille veste : {{ user.tailleVeste ?? 'â€”' }}</div>
-                    <div class="member-meta">Taille short : {{ user.tailleShort ?? 'â€”' }}</div>
+                    <div class="member-meta">Taille veste : {{ user.tailleVeste ?? '—' }}</div>
+                    <div class="member-meta">Taille short : {{ user.tailleShort ?? '—' }}</div>
                 </div>
 
             </a>
@@ -27,4 +27,3 @@
 </section>
 
 {% endblock %}
-

@@ -1,17 +1,17 @@
-﻿{% extends 'email/base.html.twig' %}
+{% extends 'email/base.html.twig' %}
 
-{% block title %}RÃ©capitulatif de commande{% endblock %}
+{% block title %}Récapitulatif de commande{% endblock %}
 
 {% block content %}
-    <h1>RÃ©capitulatif de commande</h1>
+    <h1>Récapitulatif de commande</h1>
 
     <p>
         Merci pour ta commande{% if user and (user.prenom or user.nom) %}, {{ user.prenom }} {{ user.nom }}{% endif %}.
-        Voici le rÃ©capitulatif :
+        Voici le récapitulatif :
     </p>
 
     <p>
-        <strong>NÂ° commande :</strong> {{ order.number }}<br>
+        <strong>N° commande :</strong> {{ order.number }}<br>
         <strong>Date :</strong> {{ order.orderedAt|date('d/m/Y H:i') }}
     </p>
 
@@ -19,7 +19,7 @@
         <thead>
         <tr>
             <th align="left" style="padding: 0.5rem; border-bottom: 1px solid #333;">Produit</th>
-            <th align="center" style="padding: 0.5rem; border-bottom: 1px solid #333;">QtÃ©</th>
+            <th align="center" style="padding: 0.5rem; border-bottom: 1px solid #333;">Qté</th>
             <th align="right" style="padding: 0.5rem; border-bottom: 1px solid #333;">Prix</th>
         </tr>
         </thead>
@@ -34,7 +34,7 @@
                 </td>
                 <td align="center" style="padding: 0.5rem; border-bottom: 1px solid #222;">{{ line.quantity }}</td>
                 <td align="right" style="padding: 0.5rem; border-bottom: 1px solid #222;">
-                    {{ line.totalPrice|number_format(2, ',', ' ') }} â‚¬
+                    {{ line.totalPrice|number_format(2, ',', ' ') }} €
                 </td>
             </tr>
         {% endfor %}
@@ -43,7 +43,7 @@
         <tr>
             <td colspan="2" align="right" style="padding: 0.75rem 0.5rem; font-weight: bold;">Total</td>
             <td align="right" style="padding: 0.75rem 0.5rem; font-weight: bold; color: #D40000;">
-                {{ order.total|number_format(2, ',', ' ') }} â‚¬
+                {{ order.total|number_format(2, ',', ' ') }} €
             </td>
         </tr>
         </tfoot>
@@ -54,10 +54,9 @@
     {% endif %}
 
     <p>
-        La remise et le paiement se font Ã  la table de vente (ou selon les consignes du groupe).
-        Si tu as une question, tu peux rÃ©pondre Ã  cet email.
+        La remise et le paiement se font à la table de vente (ou selon les consignes du groupe).
+        Si tu as une question, tu peux répondre à cet email.
     </p>
 
     <a href="{{ url('merch_index') }}" class="btn">Voir la table de vente</a>
 {% endblock %}
-

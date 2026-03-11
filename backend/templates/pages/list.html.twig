@@ -1,6 +1,6 @@
-﻿{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Pages â€“ Ultras Lions{% endblock %}
+{% block title %}Pages – Ultras Lions{% endblock %}
 
 {% block body %}
 
@@ -29,7 +29,7 @@
                         <h3>{{ page.title }}</h3>
 
                         {% if page.content %}
-                            <p>{{ page.content|striptags|slice(0, 120) ~ 'â€¦' }}</p>
+                            <p>{{ page.content|striptags|slice(0, 120) ~ '…' }}</p>
                         {% endif %}
                     </div>
                 </a>
@@ -42,4 +42,3 @@
 </div>
 
 {% endblock %}
-
