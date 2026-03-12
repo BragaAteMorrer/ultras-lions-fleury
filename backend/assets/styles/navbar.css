@@ -164,6 +164,32 @@
     border-bottom: 0.0625rem solid rgba(255,255,255,0.15);
 }
 
+.ultra-nav-mobile .mobile-submenu .sub {
+    display: none;
+    padding-left: 1.2rem;
+    font-size: 1.05rem;
+}
+
+.ultra-nav-mobile .mobile-submenu.open .sub {
+    display: flex;
+}
+
+.ultra-nav-mobile .submenu-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1rem 0.5rem;
+    background: #000;
+    border: 0;
+    color: #fff;
+    font: inherit;
+    text-transform: uppercase;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
+
 .ultra-nav-mobile .ultra-link:last-child {
     border-bottom: none;
 }

@@ -164,6 +164,20 @@
     });
 })();
 
+(() => {
+    const toggles = document.querySelectorAll('#ultraNavMobile .submenu-toggle');
+    if (!toggles.length) return;
+
+    toggles.forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+            const parent = toggle.closest('.mobile-submenu');
+            if (!parent) return;
+            const isOpen = parent.classList.toggle('open');
+            toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+    });
+})();
+
 // Slider de background sur le hero
 (function () {
     const hero = document.getElementById('heroSlider');

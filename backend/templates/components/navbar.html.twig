@@ -114,7 +114,10 @@
             <a href="{{ path('home') }}" class="ultra-link">{{ 'components_navbar.html.accueil'|trans }}</a>
             <a href="{{ path('post_index') }}" class="ultra-link">{{ 'components_navbar.html.actualites'|trans }}</a>
             <div class="mobile-submenu">
-                <a href="{{ path('event_index') }}" class="ultra-link">{{ 'components_navbar.html.photos_de_match'|trans }}</a>
+                <button type="button" class="ultra-link submenu-toggle" aria-expanded="false">
+                    {{ 'components_navbar.html.photos_de_match'|trans }}
+                </button>
+                <a href="{{ path('event_index') }}" class="ultra-link sub">{{ 'components_navbar.html.toutes_les_saisons'|trans }}</a>
                 {% set currentYear = "now"|date("Y") %}
                 {% for year in (currentYear - 2)..(currentYear + 2) %}
                     {% set seasonValue = year ~ '-' ~ (year + 1) %}
@@ -143,11 +146,14 @@
                 <a href="{{ path('app_logout') }}" class="ultra-link text-danger">🚪 {{ 'components_navbar.html.deconnexion'|trans }}</a>
             {% else %}
                 <div class="mobile-submenu">
-                    <a class="ultra-link">🔐 {{ 'components_navbar.html.connexion'|trans }}</a>
+                    <button type="button" class="ultra-link submenu-toggle" aria-expanded="false">
+                        🔐 {{ 'components_navbar.html.connexion'|trans }}
+                    </button>
 
                     <a href="{{ path('app_login') }}" class="ultra-link sub">🔑 {{ 'components_navbar.html.se_connecter'|trans }}</a>
                     <a href="{{ path('invitation_check') }}" class="ultra-link sub">🎟 {{ 'components_navbar.html.saisir_un_code'|trans }}</a>
                 </div>
+                <a></a>
             {% endif %}
         </nav>
 
