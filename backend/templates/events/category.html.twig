@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ titleKey|trans }}{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ titleKey|trans }}</h1>
+        <p class="hero-subtitle">{{ 'galleries_list.html.tribunes_deplacements_tifos_vie_du_groupe'|trans }}</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+        <div class="event-list">
+            {% for event in events %}
+                <article class="event-item">
+                    {% set cover = event.image ?: (event.media|first) %}
+                    {% if cover %}
+                        <a href="{{ path('event_show', { id: event.id }) }}" class="card mb-3">
+                            <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="event-card-img-top" alt="{{ event.title }}">
+                        </a>
+                    {% endif %}
+
+                    <div class="event-date-block">
+                        {% if event.date %}
+                            <div class="event-date-day">{{ event.date|date('d') }}</div>
+                            <div class="event-date-month">{{ event.date|date('M')|upper }}</div>
+                        {% else %}
+                            <div class="event-date-day">?</div>
+                            <div class="event-date-month">---</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="event-content">
+                        <h3>
+                            <a href="{{ path('event_show', { id: event.id }) }}">
+                                {{ event.title }}
+                            </a>
+                        </h3>
+                    </div>
+
+                </article>
+            {% else %}
+                <p>{{ 'events_list.html.aucun_evenement_pour_le_moment'|trans }}</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

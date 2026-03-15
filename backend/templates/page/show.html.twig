@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'pages_show.html.title'|trans({'%title%': page.title}) }}{% endblock %}
+
+{% block body %}
+
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ page.title }}</h1>
+        <p class="hero-subtitle">{{ 'pages_show.html.published_on'|trans({'%date%': page.createdAt|date('d/m/Y')}) }}</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+
+        {% if page.image %}
+            <div class="post-main-image">
+                <img src="{{ asset('uploads/media/' ~ page.image.path) }}"
+                     alt="{{ page.title }}">
+            </div>
+        {% endif %}
+
+        <div class="post-body">
+            {{ page.content|raw }}
+        </div>
+
+        <a href="{{ path('home') }}" class="btn btn-secondary" style="margin-top: 2rem;">{{ 'merch_buy.html.retour'|trans }}</a>
+
+    </div>
+</div>
+
+{% endblock %}

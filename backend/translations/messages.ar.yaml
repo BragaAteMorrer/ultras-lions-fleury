@@ -40,6 +40,9 @@ components_navbar:
     sinscrire: يسجل
     table_de_vente: جدول المبيعات
     toutes_les_saisons: كل المواسم
+    videos: فيديوهات
+    communiques: بيانات صحفية
+    streetart: فن الشارع
 email_base:
   html:
     footer_brand: ألتراس لايونز – إف سي فلوري 91

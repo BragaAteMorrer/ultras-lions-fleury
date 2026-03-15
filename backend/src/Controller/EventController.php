@@ -10,10 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/deplacements')]
+#[Route('/photos-de-match')]
 class EventController extends AbstractController
 {
-    #[Route('/', name: 'event_index')]
+    #[Route('/', name: 'gamephoto_index')]
     public function index(EntityManagerInterface $em, Request $request): Response
     {
         $selectedSeason = trim($request->query->getString('season', ''));

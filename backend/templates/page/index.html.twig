@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'pages_list.html.pages_ultras_lions'|trans }}{% endblock %}
+
+{% block body %}
+
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ 'pages_list.html.pages'|trans }}</h1>
+        <p class="hero-subtitle">{{ 'pages_list.html.pages_informatives_du_groupe'|trans }}</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+
+        <h2 class="section-title">{{ 'pages_list.html.toutes_les_pages'|trans }}</h2>
+
+        <div class="cards">
+            {% for page in pages %}
+                <a href="{{ path('page_show', { slug: page.slug }) }}" class="card">
+
+                    {% if page.image %}
+                        <img src="{{ asset('uploads/media/' ~ page.image.path) }}"
+                             alt="{{ page.title }}">
+                    {% endif %}
+
+                    <div class="card-content">
+                        <h3>{{ page.title }}</h3>
+
+                        {% if page.content %}
+                            <p>{{ page.content|striptags|slice(0, 120) ~ 'â€¦' }}</p>
+                        {% endif %}
+                    </div>
+                </a>
+            {% else %}
+                <p>{{ 'pages_list.html.aucune_page_disponible'|trans }}</p>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

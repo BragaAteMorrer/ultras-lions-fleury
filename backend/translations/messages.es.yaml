@@ -40,6 +40,10 @@ components_navbar:
     sinscrire: Registro
     table_de_vente: Tabla de ventas
     toutes_les_saisons: Todas las estaciones
+    videos: Videos
+    communiques: Comunicados de prensa
+    streetart: Street Art
+    
 email_base:
   html:
     footer_brand: Ultras Lions – FC Fleury 91

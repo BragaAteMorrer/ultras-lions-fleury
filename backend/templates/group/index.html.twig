@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'group_show.html.le_groupe_ultras_lions'|trans }}{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ 'group_show.html.le_groupe'|trans }}</h1>
+        <p class="hero-subtitle">{{ 'group_show.html.identite_valeurs_histoire_tribune'|trans }}</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+
+        <div class="group-content">
+            {{ group.description|raw }}
+        </div>
+
+        {% if group.banner %}
+            <div style="margin-top:2rem;">
+                <img class="group-banner"
+                     src="{{ asset('uploads/media/' ~ group.banner.path) }}"
+                     alt="">
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

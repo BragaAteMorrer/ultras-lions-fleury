@@ -47,6 +47,9 @@ class EventCrudController extends AbstractCrudController
             ->setChoices([
                 'Photo de match' => 'photo_match',
                 'Événement' => 'evenement',
+                'Vidéos' => 'video',
+                'Communiqués' => 'communique',
+                'Street Art' => 'streetart',
             ])
             ->renderExpanded(false);
         yield TextField::new('opponent', 'Adversaire')

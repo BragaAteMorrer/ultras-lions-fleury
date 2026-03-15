@@ -3,17 +3,14 @@
     <div class="ultra-topband">
         <div class="container d-flex align-items-center justify-content-between">
 
-            {# LOGO #}
             <a href="{{ path('home') }}" class="ultra-brand d-flex align-items-center">
                 <img src="{{ asset('img/logo/Logo Texte.png') }}" class="ultra-logo" alt="{{ 'components_footer.html.ultras_lions'|trans }}">
             </a>
 
-            {# BURGER MOBILE #}
             <button class="ultra-burger d-lg-none" id="ultraNavToggle">
                 <span></span><span></span><span></span>
             </button>
 
-            {# --- MENU DESKTOP --- #}
             <nav class="ultra-nav d-none d-lg-flex align-items-center">
 
                 <a href="{{ path('home') }}"
@@ -24,39 +21,57 @@
 
                 <div class="dropdown">
                     <a href="#"
-                       class="ultra-link dropdown-toggle {{ app.request.get('_route') starts with 'event_' ? 'active' }}"
+                       class="ultra-link dropdown-toggle {{ (app.request.get('_route') starts with 'event_') or (app.request.get('_route') starts with 'gallery_') or (app.request.get('_route') starts with 'media_') ? 'active' }}"
                        id="eventDropdown"
                        data-bs-toggle="dropdown"
-                       aria-expanded="false">{{ 'components_navbar.html.photos_de_match'|trans }}</a>
+                       aria-expanded="false">{{ 'admin_dashboard.html.galeries'|trans }}
+                    </a>
                     <ul class="dropdown-menu ultra-dropdown" aria-labelledby="eventDropdown">
-                        <li>
-                            <a class="dropdown-item" href="{{ path('event_index') }}">{{ 'components_navbar.html.toutes_les_saisons'|trans }}</a>
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="{{ path('gamephoto_index') }}">
+                                {{ 'components_navbar.html.photos_de_match'|trans }}
+                            </a>
+                            <ul class="dropdown-menu ultra-dropdown">
+                                {% set currentYear = "now"|date("Y") %}
+                                {% for year in (currentYear - 2)..(currentYear + 2) %}
+                                    {% set seasonValue = year ~ '-' ~ (year + 1) %}
+                                    <li>
+                                        <a class="dropdown-item" href="{{ path('gamephoto_index', { season: seasonValue }) }}">
+                                            {{ 'components_navbar.html.saison'|trans({'%year_start%': year, '%year_end%': year + 1}) }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         </li>
-                        {% set currentYear = "now"|date("Y") %}
-                        {% for year in (currentYear - 2)..(currentYear + 2) %}
-                            {% set seasonValue = year ~ '-' ~ (year + 1) %}
-                            <li>
-                                <a class="dropdown-item" href="{{ path('event_index', { season: seasonValue }) }}">
-                                    {{ 'components_navbar.html.saison'|trans({'%year_start%': year, '%year_end%': year + 1}) }}
-                                </a>
-                            </li>
-                        {% endfor %}
+                        <li>
+                            <a class="dropdown-item" href="{{ path('media_videos') }}">
+                                {{ 'components_navbar.html.videos'|trans }}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ path('media_communiques') }}">
+                                {{ 'components_navbar.html.communiques'|trans }}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ path('media_streetart') }}">
+                                {{ 'components_navbar.html.streetart'|trans }}
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
-                <a href="{{ path('gallery_index') }}"
-                   class="ultra-link {{ app.request.get('_route') starts with 'gallery_' ? 'active' }}">{{ 'admin_dashboard.html.galeries'|trans }}</a>
+                {% if app.user %}
+                    <a href="{{ path('merch_index') }}"
+                       class="ultra-link {{ app.request.get('_route') starts with 'merch_' ? 'active' }}">{{ 'components_navbar.html.table_de_vente'|trans }}</a>
 
-                <a href="{{ path('merch_index') }}"
-                   class="ultra-link {{ app.request.get('_route') starts with 'merch_' ? 'active' }}">{{ 'components_navbar.html.table_de_vente'|trans }}</a>
-
-                <a href="{{ path('ticket_index') }}"
-                   class="ultra-link {{ app.request.get('_route') starts with 'ticket_' ? 'active' }}">{{ 'components_navbar.html.billetterie'|trans }}</a>
+                    <a href="{{ path('ticket_index') }}"
+                       class="ultra-link {{ app.request.get('_route') starts with 'ticket_' ? 'active' }}">{{ 'components_navbar.html.billetterie'|trans }}</a>
+                {% endif %}
 
                 <a href="{{ path('group_index') }}"
                    class="ultra-link {{ app.request.get('_route') starts with 'group_' ? 'active' }}">{{ 'components_navbar.html.le_groupe'|trans }}</a>
 
-                {# ----- DROPDOWN USER ----- #}
                 {% if app.user %}
                     <div class="dropdown user-nav">
                         <a class="ultra-link dropdown-toggle d-flex align-items-center"
@@ -108,29 +123,31 @@
             </nav>
         </div>
 
-        {# --- MENU MOBILE --- #}
         <nav class="ultra-nav-mobile d-lg-none" id="ultraNavMobile">
 
             <a href="{{ path('home') }}" class="ultra-link">{{ 'components_navbar.html.accueil'|trans }}</a>
+            <a href="{{ path('group_index') }}" class="ultra-link">{{ 'components_navbar.html.le_groupe'|trans }}</a>
             <a href="{{ path('post_index') }}" class="ultra-link">{{ 'components_navbar.html.actualites'|trans }}</a>
             <div class="mobile-submenu">
                 <button type="button" class="ultra-link submenu-toggle" aria-expanded="false">
-                    {{ 'components_navbar.html.photos_de_match'|trans }}
+                    {{ 'admin_dashboard.html.galeries'|trans }}
                 </button>
-                <a href="{{ path('event_index') }}" class="ultra-link sub">{{ 'components_navbar.html.toutes_les_saisons'|trans }}</a>
+                <a href="{{ path('gamephoto_index') }}" class="ultra-link sub">{{ 'components_navbar.html.photos_de_match'|trans }}</a>
+                <a href="{{ path('media_videos') }}" class="ultra-link sub">{{ 'components_navbar.html.videos'|trans }}</a>
+                <a href="{{ path('media_communiques') }}" class="ultra-link sub">{{ 'components_navbar.html.communiques'|trans }}</a>
+                <a href="{{ path('media_streetart') }}" class="ultra-link sub">{{ 'components_navbar.html.streetart'|trans }}</a>
                 {% set currentYear = "now"|date("Y") %}
                 {% for year in (currentYear - 2)..(currentYear + 2) %}
                     {% set seasonValue = year ~ '-' ~ (year + 1) %}
-                    <a href="{{ path('event_index', { season: seasonValue }) }}" class="ultra-link sub">
+                    <a href="{{ path('gamephoto_index', { season: seasonValue }) }}" class="ultra-link sub">
                         {{ 'components_navbar.html.saison'|trans({'%year_start%': year, '%year_end%': year + 1}) }}
                     </a>
                 {% endfor %}
             </div>
-            <a href="{{ path('gallery_index') }}" class="ultra-link">{{ 'admin_dashboard.html.galeries'|trans }}</a>
-            <a href="{{ path('merch_index') }}" class="ultra-link">{{ 'components_navbar.html.table_de_vente'|trans }}</a>
-            <a href="{{ path('ticket_index') }}" class="ultra-link">{{ 'components_navbar.html.billetterie'|trans }}</a>
-            <a href="{{ path('group_index') }}" class="ultra-link">{{ 'components_navbar.html.le_groupe'|trans }}</a>
-
+            {% if app.user %}
+                <a href="{{ path('merch_index') }}" class="ultra-link">{{ 'components_navbar.html.table_de_vente'|trans }}</a>
+                <a href="{{ path('ticket_index') }}" class="ultra-link">{{ 'components_navbar.html.billetterie'|trans }}</a>
+            {% endif %}
             <hr>
 
             {% if app.user %}

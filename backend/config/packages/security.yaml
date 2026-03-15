@@ -34,6 +34,10 @@ security:
         # Admin uniquement
         - { path: ^/admin, roles: ROLE_ADMIN }
 
+        # Accès réservé aux membres connectés
+        - { path: ^/table-de-vente, roles: ROLE_USER }
+        - { path: ^/billetterie, roles: ROLE_USER }
+
         # Pages utilisateur connectées
         - { path: ^/profile, roles: ROLE_USER }
 

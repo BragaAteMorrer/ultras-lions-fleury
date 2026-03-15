@@ -43,6 +43,9 @@ components_navbar:
     sinscrire: "S'Inscrire"
     table_de_vente: "Table de Vente"
     toutes_les_saisons: "Toutes les saisons"
+    videos: "Vidéos"
+    communiques: "Communiqués"
+    streetart: "Street Art"
 
 email_base:
   html:
