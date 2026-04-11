@@ -33,9 +33,14 @@ components_navbar:
     le_groupe: O Grupo
     modifier_mon_compte: ️ Editar minha conta
     mon_profil: Meu perfil
+    notre_histoire: "Nossa historia"
+    notre_mentalite: "Nossa mentalidade"
+    notre_fonctionnement: "Nosso funcionamento"
+    pourquoi_nous_rejoindre: "Por que se juntar a nos?"
     photos_de_match: Combine fotos
     saisir_un_code: Insira um código
     saison: Temporada %year_start%/%year_end%
+    se_carter: "Se Carter"
     se_connecter: Conecte-se
     sinscrire: Cadastre-se
     table_de_vente: Tabela de Vendas
@@ -43,6 +48,7 @@ components_navbar:
     videos: Vídeos
     communiques: Comunicados de imprensa
     streetart: Street Art
+    chants: "Chants"
     
 email_base:
   html:
@@ -105,6 +111,16 @@ group_show:
     identite_valeurs_histoire_tribune: Identidade, valores, história, plataforma
     le_groupe: O grupo
     le_groupe_ultras_lions: O grupo – Ultras Lions
+    section_histoire_title: "Nossa historia"
+    section_histoire_text: "Nascidos na arquibancada de Fleury, construimos nossa identidade jogo a jogo. Vermelho e preto, fieis, presentes em todo lugar."
+    section_mentalite_title: "Nossa mentalidade"
+    section_mentalite_text: "Lealdade, respeito, uniao. Cantamos, empurramos, nao largamos nunca, em casa e fora."
+    section_fonctionnement_title: "Nosso funcionamento"
+    section_fonctionnement_text: "O grupo funciona com voluntarios, reunioes e decisoes coletivas. Cada um tem seu lugar, cada um contribui."
+    section_rejoindre_title: "Por que se juntar a nos?"
+    section_rejoindre_text: "Para viver o jogo de outro jeito, participar de tifos e viagens e fazer parte de uma familia rubro-negra."
+    section_se_carter_title: "Se Carter"
+    section_se_carter_text: "Passe na mesa de vendas em dia de jogo, pegue seu codigo e depois se registre para acessar a area de membros."
 home_index:
   html:
     aucun_evenement_prevu: Nenhum evento planejado.

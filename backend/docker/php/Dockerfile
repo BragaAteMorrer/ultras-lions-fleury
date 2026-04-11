@@ -13,4 +13,8 @@ RUN install-php-extensions gd
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
+COPY docker/php/php-fpm.d/zz-listen.conf /usr/local/etc/php-fpm.d/zz-listen.conf
+
 WORKDIR /var/www
+
+COPY docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini

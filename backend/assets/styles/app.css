@@ -90,6 +90,91 @@ img {
     color: #fff;
 }
 
+.group-section {
+    background: rgba(10, 10, 10, 0.7);
+    border: 0.0625rem solid #222;
+    border-left: 0.25rem solid #D40000;
+    padding: 1.5rem 1.75rem;
+    border-radius: 0.6rem;
+    box-shadow: 0 0.75rem 1.75rem rgba(0, 0, 0, 0.45);
+    margin-bottom: 1.4rem;
+    scroll-margin-top: 6rem;
+}
+
+.group-section h2 {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.6rem;
+    color: #fff;
+}
+
+.group-section p {
+    color: #ddd;
+    font-size: 0.98rem;
+    max-width: 60ch;
+}
+
+.group-section:last-child {
+    margin-bottom: 2.4rem;
+}
+
+/* ==============================================
+   PAGE GROUPE - SIDENAV
+============================================== */
+
+.group-layout {
+    display: grid;
+    grid-template-columns: 16rem 1fr;
+    gap: 2rem;
+}
+
+.group-sidenav {
+    position: sticky;
+    top: 6rem;
+    align-self: start;
+    background: rgba(10, 10, 10, 0.7);
+    border: 0.0625rem solid #222;
+    border-left: 0.25rem solid #D40000;
+    border-radius: 0.6rem;
+    padding: 1rem;
+    box-shadow: 0 0.75rem 1.75rem rgba(0, 0, 0, 0.45);
+}
+
+.group-sidenav-title {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    color: #fff;
+}
+
+.group-sidenav-link {
+    display: block;
+    padding: 0.5rem 0.6rem;
+    border-radius: 0.4rem;
+    color: #ddd;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    transition: 0.2s;
+}
+
+.group-sidenav-link:hover {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+@media (max-width: 62rem) {
+    .group-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .group-sidenav {
+        position: static;
+    }
+}
+
 /* ==============================================
    CARDS ULTRA LIONS
 ============================================== */
@@ -624,4 +709,69 @@ form .btn {
     text-transform: uppercase;
     font-weight: bold;
     letter-spacing: .05em;
+}
+
+/* ===============================
+   RICH CONTENT (EDITOR OUTPUT)
+================================ */
+.rich-content {
+    color: #ddd;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.rich-content h1,
+.rich-content h2,
+.rich-content h3 {
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 1.2rem 0 0.6rem;
+}
+
+.rich-content h1 {
+    font-size: clamp(1.6rem, 3vw, 2.3rem);
+}
+
+.rich-content h2 {
+    font-size: clamp(1.3rem, 2.5vw, 2rem);
+}
+
+.rich-content h3 {
+    font-size: 1.2rem;
+}
+
+.rich-content p {
+    margin-bottom: 0.9rem;
+}
+
+.rich-content a {
+    color: #D40000;
+    text-decoration: underline;
+}
+
+.rich-content ul,
+.rich-content ol {
+    padding-left: 1.3rem;
+    margin: 0 0 1rem;
+}
+
+.rich-content li {
+    margin-bottom: 0.35rem;
+}
+
+.rich-content blockquote {
+    border-left: 0.25rem solid #D40000;
+    background: rgba(10, 10, 10, 0.6);
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+}
+
+.rich-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.75rem 1.5rem rgba(0,0,0,0.45);
+    margin: 1rem 0;
 }

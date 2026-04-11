@@ -36,9 +36,14 @@ components_navbar:
     le_groupe: "Le Groupe"
     modifier_mon_compte: "️ Modifier mon compte"
     mon_profil: "Mon profil"
+    notre_fonctionnement: "Notre fonctionnement"
+    notre_histoire: "Notre histoire"
+    notre_mentalite: "Notre mentalite"
     photos_de_match: "Photos de match"
+    pourquoi_nous_rejoindre: "Pourquoi nous rejoindre ?"
     saisir_un_code: "Saisir un code"
     saison: "Saison %year_start%/%year_end%"
+    se_carter: "Se Carter"
     se_connecter: "Se connecter"
     sinscrire: "S'Inscrire"
     table_de_vente: "Table de Vente"
@@ -46,6 +51,7 @@ components_navbar:
     videos: "Vidéos"
     communiques: "Communiqués"
     streetart: "Street Art"
+    chants: "Chants"
 
 email_base:
   html:
@@ -116,6 +122,16 @@ group_show:
     identite_valeurs_histoire_tribune: "Identité, valeurs, histoire, tribune"
     le_groupe: "Le groupe"
     le_groupe_ultras_lions: "Le groupe – Ultras Lions"
+    section_histoire_title: "Notre histoire"
+    section_histoire_text: "Nes en tribune a Fleury, on a bati notre identite match apres match. Rouge et noir, fideles, presents partout."
+    section_mentalite_title: "Notre mentalite"
+    section_mentalite_text: "Fidelite, respect, solidarite. On chante, on pousse, on ne lache rien, a domicile comme en deplacement."
+    section_fonctionnement_title: "Notre fonctionnement"
+    section_fonctionnement_text: "Le groupe tourne grace aux benevoles, aux reunions et aux decisions collectives. Chacun a sa place, chacun met la main."
+    section_rejoindre_title: "Pourquoi nous rejoindre ?"
+    section_rejoindre_text: "Pour vivre le match autrement, participer aux tifos et deplacements, et faire partie d'une famille rouge et noire."
+    section_se_carter_title: "Se Carter"
+    section_se_carter_text: "Passe a la table de vente les jours de match, recupere ton code, puis inscris-toi pour acceder a l'espace membres."
 
 home_index:
   html:

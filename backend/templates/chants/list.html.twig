@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'components_navbar.html.chants'|trans }}{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ 'components_navbar.html.chants'|trans }}</h1>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+        <div class="cards">
+            {% for chant in chants %}
+                <div class="card">
+                    <div class="card-content">
+                        <h3>{{ chant.title }}</h3>
+
+                        {% if chant.audioPath %}
+                            <audio controls preload="none" style="width: 100%; margin: 8px 0;">
+                                <source src="{{ asset('uploads/chants/' ~ chant.audioPath) }}">
+                            </audio>
+                        {% endif %}
+
+                        {% if chant.lyrics %}
+                            <p>{{ chant.lyrics|e|nl2br }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <p>Aucun chant pour le moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

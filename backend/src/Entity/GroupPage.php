@@ -22,6 +22,21 @@ class GroupPage
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $histoireText = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $mentaliteText = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $fonctionnementText = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $rejoindreText = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $seCarterText = null;
+
     #[ORM\ManyToOne(cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'logo_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?Media $logo = null;
@@ -62,6 +77,46 @@ class GroupPage
         return $this;
     }
 
+    public function getHistoireText(): ?string { return $this->histoireText; }
+
+    public function setHistoireText(?string $histoireText): self
+    {
+        $this->histoireText = $histoireText;
+        return $this;
+    }
+
+    public function getMentaliteText(): ?string { return $this->mentaliteText; }
+
+    public function setMentaliteText(?string $mentaliteText): self
+    {
+        $this->mentaliteText = $mentaliteText;
+        return $this;
+    }
+
+    public function getFonctionnementText(): ?string { return $this->fonctionnementText; }
+
+    public function setFonctionnementText(?string $fonctionnementText): self
+    {
+        $this->fonctionnementText = $fonctionnementText;
+        return $this;
+    }
+
+    public function getRejoindreText(): ?string { return $this->rejoindreText; }
+
+    public function setRejoindreText(?string $rejoindreText): self
+    {
+        $this->rejoindreText = $rejoindreText;
+        return $this;
+    }
+
+    public function getSeCarterText(): ?string { return $this->seCarterText; }
+
+    public function setSeCarterText(?string $seCarterText): self
+    {
+        $this->seCarterText = $seCarterText;
+        return $this;
+    }
+
     public function getLogo(): ?Media { return $this->logo; }
 
     public function setLogo(?Media $logo): self
@@ -82,6 +137,22 @@ class GroupPage
     public function getMedia(): Collection
     {
         return $this->media;
+    }
+
+    /**
+     * @param iterable<Media> $media
+     */
+    public function setMedia(iterable $media): self
+    {
+        foreach ($this->media as $item) {
+            $this->removeMedia($item);
+        }
+
+        foreach ($media as $item) {
+            $this->addMedia($item);
+        }
+
+        return $this;
     }
 
     public function addMedia(Media $media): self

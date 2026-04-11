@@ -99,22 +99,22 @@
    ------------------------------ #}
 <section class="section about-group">
     <div class="container">
-        <h2 class="section-title">{{ 'components_navbar.html.le_groupe'|trans }}</h2>
+        <h2 class="section-title">{{ 'components_navbar.html.se_carter'|trans }}</h2>
 
         {% if group %}
-            <div class="group-content">
-                {{ group.description|raw }}
+            <div class="group-section" id="se-carter">
+                {% set seCarterText = (group and group.seCarterText) ? group.seCarterText : 'Passe à la table de vente les jours de match, récupère ton code, puis inscris-toi pour accéder à l’espace membres.' %}
+                <div class="rich-content">
+                {% if group and group.seCarterText %}
+                    {{ seCarterText|raw }}
+                {% else %}
+                    {{ seCarterText|nl2br }}
+                {% endif %}
             </div>
-
-            {% if group.banner %}
-                <img class="group-banner" 
-                    src="{{ asset('uploads/media/' ~ group.banner.path) }}" 
-                    alt="{{ 'home_index.html.banniere_du_groupe'|trans }}">
+            {% else %}
+                <p>{{ 'home_index.html.aucune_information_de_groupe_na_encore_ete_ajoutee'|trans }}</p>
             {% endif %}
-        {% else %}
-            <p>{{ 'home_index.html.aucune_information_de_groupe_na_encore_ete_ajoutee'|trans }}</p>
-        {% endif %}
-    </div>
+        </div>
 </section>
 
 {% endblock %}

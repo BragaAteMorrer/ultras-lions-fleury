@@ -33,9 +33,14 @@ components_navbar:
     le_groupe: المجموعة
     modifier_mon_compte: ️ تعديل حسابي
     mon_profil: ملفي الشخصي
+    notre_histoire: "Our history"
+    notre_mentalite: "Our mindset"
+    notre_fonctionnement: "How we operate"
+    pourquoi_nous_rejoindre: "Why join us?"
     photos_de_match: تطابق الصور
     saisir_un_code: أدخل رمزا
     saison: الموسم %year_start%/%year_end%
+    se_carter: "Se Carter"
     se_connecter: تسجيل الدخول
     sinscrire: يسجل
     table_de_vente: جدول المبيعات
@@ -43,6 +48,7 @@ components_navbar:
     videos: فيديوهات
     communiques: بيانات صحفية
     streetart: فن الشارع
+    chants: "Chants"
 email_base:
   html:
     footer_brand: ألتراس لايونز – إف سي فلوري 91
@@ -104,6 +110,16 @@ group_show:
     identite_valeurs_histoire_tribune: الهوية، القيم، التاريخ، المنصة
     le_groupe: المجموعة
     le_groupe_ultras_lions: المجموعة – ألتراس ليونز
+    section_histoire_title: "Our history"
+    section_histoire_text: "Born in the stands at Fleury, we built our identity match after match. Red and black, loyal, present everywhere."
+    section_mentalite_title: "Our mindset"
+    section_mentalite_text: "Loyalty, respect, solidarity. We sing, we push, we never let go, home or away."
+    section_fonctionnement_title: "How we operate"
+    section_fonctionnement_text: "The group runs on volunteers, meetings, and collective decisions. Everyone has a role, everyone contributes."
+    section_rejoindre_title: "Why join us?"
+    section_rejoindre_text: "To live the match differently, join tifos and trips, and be part of a real red-and-black family."
+    section_se_carter_title: "Se Carter"
+    section_se_carter_text: "Stop by the sales table on match days, get your code, then register to access the members area."
 home_index:
   html:
     aucun_evenement_prevu: لم يتم التخطيط لأي أحداث.

@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Category;
+use App\Entity\Chant;
 use App\Entity\Event;
 use App\Entity\Gallery;
 use App\Entity\GroupPage;
@@ -76,27 +77,38 @@ class DashboardController extends AbstractDashboardController
     public function configureAssets(): Assets
     {
         return Assets::new()
-            ->addJsFile('assets/js/dashboard.js');
+            ->addJsFile('assets/js/dashboard.js')
+            ->addJsFile('assets/js/easyadmin-editor.js')
+            ->addCssFile('styles/dashboard.css');
     }
 
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
-        yield MenuItem::section('Contenus');
+        yield MenuItem::section('Contenu du site');
         yield MenuItem::linkToCrud('Articles', 'fa fa-newspaper', Post::class);
-        yield MenuItem::linkToCrud('Catégories', 'fa fa-tags', Category::class);
         yield MenuItem::linkToCrud('Pages', 'fa fa-file', Page::class);
-        yield MenuItem::linkToCrud('Événements', 'fa fa-bus', Event::class);
+        yield MenuItem::linkToCrud('Chants', 'fa fa-music', Chant::class);
+        yield MenuItem::linkToCrud('Le Groupe', 'fa fa-users', GroupPage::class);
+        yield MenuItem::linkToCrud('Photos de match', 'fa fa-camera', Event::class)
+            ->setController(PhotoMatchCrudController::class);
         yield MenuItem::linkToCrud('Galeries', 'fa fa-images', Gallery::class);
-        yield MenuItem::linkToCrud('Médias', 'fa fa-photo-film', Media::class);
+        yield MenuItem::linkToCrud('Medias', 'fa fa-photo-film', Media::class);
+
+        yield MenuItem::section('Categories & Evenements');
+        yield MenuItem::linkToCrud('Categories', 'fa fa-tags', Category::class);
+        yield MenuItem::linkToCrud('Evenements', 'fa fa-bus', Event::class);
+
+        yield MenuItem::section('Boutique & Billetterie');
         yield MenuItem::linkToCrud('Merch', 'fa fa-shirt', Merch::class);
         yield MenuItem::linkToCrud('Billetterie', 'fa fa-ticket', Ticket::class);
-        yield MenuItem::linkToCrud('Catégories Billetterie', 'fa fa-list', TicketCategory::class);
-        yield MenuItem::linkToCrud('Catégories Merch', 'fa fa-list', MerchCategory::class);
-        yield MenuItem::linkToCrud('Le Groupe', 'fa fa-users', GroupPage::class);
+        yield MenuItem::linkToCrud('Categories Billetterie', 'fa fa-list', TicketCategory::class);
+        yield MenuItem::linkToCrud('Categories Merch', 'fa fa-list', MerchCategory::class);
+
+        yield MenuItem::section('Utilisateurs');
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-users', User::class);
-        yield MenuItem::linkToCrud('Codes d’invitation', 'fa fa-key', InviteCode::class);
+        yield MenuItem::linkToCrud('Codes pour accès', 'fa fa-key', InviteCode::class);
 
         yield MenuItem::section('Configuration');
         yield MenuItem::linkToCrud('Site', 'fa fa-gear', SiteConfig::class);

@@ -26,6 +26,9 @@
 
                     <div class="card-content">
                         <h3>{{ gallery.title }}</h3>
+                        {% if gallery.description %}
+                            <p>{{ gallery.description|striptags|slice(0,120) ~ '...' }}</p>
+                        {% endif %}
                     </div>
                 </a>
 

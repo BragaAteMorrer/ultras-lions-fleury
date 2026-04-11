@@ -19,6 +19,9 @@ class Gallery
     #[ORM\Column(length: 180)]
     private ?string $title = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $description = null;
+
     /** @var Collection<int, Media> */
     #[ORM\OneToMany(mappedBy: 'gallery', targetEntity: Media::class, cascade: ['persist'])]
     private Collection $media;
@@ -40,6 +43,17 @@ class Gallery
     public function setTitle(string $title): self
     {
         $this->title = $title;
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
         return $this;
     }
 

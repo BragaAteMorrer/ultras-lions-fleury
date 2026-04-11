@@ -2,4 +2,4 @@ easy_admin:
     design:
         assets:
             css:
-                - '/css/easyadmin.css'
+                - 'styles/easyadmin-home.css'

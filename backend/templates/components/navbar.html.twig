@@ -61,6 +61,9 @@
                     </ul>
                 </div>
 
+                <a href="{{ path('chant_index') }}"
+                   class="ultra-link {{ app.request.get('_route') starts with 'chant_' ? 'active' }}">{{ 'components_navbar.html.chants'|trans }}</a>
+
                 {% if app.user %}
                     <a href="{{ path('merch_index') }}"
                        class="ultra-link {{ app.request.get('_route') starts with 'merch_' ? 'active' }}">{{ 'components_navbar.html.table_de_vente'|trans }}</a>
@@ -69,8 +72,8 @@
                        class="ultra-link {{ app.request.get('_route') starts with 'ticket_' ? 'active' }}">{{ 'components_navbar.html.billetterie'|trans }}</a>
                 {% endif %}
 
-                <a href="{{ path('group_index') }}"
-                   class="ultra-link {{ app.request.get('_route') starts with 'group_' ? 'active' }}">{{ 'components_navbar.html.le_groupe'|trans }}</a>
+                <a href="#"
+                   class="ultra-link {{ app.request.get('_route') starts with 'group_' ? 'active' }}" aria-expanded="false">{{ 'components_navbar.html.le_groupe'|trans }}</a>
 
                 {% if app.user %}
                     <div class="dropdown user-nav">
@@ -126,8 +129,25 @@
         <nav class="ultra-nav-mobile d-lg-none" id="ultraNavMobile">
 
             <a href="{{ path('home') }}" class="ultra-link">{{ 'components_navbar.html.accueil'|trans }}</a>
-            <a href="{{ path('group_index') }}" class="ultra-link">{{ 'components_navbar.html.le_groupe'|trans }}</a>
+            <div class="mobile-submenu">
+                <button type="button" class="ultra-link submenu-toggle" aria-expanded="false">
+                    {{ 'components_navbar.html.le_groupe'|trans }}
+                </button>
+                <a href="{{ path('group_index') ~ '#notre-histoire' }}" class="ultra-link sub">
+                    {{ 'components_navbar.html.notre_histoire'|trans }}
+                </a>
+                <a href="{{ path('group_index') ~ '#notre-mentalite' }}" class="ultra-link sub">
+                    {{ 'components_navbar.html.notre_mentalite'|trans }}
+                </a>
+                <a href="{{ path('group_index') ~ '#notre-fonctionnement' }}" class="ultra-link sub">
+                    {{ 'components_navbar.html.notre_fonctionnement'|trans }}
+                </a>
+                <a href="{{ path('group_index') ~ '#pourquoi-nous-rejoindre' }}" class="ultra-link sub">
+                    {{ 'components_navbar.html.pourquoi_nous_rejoindre'|trans }}
+                </a>
+            </div>
             <a href="{{ path('post_index') }}" class="ultra-link">{{ 'components_navbar.html.actualites'|trans }}</a>
+            <a href="{{ path('chant_index') }}" class="ultra-link">{{ 'components_navbar.html.chants'|trans }}</a>
             <div class="mobile-submenu">
                 <button type="button" class="ultra-link submenu-toggle" aria-expanded="false">
                     {{ 'admin_dashboard.html.galeries'|trans }}

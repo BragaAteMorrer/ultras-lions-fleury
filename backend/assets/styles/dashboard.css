@@ -5,6 +5,8 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
 }
 
 .stats-grid {
@@ -12,15 +14,17 @@
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 20px;
     margin-bottom: 40px;
+    width: 100%;
 }
 
 .stat-card {
-    background: #111;
+    background: rgba(10, 10, 10, 0.8);
     padding: 20px;
     border-radius: 12px;
     text-align: center;
     color: white;
-    border: 1px solid #333;
+    border: 1px solid #222;
+    box-shadow: 0 0.75rem 1.75rem rgba(0, 0, 0, 0.45);
 }
 
 .stat-number {
@@ -36,6 +40,10 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-left: 1rem;
+    border-left: 0.25rem solid #D40000;
 }
 
 .latest-posts {
@@ -45,7 +53,43 @@
 
 .latest-post-card {
     padding: 15px;
-    background: #1a1a1a;
-    border: 1px solid #333;
+    background: rgba(10, 10, 10, 0.8);
+    border: 1px solid #222;
+    border-left: 0.25rem solid #D40000;
     border-radius: 10px;
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background: #222;
+    margin: 2rem 0;
+}
+
+@media (max-width: 900px) {
+    .admin-title {
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        margin: 24px 0 12px;
+    }
+}
+
+@media (max-width: 600px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .latest-post-card {
+        padding: 12px;
+    }
 }

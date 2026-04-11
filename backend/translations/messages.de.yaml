@@ -33,9 +33,14 @@ components_navbar:
     le_groupe: Die Gruppe
     modifier_mon_compte: ️ Bearbeiten Sie mein Konto
     mon_profil: Mein Profil
+    notre_histoire: "Unsere Geschichte"
+    notre_mentalite: "Unsere Mentalitaet"
+    notre_fonctionnement: "So arbeiten wir"
+    pourquoi_nous_rejoindre: "Warum uns beitreten?"
     photos_de_match: Passen Sie Fotos an
     saisir_un_code: Geben Sie einen Code ein
     saison: Staffel %year_start%/%year_end%
+    se_carter: "Se Carter"
     se_connecter: Einloggen
     sinscrire: Registrieren
     table_de_vente: Verkaufstisch
@@ -43,6 +48,7 @@ components_navbar:
     videos: Videos
     communiques: Pressemitteilungen
     streetart: Street Art
+    chants: "Chants"
 email_base:
   html:
     footer_brand: Ultras Lions – FC Fleury 91
@@ -104,6 +110,16 @@ group_show:
     identite_valeurs_histoire_tribune: Identität, Werte, Geschichte, Plattform
     le_groupe: Die Gruppe
     le_groupe_ultras_lions: Die Gruppe – Ultras Lions
+    section_histoire_title: "Unsere Geschichte"
+    section_histoire_text: "In der Kurve von Fleury geboren, haben wir unsere Identitaet Spiel fuer Spiel aufgebaut. Rot und Schwarz, treu, ueberall praesent."
+    section_mentalite_title: "Unsere Mentalitaet"
+    section_mentalite_text: "Treue, Respekt, Zusammenhalt. Wir singen, wir treiben an, wir lassen nie locker, zuhause wie auswaerts."
+    section_fonctionnement_title: "So arbeiten wir"
+    section_fonctionnement_text: "Die Gruppe lebt von Freiwilligen, Treffen und gemeinsamen Entscheidungen. Jeder hat seinen Platz, jeder packt mit an."
+    section_rejoindre_title: "Warum uns beitreten?"
+    section_rejoindre_text: "Um das Spiel anders zu erleben, bei Tifos und Auswaertsfahrten dabei zu sein und Teil einer rot-schwarzen Familie zu werden."
+    section_se_carter_title: "Se Carter"
+    section_se_carter_text: "Komm an Spieltagen am Verkaufstisch vorbei, hol dir deinen Code und registriere dich fuer den Mitgliederbereich."
 home_index:
   html:
     aucun_evenement_prevu: Keine Veranstaltungen geplant.

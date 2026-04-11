@@ -3,3 +3,4 @@ rmdir /S /Q backend\var\cache\dev
 docker start ultras_php
 docker exec -it ultras_php php bin/console cache:clear
 docker exec -it ultras_php php bin/console make:migration
+docker compose exec php bin/console asset-map:compile

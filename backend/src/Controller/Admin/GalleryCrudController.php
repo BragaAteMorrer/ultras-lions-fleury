@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 
 class GalleryCrudController extends AbstractCrudController
 {
@@ -28,6 +29,9 @@ class GalleryCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
 
         yield TextField::new('title', 'Titre');
+        yield TextEditorField::new('description', 'Description')
+            ->setFormTypeOption('attr', ['data-ea-trix-preview' => '1'])
+            ->hideOnIndex();
         yield CollectionField::new('media', 'Médias')
             ->useEntryCrudForm(MediaCrudController::class)
             ->setFormTypeOption('by_reference', false)

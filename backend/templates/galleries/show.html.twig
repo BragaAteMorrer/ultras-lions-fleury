@@ -12,6 +12,12 @@
 <div class="section">
     <div class="container">
 
+        {% if gallery.description %}
+            <div class="rich-content" style="margin-bottom: 1.5rem;">
+                {{ gallery.description|raw }}
+            </div>
+        {% endif %}
+
         {% if gallery.media|length > 0 %}
             <div class="cards gallery-grid">
                 {% for media in gallery.media %}
