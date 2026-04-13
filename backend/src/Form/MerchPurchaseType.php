@@ -37,8 +37,9 @@ class MerchPurchaseType extends AbstractType
 
         $builder
             ->add('quantity', IntegerType::class, [
-                'label' => 'Quantité',
+                'label' => 'Quantite',
                 'data' => 1,
+                'empty_data' => '1',
                 'constraints' => [
                     new NotBlank(),
                     new GreaterThanOrEqual(1),

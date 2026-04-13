@@ -7,6 +7,16 @@
     <div class="hero-content">
         <h1 class="hero-title">{{ 'group_show.html.le_groupe'|trans }}</h1>
         <p class="hero-subtitle">{{ 'group_show.html.identite_valeurs_histoire_tribune'|trans }}</p>
+
+        {% if group %}
+            <div class="group-content rich-content">
+                {{ group.description|raw }}
+            </div>
+            {% else %}
+            <div class="group-content rich-content">
+                {{ 'home_index.html.aucune_information_de_groupe_na_encore_ete_ajoutee'|trans }}
+            </div>
+        {% endif %}
     </div>
 </section>
 
@@ -90,16 +100,6 @@
                         {% endif %}
                     </div>
                 </div>
-
-                {% if group %}
-                    <div class="group-content rich-content">
-                        {{ group.description|raw }}
-                    </div>
-                {% else %}
-                    <div class="group-content rich-content">
-                        {{ 'home_index.html.aucune_information_de_groupe_na_encore_ete_ajoutee'|trans }}
-                    </div>
-                {% endif %}
             </div>
         </div>
     </div>

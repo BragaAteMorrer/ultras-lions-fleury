@@ -2,7 +2,18 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{{ 'base.html.ultras_lions_fc_fleury_91'|trans }}{% endblock %}</title>
+    {% set siteTitle = site_name ?: ('base.html.ultras_lions_fc_fleury_91_title'|trans) %}
+    {% set pageTitle %}{% block title %}{{ 'base.html.ultras_lions_fc_fleury_91_title'|trans }}{% endblock %}{% endset %}
+    {% set pageTitle = pageTitle|trim %}
+    {% set siteTitleNorm = siteTitle|lower %}
+    {% set pageTitleNorm = pageTitle|lower %}
+    <title>
+        {% if pageTitle and pageTitle != siteTitle and (siteTitleNorm not in pageTitleNorm) %}
+            {{ siteTitle }} - {{ pageTitle }}
+        {% else %}
+            {{ siteTitle }}
+        {% endif %}
+    </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="icon" href="{{ asset('img/logo/Logo Final - Ultras Lions - Autre Présentation.png') }}">
@@ -27,6 +38,14 @@
     {% include 'components/navbar.html.twig' %}
 
     <main>
+        {% for label, messages in app.flashes %}
+            {% set alertClass = label in ['success','warning','danger','info'] ? label : 'secondary' %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                    <div class="alert alert-{{ alertClass }} mb-2">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
         {% block body %}{% endblock %}
     </main>
 
@@ -40,5 +59,3 @@
     {% block javascripts %}{% endblock %}
 </body>
 </html>
-
-

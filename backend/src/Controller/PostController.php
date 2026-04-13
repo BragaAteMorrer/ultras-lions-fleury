@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Post;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +13,7 @@ class PostController extends AbstractController
     #[Route('/', name: 'post_index')]
     public function index(PostRepository $postRepository): Response
     {
-        $posts = $postRepository->findBy([], ['createdAt' => 'DESC']);
+        $posts = $postRepository->findPublicPosts();
 
         return $this->render('posts/list.html.twig', [
             'posts' => $posts,
@@ -22,8 +21,13 @@ class PostController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'post_show')]
-    public function show(Post $post): Response
+    public function show(string $slug, PostRepository $postRepository): Response
     {
+        $post = $postRepository->findPublicBySlug($slug);
+        if (!$post) {
+            throw $this->createNotFoundException();
+        }
+
         return $this->render('posts/show.html.twig', [
             'post' => $post,
         ]);

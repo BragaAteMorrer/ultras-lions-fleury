@@ -45,6 +45,10 @@ class Media
     #[ORM\JoinColumn(name: 'event_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?Event $event = null;
 
+    #[ORM\ManyToOne(inversedBy: 'media')]
+    #[ORM\JoinColumn(name: 'post_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    private ?Post $post = null;
+
     public function __toString(): string
     {
         return $this->alt ?? $this->path ?? ('Media #'.$this->id);
@@ -127,6 +131,17 @@ class Media
     public function setEvent(?Event $event): self
     {
         $this->event = $event;
+        return $this;
+    }
+
+    public function getPost(): ?Post
+    {
+        return $this->post;
+    }
+
+    public function setPost(?Post $post): self
+    {
+        $this->post = $post;
         return $this;
     }
 }

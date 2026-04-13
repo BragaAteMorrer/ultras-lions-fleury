@@ -2,11 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\PostRepository;
-use App\Repository\EventRepository;
-use App\Repository\GalleryRepository;
-use App\Repository\MerchRepository;
-use App\Repository\GroupPageRepository;
+use App\Entity\Event;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,55 +15,76 @@ class HomeController extends AbstractController
         EntityManagerInterface $em
     ): Response {
 
-        // 🔥 1. Récupérer les 3 derniers posts avec FETCH JOIN
-        $lastPosts = $em->createQueryBuilder()
-            ->select('p', 'img', 'cat')
-            ->from('App\Entity\Post', 'p')
-            ->leftJoin('p.image', 'img')
-            ->leftJoin('p.category', 'cat')
-            ->orderBy('p.createdAt', 'DESC')
-            ->setMaxResults(3)
+        // 1. Dernieres actualites (posts + evenements + photos de match)
+        $postRepo = $em->getRepository('App\\Entity\\Post');
+        $posts = $postRepo->findPublicPosts(6);
+
+        $events = $em->createQueryBuilder()
+            ->select('e', 'img', 'cat')
+            ->from(Event::class, 'e')
+            ->leftJoin('e.image', 'img')
+            ->leftJoin('e.category', 'cat')
+            ->where('cat.section IN (:sections)')
+            ->setParameter('sections', ['photos_de_match', 'evenements'])
+            ->orderBy('e.date', 'DESC')
+            ->setMaxResults(6)
             ->getQuery()
             ->getResult();
 
-        // 🔥 2. Prochain événement (juste un)
-        $nextEvent = $em->createQueryBuilder()
-            ->select('e', 'img')
-            ->from('App\Entity\Event', 'e')
-            ->leftJoin('e.image', 'img')
-            ->where('e.category = :category')
-            ->setParameter('category', 'photo_match')
-            ->addOrderBy('e.season', 'DESC')
-            ->addOrderBy('e.journee', 'ASC')
-            ->addOrderBy('e.date', 'ASC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
+        $latestItems = [];
+        foreach ($posts as $post) {
+            $latestItems[] = [
+                'type' => 'post',
+                'date' => $post->getCreatedAt(),
+                'item' => $post,
+            ];
+        }
+        foreach ($events as $event) {
+            $latestItems[] = [
+                'type' => 'event',
+                'date' => $event->getDate(),
+                'item' => $event,
+            ];
+        }
 
-        // 🔥 3. Galeries (avec image de preview)
+        usort($latestItems, static function (array $a, array $b) {
+            $dateA = $a['date'] instanceof \DateTimeInterface ? $a['date']->getTimestamp() : 0;
+            $dateB = $b['date'] instanceof \DateTimeInterface ? $b['date']->getTimestamp() : 0;
+            return $dateB <=> $dateA;
+        });
+
+        $latestItems = array_slice($latestItems, 0, 6);
+
+        // 2. Billetterie (3 prochains matchs visibles)
+        $ticketRepo = $em->getRepository('App\\Entity\\Ticket');
+        $isMember = $this->getUser() !== null;
+        $tickets = $ticketRepo->findPublicTickets(null, $isMember);
+        $tickets = array_slice($tickets, 0, 3);
+
+        // 3. Galeries
         $galleries = $em->createQueryBuilder()
             ->select('g', 'm')
-            ->from('App\Entity\Gallery', 'g')
+            ->from('App\\Entity\\Gallery', 'g')
             ->leftJoin('g.media', 'm')
             ->orderBy('g.id', 'DESC')
             ->setMaxResults(3)
             ->getQuery()
             ->getResult();
 
-        // 🔥 4. Merch (3 derniers articles)
+        // 4. Merch
         $merch = $em->createQueryBuilder()
             ->select('m', 'img')
-            ->from('App\Entity\Merch', 'm')
+            ->from('App\\Entity\\Merch', 'm')
             ->leftJoin('m.image', 'img')
             ->orderBy('m.id', 'DESC')
             ->setMaxResults(3)
             ->getQuery()
             ->getResult();
 
-        // 🔥 5. Groupe (une seule entité)
+        // 5. Groupe
         $group = $em->createQueryBuilder()
             ->select('g', 'logo', 'banner')
-            ->from('App\Entity\GroupPage', 'g')
+            ->from('App\\Entity\\GroupPage', 'g')
             ->leftJoin('g.logo', 'logo')
             ->leftJoin('g.banner', 'banner')
             ->setMaxResults(1)
@@ -75,11 +92,11 @@ class HomeController extends AbstractController
             ->getOneOrNullResult();
 
         return $this->render('home/index.html.twig', [
-            'last_posts'  => $lastPosts,
-            'event'       => $nextEvent,
-            'galleries'   => $galleries,
-            'merch'       => $merch,
-            'group'       => $group,
+            'latest_items' => $latestItems,
+            'tickets' => $tickets,
+            'galleries' => $galleries,
+            'merch' => $merch,
+            'group' => $group,
         ]);
     }
 }

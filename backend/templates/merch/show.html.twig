@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
 {% block title %}{{ 'merch_show.html.title'|trans({'%title%': item.title}) }}{% endblock %}
 
@@ -41,8 +41,26 @@
                     {{ item.description|raw }}
                 </div>
 
-                <a href="{{ path('merch_buy', { id: item.id }) }}" class="btn btn-danger mt-4 w-100">{{ 'merch_show.html.acheter'|trans }}</a>
-                <a href="{{ path('merch_index') }}" class="btn btn-outline-light mt-4">{{ 'merch_buy.html.retour'|trans }}</a>
+                <form action="{{ path('merch_cart_add', { id: item.id }) }}" method="post" class="mt-4">
+                    {% if sizeChoices is not empty %}
+                        <label class="form-label text-light" for="size">Taille</label>
+                        <select id="size" name="size" class="form-select mb-3">
+                            {% for label, value in sizeChoices %}
+                                <option value="{{ value }}" {% if preferredSize and preferredSize == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                        <input type="hidden" name="size" value="TU">
+                    {% endif %}
+
+                    <label class="form-label text-light" for="quantity">Quantite</label>
+                    <input id="quantity" name="quantity" type="number" min="1" value="1" class="form-control mb-3">
+
+                    <button class="btn btn-danger w-100" type="submit">Ajouter au panier</button>
+                </form>
+
+                <a href="{{ path('merch_cart') }}" class="btn btn-outline-light mt-3 w-100">Voir mon panier</a>
+                <a href="{{ path('merch_index') }}" class="btn btn-outline-light mt-3">{{ 'merch_buy.html.retour'|trans }}</a>
             </div>
 
         </div>

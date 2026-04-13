@@ -8,13 +8,13 @@
         <div class="profile-header">
             <div class="profile-avatar-wrapper">
                 {% if user.photoProfil %}
-                    <img src="/uploads/profils/{{ user.photoProfil }}" alt="{{ user.pseudo }}" class="profile-avatar">
+                    <img src="/uploads/profils/{{ user.photoProfil }}" alt="{{ user.prenom }} {{ user.nom }}" class="profile-avatar">
                 {% else %}
-                    <img src="/img/default-profile.png" alt="{{ user.pseudo }}" class="profile-avatar">
+                    <img src="{{ asset('img/logo/Logo CIrculaire - Final - Football Furies.png') }}" alt="{{ user.prenom }} {{ user.nom }}" class="profile-avatar">
                 {% endif %}
             </div>
 
-            <h1 class="profile-name">{{ user.pseudo }}</h1>
+            <h1 class="profile-name">{{ user.prenom }} {{ user.nom }}</h1>
             <p class="profile-role">
                 {% if 'ROLE_ADMIN' in user.roles %}
                     {{ 'profile_show.html.admin_role'|trans }}
@@ -56,6 +56,121 @@
                 <a href="{{ path('profile_edit', { id: user.id }) }}" class="btn-ul profile-edit-btn">{{ 'profile_show.html.modifier_mon_profil'|trans }}</a>
             {% endif %}
         </div>
+
+        {% if app.user and app.user.id == user.id %}
+            <div class="profile-info-card mt-4">
+                <h2 class="section-title">Mes achats</h2>
+
+                <h3 class="form-section-title">Mes commandes</h3>
+                {% if paymentCheckouts is empty %}
+                    <p class="text-muted">Aucune commande pour le moment.</p>
+                {% else %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Statut</th>
+                                    <th>Total</th>
+                                    <th>Creation</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for p in paymentCheckouts %}
+                                    {% set status = p.status|lower %}
+                                    {% set badge = status == 'paid' ? 'bg-success' : (status == 'failed' ? 'bg-danger' : 'bg-warning') %}
+                                    <tr>
+                                        <td>
+                                            {% if p.type == 'ticket' %}
+                                                Billetterie
+                                            {% elseif p.type == 'merch' %}
+                                                Table de vente
+                                            {% else %}
+                                                Panier
+                                            {% endif %}
+                                        </td>
+                                        <td><span class="badge {{ badge }}">{{ p.status }}</span></td>
+                                        <td>{{ p.amount|number_format(2, ',', ' ') }} {{ p.currency }}</td>
+                                        <td>{{ p.createdAt|date('d/m/Y H:i') }}</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-outline-light" href="{{ path('profile_order_show', { id: p.id }) }}">Voir</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+                <h3 class="form-section-title">Billets</h3>
+                {% if ticketOrders is empty %}
+                    <p class="text-muted">Aucun billet pour le moment.</p>
+                {% else %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Match</th>
+                                    <th>Date</th>
+                                    <th>Quantite</th>
+                                    <th>Total</th>
+                                    <th>Statut</th>
+                                    <th>Commande</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in ticketOrders %}
+                                    {% set t = order.ticket %}
+                                    <tr>
+                                        <td>{{ t.opponent }}</td>
+                                        <td>{{ t.matchDate|date('d/m/Y H:i') }}</td>
+                                        <td>{{ order.quantity }}</td>
+                                        <td>{{ order.totalPrice|number_format(2, ',', ' ') }} EUR</td>
+                                        <td><span class="badge bg-success">Paye</span></td>
+                                        <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+                <h3 class="form-section-title mt-4">Matos</h3>
+                {% if merchOrders is empty %}
+                    <p class="text-muted">Aucun achat pour le moment.</p>
+                {% else %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Taille</th>
+                                    <th>Quantite</th>
+                                    <th>Total</th>
+                                    <th>Statut</th>
+                                    <th>Commande</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in merchOrders %}
+                                    <tr>
+                                        <td>{{ order.merch.title }}</td>
+                                        <td>{{ order.size ?? 'TU' }}</td>
+                                        <td>{{ order.quantity }}</td>
+                                        <td>{{ order.totalPrice|number_format(2, ',', ' ') }} €</td>
+                                        <td><span class="badge bg-success">Paye</span></td>
+                                        <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+                
+            </div>
+        {% endif %}
 
     </div>
 </section>

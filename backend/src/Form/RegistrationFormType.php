@@ -61,14 +61,6 @@ class RegistrationFormType extends AbstractType
                     new Assert\Email(),
                 ],
             ])
-            ->add('pseudo', TextType::class, [
-                'label' => 'Pseudo',
-                'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Length(min: 3, max: 50),
-                ],
-            ])
-
             /* -------------------- PASSWORD + CONFIRM -------------------- */
             ->add('plainPassword', PasswordType::class, [
                 'label' => 'Mot de passe',

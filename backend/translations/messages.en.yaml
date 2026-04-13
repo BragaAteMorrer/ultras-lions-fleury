@@ -13,6 +13,7 @@ admin_dashboard:
 base:
   html:
     ultras_lions_fc_fleury_91: Ultras Lions – FC Fleury 91
+    ultras_lions_fc_fleury_91_title: Ultras Lions
 components_footer:
   html:
     copyright: © %year% Ultras Lions — Ultras FC Fleury 91 website.
@@ -186,11 +187,11 @@ profile_edit:
     modifier_mon_compte: Edit my account
 profile_show:
   html:
-    admin_role: Office - Ultras Lions
+    admin_role: Office
     adresse: 'Address :'
     date_de_naissance: 'Date of birth :'
     email: 'Email:'
-    member_role: Member - Ultras Lions
+    member_role: Member
     modifier_mon_profil: Edit my profile
     nom: 'Name :'
     polo: 'Polo:'
@@ -254,7 +255,7 @@ ticket_buy:
 ticket_list:
   html:
     aucun_match_pour_le_moment: No matches yet.
-    billetterie_ultras_lions: Ticketing - Ultras Lions
+    billetterie_ultras_lions: Ticketing
     matchs_a_domicile_et_a_lexterieur: Home and away matches
     matchs_disponibles: Matches available
     stock: 'Stock: %stock%'

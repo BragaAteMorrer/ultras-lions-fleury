@@ -8,7 +8,7 @@
         {% if user.prenom or user.nom %}
             {{ user.prenom }} {{ user.nom }}
         {% else %}
-            {{ user.pseudo }}
+            {{ user.prenom }} {{ user.nom }}
         {% endif %}
     </h1>
 

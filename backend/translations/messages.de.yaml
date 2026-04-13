@@ -13,6 +13,7 @@ admin_dashboard:
 base:
   html:
     ultras_lions_fc_fleury_91: Ultras Lions – FC Fleury 91
+    ultras_lions_fc_fleury_91_title: Ultras Lions
 components_footer:
   html:
     copyright: © %year% Ultras Lions – Website der Ultras FC Fleury 91.

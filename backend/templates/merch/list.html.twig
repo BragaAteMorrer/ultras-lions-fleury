@@ -45,11 +45,11 @@
                             {% if product.category %}
                                 <p class="text-muted mb-1">{{ product.category.name }}</p>
                             {% endif %}
-                            <p class="card-price">{{ product.price|number_format(2, ',', ' ') }} €</p>
-
                             {% if product.description %}
-                                <p>{{ product.description|striptags|slice(0, 90) ~ '…' }}</p>
+                                <p class="mb-1">{{ product.description|striptags|slice(0, 90) ~ '...' }}</p>
                             {% endif %}
+                            <p class="card-price">{{ product.price|number_format(2, ',', ' ') }} €</p>
+                            <p class="text-muted mb-0">{% if product.stocks is empty %}Stock non defini{% else %}{{ 'merch_show.html.stock_total'|trans({'%stock%': product.totalStock}) }}{% endif %}</p>
                         </div>
 
                     </a>

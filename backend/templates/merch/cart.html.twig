@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panier - Table de vente{% endblock %}
+
+{% block body %}
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Panier</h1>
+            <p class="hero-subtitle">{{ 'components_navbar.html.table_de_vente'|trans }}</p>
+        </div>
+    </section>
+
+    <div class="section">
+        <div class="container" style="max-width: 62rem;">
+            <div class="card p-4 bg-dark text-light border-0 shadow">
+                {% if items is empty %}
+                    <p class="text-muted">Ton panier est vide.</p>
+                {% else %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Taille</th>
+                                    <th>Quantite</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in items %}
+                                    <tr>
+                                        <td>{{ row.product.title }}</td>
+                                        <td>{{ row.size }}</td>
+                                        <td>{{ row.quantity }}</td>
+                                        <td>{{ row.lineTotal|number_format(2, ',', ' ') }} €</td>
+                                        <td>
+                                            <form action="{{ path('merch_cart_remove', { key: row.key }) }}" method="post">
+                                                <button class="btn btn-outline-light btn-sm" type="submit">Supprimer</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <strong>Total</strong>
+                        <strong>{{ total|number_format(2, ',', ' ') }} €</strong>
+                    </div>
+
+                    <form action="{{ path('merch_cart_checkout') }}" method="post" class="mt-4">
+                        {% if app.user is null %}
+                            <label class="form-label text-light" for="email">Email</label>
+                            <input id="email" name="email" type="email" required value="{{ email }}" class="form-control mb-3">
+                        {% endif %}
+                        <button class="btn btn-danger w-100" type="submit">Payer avec SumUp</button>
+                    </form>
+
+                    <form action="{{ path('merch_cart_clear') }}" method="post" class="mt-3">
+                        <button class="btn btn-outline-light w-100" type="submit">Vider le panier</button>
+                    </form>
+                {% endif %}
+            </div>
+
+            <a href="{{ path('merch_index') }}" class="btn btn-outline-light mt-4">{{ 'merch_buy.html.retour'|trans }}</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}{% endblock %}

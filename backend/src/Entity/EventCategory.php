@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
+use App\Repository\EventCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CategoryRepository::class)]
-#[ORM\Table(name: 'category')]
-class Category
+#[ORM\Entity(repositoryClass: EventCategoryRepository::class)]
+#[ORM\Table(name: 'event_category')]
+class EventCategory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,13 +22,16 @@ class Category
     #[ORM\Column(length: 150, unique: true)]
     private ?string $slug = null;
 
-    /** @var Collection<int, Post> */
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Post::class)]
-    private Collection $posts;
+    #[ORM\Column(length: 40)]
+    private ?string $section = null;
+
+    /** @var Collection<int, Event> */
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Event::class)]
+    private Collection $events;
 
     public function __construct()
     {
-        $this->posts = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -54,28 +57,17 @@ class Category
         return $this;
     }
 
-    /** @return Collection<int, Post> */
-    public function getPosts(): Collection
-    {
-        return $this->posts;
-    }
+    public function getSection(): ?string { return $this->section; }
 
-    public function addPost(Post $post): self
+    public function setSection(string $section): self
     {
-        if (!$this->posts->contains($post)) {
-            $this->posts->add($post);
-            $post->setCategory($this);
-        }
-
+        $this->section = $section;
         return $this;
     }
 
-    public function removePost(Post $post): self
+    /** @return Collection<int, Event> */
+    public function getEvents(): Collection
     {
-        if ($this->posts->removeElement($post) && $post->getCategory() === $this) {
-            $post->setCategory(null);
-        }
-
-        return $this;
+        return $this->events;
     }
 }

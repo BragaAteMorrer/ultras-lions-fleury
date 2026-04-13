@@ -11,7 +11,7 @@ class MembersController extends AbstractController
     #[Route('/members', name: 'members_list')]
     public function index(UserRepository $repo)
     {
-        $members = $repo->findBy([], ['pseudo' => 'ASC']);
+        $members = $repo->findBy([], ['nom' => 'ASC', 'prenom' => 'ASC']);
 
         return $this->render('members/list.html.twig', [
             'members' => $members

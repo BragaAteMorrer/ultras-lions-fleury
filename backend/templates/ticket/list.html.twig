@@ -29,6 +29,11 @@
 
             <div class="row g-4">
                 {% for ticket in items %}
+                    {% set isAway = ticket.matchLocation|default('')|lower|trim == 'exterieur'
+                        or (ticket.matchLocation is empty and ticket.category and ticket.category.slug == 'ext') %}
+                    {% set matchLabel = isAway
+                        ? ticket.opponent ~ ' vs FC Fleury'
+                        : 'FC Fleury vs ' ~ ticket.opponent %}
                     <div class="col-md-4">
                         <a href="{{ path('ticket_show', { id: ticket.id }) }}" class="card h-100">
 
@@ -39,12 +44,11 @@
                             {% endif %}
 
                             <div class="card-body">
-                                <h3 class="card-title">{{ ticket.title }}</h3>
+                                <h3 class="card-title">{{ matchLabel }}</h3>
                                 {% if ticket.category %}
                                     <p class="text-muted mb-1">{{ ticket.category.name }}</p>
                                 {% endif %}
                                 <p class="mb-1">{{ ticket.matchDate|date('d/m/Y H:i') }}{% if ticket.venue %} - {{ ticket.venue }}{% endif %}</p>
-                                <p class="text-muted mb-1">{{ 'ticket_list.html.vs_opponent'|trans({'%opponent%': ticket.opponent}) }}</p>
                                 <p class="card-price">{{ ticket.price|number_format(2, ',', ' ') }} €</p>
                                 <p class="text-muted mb-0">{{ 'ticket_list.html.stock'|trans({'%stock%': ticket.stock}) }}</p>
                             </div>

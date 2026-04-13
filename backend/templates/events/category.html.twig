@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ titleKey|trans }}{% endblock %}
+{% block title %}{{ category.name }}{% endblock %}
 
 {% block body %}
 <section class="hero">
     <div class="hero-content">
-        <h1 class="hero-title">{{ titleKey|trans }}</h1>
+        <h1 class="hero-title">{{ category.name }}</h1>
         <p class="hero-subtitle">{{ 'galleries_list.html.tribunes_deplacements_tifos_vie_du_groupe'|trans }}</p>
     </div>
 </section>

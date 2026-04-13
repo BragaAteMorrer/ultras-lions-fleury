@@ -30,8 +30,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $pseudo = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photoProfil = null;
@@ -147,16 +145,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->plainPassword = null;
     }
 
-    public function getPseudo(): ?string
-    {
-        return $this->pseudo;
-    }
-
-    public function setPseudo(string $pseudo): self
-    {
-        $this->pseudo = $pseudo;
-        return $this;
-    }
 
     public function getPhotoProfil(): ?string
     {

@@ -23,6 +23,9 @@ class Ticket
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $matchDate = null;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $matchLocation = null;
+
     #[ORM\Column(length: 180, nullable: true)]
     private ?string $venue = null;
 
@@ -74,6 +77,14 @@ class Ticket
         return $this;
     }
 
+    public function getMatchLocation(): ?string { return $this->matchLocation; }
+
+    public function setMatchLocation(?string $matchLocation): self
+    {
+        $this->matchLocation = $matchLocation;
+        return $this;
+    }
+
     public function getVenue(): ?string { return $this->venue; }
 
     public function setVenue(?string $venue): self
@@ -122,4 +133,3 @@ class Ticket
         return $this;
     }
 }
-

@@ -1,0 +1,14 @@
+<h2>Ta commande est prete</h2>
+
+<p>Bonjour,</p>
+
+<p>Ta commande merch est maintenant marquee comme executee.</p>
+
+<ul>
+    <li>Produit : {{ order.merch ? order.merch.title : 'Produit' }}</li>
+    <li>Taille : {{ order.size ?? 'TU' }}</li>
+    <li>Quantite : {{ order.quantity }}</li>
+    <li>Total : {{ order.totalPrice|number_format(2, ',', ' ') }} EUR</li>
+</ul>
+
+<p>Merci.</p>

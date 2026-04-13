@@ -11,8 +11,10 @@ class MerchSizingService
     public function getAdminSizesForCategorySlug(?string $slug): array
     {
         if ($slug === null || $slug === '') {
-            return ['TU'];
+            return $this->getAllAdminSizes();
         }
+
+        $slug = $this->normalizeSlug($slug);
 
         return match ($slug) {
             't-shirt',
@@ -42,7 +44,7 @@ class MerchSizingService
             return $choices;
         }
 
-        $slug = $merch->getCategory()?->getSlug();
+        $slug = $this->normalizeSlug($merch->getCategory()?->getSlug());
 
         if ($slug === null) {
             return [];
@@ -74,7 +76,7 @@ class MerchSizingService
             return null;
         }
 
-        $slug = $merch->getCategory()?->getSlug();
+        $slug = $this->normalizeSlug($merch->getCategory()?->getSlug());
 
         return match ($slug) {
             't-shirt' => $user->getTailleTshirt(),
@@ -86,5 +88,36 @@ class MerchSizingService
             'short' => $user->getTailleShort(),
             default => null,
         };
+    }
+
+    private function normalizeSlug(?string $slug): ?string
+    {
+        if ($slug === null) {
+            return null;
+        }
+
+        $slug = trim(mb_strtolower($slug));
+
+        return match ($slug) {
+            't-shirts', 'tee-shirt', 'tee-shirts', 'tshirt', 'tshirts' => 't-shirt',
+            'polos' => 'polo',
+            'chemises' => 'chemise',
+            'pull', 'pulls', 'sweat', 'sweats' => 'pull-sweat',
+            'vestes' => 'veste',
+            'manteaux' => 'manteau',
+            'shorts' => 'short',
+            'chaussures' => 'chaussure',
+            'echarpes' => 'echarpe',
+            default => $slug,
+        };
+    }
+
+    /** @return list<string> */
+    private function getAllAdminSizes(): array
+    {
+        $apparel = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'];
+        $shoes = array_map(static fn (int $s) => (string) $s, range(36, 46));
+
+        return array_values(array_unique(array_merge($apparel, $shoes, ['TU'])));
     }
 }

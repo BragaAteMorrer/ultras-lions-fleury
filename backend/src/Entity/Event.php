@@ -26,8 +26,9 @@ class Event
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 20, options: ['default' => 'photo_match'])]
-    private string $category = 'photo_match';
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    private ?EventCategory $category = null;
 
     #[ORM\Column(length: 180, nullable: true)]
     private ?string $opponent = null;
@@ -86,15 +87,15 @@ class Event
         return $this;
     }
 
-    public function getCategory(): string
+    public function getCategory(): ?EventCategory
     {
         return $this->category;
     }
 
-    public function setCategory(string $category): self
+    public function setCategory(?EventCategory $category): self
     {
         $this->category = $category;
-        if ($category === 'evenement') {
+        if ($category?->getSection() !== 'photos_de_match') {
             $this->season = null;
             $this->journee = null;
             $this->opponent = null;
@@ -217,7 +218,7 @@ class Event
 
     private function refreshPhotoMatchTitle(): void
     {
-        if ($this->category !== 'photo_match') {
+        if ($this->category?->getSection() !== 'photos_de_match') {
             return;
         }
 

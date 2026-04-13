@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
@@ -31,8 +32,13 @@ class MerchCrudController extends AbstractCrudController
     {
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('title', 'Titre');
-        yield AssociationField::new('category', 'Catégorie');
+        yield AssociationField::new('category', 'Categorie');
         yield NumberField::new('price', 'Prix');
+        yield ChoiceField::new('audience', 'Audience')
+            ->setChoices([
+                'Matos generaliste (public)' => 'public',
+                'Matos du groupe (membres)' => 'members',
+            ]);
         yield TextareaField::new('description', 'Description')->hideOnIndex();
         yield AssociationField::new('image', 'Image')
             ->renderAsEmbeddedForm(MediaCrudController::class);
@@ -43,43 +49,18 @@ class MerchCrudController extends AbstractCrudController
             ->allowDelete()
             ->onlyOnForms();
 
-        $noSizeSlugs = [
-            'stickers',
-            'couvre-chef',
-            'cartage',
-            'echarpe',
-            'gadget',
-            'patch',
-        ];
-
         $context  = $this->getContext();
         $instance = $context?->getEntity()?->getInstance();
+        $slug = $instance instanceof Merch ? $instance->getCategory()?->getSlug() : null;
 
-        // CREATE
-        if ($pageName === Crud::PAGE_NEW) {
-            yield TextField::new('stocks_info')
-                ->setVirtual(true)
-                ->setHelp("💡 Enregistre le produit avant d’ajouter les stocks.")
-                ->onlyOnForms();
-
-            return;
-        }
-
-        // EDIT
-        if ($pageName === Crud::PAGE_EDIT && $instance instanceof Merch) {
-            $slug = $instance->getCategory()?->getSlug();
-
-            if ($slug && !in_array($slug, $noSizeSlugs, true)) {
-                yield CollectionField::new('stocks', 'Stocks')
-                    ->setEntryType(MerchStockType::class)
-                    ->setFormTypeOption('entry_options', [
-                        'category_slug' => $slug,
-                    ])
-                    ->setFormTypeOption('by_reference', false) // ⭐ OBLIGATOIRE
-                    ->allowAdd()
-                    ->allowDelete()
-                    ->onlyOnForms();
-            }
-        }
+        yield CollectionField::new('stocks', 'Stocks')
+            ->setEntryType(MerchStockType::class)
+            ->setFormTypeOption('entry_options', [
+                'category_slug' => $slug,
+            ])
+            ->setFormTypeOption('by_reference', false)
+            ->allowAdd()
+            ->allowDelete()
+            ->onlyOnForms();
     }
 }

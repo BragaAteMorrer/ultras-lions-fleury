@@ -12,11 +12,11 @@
                 {% if user.photoProfil %}
                     <img src="/uploads/profils/{{ user.photoProfil }}" alt="">
                 {% else %}
-                    <img src="/img/default-profile.png" alt="">
+                    <img src="{{ asset('img/logo/Logo CIrculaire - Final - Football Furies.png') }}" alt="">
                 {% endif %}
 
                 <div class="member-info">
-                    <div class="member-name">{{ user.pseudo }}</div>
+                    <div class="member-name">{{ user.prenom }} {{ user.nom }}</div>
                     <div class="member-meta">Taille veste : {{ user.tailleVeste ?? '—' }}</div>
                     <div class="member-meta">Taille short : {{ user.tailleShort ?? '—' }}</div>
                 </div>

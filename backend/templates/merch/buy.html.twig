@@ -1,6 +1,6 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
-{% block title %}Achat – {{ item.title }}{% endblock %}
+{% block title %}Achat â€“ {{ item.title }}{% endblock %}
 
 {% block body %}
     <section class="hero">
@@ -11,29 +11,62 @@
     </section>
 
     <div class="section">
-        <div class="container" style="max-width: 42rem;">
-            <div class="card p-4 bg-dark text-light border-0 shadow">
-                <p class="mb-3">{{ 'merch_buy.html.prix_unitaire'|trans }}<strong>{{ item.price|number_format(2, ',', ' ') }} €</strong>
-                </p>
+        <div class="container" style="max-width: 46rem;">
+            <div class="card merch-buy-card">
+                <div class="merch-buy-header">
+                    <p class="merch-buy-kicker">{{ 'components_navbar.html.table_de_vente'|trans }}</p>
+                    <h2 class="merch-buy-title">{{ item.title }}</h2>
+                </div>
+
+                <div class="merch-buy-meta">
+                    <div>
+                        <span class="merch-buy-label">{{ 'merch_buy.html.prix_unitaire'|trans }}</span>
+                        <div class="merch-buy-value">{{ item.price|number_format(2, ',', ' ') }} &euro;</div>
+                    </div>
+                    {% if item.category %}
+                        <div>
+                            <span class="merch-buy-label">{{ 'merch_list.html.categorie'|trans }}</span>
+                            <div class="merch-buy-value">{{ item.category.name }}</div>
+                        </div>
+                    {% endif %}
+                    <div>
+                        <span class="merch-buy-label">Stock total</span>
+                        <div class="merch-buy-value">{{ item.totalStock }}</div>
+                    </div>
+                </div>
 
                 {% if not stockConfigured %}
                     <div class="alert alert-warning mb-3">{{ 'merch_buy.html.stock_non_configure_pour_cet_article_contacte_un_admin'|trans }}</div>
                 {% endif %}
 
-                {{ form_start(form) }}
-                    {% if form.email is defined %}
-                        {{ form_row(form.email) }}
-                    {% endif %}
-                    {% if form.size is defined %}
-                        {{ form_row(form.size) }}
-                    {% endif %}
-                    {{ form_row(form.quantity) }}
-                    {{ form_row(form.note) }}
+                {{ form_start(form, { attr: { class: 'merch-buy-form' } }) }}
+                    <div class="merch-buy-grid">
+                        {% if form.email is defined %}
+                            <div class="merch-buy-field full">
+                                {{ form_label(form.email) }}
+                                {{ form_widget(form.email) }}
+                            </div>
+                        {% endif %}
+                        {% if form.size is defined %}
+                            <div class="merch-buy-field">
+                                {{ form_label(form.size) }}
+                                {{ form_widget(form.size) }}
+                            </div>
+                        {% endif %}
+                        <div class="merch-buy-field">
+                            {{ form_label(form.quantity) }}
+                            {{ form_widget(form.quantity) }}
+                        </div>
+                        <div class="merch-buy-field full">
+                            {{ form_label(form.note) }}
+                            {{ form_widget(form.note) }}
+                        </div>
+                    </div>
 
-                    <button class="btn btn-danger w-100 mt-3" type="submit">{{ 'merch_buy.html.valider_et_recevoir_mon_recapitulatif'|trans }}</button>
+                    <button class="btn btn-danger w-100 mt-2" type="submit">{{ 'merch_buy.html.valider_et_recevoir_mon_recapitulatif'|trans }}</button>
                 {{ form_end(form) }}
 
-                <p class="mt-3 text-muted" style="font-size: 0.9rem;">{{ 'merch_buy.html.paiement_et_remise_a_la_table_de_vente_ou_selon_consignes_du_groupe'|trans }}</p>
+                <p class="merch-buy-footnote">{{ 'merch_buy.html.paiement_et_remise_a_la_table_de_vente_ou_selon_consignes_du_groupe'|trans }}</p>
             </div>
 
             <a href="{{ path('merch_show', { id: item.id }) }}" class="btn btn-outline-light mt-4">{{ 'merch_buy.html.retour'|trans }}</a>

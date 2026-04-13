@@ -25,14 +25,6 @@ class ProfileType extends AbstractType
          *  INFORMATIONS PRINCIPALES
          * ======================================================= */
         $builder
-            ->add('pseudo', TextType::class, [
-                'label' => 'Pseudo',
-                'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Length(min: 3, max: 50),
-                ]
-            ])
-
             ->add('email', EmailType::class, [
                 'label' => 'Adresse email',
                 'constraints' => [

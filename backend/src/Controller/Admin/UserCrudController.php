@@ -38,8 +38,6 @@ class UserCrudController extends AbstractCrudController
         return [
             EmailField::new('email'),
 
-            TextField::new('pseudo'),
-
             TextField::new('plainPassword', 'Nouveau mot de passe')
                 ->onlyOnForms()
                 ->setRequired(false),

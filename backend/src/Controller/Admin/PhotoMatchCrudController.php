@@ -3,25 +3,33 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Event;
+use App\Repository\EventCategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
-use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
-use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Doctrine\ORM\EntityManagerInterface;
 
 class PhotoMatchCrudController extends AbstractCrudController
 {
+    private EventCategoryRepository $eventCategoryRepository;
+
+    public function __construct(EventCategoryRepository $eventCategoryRepository)
+    {
+        $this->eventCategoryRepository = $eventCategoryRepository;
+    }
+
     public static function getEntityFqcn(): string
     {
         return Event::class;
@@ -38,22 +46,22 @@ class PhotoMatchCrudController extends AbstractCrudController
     public function createEntity(string $entityFqcn)
     {
         $event = new Event();
-        $event->setCategory('photo_match');
+        $event->setCategory($this->eventCategoryRepository->findOneBySection('photos_de_match'));
         return $event;
     }
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        if ($entityInstance instanceof Event) {
-            $entityInstance->setCategory('photo_match');
+        if ($entityInstance instanceof Event && $entityInstance->getCategory() === null) {
+            $entityInstance->setCategory($this->eventCategoryRepository->findOneBySection('photos_de_match'));
         }
         parent::persistEntity($entityManager, $entityInstance);
     }
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        if ($entityInstance instanceof Event) {
-            $entityInstance->setCategory('photo_match');
+        if ($entityInstance instanceof Event && $entityInstance->getCategory() === null) {
+            $entityInstance->setCategory($this->eventCategoryRepository->findOneBySection('photos_de_match'));
         }
         parent::updateEntity($entityManager, $entityInstance);
     }
@@ -65,8 +73,9 @@ class PhotoMatchCrudController extends AbstractCrudController
         FilterCollection $filters
     ): QueryBuilder {
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-        $qb->andWhere('entity.category = :category')
-            ->setParameter('category', 'photo_match');
+        $qb->join('entity.category', 'cat')
+            ->andWhere('cat.section = :section')
+            ->setParameter('section', 'photos_de_match');
         return $qb;
     }
 
@@ -86,13 +95,13 @@ class PhotoMatchCrudController extends AbstractCrudController
         yield ChoiceField::new('matchLocation', 'Lieu du match')
             ->setChoices([
                 'Domicile' => 'domicile',
-                'Extérieur' => 'exterieur',
+                'Exterieur' => 'exterieur',
             ])
             ->setRequired(false);
         yield ChoiceField::new('season', 'Saison')
             ->setChoices($seasonChoices)
             ->setRequired(false);
-        yield IntegerField::new('journee', 'Journée')
+        yield IntegerField::new('journee', 'Journee')
             ->setRequired(false);
         yield DateTimeField::new('date', 'Date');
         yield TextEditorField::new('description', 'Compte rendu')

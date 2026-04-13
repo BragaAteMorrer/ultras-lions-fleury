@@ -11,7 +11,7 @@ if [ -d "$VAR_DIR" ]; then
   chmod -R ug+rwX "$VAR_DIR/cache" "$VAR_DIR/log"
 fi
 
-mkdir -p "$UPLOAD_DIR/media" "$UPLOAD_DIR/profils"
+mkdir -p "$UPLOAD_DIR/media" "$UPLOAD_DIR/profils" "$UPLOAD_DIR/chants"
 chown -R www-data:www-data "$UPLOAD_DIR"
 chmod -R ug+rwX "$UPLOAD_DIR"
 

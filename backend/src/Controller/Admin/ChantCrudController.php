@@ -3,12 +3,19 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Chant;
+use App\Repository\SiteConfigRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class ChantCrudController extends AbstractCrudController
@@ -23,6 +30,16 @@ class ChantCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Chant')
             ->setEntityLabelInPlural('Chants');
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        $editChantsText = Action::new('editChantsText', 'Texte page')
+            ->createAsGlobalAction()
+            ->linkToCrudAction('editChantsText');
+
+        return $actions
+            ->add(Crud::PAGE_INDEX, $editChantsText);
     }
 
     public function configureFields(string $pageName): iterable
@@ -43,5 +60,25 @@ class ChantCrudController extends AbstractCrudController
             ->hideOnIndex();
 
         yield DateTimeField::new('updatedAt', 'MAJ')->hideOnForm();
+    }
+
+    public function editChantsText(
+        AdminContext $context,
+        EntityManagerInterface $em,
+        SiteConfigRepository $siteConfigRepository,
+        AdminUrlGenerator $adminUrlGenerator
+    ): RedirectResponse {
+        $config = $siteConfigRepository->findOneBy([], ['id' => 'ASC']);
+        if (!$config) {
+            $config = $siteConfigRepository->createDefaultConfig($em);
+        }
+
+        $url = $adminUrlGenerator
+            ->setController(ChantsTextCrudController::class)
+            ->setAction(Action::EDIT)
+            ->setEntityId($config->getId())
+            ->generateUrl();
+
+        return $this->redirect($url);
     }
 }

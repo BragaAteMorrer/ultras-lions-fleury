@@ -22,6 +22,9 @@ class Merch
     #[ORM\Column(type: 'float')]
     private ?float $price = null;
 
+    #[ORM\Column(length: 20)]
+    private ?string $audience = 'public';
+
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
@@ -70,6 +73,14 @@ class Merch
         return $this;
     }
 
+    public function getAudience(): ?string { return $this->audience; }
+
+    public function setAudience(string $audience): self
+    {
+        $this->audience = $audience;
+        return $this;
+    }
+
     public function getDescription(): ?string { return $this->description; }
 
     public function setDescription(?string $description): self
@@ -98,6 +109,19 @@ class Merch
     public function getMedia(): Collection
     {
         return $this->media;
+    }
+
+    /**
+     * @param iterable<Media> $media
+     */
+    public function setMedia(iterable $media): self
+    {
+        $this->media = new ArrayCollection();
+        foreach ($media as $item) {
+            $this->addMedia($item);
+        }
+
+        return $this;
     }
 
     public function addMedia(Media $media): self

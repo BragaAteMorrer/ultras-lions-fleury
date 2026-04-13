@@ -1,0 +1,35 @@
+<h2>Recapitulatif de commande</h2>
+
+<p>
+    Numero : {{ checkout.checkoutReference }}<br>
+    Date : {{ checkout.createdAt|date('d/m/Y H:i') }}<br>
+    Total : {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}
+</p>
+
+{% if cashNotice %}
+    <p><strong>Paiement a regler en liquide au prochain match a domicile.</strong></p>
+{% endif %}
+
+{% if ticketLines is not empty %}
+    <h3>Billets</h3>
+    <ul>
+        {% for line in ticketLines %}
+            <li>
+                {{ line.opponent ?? line.title }} — Qté {{ line.quantity }} — {{ line.totalPrice|number_format(2, ',', ' ') }} EUR
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% if merchLines is not empty %}
+    <h3>Matos</h3>
+    <ul>
+        {% for line in merchLines %}
+            <li>
+                {{ line.title }}{% if line.size %} ({{ line.size }}){% endif %} — Qté {{ line.quantity }} — {{ line.totalPrice|number_format(2, ',', ' ') }} EUR
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<p>Merci pour ta commande.</p>

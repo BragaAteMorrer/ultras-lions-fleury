@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panier{% endblock %}
+
+{% block body %}
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Panier</h1>
+            <p class="hero-subtitle">Billets + Table de vente</p>
+        </div>
+    </section>
+
+    <div class="section">
+        <div class="container" style="max-width: 70rem;">
+            <div class="card p-4 bg-dark text-light border-0 shadow">
+                {% if merchItems is empty and ticketItems is empty %}
+                    <p class="text-muted">Ton panier est vide.</p>
+                {% else %}
+                    {% if ticketItems is not empty %}
+                        <h3 class="form-section-title">Billets</h3>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-striped align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Match</th>
+                                        <th>Date</th>
+                                        <th>Quantite</th>
+                                        <th>Total</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in ticketItems %}
+                                        <tr>
+                                            <td>{{ row.ticket.opponent }}</td>
+                                            <td>{{ row.ticket.matchDate|date('d/m/Y H:i') }}</td>
+                                            <td>{{ row.quantity }}</td>
+                                            <td>{{ row.lineTotal|number_format(2, ',', ' ') }} EUR</td>
+                                            <td>
+                                                <form action="{{ path('cart_remove', { type: 'ticket', key: row.key }) }}" method="post">
+                                                    <button class="btn btn-outline-light btn-sm" type="submit">Supprimer</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <strong>Sous-total billets</strong>
+                            <strong>{{ ticketTotal|number_format(2, ',', ' ') }} EUR</strong>
+                        </div>
+                    {% endif %}
+
+                    {% if merchItems is not empty %}
+                        <h3 class="form-section-title mt-4">Matos</h3>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-striped align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Produit</th>
+                                        <th>Taille</th>
+                                        <th>Quantite</th>
+                                        <th>Total</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in merchItems %}
+                                        <tr>
+                                            <td>{{ row.product.title }}</td>
+                                            <td>{{ row.size }}</td>
+                                            <td>{{ row.quantity }}</td>
+                                            <td>{{ row.lineTotal|number_format(2, ',', ' ') }} EUR</td>
+                                            <td>
+                                                <form action="{{ path('cart_remove', { type: 'merch', key: row.key }) }}" method="post">
+                                                    <button class="btn btn-outline-light btn-sm" type="submit">Supprimer</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <strong>Sous-total matos</strong>
+                            <strong>{{ merchTotal|number_format(2, ',', ' ') }} EUR</strong>
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <strong>Total</strong>
+                        <strong>{{ total|number_format(2, ',', ' ') }} EUR</strong>
+                    </div>
+
+                    <form action="{{ path('cart_checkout') }}" method="post" class="mt-4" id="sumupCheckoutForm">
+                        {% if app.user is null %}
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <label class="form-label text-light" for="first_name">Prenom</label>
+                                    <input id="first_name" name="first_name" type="text" required class="form-control mb-2">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-light" for="last_name">Nom</label>
+                                    <input id="last_name" name="last_name" type="text" required class="form-control mb-2">
+                                </div>
+                            </div>
+                            <label class="form-label text-light" for="email">Email</label>
+                            <input id="email" name="email" type="email" required value="{{ emailMerch ?? emailTicket }}" class="form-control mb-3">
+                        {% endif %}
+                        <button class="btn btn-danger w-100" type="submit">Payer avec SumUp</button>
+                    </form>
+
+                    <form action="{{ path('cart_checkout_cash') }}" method="post" class="mt-3" id="cashCheckoutForm">
+                        <button class="btn btn-outline-light w-100" type="submit">Reserver & payer en liquide</button>
+                    </form>
+
+                    <form action="{{ path('cart_clear') }}" method="post" class="mt-3">
+                        <button class="btn btn-outline-light w-100" type="submit">Vider le panier</button>
+                    </form>
+                {% endif %}
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <a href="{{ path('ticket_index') }}" class="btn btn-outline-light">Retour billetterie</a>
+                <a href="{{ path('merch_index') }}" class="btn btn-outline-light">Retour table de vente</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            var cashForm = document.getElementById('cashCheckoutForm');
+            var sumupForm = document.getElementById('sumupCheckoutForm');
+            if (!cashForm || !sumupForm) { return; }
+
+            var fields = ['first_name', 'last_name', 'email'];
+            fields.forEach(function (name) {
+                var src = sumupForm.querySelector('[name=\"' + name + '\"]');
+                if (!src) { return; }
+                var hidden = document.createElement('input');
+                hidden.type = 'hidden';
+                hidden.name = name;
+                hidden.value = src.value || '';
+                cashForm.appendChild(hidden);
+                src.addEventListener('input', function () {
+                    hidden.value = src.value || '';
+                });
+            });
+        })();
+    </script>
+{% endblock %}

@@ -15,4 +15,42 @@ class PostRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Post::class);
     }
+
+    /**
+     * @return Post[]
+     */
+    public function findPublicPosts(?int $limit = null): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.category', 'cat')
+            ->addSelect('cat')
+            ->orderBy('p.createdAt', 'DESC');
+
+        $now = new \DateTime();
+        $qb->andWhere('(cat.slug IS NULL OR cat.slug != :communique OR p.createdAt <= :now)')
+            ->setParameter('communique', 'communique')
+            ->setParameter('now', $now);
+
+        if ($limit !== null) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findPublicBySlug(string $slug): ?Post
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.category', 'cat')
+            ->addSelect('cat')
+            ->where('p.slug = :slug')
+            ->setParameter('slug', $slug);
+
+        $now = new \DateTime();
+        $qb->andWhere('(cat.slug IS NULL OR cat.slug != :communique OR p.createdAt <= :now)')
+            ->setParameter('communique', 'communique')
+            ->setParameter('now', $now);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

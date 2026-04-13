@@ -2,16 +2,19 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Category;
 use App\Entity\Chant;
 use App\Entity\Event;
+use App\Entity\EventCategory;
 use App\Entity\Gallery;
 use App\Entity\GroupPage;
 use App\Entity\Media;
 use App\Entity\Merch;
 use App\Entity\MerchCategory;
+use App\Entity\MerchOrder;
+use App\Entity\PaymentCheckout;
 use App\Entity\Ticket;
 use App\Entity\TicketCategory;
+use App\Entity\TicketOrder;
 use App\Entity\Page;
 use App\Entity\Post;
 use App\Entity\SiteConfig;
@@ -79,6 +82,7 @@ class DashboardController extends AbstractDashboardController
         return Assets::new()
             ->addJsFile('assets/js/dashboard.js')
             ->addJsFile('assets/js/easyadmin-editor.js')
+            ->addJsFile('assets/js/merch-stocks.js')
             ->addCssFile('styles/dashboard.css');
     }
 
@@ -97,7 +101,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Medias', 'fa fa-photo-film', Media::class);
 
         yield MenuItem::section('Categories & Evenements');
-        yield MenuItem::linkToCrud('Categories', 'fa fa-tags', Category::class);
+        yield MenuItem::linkToCrud('Categories', 'fa fa-tags', EventCategory::class);
         yield MenuItem::linkToCrud('Evenements', 'fa fa-bus', Event::class);
 
         yield MenuItem::section('Boutique & Billetterie');
@@ -105,6 +109,14 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Billetterie', 'fa fa-ticket', Ticket::class);
         yield MenuItem::linkToCrud('Categories Billetterie', 'fa fa-list', TicketCategory::class);
         yield MenuItem::linkToCrud('Categories Merch', 'fa fa-list', MerchCategory::class);
+
+        yield MenuItem::section('Commandes');
+        yield MenuItem::linkToCrud('Commandes merch', 'fa fa-receipt', MerchOrder::class)
+            ->setController(MerchOrderCrudController::class);
+        yield MenuItem::linkToCrud('Commandes billets', 'fa fa-receipt', TicketOrder::class)
+            ->setController(TicketOrderCrudController::class);
+        yield MenuItem::linkToCrud('Paiements SumUp', 'fa fa-credit-card', PaymentCheckout::class)
+            ->setController(PaymentCheckoutCrudController::class);
 
         yield MenuItem::section('Utilisateurs');
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-users', User::class);

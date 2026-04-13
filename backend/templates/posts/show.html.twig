@@ -16,7 +16,19 @@
 
             {% if post.image %}
                 <div class="post-main-image">
-                    <img src="{{ asset('uploads/media/' ~ post.image.path) }}" alt="{{ post.title }}">
+                    <a href="{{ asset('uploads/media/' ~ post.image.path) }}" data-lightbox="post-main">
+                        <img src="{{ asset('uploads/media/' ~ post.image.path) }}" alt="{{ post.title }}">
+                    </a>
+                </div>
+            {% endif %}
+
+            {% if post.media is not empty %}
+                <div class="cards mt-4">
+                    {% for media in post.media %}
+                        <a href="{{ asset('uploads/media/' ~ media.path) }}" class="card" data-lightbox="post-gallery">
+                            <img src="{{ asset('uploads/media/' ~ media.path) }}" alt="{{ media.alt ?: post.title }}">
+                        </a>
+                    {% endfor %}
                 </div>
             {% endif %}
 

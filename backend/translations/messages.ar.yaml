@@ -13,6 +13,7 @@ admin_dashboard:
 base:
   html:
     ultras_lions_fc_fleury_91: ألتراس لايونز – إف سي فلوري 91
+    ultras_lions_fc_fleury_91_title: ألتراس لايونز
 components_footer:
   html:
     copyright: © %year% Ultras Lions — موقع Ultras FC Fleury 91.

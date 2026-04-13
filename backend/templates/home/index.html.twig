@@ -11,33 +11,56 @@
 ] %}
     <div class="hero-overlay"></div>
     <div class="hero-content">
-        <img src="{{ asset('img/logo/Logo Final - Ultras Lions - Autre Présentation.png') }}" class="hero-ultra-logo" alt="{{ 'components_footer.html.ultras_lions'|trans }}">
+        <img src="{{ asset('img/logo/Logo Final - Ultras Lions - Autre Pr�sentation.png') }}" class="hero-ultra-logo" alt="{{ 'components_footer.html.ultras_lions'|trans }}">
         <h1 class="hero-title">{{ 'home_index.html.ultras_lions'|trans }}</h1>
         <p class="hero-subtitle">{{ 'home_index.html.le_site_web_du_groupe_ultras_du_fc_fleury_91'|trans }}</p>
     </div>
 
 {# ------------------------------
-   DERNIÃˆRES ACTUALITÃ‰S (POSTS)
+   DERNIERES ACTUALITES (POSTS + EVENEMENTS)
    ------------------------------ #}
 <section class="section latest-news">
     <div class="container">
         <h2 class="section-title">{{ 'home_index.html.dernieres_actualites'|trans }}</h2>
 
         <div class="row g-4">
-            {% for post in last_posts %}
+            {% for entry in latest_items %}
+                {% set item = entry.item %}
                 <div class="col-md-4">
-                    <a href="{{ path('post_show', { slug: post.slug }) }}" class="card h-100">
+                    {% if entry.type == 'post' %}
+                        <a href="{{ path('post_show', { slug: item.slug }) }}" class="card h-100">
 
-                        {% if post.image %}
-                            <img src="{{ asset('uploads/media/' ~ post.image.path) }}" class="card-img-top" alt="{{ post.title }}">
-                        {% endif %}
+                            {% if item.image %}
+                                <img src="{{ asset('uploads/media/' ~ item.image.path) }}" class="card-img-top" alt="{{ item.title }}">
+                            {% endif %}
 
-                        <div class="card-body">
-                            <h3 class="card-title">{{ post.title }}</h3>
-                            <p class="card-text">{{ post.content|striptags|slice(0,120) ~ '...' }}</p>
-                        </div>
+                            <div class="card-body">
+                                <span class="badge bg-danger text-uppercase mb-2">Article</span>
+                                <h3 class="card-title">{{ item.title }}</h3>
+                                <p class="card-text">{{ item.content|striptags|slice(0,120) ~ '...' }}</p>
+                            </div>
 
-                    </a>
+                        </a>
+                    {% else %}
+                        <a href="{{ path('event_show', { id: item.id }) }}" class="card h-100">
+
+                            {% set cover = item.image ?: (item.media|first) %}
+                            {% if cover %}
+                                <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="card-img-top" alt="{{ item.title }}">
+                            {% endif %}
+
+                            <div class="card-body">
+                                <span class="badge bg-dark text-uppercase mb-2">
+                                    {{ item.category ? item.category.name : 'Evenement' }}
+                                </span>
+                                <h3 class="card-title">{{ item.title }}</h3>
+                                {% if item.date %}
+                                    <p class="card-text">{{ item.date|date('d/m/Y') }}</p>
+                                {% endif %}
+                            </div>
+
+                        </a>
+                    {% endif %}
                 </div>
             {% else %}
                 <p>{{ 'home_index.html.aucune_actualite_disponible'|trans }}</p>
@@ -47,26 +70,48 @@
 </section>
 
 {# ------------------------------
-   PROCHAIN EVENT
+   BILLETTERIE (3 PROCHAINS MATCHS)
    ------------------------------ #}
 <section class="section next-event">
     <div class="container">
-        <h2 class="section-title">{{ 'home_index.html.prochain_deplacement'|trans }}</h2>
+        <h2 class="section-title">{{ 'components_navbar.html.billetterie'|trans }}</h2>
 
-        {% if event %}
-            <div class="event-box">
-                {% set eventCover = event.image ?: (event.media|first) %}
-                {% if eventCover %}
-                    <img src="{{ asset('uploads/media/' ~ eventCover.path) }}" class="img-fluid rounded shadow mb-3" alt="{{ event.title }}">
-                {% endif %}
-                <h3>{{ event.title }}</h3>
-                <p class="event-date">ðŸ“… {{ event.date|date("d/m/Y") }}</p>
+        <div class="row g-4">
+            {% for ticket in tickets %}
+                            {% set isAway = ticket.matchLocation|default('')|lower|trim == 'exterieur'
+                                or (ticket.matchLocation is empty and ticket.category and ticket.category.slug == 'ext') %}
+                            {% set matchLabel = isAway
+                                ? ticket.opponent ~ ' vs FC Fleury'
+                                : 'FC Fleury vs ' ~ ticket.opponent %}
+                <div class="col-md-4">
+                    <a href="{{ path('ticket_show', { id: ticket.id }) }}" class="card h-100">
+                        {% if ticket.image %}
+                            <img src="{{ asset('uploads/media/' ~ ticket.image.path) }}" class="card-img-top" alt="{{ ticket.title }}">
+                        {% endif %}
 
-                <a href="{{ path('gamephoto_index') }}" class="btn-ul">{{ 'home_index.html.voir_les_evenements'|trans }}</a>
-            </div>
-        {% else %}
-            <p>{{ 'home_index.html.aucun_evenement_prevu'|trans }}</p>
-        {% endif %}
+                        <div class="card-body">
+                            <h3 class="card-title">{{ matchLabel }}</h3>
+                            {% if ticket.matchLocation %}
+                                <span class="badge bg-secondary text-uppercase mb-2">
+                                    {{ ticket.matchLocation == 'domicile' ? 'Domicile' : 'Ext�rieur' }}
+                                </span>
+                            {% endif %}
+                            <p class="card-text">
+                                {{ ticket.matchDate|date('d/m/Y H:i') }}
+                                {% if ticket.venue %} - {{ ticket.venue }}{% endif %}
+                            </p>
+                            <p class="card-text fw-bold">{{ ticket.price }} �</p>
+                        </div>
+                    </a>
+                </div>
+            {% else %}
+                <p>{{ 'home_index.html.aucun_evenement_prevu'|trans }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="mt-3">
+            <a href="{{ path('ticket_index') }}" class="btn-ul">{{ 'ticket_list.html.billetterie_ultras_lions'|trans }}</a>
+        </div>
     </div>
 </section>
 
@@ -103,7 +148,7 @@
 
         {% if group %}
             <div class="group-section" id="se-carter">
-                {% set seCarterText = (group and group.seCarterText) ? group.seCarterText : 'Passe à la table de vente les jours de match, récupère ton code, puis inscris-toi pour accéder à l’espace membres.' %}
+                {% set seCarterText = (group and group.seCarterText) ? group.seCarterText : 'Passe � la table de vente les jours de match, r�cup�re ton code, puis inscris-toi pour acc�der � l�espace membres.' %}
                 <div class="rich-content">
                 {% if group and group.seCarterText %}
                     {{ seCarterText|raw }}
@@ -118,7 +163,4 @@
 </section>
 
 {% endblock %}
-
-
-
 

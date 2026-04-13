@@ -23,6 +23,12 @@ class SiteConfig
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $heroSubtitle = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $chantsSubtitle = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $chantsTitle = null;
+
     public function getId(): ?int { return $this->id; }
 
     public function getSiteName(): ?string { return $this->siteName; }
@@ -46,6 +52,22 @@ class SiteConfig
     public function setHeroSubtitle(?string $heroSubtitle): self
     {
         $this->heroSubtitle = $heroSubtitle;
+        return $this;
+    }
+
+    public function getChantsSubtitle(): ?string { return $this->chantsSubtitle; }
+
+    public function setChantsSubtitle(?string $chantsSubtitle): self
+    {
+        $this->chantsSubtitle = $chantsSubtitle;
+        return $this;
+    }
+
+    public function getChantsTitle(): ?string { return $this->chantsTitle; }
+
+    public function setChantsTitle(?string $chantsTitle): self
+    {
+        $this->chantsTitle = $chantsTitle;
         return $this;
     }
 

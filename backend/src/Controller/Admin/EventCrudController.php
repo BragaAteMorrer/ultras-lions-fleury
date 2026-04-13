@@ -5,14 +5,14 @@ namespace App\Controller\Admin;
 use App\Entity\Event;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 
 class EventCrudController extends AbstractCrudController
 {
@@ -24,8 +24,8 @@ class EventCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Événement')
-            ->setEntityLabelInPlural('Événements');
+            ->setEntityLabelInSingular('Evenement')
+            ->setEntityLabelInPlural('Evenements');
     }
 
     public function configureFields(string $pageName): iterable
@@ -43,22 +43,14 @@ class EventCrudController extends AbstractCrudController
         yield TextField::new('title', 'Titre')
             ->setRequired(false)
             ->hideOnIndex();
-        yield ChoiceField::new('category', 'Catégorie')
-            ->setChoices([
-                'Photo de match' => 'photo_match',
-                'Événement' => 'evenement',
-                'Vidéos' => 'video',
-                'Communiqués' => 'communique',
-                'Street Art' => 'streetart',
-            ])
-            ->renderExpanded(false);
+        yield AssociationField::new('category', 'Categorie');
         yield TextField::new('opponent', 'Adversaire')
             ->setRequired(false)
             ->hideOnIndex();
         yield ChoiceField::new('matchLocation', 'Lieu du match')
             ->setChoices([
                 'Domicile' => 'domicile',
-                'Extérieur' => 'exterieur',
+                'Exterieur' => 'exterieur',
             ])
             ->setRequired(false)
             ->hideOnIndex();
@@ -66,7 +58,7 @@ class EventCrudController extends AbstractCrudController
             ->setChoices($seasonChoices)
             ->setRequired(false)
             ->hideOnIndex();
-        yield IntegerField::new('journee', 'Journée')
+        yield IntegerField::new('journee', 'Journee')
             ->setRequired(false)
             ->hideOnIndex();
         yield DateTimeField::new('date', 'Date');
@@ -74,13 +66,12 @@ class EventCrudController extends AbstractCrudController
         yield AssociationField::new('image', 'Image')
             ->renderAsEmbeddedForm(MediaCrudController::class);
         if ($pageName === Crud::PAGE_NEW || $pageName === Crud::PAGE_EDIT) {
-            yield CollectionField::new('media', 'Images événement')
+            yield CollectionField::new('media', 'Images evenement')
                 ->useEntryCrudForm(MediaCrudController::class)
                 ->setFormTypeOption('by_reference', false)
                 ->allowAdd()
                 ->allowDelete()
                 ->onlyOnForms();
         }
-
     }
 }

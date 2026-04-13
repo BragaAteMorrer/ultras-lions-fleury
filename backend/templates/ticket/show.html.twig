@@ -1,12 +1,16 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
-{% block title %}{{ 'ticket_show.html.title'|trans({'%title%': item.title}) }}{% endblock %}
+{% block title %}{{ 'ticket_show.html.title'|trans}}{% endblock %}
 
 {% block body %}
     <section class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">{{ 'components_navbar.html.billetterie'|trans }}</h1>
-            <p class="hero-subtitle">{{ item.title }}</p>
+            {% set isAway = item.matchLocation|default('')|lower|trim == 'exterieur'
+                or (item.matchLocation is empty and item.category and item.category.slug == 'ext') %}
+            {% set matchLabel = isAway
+                ? item.opponent ~ ' vs FC Fleury'
+                : 'FC Fleury vs ' ~ item.opponent %}
+            <h1 class="hero-title">{{ matchLabel }}</h1>
         </div>
     </section>
 
@@ -28,7 +32,7 @@
                         {% if item.category %}
                             <p class="text-muted mb-2">{{ item.category.name }}</p>
                         {% endif %}
-                        <h2 class="mb-2">{{ item.title }}</h2>
+                        <h2 class="mb-2">{{ matchLabel }}</h2>
                         <p class="mb-1"><strong>{{ 'email_merch_order_recap.html.date'|trans }}</strong> {{ item.matchDate|date('d/m/Y H:i') }}</p>
                         <p class="mb-1"><strong>{{ 'ticket_show.html.adversaire'|trans }}</strong> {{ item.opponent }}</p>
                         {% if item.venue %}
@@ -42,7 +46,12 @@
                         {% endif %}
 
                         {% if item.stock > 0 %}
-                            <a class="btn btn-danger w-100" href="{{ path('ticket_buy', { id: item.id }) }}">{{ 'ticket_show.html.reserver'|trans }}</a>
+                            <form action="{{ path('ticket_cart_add', { id: item.id }) }}" method="post">
+                                <label class="form-label text-light" for="quantity">Quantite</label>
+                                <input id="quantity" name="quantity" type="number" min="1" value="1" class="form-control mb-3">
+                                <button class="btn btn-danger w-100" type="submit">Ajouter au panier</button>
+                            </form>
+                            <a href="{{ path('ticket_cart') }}" class="btn btn-outline-light mt-3 w-100">Voir mon panier</a>
                         {% else %}
                             <button class="btn btn-secondary w-100" disabled>{{ 'ticket_show.html.complet'|trans }}</button>
                         {% endif %}

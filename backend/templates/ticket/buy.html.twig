@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
 {% block title %}{{ 'ticket_buy.html.title'|trans({'%title%': item.title}) }}{% endblock %}
 
@@ -11,26 +11,42 @@
     </section>
 
     <div class="section">
-        <div class="container" style="max-width: 42rem;">
-            <div class="card p-4 bg-dark text-light border-0 shadow">
-                <p class="mb-1">{{ 'ticket_buy.html.match'|trans }}<strong>{{ 'ticket_buy.html.vs_opponent'|trans({'%opponent%': item.opponent}) }}</strong>
-                </p>
-                <p class="mb-1">{{ 'email_merch_order_recap.html.date'|trans }}<strong>{{ item.matchDate|date('d/m/Y H:i') }}</strong>{% if item.venue %} ({{ item.venue }}){% endif %}
-                </p>
-                <p class="mb-3">{{ 'merch_buy.html.prix_unitaire'|trans }}<strong>{{ item.price|number_format(2, ',', ' ') }} €</strong>{{ 'ticket_buy.html.stock'|trans }}<strong>{{ item.stock }}</strong>
-                </p>
+        <div class="container" style="max-width: 46rem;">
+            <div class="card ticket-buy-card">
+                <div class="ticket-buy-header">
+                    <p class="ticket-buy-kicker">{{ 'components_navbar.html.billetterie'|trans }}</p>
+                    <h2 class="ticket-buy-title">{{ 'ticket_buy.html.vs_opponent'|trans({'%opponent%': item.opponent}) }}</h2>
+                </div>
 
-                {{ form_start(form) }}
+                <div class="ticket-buy-meta">
+                    <div>
+                        <span class="ticket-buy-label">{{ 'email_merch_order_recap.html.date'|trans }}</span>
+                        <div class="ticket-buy-value">{{ item.matchDate|date('d/m/Y H:i') }}</div>
+                        {% if item.venue %}
+                            <div class="ticket-buy-subvalue">{{ item.venue }}</div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <span class="ticket-buy-label">{{ 'merch_buy.html.prix_unitaire'|trans }}</span>
+                        <div class="ticket-buy-value">{{ item.price|number_format(2, ',', ' ') }} &euro;</div>
+                    </div>
+                    <div>
+                        <span class="ticket-buy-label">{{ 'ticket_buy.html.stock'|trans }}</span>
+                        <div class="ticket-buy-value">{{ item.stock }}</div>
+                    </div>
+                </div>
+
+                {{ form_start(form, { attr: { class: 'ticket-buy-form' } }) }}
                     {% if form.email is defined %}
                         {{ form_row(form.email) }}
                     {% endif %}
                     {{ form_row(form.quantity) }}
                     {{ form_row(form.note) }}
 
-                    <button class="btn btn-danger w-100 mt-3" type="submit">{{ 'merch_buy.html.valider_et_recevoir_mon_recapitulatif'|trans }}</button>
+                    <button class="btn btn-danger w-100 mt-2" type="submit">{{ 'merch_buy.html.valider_et_recevoir_mon_recapitulatif'|trans }}</button>
                 {{ form_end(form) }}
 
-                <p class="mt-3 text-muted" style="font-size: 0.9rem;">{{ 'ticket_buy.html.paiement_et_remise_selon_les_consignes_du_groupe'|trans }}</p>
+                <p class="ticket-buy-footnote">{{ 'ticket_buy.html.paiement_et_remise_selon_les_consignes_du_groupe'|trans }}</p>
             </div>
 
             <a href="{{ path('ticket_show', { id: item.id }) }}" class="btn btn-outline-light mt-4">{{ 'merch_buy.html.retour'|trans }}</a>

@@ -14,6 +14,7 @@ admin_dashboard:
 base:
   html:
     ultras_lions_fc_fleury_91: "Ultras Lions – FC Fleury 91"
+    ultras_lions_fc_fleury_91_title: Ultras Lions
 
 components_footer:
   html:
@@ -199,7 +200,7 @@ posts_list:
 posts_show:
   html:
     published_on: "Publié le %date%"
-    title: "%title% – Ultras Lions"
+    title: "%title%"
 
 profile_edit:
   html:
@@ -208,11 +209,11 @@ profile_edit:
 
 profile_show:
   html:
-    admin_role: "Bureau - Ultras Lions"
+    admin_role: "Bureau"
     adresse: "Adresse :"
     date_de_naissance: "Date de naissance :"
     email: "Email :"
-    member_role: "Adhérant - Ultras Lions"
+    member_role: "Adhérant"
     modifier_mon_profil: "Modifier mon profil"
     nom: "Nom :"
     polo: "Polo :"
@@ -286,7 +287,7 @@ ticket_buy:
 ticket_list:
   html:
     aucun_match_pour_le_moment: "Aucun match pour le moment."
-    billetterie_ultras_lions: "Billetterie - Ultras Lions"
+    billetterie_ultras_lions: "Billetterie"
     matchs_a_domicile_et_a_lexterieur: "Matchs à domicile et à l'extérieur"
     matchs_disponibles: "Matchs disponibles"
     stock: "Stock : %stock%"

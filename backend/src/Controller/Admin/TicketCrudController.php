@@ -6,6 +6,7 @@ use App\Entity\Ticket;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
@@ -31,9 +32,15 @@ class TicketCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
 
         yield TextField::new('title', 'Titre');
-        yield AssociationField::new('category', 'Catégorie');
+        yield AssociationField::new('category', 'Categorie');
         yield TextField::new('opponent', 'Adversaire');
         yield DateTimeField::new('matchDate', 'Date du match');
+        yield ChoiceField::new('matchLocation', 'Lieu du match')
+            ->setChoices([
+                'Domicile' => 'domicile',
+                'Exterieur' => 'exterieur',
+            ])
+            ->setRequired(false);
         yield TextField::new('venue', 'Stade / Lieu')->hideOnIndex();
         yield NumberField::new('price', 'Prix');
         yield NumberField::new('stock', 'Stock');
@@ -41,4 +48,3 @@ class TicketCrudController extends AbstractCrudController
         yield AssociationField::new('image', 'Image')->renderAsEmbeddedForm(MediaCrudController::class);
     }
 }
-

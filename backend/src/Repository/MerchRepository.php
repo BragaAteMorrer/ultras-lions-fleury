@@ -15,4 +15,27 @@ class MerchRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Merch::class);
     }
+
+    /**
+     * @return Merch[]
+     */
+    public function findVisibleForUser(?MerchCategory $category, bool $isMember): array
+    {
+        $qb = $this->createQueryBuilder('m')
+            ->leftJoin('m.category', 'cat')
+            ->addSelect('cat')
+            ->orderBy('m.id', 'DESC');
+
+        if ($category) {
+            $qb->andWhere('m.category = :category')
+                ->setParameter('category', $category);
+        }
+
+        if (!$isMember) {
+            $qb->andWhere('m.audience = :audiencePublic')
+                ->setParameter('audiencePublic', 'public');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

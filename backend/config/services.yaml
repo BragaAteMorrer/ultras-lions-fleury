@@ -14,3 +14,11 @@ services:
     App\Controller\:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
+
+    App\Service\SumupService:
+        arguments:
+            $apiKey: '%env(SUMUP_API_KEY)%'
+            $returnUrl: '%env(SUMUP_RETURN_URL)%'
+            $merchantCode: '%env(default::SUMUP_MERCHANT_CODE)%'
+            $webhookSecret: '%env(default::SUMUP_WEBHOOK_SECRET)%'
+            $webhookUrl: '%env(default::SUMUP_WEBHOOK_URL)%'
