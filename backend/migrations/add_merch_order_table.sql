@@ -1,0 +1,21 @@
+CREATE TABLE merch_order (
+    id INT AUTO_INCREMENT NOT NULL,
+    user_id INT DEFAULT NULL,
+    merch_id INT NOT NULL,
+    email VARCHAR(180) DEFAULT NULL,
+    customer_first_name VARCHAR(120) DEFAULT NULL,
+    customer_last_name VARCHAR(120) DEFAULT NULL,
+    size VARCHAR(20) DEFAULT NULL,
+    quantity INT NOT NULL,
+    unit_price DOUBLE NOT NULL,
+    total_price DOUBLE NOT NULL,
+    note LONGTEXT DEFAULT NULL,
+    created_at DATETIME NOT NULL,
+    payment_method VARCHAR(20) NOT NULL,
+    executed TINYINT(1) NOT NULL,
+    INDEX IDX_1E733F9EA76ED395 (user_id),
+    INDEX IDX_1E733F9E67B3B43D (merch_id),
+    PRIMARY KEY (id),
+    CONSTRAINT FK_1E733F9EA76ED395 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL,
+    CONSTRAINT FK_1E733F9E67B3B43D FOREIGN KEY (merch_id) REFERENCES merch (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

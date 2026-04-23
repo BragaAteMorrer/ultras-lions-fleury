@@ -10,6 +10,10 @@
 {% endfor %}
 {% set cartCount = merchCount + ticketCount %}
 {% set cartUrl = path('cart_index') %}
+{% set navbarDisplayName = null %}
+{% if app.user %}
+    {% set navbarDisplayName = app.user.prenom ?: (app.user.email ? app.user.email|split('@')|first : 'Compte') %}
+{% endif %}
 
 <header class="ultra-header">
 
@@ -81,7 +85,7 @@
 
                 {% if app.user %}
                     <div class="dropdown user-nav">
-                        <a class="ultra-link dropdown-toggle d-flex align-items-center"
+                        <a class="ultra-link dropdown-toggle d-flex align-items-center user-nav-trigger"
                            href="#" id="userDropdown"
                            data-bs-toggle="dropdown" aria-expanded="false">
 
@@ -93,7 +97,7 @@
                                      class="user-avatar-menu me-2">
                             {% endif %}
 
-                            {{ app.user.prenom ?? app.user.email }}
+                            <span class="user-nav-label">{{ navbarDisplayName }}</span>
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-end ultra-dropdown" aria-labelledby="userDropdown">
@@ -201,7 +205,7 @@
                     {% if app.user.photoProfil %}
                         <img src="/uploads/profils/{{ app.user.photoProfil }}" class="mobile-avatar">
                     {% endif %}
-                    <p class="mobile-user-name">{{ app.user.prenom ?? app.user.email }}</p>
+                    <p class="mobile-user-name">{{ navbarDisplayName }}</p>
                 </div>
 
                 <a href="{{ path('profile_show', { id: app.user.id }) }}" class="ultra-link">👤 {{ 'components_navbar.html.mon_profil'|trans }}</a>

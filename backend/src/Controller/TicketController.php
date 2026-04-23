@@ -71,6 +71,10 @@ class TicketController extends AbstractController
             throw $this->createNotFoundException();
         }
 
+        if ($item->usesBilletweb()) {
+            return $this->redirectToRoute('ticket_show', ['id' => $item->getId()]);
+        }
+
         $user = $this->getUser() instanceof User ? $this->getUser() : null;
 
         $form = $this->createForm(TicketPurchaseType::class, null, [

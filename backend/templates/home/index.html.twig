@@ -11,7 +11,7 @@
 ] %}
     <div class="hero-overlay"></div>
     <div class="hero-content">
-        <img src="{{ asset('img/logo/Logo Final - Ultras Lions - Autre Pr�sentation.png') }}" class="hero-ultra-logo" alt="{{ 'components_footer.html.ultras_lions'|trans }}">
+        <img src="{{ asset('img/logo/Logo Final - Ultras Lions - Autre Présentation.png') }}" class="hero-ultra-logo" alt="{{ 'components_footer.html.ultras_lions'|trans }}">
         <h1 class="hero-title">{{ 'home_index.html.ultras_lions'|trans }}</h1>
         <p class="hero-subtitle">{{ 'home_index.html.le_site_web_du_groupe_ultras_du_fc_fleury_91'|trans }}</p>
     </div>
@@ -100,7 +100,11 @@
                                 {{ ticket.matchDate|date('d/m/Y H:i') }}
                                 {% if ticket.venue %} - {{ ticket.venue }}{% endif %}
                             </p>
-                            <p class="card-text fw-bold">{{ ticket.price }} �</p>
+                            {% if ticket.usesBilletweb %}
+                                <p class="card-text fw-bold">Billetterie Billetweb</p>
+                            {% else %}
+                                <p class="card-text fw-bold">{{ ticket.price }} �</p>
+                            {% endif %}
                         </div>
                     </a>
                 </div>
@@ -163,4 +167,3 @@
 </section>
 
 {% endblock %}
-

@@ -50,7 +50,11 @@
                                 {% endif %}
                                 <p class="mb-1">{{ ticket.matchDate|date('d/m/Y H:i') }}{% if ticket.venue %} - {{ ticket.venue }}{% endif %}</p>
                                 <p class="card-price">{{ ticket.price|number_format(2, ',', ' ') }} €</p>
-                                <p class="text-muted mb-0">{{ 'ticket_list.html.stock'|trans({'%stock%': ticket.stock}) }}</p>
+                                {% if ticket.usesBilletweb %}
+                                    <p class="text-muted mb-0">Billetterie Billetweb integree</p>
+                                {% else %}
+                                    <p class="text-muted mb-0">{{ 'ticket_list.html.stock'|trans({'%stock%': ticket.stock}) }}</p>
+                                {% endif %}
                             </div>
 
                         </a>

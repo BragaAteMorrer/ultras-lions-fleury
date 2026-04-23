@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TicketRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
 #[ORM\Table(name: 'ticket')]
@@ -28,6 +29,10 @@ class Ticket
 
     #[ORM\Column(length: 180, nullable: true)]
     private ?string $venue = null;
+
+    #[ORM\Column(length: 2048, nullable: true)]
+    #[Assert\Url]
+    private ?string $billetwebUrl = null;
 
     #[ORM\Column(type: 'float')]
     private ?float $price = null;
@@ -93,6 +98,14 @@ class Ticket
         return $this;
     }
 
+    public function getBilletwebUrl(): ?string { return $this->billetwebUrl; }
+
+    public function setBilletwebUrl(?string $billetwebUrl): self
+    {
+        $this->billetwebUrl = $billetwebUrl;
+        return $this;
+    }
+
     public function getPrice(): ?float { return $this->price; }
 
     public function setPrice(float $price): self
@@ -131,5 +144,15 @@ class Ticket
     {
         $this->category = $category;
         return $this;
+    }
+
+    public function isHomeMatch(): bool
+    {
+        return $this->matchLocation === null || $this->matchLocation === 'domicile';
+    }
+
+    public function usesBilletweb(): bool
+    {
+        return $this->isHomeMatch() && $this->billetwebUrl !== null && trim($this->billetwebUrl) !== '';
     }
 }

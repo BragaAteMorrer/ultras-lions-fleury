@@ -39,21 +39,41 @@
                             <p class="mb-1"><strong>{{ 'ticket_show.html.lieu'|trans }}</strong> {{ item.venue }}</p>
                         {% endif %}
                         <p class="mb-2"><strong>{{ 'ticket_show.html.prix'|trans }}</strong> {{ item.price|number_format(2, ',', ' ') }} €</p>
-                        <p class="text-muted mb-3">{{ 'ticket_show.html.stock'|trans({'%stock%': item.stock}) }}</p>
+                        {% if not item.usesBilletweb %}
+                            <p class="text-muted mb-3">{{ 'ticket_show.html.stock'|trans({'%stock%': item.stock}) }}</p>
+                        {% endif %}
 
                         {% if item.description %}
                             <div class="mb-3">{{ item.description|raw }}</div>
                         {% endif %}
 
-                        {% if item.stock > 0 %}
-                            <form action="{{ path('ticket_cart_add', { id: item.id }) }}" method="post">
-                                <label class="form-label text-light" for="quantity">Quantite</label>
-                                <input id="quantity" name="quantity" type="number" min="1" value="1" class="form-control mb-3">
-                                <button class="btn btn-danger w-100" type="submit">Ajouter au panier</button>
-                            </form>
-                            <a href="{{ path('ticket_cart') }}" class="btn btn-outline-light mt-3 w-100">Voir mon panier</a>
+                        {% if item.usesBilletweb %}
+                            <div class="alert alert-secondary mb-3">
+                                La billetterie de ce match a domicile est integree via Billetweb.
+                            </div>
+                            <div class="ratio ratio-4x3 rounded overflow-hidden border border-secondary mb-3">
+                                <iframe
+                                    src="{{ item.billetwebUrl }}"
+                                    title="Billetterie Billetweb - {{ matchLabel }}"
+                                    loading="lazy"
+                                    referrerpolicy="strict-origin-when-cross-origin"
+                                    allowfullscreen
+                                ></iframe>
+                            </div>
+                            <a href="{{ item.billetwebUrl }}" class="btn btn-danger w-100" target="_blank" rel="noopener noreferrer">
+                                Ouvrir la billetterie Billetweb
+                            </a>
                         {% else %}
-                            <button class="btn btn-secondary w-100" disabled>{{ 'ticket_show.html.complet'|trans }}</button>
+                            {% if item.stock > 0 %}
+                                <form action="{{ path('ticket_cart_add', { id: item.id }) }}" method="post">
+                                    <label class="form-label text-light" for="quantity">Quantite</label>
+                                    <input id="quantity" name="quantity" type="number" min="1" value="1" class="form-control mb-3">
+                                    <button class="btn btn-danger w-100" type="submit">Ajouter au panier</button>
+                                </form>
+                                <a href="{{ path('ticket_cart') }}" class="btn btn-outline-light mt-3 w-100">Voir mon panier</a>
+                            {% else %}
+                                <button class="btn btn-secondary w-100" disabled>{{ 'ticket_show.html.complet'|trans }}</button>
+                            {% endif %}
                         {% endif %}
                     </div>
 

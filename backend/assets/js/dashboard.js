@@ -113,5 +113,42 @@ function initEventCategoryToggle() {
     update();
 }
 
+function initTicketLocationToggle() {
+    const matchLocation = document.querySelector('#Ticket_matchLocation, #ticket_matchLocation, [name$="[matchLocation]"]');
+    const billetwebUrl = document.querySelector('#Ticket_billetwebUrl, #ticket_billetwebUrl, [name$="[billetwebUrl]"]');
+    const price = document.querySelector('#Ticket_price, #ticket_price, [name$="[price]"]');
+    const stock = document.querySelector('#Ticket_stock, #ticket_stock, [name$="[stock]"]');
+
+    if (!matchLocation || !billetwebUrl || !price || !stock) return;
+
+    const findFieldWrapper = (input, propertyName) => {
+        return input.closest(`[data-property-name="${propertyName}"], .form-group, .field-text, .field-number, .field-integer, .field-choice, .mb-3`) || input.parentElement;
+    };
+
+    const billetwebWrapper = findFieldWrapper(billetwebUrl, 'billetwebUrl');
+    const priceWrapper = findFieldWrapper(price, 'price');
+    const stockWrapper = findFieldWrapper(stock, 'stock');
+
+    const update = () => {
+        const isHome = (matchLocation.value || '') === 'domicile' || matchLocation.value === '';
+
+        if (billetwebWrapper) billetwebWrapper.style.display = isHome ? '' : 'none';
+        if (priceWrapper) priceWrapper.style.display = isHome ? 'none' : '';
+        if (stockWrapper) stockWrapper.style.display = isHome ? 'none' : '';
+
+        if (isHome) {
+            price.value = '0';
+            stock.value = '0';
+        } else {
+            billetwebUrl.value = '';
+        }
+    };
+
+    matchLocation.addEventListener('change', update);
+    update();
+}
+
 document.addEventListener('DOMContentLoaded', initEventCategoryToggle);
 document.addEventListener('turbo:load', initEventCategoryToggle);
+document.addEventListener('DOMContentLoaded', initTicketLocationToggle);
+document.addEventListener('turbo:load', initTicketLocationToggle);
