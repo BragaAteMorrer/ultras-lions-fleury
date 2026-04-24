@@ -123,6 +123,7 @@ class TicketOrderCrudController extends AbstractCrudController
         yield ChoiceField::new('paymentMethod', 'Paiement')->setChoices([
             'SumUp' => 'sumup',
             'Liquide' => 'cash',
+            'Gratuit' => 'free',
         ]);
         yield BooleanField::new('paid', 'Paiement effectue');
         yield DateTimeField::new('createdAt', 'Date');

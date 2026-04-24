@@ -79,7 +79,9 @@
                 <div class="col">
                     <div class="label">Paiement</div>
                     <div class="value">
-                        {% if checkout.type == 'cash' %}
+                        {% if checkout.type == 'free' %}
+                            Gratuit
+                        {% elseif checkout.type == 'cash' %}
                             Liquide
                         {% elseif checkout.type == 'ticket' or checkout.type == 'merch' or checkout.type == 'mixed' %}
                             SumUp

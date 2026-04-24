@@ -1,35 +1,89 @@
-<h2>Recapitulatif de commande</h2>
+{% extends 'email/base.html.twig' %}
 
-<p>
-    Numero : {{ checkout.checkoutReference }}<br>
-    Date : {{ checkout.createdAt|date('d/m/Y H:i') }}<br>
-    Total : {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}
-</p>
+{% block title %}Recapitulatif de commande{% endblock %}
 
-{% if cashNotice %}
-    <p><strong>Paiement a regler en liquide au prochain match a domicile.</strong></p>
-{% endif %}
+{% block content %}
+    <h1>Recapitulatif de commande</h1>
 
-{% if ticketLines is not empty %}
-    <h3>Billets</h3>
-    <ul>
-        {% for line in ticketLines %}
-            <li>
-                {{ line.opponent ?? line.title }} — Qté {{ line.quantity }} — {{ line.totalPrice|number_format(2, ',', ' ') }} EUR
-            </li>
-        {% endfor %}
-    </ul>
-{% endif %}
+    <p style="text-align: center;">Merci pour ta commande. Voici ton recu.</p>
 
-{% if merchLines is not empty %}
-    <h3>Matos</h3>
-    <ul>
-        {% for line in merchLines %}
-            <li>
-                {{ line.title }}{% if line.size %} ({{ line.size }}){% endif %} — Qté {{ line.quantity }} — {{ line.totalPrice|number_format(2, ',', ' ') }} EUR
-            </li>
-        {% endfor %}
-    </ul>
-{% endif %}
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin: 1.5rem 0; border-collapse: separate; border-spacing: 0;">
+        <tr>
+            <td style="background: #171717; border: 1px solid #2b2b2b; border-left: 4px solid #D40000; border-radius: 8px; padding: 1rem;">
+                <div style="color: #888; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">Numero</div>
+                <div style="color: #fff; font-size: 1.25rem; font-weight: bold; margin: 0.25rem 0 0.75rem;">{{ checkout.checkoutReference }}</div>
+                <div style="color: #888; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">Date</div>
+                <div style="color: #ddd; font-size: 0.95rem; margin-top: 0.25rem;">{{ checkout.createdAt|date('d/m/Y H:i') }}</div>
+            </td>
+        </tr>
+    </table>
 
-<p>Merci pour ta commande.</p>
+    {% if cashNotice|default(false) %}
+        <p style="background: #240000; border: 1px solid #D40000; border-radius: 8px; color: #fff; padding: 1rem; text-align: center;">
+            <strong>Paiement a regler en liquide au prochain match a domicile.</strong>
+        </p>
+    {% endif %}
+
+    {% if ticketLines is not empty %}
+        <h2 style="color: #ffffff; font-size: 1rem; text-transform: uppercase; margin: 1.75rem 0 0.75rem;">Billets</h2>
+        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; margin: 0 0 1.5rem; background: #151515; border: 1px solid #2b2b2b; border-radius: 8px; overflow: hidden;">
+            <thead>
+            <tr style="background: #D40000;">
+                <th align="left" style="padding: 0.75rem; color: #fff; font-size: 0.8rem; text-transform: uppercase;">Match</th>
+                <th align="center" style="padding: 0.75rem; color: #fff; font-size: 0.8rem; text-transform: uppercase;">Qte</th>
+                <th align="right" style="padding: 0.75rem; color: #fff; font-size: 0.8rem; text-transform: uppercase;">Prix</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for line in ticketLines %}
+                <tr>
+                    <td style="padding: 0.875rem 0.75rem; border-bottom: 1px solid #262626; color: #fff;">
+                        <strong>{{ line.opponent ?? line.title }}</strong>
+                        {% if line.matchDate is defined and line.matchDate %}
+                            <br><span style="display: inline-block; margin-top: 0.35rem; color: #bbb; font-size: 0.8rem;">{{ line.matchDate|date('d/m/Y H:i') }}</span>
+                        {% endif %}
+                    </td>
+                    <td align="center" style="padding: 0.875rem 0.75rem; border-bottom: 1px solid #262626; color: #ddd; font-weight: bold;">{{ line.quantity }}</td>
+                    <td align="right" style="padding: 0.875rem 0.75rem; border-bottom: 1px solid #262626; color: #fff; font-weight: bold;">{{ line.totalPrice|number_format(2, ',', ' ') }} EUR</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if merchLines is not empty %}
+        <h2 style="color: #ffffff; font-size: 1rem; text-transform: uppercase; margin: 1.75rem 0 0.75rem;">Matos</h2>
+        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; margin: 0 0 1.5rem; background: #151515; border: 1px solid #2b2b2b; border-radius: 8px; overflow: hidden;">
+            <thead>
+            <tr style="background: #D40000;">
+                <th align="left" style="padding: 0.75rem; color: #fff; font-size: 0.8rem; text-transform: uppercase;">Produit</th>
+                <th align="center" style="padding: 0.75rem; color: #fff; font-size: 0.8rem; text-transform: uppercase;">Qte</th>
+                <th align="right" style="padding: 0.75rem; color: #fff; font-size: 0.8rem; text-transform: uppercase;">Prix</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for line in merchLines %}
+                <tr>
+                    <td style="padding: 0.875rem 0.75rem; border-bottom: 1px solid #262626; color: #fff;">
+                        <strong>{{ line.title }}</strong>
+                        {% if line.size is defined and line.size %}
+                            <br><span style="display: inline-block; margin-top: 0.35rem; padding: 0.2rem 0.45rem; border: 1px solid #3a3a3a; border-radius: 999px; color: #bbb; font-size: 0.75rem;">Taille : {{ line.size }}</span>
+                        {% endif %}
+                    </td>
+                    <td align="center" style="padding: 0.875rem 0.75rem; border-bottom: 1px solid #262626; color: #ddd; font-weight: bold;">{{ line.quantity }}</td>
+                    <td align="right" style="padding: 0.875rem 0.75rem; border-bottom: 1px solid #262626; color: #fff; font-weight: bold;">{{ line.totalPrice|number_format(2, ',', ' ') }} EUR</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin: 1rem 0 0; border-collapse: collapse;">
+        <tr>
+            <td align="right" style="background: #0b0b0b; border: 1px solid #2b2b2b; border-radius: 8px; padding: 1rem;">
+                <span style="color: #ddd; font-weight: bold; text-transform: uppercase;">Total</span>
+                <span style="color: #D40000; font-size: 1.35rem; font-weight: bold; margin-left: 0.75rem;">{{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}</span>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

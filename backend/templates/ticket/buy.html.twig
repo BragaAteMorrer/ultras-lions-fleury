@@ -43,10 +43,12 @@
                     {{ form_row(form.quantity) }}
                     {{ form_row(form.note) }}
 
-                    <button class="btn btn-danger w-100 mt-2" type="submit">{{ 'merch_buy.html.valider_et_recevoir_mon_recapitulatif'|trans }}</button>
+                    <button class="btn btn-danger w-100 mt-2" type="submit">{{ item.price <= 0 ? 'Reserver' : ('merch_buy.html.valider_et_recevoir_mon_recapitulatif'|trans) }}</button>
                 {{ form_end(form) }}
 
-                <p class="ticket-buy-footnote">{{ 'ticket_buy.html.paiement_et_remise_selon_les_consignes_du_groupe'|trans }}</p>
+                {% if item.price > 0 %}
+                    <p class="ticket-buy-footnote">{{ 'ticket_buy.html.paiement_et_remise_selon_les_consignes_du_groupe'|trans }}</p>
+                {% endif %}
             </div>
 
             <a href="{{ path('ticket_show', { id: item.id }) }}" class="btn btn-outline-light mt-4">{{ 'merch_buy.html.retour'|trans }}</a>

@@ -22,3 +22,7 @@ services:
             $merchantCode: '%env(default::SUMUP_MERCHANT_CODE)%'
             $webhookSecret: '%env(default::SUMUP_WEBHOOK_SECRET)%'
             $webhookUrl: '%env(default::SUMUP_WEBHOOK_URL)%'
+
+    App\Service\MailService:
+        arguments:
+            $fromEmail: '%env(MAILER_FROM)%'

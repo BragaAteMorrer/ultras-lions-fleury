@@ -5,55 +5,61 @@
 {% block content %}
     <h1>{{ 'email_merch_order_recap.html.recapitulatif_de_commande'|trans }}</h1>
 
-    <p>
+    <p style="text-align: center;">
         Merci pour ta commande{% if user and (user.prenom or user.nom) %}, {{ user.prenom }} {{ user.nom }}{% endif %}.
-        Voici le récapitulatif :
+        Voici le recapitulatif.
     </p>
 
-    <p>
-        <strong>{{ 'email_merch_order_recap.html.n_commande'|trans }}</strong> {{ order.number }}<br>
-        <strong>{{ 'email_merch_order_recap.html.date'|trans }}</strong> {{ order.orderedAt|date('d/m/Y H:i') }}
-    </p>
-
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; margin: 1rem 0;">
-        <thead>
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin: 1.5rem 0; border-collapse: separate; border-spacing: 0;">
         <tr>
-            <th align="left" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_merch_order_recap.html.produit'|trans }}</th>
-            <th align="center" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_merch_order_recap.html.qte'|trans }}</th>
-            <th align="right" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_merch_order_recap.html.prix'|trans }}</th>
+            <td style="background: #171717; border: 1px solid #2b2b2b; border-left: 4px solid #D40000; border-radius: 8px; padding: 1rem;">
+                <div style="color: #888; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">{{ 'email_merch_order_recap.html.n_commande'|trans }}</div>
+                <div style="color: #fff; font-size: 1.25rem; font-weight: bold; margin: 0.25rem 0 0.75rem;">{{ order.number }}</div>
+                <div style="color: #888; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">{{ 'email_merch_order_recap.html.date'|trans }}</div>
+                <div style="color: #ddd; font-size: 0.95rem; margin-top: 0.25rem;">{{ order.orderedAt|date('d/m/Y H:i') }}</div>
+            </td>
+        </tr>
+    </table>
+
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; margin: 1.5rem 0; background: #151515; border: 1px solid #2b2b2b; border-radius: 8px; overflow: hidden;">
+        <thead>
+        <tr style="background: #D40000;">
+            <th align="left" style="padding: 0.75rem; color: #fff; font-size: 0.8rem; text-transform: uppercase;">{{ 'email_merch_order_recap.html.produit'|trans }}</th>
+            <th align="center" style="padding: 0.75rem; color: #fff; font-size: 0.8rem; text-transform: uppercase;">{{ 'email_merch_order_recap.html.qte'|trans }}</th>
+            <th align="right" style="padding: 0.75rem; color: #fff; font-size: 0.8rem; text-transform: uppercase;">{{ 'email_merch_order_recap.html.prix'|trans }}</th>
         </tr>
         </thead>
         <tbody>
         {% for line in order.lines %}
             <tr>
-                <td style="padding: 0.5rem; border-bottom: 1px solid #222;">
-                    {{ line.title }}
+                <td style="padding: 0.875rem 0.75rem; border-bottom: 1px solid #262626; color: #fff;">
+                    <strong>{{ line.title }}</strong>
                     {% if line.size is defined and line.size %}
-                        <br><span style="color:#999;">Taille : {{ line.size }}</span>
+                        <br><span style="display: inline-block; margin-top: 0.35rem; padding: 0.2rem 0.45rem; border: 1px solid #3a3a3a; border-radius: 999px; color: #bbb; font-size: 0.75rem;">Taille : {{ line.size }}</span>
                     {% endif %}
                 </td>
-                <td align="center" style="padding: 0.5rem; border-bottom: 1px solid #222;">{{ line.quantity }}</td>
-                <td align="right" style="padding: 0.5rem; border-bottom: 1px solid #222;">
-                    {{ line.totalPrice|number_format(2, ',', ' ') }} €
+                <td align="center" style="padding: 0.875rem 0.75rem; border-bottom: 1px solid #262626; color: #ddd; font-weight: bold;">{{ line.quantity }}</td>
+                <td align="right" style="padding: 0.875rem 0.75rem; border-bottom: 1px solid #262626; color: #fff; font-weight: bold;">
+                    {{ line.totalPrice|number_format(2, ',', ' ') }} EUR
                 </td>
             </tr>
         {% endfor %}
         </tbody>
         <tfoot>
-        <tr>
-            <td colspan="2" align="right" style="padding: 0.75rem 0.5rem; font-weight: bold;">{{ 'email_merch_order_recap.html.total'|trans }}</td>
-            <td align="right" style="padding: 0.75rem 0.5rem; font-weight: bold; color: #D40000;">
-                {{ order.total|number_format(2, ',', ' ') }} €
+        <tr style="background: #0b0b0b;">
+            <td colspan="2" align="right" style="padding: 1rem 0.75rem; color: #ddd; font-weight: bold; text-transform: uppercase;">{{ 'email_merch_order_recap.html.total'|trans }}</td>
+            <td align="right" style="padding: 1rem 0.75rem; font-weight: bold; color: #D40000; font-size: 1.25rem;">
+                {{ order.total|number_format(2, ',', ' ') }} EUR
             </td>
         </tr>
         </tfoot>
     </table>
 
     {% if order.note %}
-        <p><strong>{{ 'email_merch_order_recap.html.note'|trans }}</strong> {{ order.note }}</p>
+        <p style="background: #171717; border: 1px solid #2b2b2b; border-radius: 8px; padding: 1rem;"><strong style="color: #fff;">{{ 'email_merch_order_recap.html.note'|trans }}</strong> {{ order.note }}</p>
     {% endif %}
 
-    <p>{{ 'email_merch_order_recap.html.la_remise_et_le_paiement_se_font_a_la_table_de_vente_ou_selon_les_cons'|trans }}</p>
+    <p style="text-align: center;">{{ 'email_merch_order_recap.html.la_remise_et_le_paiement_se_font_a_la_table_de_vente_ou_selon_les_cons'|trans }}</p>
 
     <a href="{{ url('merch_index') }}" class="btn">{{ 'email_merch_order_recap.html.voir_la_table_de_vente'|trans }}</a>
 {% endblock %}

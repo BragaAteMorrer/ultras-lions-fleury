@@ -87,6 +87,7 @@ class MerchOrderCrudController extends AbstractCrudController
         yield ChoiceField::new('paymentMethod', 'Paiement')->setChoices([
             'SumUp' => 'sumup',
             'Liquide' => 'cash',
+            'Gratuit' => 'free',
         ]);
         yield DateTimeField::new('createdAt', 'Date');
         yield BooleanField::new('executed', 'Commande executee');

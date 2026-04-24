@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Paiement en liquide{% endblock %}
+{% block title %}{{ checkout.type == 'free' ? 'Reservation confirmee' : 'Paiement en liquide' }}{% endblock %}
 
 {% block body %}
     <section class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Paiement en liquide</h1>
-            <p class="hero-subtitle">A regler au prochain match a domicile</p>
+            <h1 class="hero-title">{{ checkout.type == 'free' ? 'Reservation confirmee' : 'Paiement en liquide' }}</h1>
+            <p class="hero-subtitle">{{ checkout.type == 'free' ? 'Aucun paiement requis' : 'A regler au prochain match a domicile' }}</p>
         </div>
     </section>
 
@@ -21,9 +21,15 @@
                 {% endif %}
                 <p><strong>Total</strong> {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}</p>
 
-                <div class="alert alert-warning mt-3">
-                    Paiement a regler en liquide au prochain match a domicile.
-                </div>
+                {% if checkout.type == 'free' %}
+                    <div class="alert alert-success mt-3">
+                        Aucun paiement n'est requis pour cette reservation.
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning mt-3">
+                        Paiement a regler en liquide au prochain match a domicile.
+                    </div>
+                {% endif %}
 
                 {% if ticketItems is not empty %}
                     <h3 class="form-section-title mt-3">Billets</h3>

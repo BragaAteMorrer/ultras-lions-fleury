@@ -8,6 +8,7 @@ services:
     working_dir: /var/www/html
     env_file:
       - ./backend/.env
+      - ./backend/.env.local
     volumes:
       - ./backend:/var/www/html
     depends_on:

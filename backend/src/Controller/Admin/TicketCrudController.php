@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -48,7 +49,8 @@ class TicketCrudController extends AbstractCrudController
             ->setRequired(false)
             ->setHelp('Renseigner le lien Billetweb integre uniquement pour un match a domicile.');
         yield NumberField::new('price', 'Prix');
-        yield NumberField::new('stock', 'Stock');
+        yield IntegerField::new('stock', 'Stock')
+            ->setHelp('Pour un match avec lien Billetweb, le stock interne reste a 0.');
         yield TextareaField::new('description', 'Description')->hideOnIndex();
         yield AssociationField::new('image', 'Image')->renderAsEmbeddedForm(MediaCrudController::class);
     }
@@ -73,12 +75,14 @@ class TicketCrudController extends AbstractCrudController
 
     private function normalizeTicket(Ticket $ticket): void
     {
-        if ($ticket->isHomeMatch()) {
+        if ($ticket->usesBilletweb()) {
             $ticket->setPrice(0.0);
             $ticket->setStock(0);
             return;
         }
 
-        $ticket->setBilletwebUrl(null);
+        if (!$ticket->isHomeMatch()) {
+            $ticket->setBilletwebUrl(null);
+        }
     }
 }

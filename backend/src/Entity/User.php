@@ -30,6 +30,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\Column(length: 128, nullable: true)]
+    private ?string $resetPasswordToken = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $resetPasswordTokenExpiresAt = null;
+
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photoProfil = null;
@@ -143,6 +149,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // Si tu stockes des données sensibles temporaires, nettoie-les ici
         $this->plainPassword = null;
+    }
+
+    public function getResetPasswordToken(): ?string
+    {
+        return $this->resetPasswordToken;
+    }
+
+    public function setResetPasswordToken(?string $resetPasswordToken): self
+    {
+        $this->resetPasswordToken = $resetPasswordToken;
+        return $this;
+    }
+
+    public function getResetPasswordTokenExpiresAt(): ?\DateTimeImmutable
+    {
+        return $this->resetPasswordTokenExpiresAt;
+    }
+
+    public function setResetPasswordTokenExpiresAt(?\DateTimeImmutable $resetPasswordTokenExpiresAt): self
+    {
+        $this->resetPasswordTokenExpiresAt = $resetPasswordTokenExpiresAt;
+        return $this;
+    }
+
+    public function isResetPasswordTokenValid(string $token): bool
+    {
+        return $this->resetPasswordToken !== null
+            && hash_equals($this->resetPasswordToken, $token)
+            && $this->resetPasswordTokenExpiresAt !== null
+            && $this->resetPasswordTokenExpiresAt > new \DateTimeImmutable();
     }
 
 

@@ -13,6 +13,8 @@
                     Table de vente
                 {% elseif checkout.type == 'cash' %}
                     Paiement liquide
+                {% elseif checkout.type == 'free' %}
+                    Reservation gratuite
                 {% else %}
                     Panier
                 {% endif %}
@@ -31,13 +33,19 @@
             <p><strong>Total</strong> {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}</p>
             <p><strong>Date</strong> {{ checkout.createdAt|date('d/m/Y H:i') }}</p>
             <p><strong>Paiement</strong>
-                {% if checkout.type == 'cash' %}
+                {% if checkout.type == 'free' %}
+                    Gratuit
+                {% elseif checkout.type == 'cash' %}
                     Liquide
                 {% else %}
                     SumUp
                 {% endif %}
             </p>
-            {% if checkout.type == 'cash' %}
+            {% if checkout.type == 'free' %}
+                <div class="alert alert-success mt-2">
+                    Aucun paiement requis.
+                </div>
+            {% elseif checkout.type == 'cash' %}
                 <div class="alert alert-warning mt-2">
                     Paiement a regler en liquide au prochain match a domicile.
                 </div>

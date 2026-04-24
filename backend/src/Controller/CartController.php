@@ -222,6 +222,11 @@ class CartController extends AbstractController
             return $this->redirectToRoute('cart_index');
         }
 
+        if ($total <= 0.0) {
+            $this->addFlash('warning', 'Cette reservation est gratuite, utilise le bouton Reserver.');
+            return $this->redirectToRoute('cart_index');
+        }
+
         $reference = strtoupper(bin2hex(random_bytes(6)));
 
         $checkout = new PaymentCheckout();
@@ -353,7 +358,7 @@ class CartController extends AbstractController
             $order->setQuantity($qty);
             $order->setUnitPrice($unit);
             $order->setTotalPrice($lineTotal);
-            $order->setPaymentMethod('cash');
+            $order->setPaymentMethod($lineTotal <= 0.0 ? 'free' : 'cash');
             $order->setExecuted(false);
             $order->setCreatedAt(new \DateTime());
             $em->persist($order);
@@ -403,8 +408,8 @@ class CartController extends AbstractController
             $order->setQuantity($qty);
             $order->setUnitPrice($unit);
             $order->setTotalPrice($lineTotal);
-            $order->setPaymentMethod('cash');
-            $order->setPaid(false);
+            $order->setPaymentMethod($lineTotal <= 0.0 ? 'free' : 'cash');
+            $order->setPaid($lineTotal <= 0.0);
             $order->setCreatedAt(new \DateTime());
             $em->persist($order);
         }
@@ -416,8 +421,10 @@ class CartController extends AbstractController
 
         $reference = strtoupper(bin2hex(random_bytes(6)));
         $checkout = new \App\Entity\PaymentCheckout();
-        $checkout->setType('cash')
-            ->setStatus('pending')
+        $isFree = $total <= 0.0;
+
+        $checkout->setType($isFree ? 'free' : 'cash')
+            ->setStatus($isFree ? 'paid' : 'pending')
             ->setCheckoutReference($reference)
             ->setAmount($total)
             ->setCurrency('EUR')
@@ -427,6 +434,10 @@ class CartController extends AbstractController
             ->setCustomerLastName($lastName !== '' ? $lastName : null)
             ->setCart($lines)
             ->setCreatedAt(new \DateTime());
+        if ($isFree) {
+            $checkout->setPaidAt(new \DateTime());
+            $checkout->setProcessedAt(new \DateTime());
+        }
         $em->persist($checkout);
 
         $em->flush();
@@ -439,13 +450,13 @@ class CartController extends AbstractController
             try {
                 $mailService->send(
                     to: $email,
-                    subject: 'Recapitulatif de ta commande (paiement liquide)',
+                    subject: $isFree ? 'Recapitulatif de ta reservation' : 'Recapitulatif de ta commande (paiement liquide)',
                     template: 'email/checkout_recap.html.twig',
                     context: [
                         'checkout' => $checkout,
                         'ticketLines' => array_filter($lines, fn ($l) => ($l['type'] ?? '') === 'ticket'),
                         'merchLines' => array_filter($lines, fn ($l) => ($l['type'] ?? '') === 'merch'),
-                        'cashNotice' => true,
+                        'cashNotice' => !$isFree,
                     ],
                 );
                 $checkout->setEmailSentAt(new \DateTime());
