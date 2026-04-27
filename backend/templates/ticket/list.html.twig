@@ -3,10 +3,13 @@
 {% block title %}{{ 'ticket_list.html.billetterie_ultras_lions'|trans }}{% endblock %}
 
 {% block body %}
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">{{ 'components_navbar.html.billetterie'|trans }}</h1>
-            <p class="hero-subtitle">{{ 'ticket_list.html.matchs_a_domicile_et_a_lexterieur'|trans }}</p>
+    <section class="ticket-show-hero" style="background-image: linear-gradient(90deg, rgba(0,0,0,0.9), rgba(0,0,0,0.58), rgba(0,0,0,0.86)), url('{{ asset('img/fond/fond1a.jpg') }}');">
+        <div class="ticket-show-hero-inner">
+            <p class="ticket-show-kicker">{{ 'ticket_list.html.matchs_a_domicile_et_a_lexterieur'|trans }}</p>
+            <h1 class="ticket-show-title">{{ 'components_navbar.html.billetterie'|trans }}</h1>
+            <div class="ticket-show-hero-meta">
+                <span>{{ items|length }} match{% if items|length > 1 %}s{% endif %}</span>
+            </div>
         </div>
     </section>
 
@@ -38,7 +41,7 @@
                         <a href="{{ path('ticket_show', { id: ticket.id }) }}" class="card h-100">
 
                             {% if ticket.image %}
-                                <img src="{{ asset('uploads/media/' ~ ticket.image.path) }}" class="event-card-img-top" alt="{{ ticket.title }}">
+                                {% include 'components/media.html.twig' with { media: ticket.image, class: 'event-card-img-top', alt: ticket.title } %}
                             {% else %}
                                 <img src="/placeholder.jpg" class="event-card-img-top" alt="{{ ticket.title }}">
                             {% endif %}

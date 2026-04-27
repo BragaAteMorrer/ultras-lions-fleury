@@ -21,9 +21,15 @@
         {% if gallery.media|length > 0 %}
             <div class="cards gallery-grid">
                 {% for media in gallery.media %}
-                    <a href="{{ asset('uploads/media/' ~ media.path) }}" class="card" data-lightbox="gallery">
-                        <img src="{{ asset('uploads/media/' ~ media.path) }}" alt="">
-                    </a>
+                    {% if media.video %}
+                        <div class="card">
+                            {% include 'components/media.html.twig' with { media: media, controls: true } %}
+                        </div>
+                    {% else %}
+                        <a href="{{ asset('uploads/media/' ~ media.path) }}" class="card" data-lightbox="gallery">
+                            {% include 'components/media.html.twig' with { media: media } %}
+                        </a>
+                    {% endif %}
                 {% endfor %}
             </div>
         {% else %}

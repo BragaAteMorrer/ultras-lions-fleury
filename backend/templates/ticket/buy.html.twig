@@ -3,10 +3,16 @@
 {% block title %}{{ 'ticket_buy.html.title'|trans({'%title%': item.title}) }}{% endblock %}
 
 {% block body %}
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">{{ 'ticket_buy.html.reservation'|trans }}</h1>
-            <p class="hero-subtitle">{{ item.title }}</p>
+    {% set ticketHeroImage = item.image and not item.image.video ? asset('uploads/media/' ~ item.image.path) : '/placeholder.jpg' %}
+    <section class="ticket-show-hero" style="background-image: linear-gradient(90deg, rgba(0,0,0,0.9), rgba(0,0,0,0.58), rgba(0,0,0,0.86)), url('{{ ticketHeroImage }}');">
+        <div class="ticket-show-hero-inner">
+            <p class="ticket-show-kicker">{{ 'components_navbar.html.billetterie'|trans }}</p>
+            <h1 class="ticket-show-title">{{ 'ticket_buy.html.reservation'|trans }}</h1>
+            <div class="ticket-show-hero-meta">
+                <span>{{ item.title }}</span>
+                <span>{{ item.matchDate|date('d/m/Y H:i') }}</span>
+                <span>{{ item.price|number_format(2, ',', ' ') }} €</span>
+            </div>
         </div>
     </section>
 

@@ -20,8 +20,7 @@
 
                     {% set cover = gallery.media|first %}
                     {% if cover %}
-                        <img src="{{ asset('uploads/media/' ~ cover.path) }}"
-                             alt="{{ gallery.title }}">
+                        {% include 'components/media.html.twig' with { media: cover, alt: gallery.title } %}
                     {% endif %}
 
                     <div class="card-content">

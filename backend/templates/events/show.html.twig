@@ -20,16 +20,28 @@
             {% if cover or event.media|length > 0 %}
                 <div class="cards gallery-grid mb-4">
                     {% if cover and cover.path %}
-                        <a href="{{ asset('uploads/media/' ~ cover.path) }}" class="card" data-lightbox="event-gallery">
-                            <img src="{{ asset('uploads/media/' ~ cover.path) }}" alt="{{ event.title }}">
-                        </a>
+                        {% if cover.video %}
+                            <div class="card">
+                                {% include 'components/media.html.twig' with { media: cover, alt: event.title, controls: true } %}
+                            </div>
+                        {% else %}
+                            <a href="{{ asset('uploads/media/' ~ cover.path) }}" class="card" data-lightbox="event-gallery">
+                                {% include 'components/media.html.twig' with { media: cover, alt: event.title } %}
+                            </a>
+                        {% endif %}
                     {% endif %}
 
                     {% for media in event.media %}
                         {% if media.path and (not cover or media.id != cover.id) %}
-                            <a href="{{ asset('uploads/media/' ~ media.path) }}" class="card" data-lightbox="event-gallery">
-                                <img src="{{ asset('uploads/media/' ~ media.path) }}" alt="{{ event.title }}">
-                            </a>
+                            {% if media.video %}
+                                <div class="card">
+                                    {% include 'components/media.html.twig' with { media: media, alt: event.title, controls: true } %}
+                                </div>
+                            {% else %}
+                                <a href="{{ asset('uploads/media/' ~ media.path) }}" class="card" data-lightbox="event-gallery">
+                                    {% include 'components/media.html.twig' with { media: media, alt: event.title } %}
+                                </a>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 </div>

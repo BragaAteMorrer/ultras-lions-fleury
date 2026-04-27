@@ -19,7 +19,7 @@
                 <a href="{{ path('post_show', { slug: post.slug }) }}" class="card">
 
                     {% if post.image %}
-                        <img src="{{ asset('uploads/media/' ~ post.image.path) }}" alt="{{ post.title }}">
+                        {% include 'components/media.html.twig' with { media: post.image, alt: post.title } %}
                     {% endif %}
 
                     <div class="card-content">

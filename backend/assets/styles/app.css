@@ -226,6 +226,29 @@ img {
     margin: 0 auto;
 }
 
+.card video,
+.post-main-image video,
+.gallery-grid video,
+.group-banner,
+.ticket-show-poster video {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+}
+
+.card video,
+.event-card-img-top {
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+}
+
+.gallery-grid video,
+.post-main-image video,
+.ticket-show-poster video {
+    background: #000;
+    border-radius: 0.625rem;
+}
+
 .card-content {
     padding: 1.1rem;
     color: white;
@@ -471,6 +494,11 @@ img {
     object-fit: cover;
 }
 
+.ticket-show-poster video {
+    height: 100%;
+    object-fit: cover;
+}
+
 .ticket-show-panel {
     padding: 2rem;
     border-radius: 0.5rem;
@@ -485,6 +513,24 @@ img {
     font-size: 2rem;
     font-weight: 900;
     text-transform: uppercase;
+}
+
+.ticket-show-panel .table {
+    margin-bottom: 0;
+}
+
+.ticket-show-panel .form-control,
+.ticket-show-panel .form-select {
+    background: #141414;
+    border: 0.0625rem solid #2a2a2a;
+    color: #fff;
+}
+
+.ticket-show-panel .form-control:focus,
+.ticket-show-panel .form-select:focus {
+    outline: none;
+    border-color: #D40000;
+    box-shadow: 0 0 0 0.15rem rgba(212, 0, 0, 0.35);
 }
 
 .ticket-show-facts {
@@ -520,6 +566,57 @@ img {
     margin: 1.2rem 0;
     color: #d5d5d5;
     line-height: 1.65;
+}
+
+.ticket-show-stock-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: -0.4rem 0 1.2rem;
+}
+
+.ticket-show-stock-list span {
+    padding: 0.45rem 0.65rem;
+    border-radius: 0.35rem;
+    background: #0d0d0d;
+    border: 0.0625rem solid #242424;
+    color: #d8d8d8;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.ticket-show-actions {
+    display: grid;
+    gap: 0.8rem;
+    margin-top: 1.4rem;
+}
+
+.ticket-show-inline-form {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.ticket-show-inline-form .form-control,
+.ticket-show-inline-form .form-select {
+    background: #141414;
+    border: 0.0625rem solid #2a2a2a;
+    color: #fff;
+}
+
+.ticket-show-inline-form .form-control:focus,
+.ticket-show-inline-form .form-select:focus {
+    outline: none;
+    border-color: #D40000;
+    box-shadow: 0 0 0 0.15rem rgba(212, 0, 0, 0.35);
+}
+
+.ticket-show-inline-form label {
+    margin: 0;
+    color: #cfcfcf;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
 .ticket-show-main-cta {

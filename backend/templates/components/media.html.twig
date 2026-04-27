@@ -1,0 +1,15 @@
+{% set mediaClass = class|default('') %}
+{% set mediaAlt = alt|default(media.alt|default('')) %}
+{% set mediaControls = controls|default(false) %}
+{% set mediaPreload = preload|default(mediaControls ? 'metadata' : 'metadata') %}
+
+{% if media and media.path %}
+    {% set mediaSrc = asset('uploads/media/' ~ media.path) %}
+    {% if media.video %}
+        <video class="{{ mediaClass }}" {% if mediaControls %}controls{% else %}muted playsinline{% endif %} preload="{{ mediaPreload }}">
+            <source src="{{ mediaSrc }}" type="{{ media.mimeType }}">
+        </video>
+    {% else %}
+        <img src="{{ mediaSrc }}" class="{{ mediaClass }}" alt="{{ mediaAlt }}">
+    {% endif %}
+{% endif %}

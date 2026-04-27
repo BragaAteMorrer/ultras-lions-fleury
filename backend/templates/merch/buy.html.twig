@@ -3,10 +3,17 @@
 {% block title %}Achat â€“ {{ item.title }}{% endblock %}
 
 {% block body %}
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">{{ 'merch_buy.html.achat'|trans }}</h1>
-            <p class="hero-subtitle">{{ item.title }}</p>
+    {% set cover = item.image ?: (item.media|first) %}
+    {% set merchHeroImage = cover and not cover.video ? asset('uploads/media/' ~ cover.path) : asset('img/fond/fond1a.jpg') %}
+    <section class="ticket-show-hero" style="background-image: linear-gradient(90deg, rgba(0,0,0,0.9), rgba(0,0,0,0.58), rgba(0,0,0,0.86)), url('{{ merchHeroImage }}');">
+        <div class="ticket-show-hero-inner">
+            <p class="ticket-show-kicker">{{ 'components_navbar.html.table_de_vente'|trans }}</p>
+            <h1 class="ticket-show-title">{{ 'merch_buy.html.achat'|trans }}</h1>
+            <div class="ticket-show-hero-meta">
+                <span>{{ item.title }}</span>
+                <span>{{ item.price|number_format(2, ',', ' ') }} €</span>
+                <span>Stock {{ item.totalStock }}</span>
+            </div>
         </div>
     </section>
 

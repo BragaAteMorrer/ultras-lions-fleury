@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\BilletwebLead;
 use App\Entity\Ticket;
 use App\Entity\TicketOrder;
 use App\Entity\PaymentCheckout;
@@ -46,7 +47,7 @@ class TicketController extends AbstractController
     }
 
     #[Route('/{id<\\d+>}', name: 'ticket_show')]
-    public function show(Ticket $item, TicketRepository $ticketRepository): Response
+    public function show(Ticket $item, TicketRepository $ticketRepository, SessionInterface $session): Response
     {
         $isMember = $this->getUser() !== null;
         if (!$ticketRepository->isVisibleForUser($item, $isMember)) {
@@ -55,7 +56,53 @@ class TicketController extends AbstractController
 
         return $this->render('ticket/show.html.twig', [
             'item' => $item,
+            'billetwebReady' => $item->usesBilletweb() && $session->get($this->billetwebSessionKey($item), false),
         ]);
+    }
+
+    #[Route('/{id<\\d+>}/billetweb-preinscription', name: 'ticket_billetweb_lead', methods: ['POST'])]
+    public function billetwebLead(
+        Request $request,
+        SessionInterface $session,
+        Ticket $item,
+        TicketRepository $ticketRepository,
+        EntityManagerInterface $em
+    ): Response {
+        $isMember = $this->getUser() !== null;
+        if (!$item->usesBilletweb() || !$ticketRepository->isVisibleForUser($item, $isMember)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$this->isCsrfTokenValid('billetweb_lead_' . $item->getId(), (string) $request->request->get('_token'))) {
+            $this->addFlash('danger', 'Formulaire invalide, reessaie.');
+            return $this->redirectToRoute('ticket_show', ['id' => $item->getId(), '_fragment' => 'reservation']);
+        }
+
+        $firstName = trim((string) $request->request->get('firstName', ''));
+        $lastName = trim((string) $request->request->get('lastName', ''));
+        $email = trim((string) $request->request->get('email', ''));
+
+        if ($firstName === '' || $lastName === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->addFlash('danger', 'Renseigne ton prenom, ton nom et un email valide.');
+            return $this->redirectToRoute('ticket_show', ['id' => $item->getId(), '_fragment' => 'reservation']);
+        }
+
+        $user = $this->getUser() instanceof User ? $this->getUser() : null;
+
+        $lead = new BilletwebLead();
+        $lead
+            ->setTicket($item)
+            ->setUser($user)
+            ->setFirstName($firstName)
+            ->setLastName($lastName)
+            ->setEmail($email);
+
+        $em->persist($lead);
+        $em->flush();
+
+        $session->set($this->billetwebSessionKey($item), true);
+
+        return $this->redirectToRoute('ticket_show', ['id' => $item->getId(), '_fragment' => 'reservation']);
     }
 
     #[Route('/{id<\\d+>}/reserver', name: 'ticket_buy')]
@@ -432,5 +479,10 @@ class TicketController extends AbstractController
         }
 
         return new JsonResponse($response);
+    }
+
+    private function billetwebSessionKey(Ticket $ticket): string
+    {
+        return 'billetweb_lead_ticket_' . $ticket->getId();
     }
 }

@@ -1,28 +1,28 @@
-services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
+    services:
+        _defaults:
+            autowire: true
+            autoconfigure: true
 
-    # Charger automatiquement tout ce qui est dans src/
-    App\:
-        resource: '../src/'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+        # Charger automatiquement tout ce qui est dans src/
+        App\:
+            resource: '../src/'
+            exclude:
+                - '../src/DependencyInjection/'
+                - '../src/Entity/'
+                - '../src/Kernel.php'
 
-    App\Controller\:
-        resource: '../src/Controller/'
-        tags: ['controller.service_arguments']
+        App\Controller\:
+            resource: '../src/Controller/'
+            tags: ['controller.service_arguments']
 
-    App\Service\SumupService:
-        arguments:
-            $apiKey: '%env(SUMUP_API_KEY)%'
-            $returnUrl: '%env(SUMUP_RETURN_URL)%'
-            $merchantCode: '%env(default::SUMUP_MERCHANT_CODE)%'
-            $webhookSecret: '%env(default::SUMUP_WEBHOOK_SECRET)%'
-            $webhookUrl: '%env(default::SUMUP_WEBHOOK_URL)%'
+        App\Service\SumupService:
+            arguments:
+                $apiKey: '%env(SUMUP_API_KEY)%'
+                $returnUrl: '%env(SUMUP_RETURN_URL)%'
+                $merchantCode: '%env(default::SUMUP_MERCHANT_CODE)%'
+                $webhookSecret: '%env(default::SUMUP_WEBHOOK_SECRET)%'
+                $webhookUrl: '%env(default::SUMUP_WEBHOOK_URL)%'
 
-    App\Service\MailService:
-        arguments:
-            $fromEmail: '%env(MAILER_FROM)%'
+        App\Service\MailService:
+            arguments:
+                $fromEmail: '%env(MAILER_FROM)%'

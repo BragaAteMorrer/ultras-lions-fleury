@@ -16,18 +16,28 @@
 
             {% if post.image %}
                 <div class="post-main-image">
-                    <a href="{{ asset('uploads/media/' ~ post.image.path) }}" data-lightbox="post-main">
-                        <img src="{{ asset('uploads/media/' ~ post.image.path) }}" alt="{{ post.title }}">
-                    </a>
+                    {% if post.image.video %}
+                        {% include 'components/media.html.twig' with { media: post.image, alt: post.title, controls: true } %}
+                    {% else %}
+                        <a href="{{ asset('uploads/media/' ~ post.image.path) }}" data-lightbox="post-main">
+                            {% include 'components/media.html.twig' with { media: post.image, alt: post.title } %}
+                        </a>
+                    {% endif %}
                 </div>
             {% endif %}
 
             {% if post.media is not empty %}
                 <div class="cards mt-4">
                     {% for media in post.media %}
-                        <a href="{{ asset('uploads/media/' ~ media.path) }}" class="card" data-lightbox="post-gallery">
-                            <img src="{{ asset('uploads/media/' ~ media.path) }}" alt="{{ media.alt ?: post.title }}">
-                        </a>
+                        {% if media.video %}
+                            <div class="card">
+                                {% include 'components/media.html.twig' with { media: media, alt: media.alt ?: post.title, controls: true } %}
+                            </div>
+                        {% else %}
+                            <a href="{{ asset('uploads/media/' ~ media.path) }}" class="card" data-lightbox="post-gallery">
+                                {% include 'components/media.html.twig' with { media: media, alt: media.alt ?: post.title } %}
+                            </a>
+                        {% endif %}
                     {% endfor %}
                 </div>
             {% endif %}

@@ -4,10 +4,13 @@
 
 {% block body %}
 
-<section class="hero">
-    <div class="hero-content">
-        <h1 class="hero-title">{{ 'components_navbar.html.table_de_vente'|trans }}</h1>
-        <p class="hero-subtitle">{{ 'merch_list.html.textiles_accessoires_stickers_supports_du_groupe'|trans }}</p>
+<section class="ticket-show-hero" style="background-image: linear-gradient(90deg, rgba(0,0,0,0.9), rgba(0,0,0,0.58), rgba(0,0,0,0.86)), url('{{ asset('img/fond/fond1a.jpg') }}');">
+    <div class="ticket-show-hero-inner">
+        <p class="ticket-show-kicker">{{ 'merch_list.html.textiles_accessoires_stickers_supports_du_groupe'|trans }}</p>
+        <h1 class="ticket-show-title">{{ 'components_navbar.html.table_de_vente'|trans }}</h1>
+        <div class="ticket-show-hero-meta">
+            <span>{{ items|length }} produit{% if items|length > 1 %}s{% endif %}</span>
+        </div>
     </div>
 </section>
 
@@ -35,7 +38,7 @@
 
                         {% set cover = product.image ?: (product.media|first) %}
                         {% if cover %}
-                            <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="event-card-img-top" alt="{{ product.title }}">
+                            {% include 'components/media.html.twig' with { media: cover, class: 'event-card-img-top', alt: product.title } %}
                         {% else %}
                             <img src="/placeholder.jpg" class="event-card-img-top" alt="{{ product.title }}">
                         {% endif %}

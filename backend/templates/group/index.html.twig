@@ -35,9 +35,7 @@
             <div class="group-main">
                 {% if group and group.banner %}
                     <div style="margin-top:2rem;">
-                        <img class="group-banner"
-                             src="{{ asset('uploads/media/' ~ group.banner.path) }}"
-                             alt="">
+                        {% include 'components/media.html.twig' with { media: group.banner, class: 'group-banner', controls: group.banner.video } %}
                     </div>
                 {% endif %}
 

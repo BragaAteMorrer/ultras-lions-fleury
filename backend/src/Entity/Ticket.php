@@ -53,7 +53,7 @@ class Ticket
 
     public function __toString(): string
     {
-        return (string) $this->title;
+        return $this->getMatchLabel();
     }
 
     public function getId(): ?int { return $this->id; }
@@ -149,6 +149,28 @@ class Ticket
     public function isHomeMatch(): bool
     {
         return $this->matchLocation === null || $this->matchLocation === 'domicile';
+    }
+
+    public function isAwayMatch(): bool
+    {
+        if ($this->matchLocation !== null) {
+            return strtolower((string) $this->matchLocation) === 'exterieur';
+        }
+
+        return $this->category?->getSlug() === 'ext';
+    }
+
+    public function getMatchLabel(): string
+    {
+        $opponent = trim((string) $this->opponent);
+
+        if ($opponent === '') {
+            return (string) $this->title;
+        }
+
+        return $this->isAwayMatch()
+            ? sprintf('%s vs FC Fleury', $opponent)
+            : sprintf('FC Fleury vs %s', $opponent);
     }
 
     public function usesBilletweb(): bool

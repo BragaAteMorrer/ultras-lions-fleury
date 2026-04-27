@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Chant;
+use App\Entity\BilletwebLead;
 use App\Entity\Event;
 use App\Entity\EventCategory;
 use App\Entity\Gallery;
@@ -117,6 +118,8 @@ class DashboardController extends AbstractDashboardController
             ->setController(TicketOrderCrudController::class);
         yield MenuItem::linkToCrud('Paiements SumUp', 'fa fa-credit-card', PaymentCheckout::class)
             ->setController(PaymentCheckoutCrudController::class);
+        yield MenuItem::linkToCrud('Pre-inscriptions Billetweb', 'fa fa-list-check', BilletwebLead::class)
+            ->setController(BilletwebLeadCrudController::class);
 
         yield MenuItem::section('Utilisateurs');
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-users', User::class);

@@ -1,0 +1,22 @@
+CREATE TABLE billetweb_lead (
+    id INT AUTO_INCREMENT NOT NULL,
+    ticket_id INT NOT NULL,
+    user_id INT DEFAULT NULL,
+    first_name VARCHAR(120) NOT NULL,
+    last_name VARCHAR(120) NOT NULL,
+    email VARCHAR(180) NOT NULL,
+    created_at DATETIME NOT NULL,
+    INDEX IDX_BILLETWEB_LEAD_TICKET (ticket_id),
+    INDEX IDX_BILLETWEB_LEAD_USER (user_id),
+    PRIMARY KEY(id)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
+
+ALTER TABLE billetweb_lead
+    ADD CONSTRAINT FK_BILLETWEB_LEAD_TICKET
+    FOREIGN KEY (ticket_id) REFERENCES ticket (id)
+    ON DELETE CASCADE;
+
+ALTER TABLE billetweb_lead
+    ADD CONSTRAINT FK_BILLETWEB_LEAD_USER
+    FOREIGN KEY (user_id) REFERENCES `user` (id)
+    ON DELETE SET NULL;

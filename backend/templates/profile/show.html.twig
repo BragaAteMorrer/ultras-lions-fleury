@@ -90,7 +90,7 @@
                                                 Panier
                                             {% endif %}
                                         </td>
-                                        <td><span class="badge {{ badge }}">{{ p.status }}</span></td>
+                                        <td><span class="badge {{ badge }}">{{ p.statusLabel }}</span></td>
                                         <td>{{ p.amount|number_format(2, ',', ' ') }} {{ p.currency }}</td>
                                         <td>{{ p.createdAt|date('d/m/Y H:i') }}</td>
                                         <td>
@@ -127,7 +127,7 @@
                                         <td>{{ t.matchDate|date('d/m/Y H:i') }}</td>
                                         <td>{{ order.quantity }}</td>
                                         <td>{{ order.totalPrice|number_format(2, ',', ' ') }} EUR</td>
-                                        <td><span class="badge bg-success">Paye</span></td>
+                                        <td><span class="badge bg-success">Payé</span></td>
                                         <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
                                     </tr>
                                 {% endfor %}
@@ -159,7 +159,7 @@
                                         <td>{{ order.size ?? 'TU' }}</td>
                                         <td>{{ order.quantity }}</td>
                                         <td>{{ order.totalPrice|number_format(2, ',', ' ') }} €</td>
-                                        <td><span class="badge bg-success">Paye</span></td>
+                                        <td><span class="badge bg-success">Payé</span></td>
                                         <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
                                     </tr>
                                 {% endfor %}

@@ -21,8 +21,7 @@
                 <a href="{{ path('page_show', { slug: page.slug }) }}" class="card">
 
                     {% if page.image %}
-                        <img src="{{ asset('uploads/media/' ~ page.image.path) }}"
-                             alt="{{ page.title }}">
+                        {% include 'components/media.html.twig' with { media: page.image, alt: page.title } %}
                     {% endif %}
 
                     <div class="card-content">

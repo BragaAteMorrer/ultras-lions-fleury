@@ -31,7 +31,7 @@
                         <a href="{{ path('post_show', { slug: item.slug }) }}" class="card h-100">
 
                             {% if item.image %}
-                                <img src="{{ asset('uploads/media/' ~ item.image.path) }}" class="card-img-top" alt="{{ item.title }}">
+                                {% include 'components/media.html.twig' with { media: item.image, class: 'card-img-top', alt: item.title } %}
                             {% endif %}
 
                             <div class="card-body">
@@ -46,7 +46,7 @@
 
                             {% set cover = item.image ?: (item.media|first) %}
                             {% if cover %}
-                                <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="card-img-top" alt="{{ item.title }}">
+                                {% include 'components/media.html.twig' with { media: cover, class: 'card-img-top', alt: item.title } %}
                             {% endif %}
 
                             <div class="card-body">
@@ -86,7 +86,7 @@
                 <div class="col-md-4">
                     <a href="{{ path('ticket_show', { id: ticket.id }) }}" class="card h-100">
                         {% if ticket.image %}
-                            <img src="{{ asset('uploads/media/' ~ ticket.image.path) }}" class="card-img-top" alt="{{ ticket.title }}">
+                            {% include 'components/media.html.twig' with { media: ticket.image, class: 'card-img-top', alt: ticket.title } %}
                         {% endif %}
 
                         <div class="card-body">
@@ -131,7 +131,7 @@
 
                     {% set cover = gal.media|first %}
                     {% if cover %}
-                        <img src="{{ asset('uploads/media/' ~ cover.path) }}" alt="{{ gal.title }}">
+                        {% include 'components/media.html.twig' with { media: cover, alt: gal.title } %}
                     {% endif %}
 
                     <div class="card-content">

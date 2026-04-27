@@ -3,16 +3,20 @@
 {% block title %}Panier - Table de vente{% endblock %}
 
 {% block body %}
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Panier</h1>
-            <p class="hero-subtitle">{{ 'components_navbar.html.table_de_vente'|trans }}</p>
+    <section class="ticket-show-hero" style="background-image: linear-gradient(90deg, rgba(0,0,0,0.9), rgba(0,0,0,0.58), rgba(0,0,0,0.86)), url('{{ asset('img/fond/fond1a.jpg') }}');">
+        <div class="ticket-show-hero-inner">
+            <p class="ticket-show-kicker">{{ 'components_navbar.html.table_de_vente'|trans }}</p>
+            <h1 class="ticket-show-title">Panier</h1>
+            <div class="ticket-show-hero-meta">
+                <span>{{ items|length }} article{% if items|length > 1 %}s{% endif %}</span>
+                <span>{{ total|number_format(2, ',', ' ') }} €</span>
+            </div>
         </div>
     </section>
 
-    <div class="section">
+    <div class="section ticket-show-section">
         <div class="container" style="max-width: 62rem;">
-            <div class="card p-4 bg-dark text-light border-0 shadow">
+            <div class="ticket-show-panel">
                 {% if items is empty %}
                     <p class="text-muted">Ton panier est vide.</p>
                 {% else %}

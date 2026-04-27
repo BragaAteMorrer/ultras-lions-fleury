@@ -8,7 +8,7 @@
     {% set matchLabel = isAway
         ? item.opponent ~ ' vs FC Fleury'
         : 'FC Fleury vs ' ~ item.opponent %}
-    {% set matchImage = item.image ? asset('uploads/media/' ~ item.image.path) : '/placeholder.jpg' %}
+    {% set matchImage = item.image and not item.image.video ? asset('uploads/media/' ~ item.image.path) : '/placeholder.jpg' %}
 
     {% if item.usesBilletweb %}
         <section class="ticket-show-hero" style="background-image: linear-gradient(90deg, rgba(0,0,0,0.9), rgba(0,0,0,0.58), rgba(0,0,0,0.86)), url('{{ matchImage }}');">
@@ -29,7 +29,11 @@
             <div class="container" style="max-width: 76rem;">
                 <div class="ticket-show-summary">
                     <div class="ticket-show-poster">
-                        <img src="{{ matchImage }}" alt="{{ item.title }}">
+                        {% if item.image %}
+                            {% include 'components/media.html.twig' with { media: item.image, alt: item.title, controls: item.image.video } %}
+                        {% else %}
+                            <img src="{{ matchImage }}" alt="{{ item.title }}">
+                        {% endif %}
                     </div>
 
                     <div class="ticket-show-panel">
@@ -67,29 +71,52 @@
 
         <section class="ticket-billetweb-band" id="reservation">
             <div class="container" style="max-width: 76rem;">
-                <div class="ticket-billetweb-heading">
-                    <div>
-                        <p class="ticket-show-kicker">Billetterie</p>
-                        <h2>Reservation officielle</h2>
+                {% if billetwebReady %}
+                    <div class="ticket-billetweb-heading">
+                        <div>
+                            <p class="ticket-show-kicker">Billetterie</p>
+                            <h2>Reservation officielle</h2>
+                        </div>
+                        <a href="{{ item.billetwebUrl }}" class="ticket-billetweb-fallback" target="_blank" rel="noopener noreferrer">
+                            Ouvrir dans Billetweb
+                        </a>
                     </div>
-                    <a href="{{ item.billetwebUrl }}" class="ticket-billetweb-fallback" target="_blank" rel="noopener noreferrer">
-                        Ouvrir dans Billetweb
-                    </a>
-                </div>
 
-                <div class="ticket-billetweb-shell">
-                    <div class="ticket-billetweb-loader">
-                        <span>Chargement de la billetterie...</span>
+                    <div class="ticket-billetweb-shell">
+                        <div class="ticket-billetweb-loader">
+                            <span>Chargement de la billetterie...</span>
+                        </div>
+                        <iframe
+                            src="{{ item.billetwebUrl }}"
+                            title="Billetterie Billetweb - {{ matchLabel }}"
+                            loading="lazy"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen
+                            onload="this.previousElementSibling.style.display='none'"
+                        ></iframe>
                     </div>
-                    <iframe
-                        src="{{ item.billetwebUrl }}"
-                        title="Billetterie Billetweb - {{ matchLabel }}"
-                        loading="lazy"
-                        referrerpolicy="strict-origin-when-cross-origin"
-                        allowfullscreen
-                        onload="this.previousElementSibling.style.display='none'"
-                    ></iframe>
-                </div>
+                {% else %}
+                    <div class="ticket-show-panel">
+                        <p class="ticket-show-kicker">Avant Billetweb</p>
+                        <h2>Infos participant</h2>
+                        <form action="{{ path('ticket_billetweb_lead', { id: item.id }) }}" method="post" class="ticket-show-actions">
+                            <input type="hidden" name="_token" value="{{ csrf_token('billetweb_lead_' ~ item.id) }}">
+                            <div>
+                                <label class="form-label text-light" for="billetweb-firstName">Prenom</label>
+                                <input id="billetweb-firstName" name="firstName" class="form-control" required value="{{ app.user ? app.user.prenom : '' }}">
+                            </div>
+                            <div>
+                                <label class="form-label text-light" for="billetweb-lastName">Nom</label>
+                                <input id="billetweb-lastName" name="lastName" class="form-control" required value="{{ app.user ? app.user.nom : '' }}">
+                            </div>
+                            <div>
+                                <label class="form-label text-light" for="billetweb-email">Email</label>
+                                <input id="billetweb-email" name="email" type="email" class="form-control" required value="{{ app.user ? app.user.userIdentifier : '' }}">
+                            </div>
+                            <button class="btn btn-danger ticket-show-main-cta" type="submit">Continuer vers Billetweb</button>
+                        </form>
+                    </div>
+                {% endif %}
             </div>
         </section>
 
@@ -97,52 +124,84 @@
             <a href="{{ path('ticket_index') }}" class="btn btn-outline-light mt-4 mb-4">{{ 'merch_buy.html.retour'|trans }}</a>
         </div>
     {% else %}
-        <section class="hero">
-            <div class="hero-content">
-                <h1 class="hero-title">{{ matchLabel }}</h1>
+        <section class="ticket-show-hero" style="background-image: linear-gradient(90deg, rgba(0,0,0,0.9), rgba(0,0,0,0.58), rgba(0,0,0,0.86)), url('{{ matchImage }}');">
+            <div class="ticket-show-hero-inner">
+                <p class="ticket-show-kicker">Billetterie Ultras Lions</p>
+                <h1 class="ticket-show-title">{{ matchLabel }}</h1>
+                <div class="ticket-show-hero-meta">
+                    <span>{{ item.matchDate|date('d/m/Y H:i') }}</span>
+                    {% if item.venue %}
+                        <span>{{ item.venue }}</span>
+                    {% endif %}
+                    {% if item.stock > 0 %}
+                        <span>{{ 'ticket_show.html.stock'|trans({'%stock%': item.stock}) }}</span>
+                    {% else %}
+                        <span>{{ 'ticket_show.html.complet'|trans }}</span>
+                    {% endif %}
+                </div>
             </div>
         </section>
 
-        <div class="section">
-            <div class="container" style="max-width: 62rem;">
-                <div class="row g-4 align-items-start">
-                    <div class="col-md-5">
-                        <div class="card bg-dark text-light border-0 shadow">
-                            <img src="{{ matchImage }}" class="event-card-img-top" alt="{{ item.title }}">
-                        </div>
+        <div class="section ticket-show-section">
+            <div class="container" style="max-width: 76rem;">
+                <div class="ticket-show-summary">
+                    <div class="ticket-show-poster">
+                        {% if item.image %}
+                            {% include 'components/media.html.twig' with { media: item.image, alt: item.title, controls: item.image.video } %}
+                        {% else %}
+                            <img src="{{ matchImage }}" alt="{{ item.title }}">
+                        {% endif %}
                     </div>
 
-                    <div class="col-md-7">
-                        <div class="card p-4 bg-dark text-light border-0 shadow">
-                            {% if item.category %}
-                                <p class="text-muted mb-2">{{ item.category.name }}</p>
-                            {% endif %}
-                            <h2 class="mb-2">{{ matchLabel }}</h2>
-                            <p class="mb-1"><strong>{{ 'email_merch_order_recap.html.date'|trans }}</strong> {{ item.matchDate|date('d/m/Y H:i') }}</p>
-                            <p class="mb-1"><strong>{{ 'ticket_show.html.adversaire'|trans }}</strong> {{ item.opponent }}</p>
+                    <div class="ticket-show-panel">
+                        {% if item.category %}
+                            <p class="ticket-show-eyebrow">{{ item.category.name }}</p>
+                        {% endif %}
+                        <h2>{{ matchLabel }}</h2>
+
+                        <div class="ticket-show-facts">
+                            <div>
+                                <span>{{ 'email_merch_order_recap.html.date'|trans }}</span>
+                                <strong>{{ item.matchDate|date('d/m/Y H:i') }}</strong>
+                            </div>
                             {% if item.venue %}
-                                <p class="mb-1"><strong>{{ 'ticket_show.html.lieu'|trans }}</strong> {{ item.venue }}</p>
+                                <div>
+                                    <span>{{ 'ticket_show.html.lieu'|trans }}</span>
+                                    <strong>{{ item.venue }}</strong>
+                                </div>
                             {% endif %}
-                            <p class="mb-2"><strong>{{ 'ticket_show.html.prix'|trans }}</strong> {{ item.price|number_format(2, ',', ' ') }} EUR</p>
-                            <p class="text-muted mb-3">{{ 'ticket_show.html.stock'|trans({'%stock%': item.stock}) }}</p>
+                            <div>
+                                <span>{{ 'ticket_show.html.adversaire'|trans }}</span>
+                                <strong>{{ item.opponent }}</strong>
+                            </div>
+                            <div>
+                                <span>{{ 'ticket_show.html.prix'|trans }}</span>
+                                <strong>{{ item.price|number_format(2, ',', ' ') }} EUR</strong>
+                            </div>
+                            <div>
+                                <span>{{ 'ticket_buy.html.stock'|trans }}</span>
+                                <strong>{{ item.stock }}</strong>
+                            </div>
+                        </div>
 
-                            {% if item.description %}
-                                <div class="mb-3">{{ item.description|raw }}</div>
-                            {% endif %}
+                        {% if item.description %}
+                            <div class="ticket-show-description">{{ item.description|raw }}</div>
+                        {% endif %}
 
+                        <div class="ticket-show-actions">
                             {% if item.stock > 0 %}
-                                <form action="{{ path('ticket_cart_add', { id: item.id }) }}" method="post">
+                                <form action="{{ path('ticket_cart_add', { id: item.id }) }}" method="post" class="ticket-show-inline-form">
                                     <label class="form-label text-light" for="quantity">Quantite</label>
-                                    <input id="quantity" name="quantity" type="number" min="1" value="1" class="form-control mb-3">
-                                    <button class="btn btn-danger w-100" type="submit">Ajouter au panier</button>
+                                    <input id="quantity" name="quantity" type="number" min="1" value="1" class="form-control">
+                                    <button class="btn btn-danger ticket-show-main-cta" type="submit">Ajouter au panier</button>
                                 </form>
-                                <a href="{{ path('ticket_cart') }}" class="btn btn-outline-light mt-3 w-100">Voir mon panier</a>
+                                <a href="{{ path('ticket_cart') }}" class="btn btn-outline-light w-100">Voir mon panier</a>
                             {% else %}
                                 <button class="btn btn-secondary w-100" disabled>{{ 'ticket_show.html.complet'|trans }}</button>
                             {% endif %}
-                        </div>
 
-                        <a href="{{ path('ticket_index') }}" class="btn btn-outline-light mt-4">{{ 'merch_buy.html.retour'|trans }}</a>
+                            <a href="{{ path('ticket_index') }}" class="btn btn-outline-light w-100">{{ 'merch_buy.html.retour'|trans }}</a>
+                        </div>
                     </div>
                 </div>
             </div>

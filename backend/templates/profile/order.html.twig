@@ -19,17 +19,7 @@
                     Panier
                 {% endif %}
             </p>
-            <p><strong>Statut</strong>
-                {% if checkout.status == 'paid' %}
-                    Paye
-                {% elseif checkout.status == 'pending' %}
-                    Attente
-                {% elseif checkout.status == 'failed' %}
-                    Refuse
-                {% else %}
-                    {{ checkout.status }}
-                {% endif %}
-            </p>
+            <p><strong>Statut</strong> {{ checkout.statusLabel }}</p>
             <p><strong>Total</strong> {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}</p>
             <p><strong>Date</strong> {{ checkout.createdAt|date('d/m/Y H:i') }}</p>
             <p><strong>Paiement</strong>

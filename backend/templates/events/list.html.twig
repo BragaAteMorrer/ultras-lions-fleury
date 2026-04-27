@@ -29,39 +29,31 @@
 
         <h2 class="section-title">{{ 'components_navbar.html.photos_de_match'|trans }}</h2>
 
-        <div class="event-list">
+        <div class="row g-4">
             {% for event in deplacements %}
-                <article class="event-item">
-                    {% set cover = event.image ?: (event.media|first) %}
-                    {% if cover %}
-                        <a href="{{ path('event_show', { id: event.id }) }}" class="card mb-3">
-                            <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="event-card-img-top" alt="{{ event.title }}">
-                        </a>
-                    {% endif %}
-
-                    <div class="event-date-block">
-                        {% if event.date %}
-                            <div class="event-date-day">{{ event.date|date('d') }}</div>
-                            <div class="event-date-month">{{ event.date|date('M')|upper }}</div>
+                <div class="col-md-4">
+                    <a href="{{ path('event_show', { id: event.id }) }}" class="card h-100">
+                        {% set cover = event.image ?: (event.media|first) %}
+                        {% if cover %}
+                            {% include 'components/media.html.twig' with { media: cover, class: 'event-card-img-top', alt: event.title } %}
                         {% else %}
-                            <div class="event-date-day">?</div>
-                            <div class="event-date-month">---</div>
+                            <img src="/placeholder.jpg" class="event-card-img-top" alt="{{ event.title }}">
                         {% endif %}
-                    </div>
 
-                    <div class="event-content">
-                        <h3>
-                            <a href="{{ path('event_show', { id: event.id }) }}">
-                                {{ event.title }}
-                            </a>
-                        </h3>
-
-                        <div class="event-meta">
-                            {# Ces champs n'existent pas, je les enlève ou tu me diras si on les rajoute #}
+                        <div class="card-body">
+                            <h3 class="card-title">{{ event.title }}</h3>
+                            {% if event.category %}
+                                <p class="text-muted mb-1">{{ event.category.name }}</p>
+                            {% endif %}
+                            {% if event.date %}
+                                <p class="mb-1">{{ event.date|date('d/m/Y') }}</p>
+                            {% endif %}
+                            {% if event.description %}
+                                <p class="mb-0">{{ event.description|striptags|slice(0, 90) ~ '...' }}</p>
+                            {% endif %}
                         </div>
-                    </div>
-
-                </article>
+                    </a>
+                </div>
             {% else %}
                 <p>{{ 'events_list.html.aucune_photo_de_match_pour_le_moment'|trans }}</p>
             {% endfor %}
@@ -69,34 +61,31 @@
 
         <h2 class="section-title mt-5">{{ 'admin_dashboard.html.evenements'|trans }}</h2>
 
-        <div class="event-list">
+        <div class="row g-4">
             {% for event in events %}
-                <article class="event-item">
-                    {% set cover = event.image ?: (event.media|first) %}
-                    {% if cover %}
-                        <a href="{{ path('event_show', { id: event.id }) }}" class="card mb-3">
-                            <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="event-card-img-top" alt="{{ event.title }}">
-                        </a>
-                    {% endif %}
-
-                    <div class="event-date-block">
-                        {% if event.date %}
-                            <div class="event-date-day">{{ event.date|date('d') }}</div>
-                            <div class="event-date-month">{{ event.date|date('M')|upper }}</div>
+                <div class="col-md-4">
+                    <a href="{{ path('event_show', { id: event.id }) }}" class="card h-100">
+                        {% set cover = event.image ?: (event.media|first) %}
+                        {% if cover %}
+                            {% include 'components/media.html.twig' with { media: cover, class: 'event-card-img-top', alt: event.title } %}
                         {% else %}
-                            <div class="event-date-day">?</div>
-                            <div class="event-date-month">---</div>
+                            <img src="/placeholder.jpg" class="event-card-img-top" alt="{{ event.title }}">
                         {% endif %}
-                    </div>
 
-                    <div class="event-content">
-                        <h3>
-                            <a href="{{ path('event_show', { id: event.id }) }}">
-                                {{ event.title }}
-                            </a>
-                        </h3>
-                    </div>
-                </article>
+                        <div class="card-body">
+                            <h3 class="card-title">{{ event.title }}</h3>
+                            {% if event.category %}
+                                <p class="text-muted mb-1">{{ event.category.name }}</p>
+                            {% endif %}
+                            {% if event.date %}
+                                <p class="mb-1">{{ event.date|date('d/m/Y') }}</p>
+                            {% endif %}
+                            {% if event.description %}
+                                <p class="mb-0">{{ event.description|striptags|slice(0, 90) ~ '...' }}</p>
+                            {% endif %}
+                        </div>
+                    </a>
+                </div>
             {% else %}
                 <p>{{ 'events_list.html.aucun_evenement_pour_le_moment'|trans }}</p>
             {% endfor %}

@@ -74,4 +74,5 @@ class TicketRepository extends ServiceEntityRepository
 
         return $matchDate <= $j10;
     }
+
 }
