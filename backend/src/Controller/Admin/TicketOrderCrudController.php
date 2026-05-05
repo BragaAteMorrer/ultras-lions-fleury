@@ -199,51 +199,6 @@ class TicketOrderCrudController extends AbstractCrudController
         $ids = $batchActionDto->getEntityIds();
         $orders = $ids ? $em->getRepository(TicketOrder::class)->findBy(['id' => $ids]) : [];
 
-        $totalAmount = 0.0;
-        $totalQuantity = 0;
-        foreach ($orders as $order) {
-            $totalAmount += $order->getTotalPrice();
-            $totalQuantity += $order->getQuantity();
-        }
-
-        $html = $this->pdfHeader('COMMANDES BILLETS', count($orders), 'Billets', $totalQuantity, $totalAmount);
-        $html .= '<table class="ultra-table">';
-        $html .= '<thead><tr><th>Date</th><th>Acheteur</th><th>Match</th><th class="center">Qte</th><th class="right">Total</th><th>Paiement</th><th>Statut</th></tr></thead><tbody>';
-
-        foreach ($orders as $order) {
-            $user = $order->getUser();
-            $first = $order->getCustomerFirstName() ?: ($user?->getPrenom() ?? '');
-            $last = $order->getCustomerLastName() ?: ($user?->getNom() ?? '');
-            $ticket = $order->getTicket();
-            $match = $ticket ? $this->getMatchLabel($ticket) : '';
-            $buyer = trim($first . ' ' . $last);
-            $buyer = $buyer !== '' ? $buyer : ($order->getEmail() ?? 'Invite');
-
-            $html .= '<tr>';
-            $html .= '<td>' . ($order->getCreatedAt()?->format('d/m/Y H:i') ?? '') . '</td>';
-            $html .= '<td>' . htmlspecialchars($buyer) . '</td>';
-            $html .= '<td>' . htmlspecialchars($match) . '</td>';
-            $html .= '<td class="center">' . $order->getQuantity() . '</td>';
-            $html .= '<td class="right strong">' . number_format($order->getTotalPrice(), 2, ',', ' ') . ' EUR</td>';
-            $html .= '<td><span class="badge badge-dark">' . htmlspecialchars($this->paymentLabel($order->getPaymentMethod())) . '</span></td>';
-            $html .= '<td><span class="badge ' . ($order->isPaid() ? 'badge-red' : 'badge-muted') . '">' . ($order->isPaid() ? 'Paye' : 'Non paye') . '</span></td>';
-            $html .= '</tr>';
-        }
-
-        $html .= '</tbody></table>';
-        $html .= $this->pdfFooter();
-
-        $dompdf = new \Dompdf\Dompdf();
-        $dompdf->loadHtml($html, 'UTF-8');
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
-
-        return new Response($dompdf->output(), 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="ticket_orders.pdf"',
-        ]);
-        /*
-
         $html = '<h2>Recapitulatif commandes billets</h2>';
         $html .= '<table width="100%" cellpadding="6" cellspacing="0" border="1" style="border-collapse:collapse;">';
         $html .= '<thead><tr><th>Date</th><th>Prenom</th><th>Nom</th><th>Match</th><th>Quantite</th><th>Total</th><th>Paiement</th><th>Payé</th></tr></thead><tbody>';
@@ -275,7 +230,6 @@ class TicketOrderCrudController extends AbstractCrudController
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'attachment; filename="ticket_orders.pdf"',
         ]);
-        */
     }
 
     private function getMatchLabel(Ticket $ticket): string
@@ -298,68 +252,5 @@ class TicketOrderCrudController extends AbstractCrudController
         }
 
         return $ticket->getCategory()?->getSlug() === 'ext';
-    }
-
-    private function paymentLabel(string $method): string
-    {
-        return match ($method) {
-            'cash' => 'Liquide',
-            'free' => 'Gratuit',
-            'sumup' => 'SumUp',
-            default => ucfirst($method),
-        };
-    }
-
-    private function pdfHeader(string $title, int $ordersCount, string $itemsLabel, int $itemsCount, float $totalAmount): string
-    {
-        return '<html><head><meta charset="UTF-8"><style>' . $this->pdfStyles() . '</style></head><body>'
-            . '<div class="topbar"></div>'
-            . '<div class="header">'
-            . '<div class="brand">ULTRAS <span>LIONS</span></div>'
-            . '<div class="subtitle">FC Fleury 91 - Export admin</div>'
-            . '<h1>' . htmlspecialchars($title) . '</h1>'
-            . '<div class="date">Genere le ' . (new \DateTimeImmutable())->format('d/m/Y H:i') . '</div>'
-            . '</div>'
-            . '<table class="stats"><tr>'
-            . '<td><span>Commandes</span><strong>' . $ordersCount . '</strong></td>'
-            . '<td><span>' . htmlspecialchars($itemsLabel) . '</span><strong>' . $itemsCount . '</strong></td>'
-            . '<td><span>Total</span><strong>' . number_format($totalAmount, 2, ',', ' ') . ' EUR</strong></td>'
-            . '</tr></table>';
-    }
-
-    private function pdfFooter(): string
-    {
-        return '<div class="footer">Ultras Lions Fleury - Document interne</div></body></html>';
-    }
-
-    private function pdfStyles(): string
-    {
-        return '
-            @page { margin: 28px; }
-            body { font-family: DejaVu Sans, Arial, sans-serif; color: #151515; font-size: 10px; }
-            .topbar { height: 7px; background: #c40016; margin-bottom: 16px; }
-            .header { background: #111; color: #fff; padding: 18px 20px; border-bottom: 4px solid #c40016; }
-            .brand { font-size: 18px; font-weight: 800; letter-spacing: 1.5px; }
-            .brand span { color: #c40016; }
-            .subtitle { color: #bbb; margin-top: 3px; text-transform: uppercase; font-size: 8px; letter-spacing: .8px; }
-            h1 { margin: 16px 0 4px; font-size: 23px; letter-spacing: .5px; }
-            .date { color: #ddd; font-size: 9px; }
-            .stats { width: 100%; border-collapse: collapse; margin: 16px 0 18px; }
-            .stats td { background: #f3f3f3; border-left: 5px solid #c40016; padding: 10px 12px; width: 33%; }
-            .stats span { display: block; color: #666; text-transform: uppercase; font-size: 8px; }
-            .stats strong { display: block; margin-top: 4px; font-size: 16px; color: #111; }
-            .ultra-table { width: 100%; border-collapse: collapse; }
-            .ultra-table th { background: #111; color: #fff; padding: 8px 7px; text-transform: uppercase; font-size: 8px; border-bottom: 3px solid #c40016; }
-            .ultra-table td { padding: 8px 7px; border-bottom: 1px solid #ddd; vertical-align: top; }
-            .ultra-table tr:nth-child(even) td { background: #f7f7f7; }
-            .center { text-align: center; }
-            .right { text-align: right; }
-            .strong { font-weight: 700; }
-            .badge { display: inline-block; padding: 3px 7px; border-radius: 2px; font-size: 8px; font-weight: 700; text-transform: uppercase; }
-            .badge-red { background: #c40016; color: #fff; }
-            .badge-dark { background: #222; color: #fff; }
-            .badge-muted { background: #aaa; color: #111; }
-            .footer { position: fixed; bottom: -12px; left: 0; right: 0; color: #777; font-size: 8px; text-align: center; border-top: 1px solid #ddd; padding-top: 6px; }
-        ';
     }
 }

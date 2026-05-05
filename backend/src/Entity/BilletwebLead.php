@@ -44,6 +44,11 @@ class BilletwebLead
     public function getTicket(): ?Ticket { return $this->ticket; }
     public function setTicket(?Ticket $ticket): self { $this->ticket = $ticket; return $this; }
 
+    public function getTicketOpponent(): string
+    {
+        return (string) ($this->ticket?->getOpponent() ?? '');
+    }
+
     public function getUser(): ?User { return $this->user; }
     public function setUser(?User $user): self { $this->user = $user; return $this; }
 

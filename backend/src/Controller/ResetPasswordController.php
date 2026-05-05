@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Repository\UserRepository;
 use App\Service\MailService;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,8 +18,7 @@ class ResetPasswordController extends AbstractController
         Request $request,
         UserRepository $userRepository,
         EntityManagerInterface $em,
-        MailService $mailService,
-        LoggerInterface $logger
+        MailService $mailService
     ): Response {
         if ($request->isMethod('POST')) {
             if (!$this->isCsrfTokenValid('forgot_password', (string) $request->request->get('_token', ''))) {
@@ -46,12 +44,7 @@ class ResetPasswordController extends AbstractController
                             'resetUrl' => $this->generateUrl('reset_password', ['token' => $token], 0),
                         ],
                     );
-                } catch (\Throwable $e) {
-                    $logger->error('Reset password email failed', [
-                        'email' => $user->getUserIdentifier(),
-                        'error' => $e->getMessage(),
-                    ]);
-
+                } catch (\Throwable) {
                     $this->addFlash('warning', 'Le lien a ete cree, mais l\'email n\'a pas pu etre envoye. Verifie la configuration SMTP.');
                     return $this->redirectToRoute('forgot_password');
                 }

@@ -145,19 +145,28 @@
 ============================================== */
 
 .ultra-burger {
-    background: none;
-    border: none;
+    width: 3rem;
+    height: 3rem;
+    background: rgba(0, 0, 0, 0.72);
+    border: 0.0625rem solid rgba(255,255,255,0.55);
+    border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: 0.3rem;
     cursor: pointer;
-    padding-right: 4rem;
+    padding: 0;
+    margin-left: auto;
+    flex: 0 0 auto;
+    box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.35);
 }
 
 .ultra-burger span {
-    width: 1.8rem;
+    width: 1.65rem;
     height: 0.2rem;
     background: #fff;
+    border-radius: 999px;
 }
 
 /* ==============================================
@@ -167,24 +176,41 @@
 .ultra-nav-mobile {
     display: none;
     flex-direction: column;
-    background: #000;
-    padding: 1rem;
-    margin-top: 1rem;
-    max-height: 30rem;
-    border-top: 0.0625rem solid rgba(255,255,255,0.1);
+    width: 100%;
+    background: #050505;
+    padding: 0.5rem 1rem 1.25rem;
+    margin-top: 0.8rem;
+    max-height: calc(100vh - 6.5rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-top: 0.0625rem solid rgba(255,255,255,0.18);
+    box-shadow: inset 0 0.25rem 0.75rem rgba(0,0,0,0.35);
+    -webkit-overflow-scrolling: touch;
 }
 
 .ultra-nav-mobile .ultra-link {
     height: auto;
-    padding: 1rem 0.5rem;
-    font-size: 1.2rem;
+    min-height: 3.15rem;
+    padding: 0.85rem 0.75rem;
+    font-size: 1.05rem;
     border-bottom: 0.0625rem solid rgba(255,255,255,0.15);
+    justify-content: flex-start;
+    text-align: left;
+    line-height: 1.2;
+    width: 100%;
+    color: #fff;
+    background: transparent;
+    text-shadow: none;
 }
 
 .ultra-nav-mobile .mobile-submenu .sub {
     display: none;
-    padding-left: 1.2rem;
-    font-size: 1.05rem;
+    min-height: 2.7rem;
+    padding: 0.7rem 0.75rem 0.7rem 1.6rem;
+    font-size: 0.98rem;
+    color: rgba(255,255,255,0.86);
+    background: #111;
+    border-bottom-color: rgba(255,255,255,0.08);
 }
 
 .ultra-nav-mobile .mobile-submenu.open .sub {
@@ -195,9 +221,10 @@
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    padding: 1rem 0.5rem;
-    background: #000;
+    justify-content: space-between;
+    min-height: 3.15rem;
+    padding: 0.85rem 0.75rem;
+    background: transparent;
     border: 0;
     color: #fff;
     font: inherit;
@@ -207,12 +234,81 @@
     cursor: pointer;
 }
 
+.ultra-nav-mobile .submenu-toggle::after {
+    content: "+";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    margin-left: 0.75rem;
+    border: 0.0625rem solid rgba(255,255,255,0.35);
+    border-radius: 50%;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.ultra-nav-mobile .mobile-submenu.open .submenu-toggle::after {
+    content: "-";
+}
+
 .ultra-nav-mobile .ultra-link:last-child {
     border-bottom: none;
 }
 
 .ultra-nav-mobile.open {
     display: flex;
+}
+
+.ultra-nav-mobile hr {
+    width: 100%;
+    margin: 0.6rem 0;
+    border: 0;
+    border-top: 0.0625rem solid rgba(255,255,255,0.2);
+    opacity: 1;
+}
+
+@media (max-width: 62rem) {
+    .ultra-topband {
+        padding: 0.55rem 0 0;
+    }
+
+    .ultra-topband .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .ultra-logo {
+        width: 10rem;
+        max-width: calc(100vw - 5.5rem);
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 30rem) {
+    .ultra-nav-mobile {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+        max-height: calc(100vh - 5.75rem);
+    }
+
+    .ultra-logo {
+        width: 8.75rem;
+    }
+
+    .ultra-burger {
+        width: 2.75rem;
+        height: 2.75rem;
+    }
+}
+
+@media (min-width: 62rem) {
+    .ultra-burger,
+    .ultra-nav-mobile {
+        display: none !important;
+    }
 }
 
 /* Cache la nav desktop < 992px */

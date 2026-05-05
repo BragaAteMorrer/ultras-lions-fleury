@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cartage{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Cartage</h1>
+        <p class="hero-subtitle">Inscription reservee au QR code</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container" style="max-width: 48rem;">
+        <div class="card card-form">
+            <h2 class="section-title">Infos cartage</h2>
+
+            {% for message in app.flashes('danger') %}
+                <div class="alert-error">{{ message }}</div>
+            {% endfor %}
+
+            {% if errors is not empty %}
+                <div class="alert-error">
+                    {% for error in errors %}
+                        <p class="mb-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <p class="form-section-hint">Montant : {{ qrToken.amount|number_format(2, ',', ' ') }} EUR</p>
+
+            <form method="post" action="{{ path('cartage_form') }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('cartage_register') }}">
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="prenom">Prenom</label>
+                        <input id="prenom" name="prenom" class="form-control" required value="{{ data.prenom|default('') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="nom">Nom</label>
+                        <input id="nom" name="nom" class="form-control" required value="{{ data.nom|default('') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="email">Email</label>
+                        <input id="email" name="email" type="email" class="form-control" required value="{{ data.email|default('') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="plainPassword">Mot de passe</label>
+                        <input id="plainPassword" name="plainPassword" type="password" class="form-control" required autocomplete="new-password">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="confirmPassword">Confirmer le mot de passe</label>
+                        <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" required autocomplete="new-password">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="telephone">Telephone</label>
+                        <input id="telephone" name="telephone" class="form-control" required value="{{ data.telephone|default('') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="tailleTshirt">T-shirt</label>
+                        <select id="tailleTshirt" name="tailleTshirt" class="form-select">
+                            <option value="">Choisir...</option>
+                            {% for size in ['XS', 'S', 'M', 'L', 'XL', 'XXL'] %}
+                                <option value="{{ size }}" {{ data.tailleTshirt|default('') == size ? 'selected' : '' }}>{{ size }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="adresse">Adresse</label>
+                        <input id="adresse" name="adresse" class="form-control" value="{{ data.adresse|default('') }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="codePostal">Code postal</label>
+                        <input id="codePostal" name="codePostal" class="form-control" value="{{ data.codePostal|default('') }}">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label" for="ville">Ville</label>
+                        <input id="ville" name="ville" class="form-control" value="{{ data.ville|default('') }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="tailleSweat">Sweat</label>
+                        <select id="tailleSweat" name="tailleSweat" class="form-select">
+                            <option value="">Choisir...</option>
+                            {% for size in ['XS', 'S', 'M', 'L', 'XL', 'XXL'] %}
+                                <option value="{{ size }}" {{ data.tailleSweat|default('') == size ? 'selected' : '' }}>{{ size }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="tailleVeste">Veste</label>
+                        <select id="tailleVeste" name="tailleVeste" class="form-select">
+                            <option value="">Choisir...</option>
+                            {% for size in ['XS', 'S', 'M', 'L', 'XL', 'XXL'] %}
+                                <option value="{{ size }}" {{ data.tailleVeste|default('') == size ? 'selected' : '' }}>{{ size }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="tailleShort">Short</label>
+                        <select id="tailleShort" name="tailleShort" class="form-select">
+                            <option value="">Choisir...</option>
+                            {% for size in ['XS', 'S', 'M', 'L', 'XL', 'XXL'] %}
+                                <option value="{{ size }}" {{ data.tailleShort|default('') == size ? 'selected' : '' }}>{{ size }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <h3 class="form-section-title">Paiement</h3>
+                <div class="d-grid gap-2">
+                    <label class="card p-3">
+                        <input type="radio" name="payment_method" value="online" {{ data.payment_method|default('online') == 'online' ? 'checked' : '' }}>
+                        Payer par carte / PayPal
+                    </label>
+                    <label class="card p-3">
+                        <input type="radio" name="payment_method" value="cash" {{ data.payment_method|default('') == 'cash' ? 'checked' : '' }}>
+                        Payer en liquide, validation par le bureau
+                    </label>
+                </div>
+
+                <div class="card p-3 mt-3">
+                    <label class="d-flex gap-2 align-items-start mb-0">
+                        <input type="checkbox" name="accept_internal_rules" value="1" required {{ data.accept_internal_rules|default('') == '1' ? 'checked' : '' }}>
+                        <span>
+                            J'ai lu et j'accepte le
+                            {% if internalRulesPage %}
+                                <a href="{{ path('page_show', { slug: internalRulesPage.slug }) }}" target="_blank" rel="noopener">reglement interieur</a>
+                            {% else %}
+                                reglement interieur
+                            {% endif %}
+                            de l'association.
+                        </span>
+                    </label>
+                </div>
+
+                <p class="form-section-hint mt-3">
+                    Les informations saisies servent a gerer ton cartage, ton compte membre et le paiement. Tu peux demander l'acces, la rectification ou la suppression de tes donnees via la page confidentialite.
+                </p>
+
+                <button class="btn btn-danger w-100 mt-4" type="submit">Valider mon cartage</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

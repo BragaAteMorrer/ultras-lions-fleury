@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Event;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -13,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\TextFilter;
 
 class EventCrudController extends AbstractCrudController
 {
@@ -26,6 +28,12 @@ class EventCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Evenement')
             ->setEntityLabelInPlural('Evenements');
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add(TextFilter::new('opponent', 'Adversaire'));
     }
 
     public function configureFields(string $pageName): iterable
@@ -46,7 +54,7 @@ class EventCrudController extends AbstractCrudController
         yield AssociationField::new('category', 'Categorie');
         yield TextField::new('opponent', 'Adversaire')
             ->setRequired(false)
-            ->hideOnIndex();
+            ->setSortable(true);
         yield ChoiceField::new('matchLocation', 'Lieu du match')
             ->setChoices([
                 'Domicile' => 'domicile',

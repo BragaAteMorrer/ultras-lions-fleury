@@ -13,16 +13,17 @@
 
 <div class="section">
     <div class="container">
-
-        {% if page.image %}
-            <div class="post-main-image">
-                {% include 'components/media.html.twig' with { media: page.image, alt: page.title, controls: page.image.video } %}
-            </div>
-        {% endif %}
-
+        
         <div class="post-body rich-content">
             {{ page.content|raw }}
         </div>
+
+        {% if page.image %}
+            <div class="post-main-image">
+                <img src="{{ asset('uploads/media/' ~ page.image.path) }}" 
+                     alt="{{ page.title }}">
+            </div>
+        {% endif %}
 
         <a href="{{ path('home') }}" class="btn btn-secondary" style="margin-top: 2rem;">{{ 'merch_buy.html.retour'|trans }}</a>
 

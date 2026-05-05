@@ -6,3 +6,11 @@ docker exec -it ultras_php php bin/console make:migration
 docker compose exec php bin/console asset-map:compile
 
 docker compose exec php php bin/console asset-map:compile
+
+----------------------------------------------------------------------------------
+
+docker compose exec php php bin/console asset-map:compile
+
+docker compose exec php composer install
+
+docker compose exec php php /usr/bin/composer install

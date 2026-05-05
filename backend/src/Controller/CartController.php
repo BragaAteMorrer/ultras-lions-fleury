@@ -196,6 +196,10 @@ class CartController extends AbstractController
             if (!$ticket) {
                 continue;
             }
+            if (!$ticketRepository->isVisibleForUser($ticket, $this->getUser() !== null)) {
+                $this->addFlash('danger', sprintf('La billetterie pour %s n\'est plus disponible.', $ticket->getOpponent()));
+                return $this->redirectToRoute('cart_index');
+            }
             $qty = (int) $row['quantity'];
             $available = (int) $ticket->getStock();
             if ($available < $qty) {
@@ -375,6 +379,10 @@ class CartController extends AbstractController
             $ticket = $ticketById[$row['id']] ?? null;
             if (!$ticket) {
                 continue;
+            }
+            if (!$ticketRepository->isVisibleForUser($ticket, $this->getUser() !== null)) {
+                $this->addFlash('danger', sprintf('La billetterie pour %s n\'est plus disponible.', $ticket->getOpponent()));
+                return $this->redirectToRoute('cart_index');
             }
             $qty = (int) $row['quantity'];
             $available = (int) $ticket->getStock();

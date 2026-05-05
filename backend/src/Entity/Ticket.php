@@ -24,6 +24,12 @@ class Ticket
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $matchDate = null;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $guestAvailabilityDate = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $memberAvailabilityDate = null;
+
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $matchLocation = null;
 
@@ -79,6 +85,22 @@ class Ticket
     public function setMatchDate(\DateTimeInterface $matchDate): self
     {
         $this->matchDate = $matchDate;
+        return $this;
+    }
+
+    public function getGuestAvailabilityDate(): ?\DateTimeInterface { return $this->guestAvailabilityDate; }
+
+    public function setGuestAvailabilityDate(?\DateTimeInterface $guestAvailabilityDate): self
+    {
+        $this->guestAvailabilityDate = $guestAvailabilityDate;
+        return $this;
+    }
+
+    public function getMemberAvailabilityDate(): ?\DateTimeInterface { return $this->memberAvailabilityDate; }
+
+    public function setMemberAvailabilityDate(?\DateTimeInterface $memberAvailabilityDate): self
+    {
+        $this->memberAvailabilityDate = $memberAvailabilityDate;
         return $this;
     }
 
@@ -176,5 +198,34 @@ class Ticket
     public function usesBilletweb(): bool
     {
         return $this->isHomeMatch() && $this->billetwebUrl !== null && trim($this->billetwebUrl) !== '';
+    }
+
+    public function isArchived(?\DateTimeInterface $now = null): bool
+    {
+        if (!$this->matchDate) {
+            return false;
+        }
+
+        $now ??= new \DateTimeImmutable();
+
+        return $this->matchDate <= $now;
+    }
+
+    public function getAvailabilityDateForUser(bool $isMember): ?\DateTimeInterface
+    {
+        return $isMember ? $this->memberAvailabilityDate : $this->guestAvailabilityDate;
+    }
+
+    public function isAvailableForUser(bool $isMember, ?\DateTimeInterface $now = null): bool
+    {
+        $now ??= new \DateTimeImmutable();
+
+        if ($this->isArchived($now)) {
+            return false;
+        }
+
+        $availabilityDate = $this->getAvailabilityDateForUser($isMember);
+
+        return $availabilityDate === null || $availabilityDate <= $now;
     }
 }

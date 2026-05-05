@@ -22,6 +22,9 @@ class Merch
     #[ORM\Column(type: 'float')]
     private ?float $price = null;
 
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $memberPrice = null;
+
     #[ORM\Column(length: 20)]
     private ?string $audience = 'public';
 
@@ -71,6 +74,23 @@ class Merch
     {
         $this->price = $price;
         return $this;
+    }
+
+    public function getMemberPrice(): ?float { return $this->memberPrice; }
+
+    public function setMemberPrice(?float $memberPrice): self
+    {
+        $this->memberPrice = $memberPrice !== null ? max(0, $memberPrice) : null;
+        return $this;
+    }
+
+    public function getPriceForUser(bool $isMember): float
+    {
+        if ($isMember && $this->memberPrice !== null) {
+            return $this->memberPrice;
+        }
+
+        return (float) $this->price;
     }
 
     public function getAudience(): ?string { return $this->audience; }

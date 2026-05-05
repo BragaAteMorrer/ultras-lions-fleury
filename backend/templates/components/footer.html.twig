@@ -35,6 +35,12 @@
             {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('app_admin_dashboard_index') }}" class="footer-admin-link">{{ 'components_footer.html.espace_admin'|trans }}</a>
             {% endif %}
+            <nav class="footer-legal" aria-label="Liens legaux">
+                <a href="{{ path('page_show', { slug: 'mentions-legales' }) }}">Mentions legales</a>
+                <a href="{{ path('page_show', { slug: 'politique-confidentialite' }) }}">Confidentialite</a>
+                <a href="{{ path('page_show', { slug: 'cookies' }) }}">Cookies</a>
+                <a href="{{ path('page_show', { slug: 'reglement-interieur' }) }}">Reglement interieur</a>
+            </nav>
         </div>
 
     </div>

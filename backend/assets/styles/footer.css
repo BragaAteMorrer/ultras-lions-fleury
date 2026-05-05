@@ -75,6 +75,25 @@
     background: #ff3d3d;
 }
 
+.footer-legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.8rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+}
+
+.footer-legal a {
+    color: #ccc;
+    text-decoration: none;
+}
+
+.footer-legal a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
 /* Bas du footer */
 .footer-bottom {
     text-align: center;
@@ -97,5 +116,9 @@
 
     .footer-socials a {
         margin: 0.3rem;
+    }
+
+    .footer-legal {
+        justify-content: center;
     }
 }

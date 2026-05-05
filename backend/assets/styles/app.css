@@ -90,6 +90,104 @@ img {
     color: #fff;
 }
 
+.media-feed-card {
+    overflow: hidden;
+}
+
+.media-card-thumb {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #000;
+}
+
+.media-card-thumb img,
+.media-card-thumb video {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+.media-feed-type {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin: 0 0 0.65rem;
+    padding: 0.25rem 0.55rem;
+    background: #D40000;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.media-video-card {
+    background: #0b0b0b;
+    border-color: #242424;
+}
+
+.media-video-card .card-body {
+    padding-top: 0.95rem;
+}
+
+.media-video-card .media-card-thumb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.48));
+    pointer-events: none;
+}
+
+.media-video-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    width: 4rem;
+    height: 2.75rem;
+    transform: translate(-50%, -50%);
+    background: #D40000;
+    border-radius: 0.6rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.45);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.media-video-play::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 52%;
+    transform: translate(-45%, -50%);
+    border-top: 0.55rem solid transparent;
+    border-bottom: 0.55rem solid transparent;
+    border-left: 0.9rem solid #fff;
+}
+
+.media-video-badge {
+    position: absolute;
+    right: 0.65rem;
+    bottom: 0.65rem;
+    z-index: 2;
+    padding: 0.18rem 0.45rem;
+    background: rgba(0,0,0,0.86);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.media-video-card:hover .media-video-play {
+    transform: translate(-50%, -50%) scale(1.06);
+    background: #ff0000;
+}
+
+.media-video-card .media-feed-type {
+    background: #ff0000;
+}
+
 .group-section {
     background: rgba(10, 10, 10, 0.7);
     border: 0.0625rem solid #222;

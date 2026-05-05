@@ -37,13 +37,18 @@
                    class="ultra-link {{ app.request.get('_route') starts with 'post_' ? 'active' }}">{{ 'components_navbar.html.actualites'|trans }}</a>
 
                 <div class="dropdown">
-                    <a href="#"
+                    <a href="{{ path('media_index') }}"
                        class="ultra-link dropdown-toggle {{ (app.request.get('_route') starts with 'event_') or (app.request.get('_route') starts with 'gallery_') or (app.request.get('_route') starts with 'media_') ? 'active' }}"
                        id="eventDropdown"
                        data-bs-toggle="dropdown"
-                       aria-expanded="false">{{ 'admin_dashboard.html.galeries'|trans }}
+                       aria-expanded="false">Media
                     </a>
                     <ul class="dropdown-menu ultra-dropdown" aria-labelledby="eventDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ path('media_index') }}">
+                                Tous les medias
+                            </a>
+                        </li>
                         <li class="dropdown-submenu">
                             <a class="dropdown-item dropdown-toggle" href="{{ path('gamephoto_index') }}">
                                 {{ 'components_navbar.html.photos_de_match'|trans }}
@@ -179,8 +184,9 @@
             <a href="{{ path('chant_index') }}" class="ultra-link">{{ 'components_navbar.html.chants'|trans }}</a>
             <div class="mobile-submenu">
                 <button type="button" class="ultra-link submenu-toggle" aria-expanded="false">
-                    {{ 'admin_dashboard.html.galeries'|trans }}
+                    Media
                 </button>
+                <a href="{{ path('media_index') }}" class="ultra-link sub">Tous les medias</a>
                 <a href="{{ path('gamephoto_index') }}" class="ultra-link sub">{{ 'components_navbar.html.photos_de_match'|trans }}</a>
                 {% for mediaCategory in event_media_categories %}
                     <a href="{{ path('media_category', { slug: mediaCategory.slug }) }}" class="ultra-link sub">

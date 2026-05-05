@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Chant;
 use App\Entity\BilletwebLead;
+use App\Entity\CartageQrToken;
+use App\Entity\CartageRegistration;
 use App\Entity\Event;
 use App\Entity\EventCategory;
 use App\Entity\Gallery;
@@ -120,6 +122,12 @@ class DashboardController extends AbstractDashboardController
             ->setController(PaymentCheckoutCrudController::class);
         yield MenuItem::linkToCrud('Pre-inscriptions Billetweb', 'fa fa-list-check', BilletwebLead::class)
             ->setController(BilletwebLeadCrudController::class);
+
+        yield MenuItem::section('Cartage');
+        yield MenuItem::linkToCrud('Demandes de cartage', 'fa fa-id-card', CartageRegistration::class)
+            ->setController(CartageRegistrationCrudController::class);
+        yield MenuItem::linkToCrud('QR codes cartage', 'fa fa-qrcode', CartageQrToken::class)
+            ->setController(CartageQrTokenCrudController::class);
 
         yield MenuItem::section('Utilisateurs');
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-users', User::class);
