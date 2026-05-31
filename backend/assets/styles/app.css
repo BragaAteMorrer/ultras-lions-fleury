@@ -1,4 +1,4 @@
-/* RESET GLOBAL ULTRA LIONS */
+﻿/* RESET GLOBAL ULTRA LIONS */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -1064,4 +1064,211 @@ form .btn {
     border-radius: 0.5rem;
     box-shadow: 0 0.75rem 1.5rem rgba(0,0,0,0.45);
     margin: 1rem 0;
+}
+
+/* ===============================
+   LINKTREE PAGE
+================================ */
+.linktree-page {
+    min-height: 100vh;
+    background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.92)),
+        url("../img/fond/fond1b-Y63v6mt.jpg") center / cover fixed no-repeat;
+}
+
+.linktree-hero {
+    min-height: calc(100vh - 4.75rem);
+    display: grid;
+    place-items: center;
+    padding: 3rem 1rem 4rem;
+}
+
+.linktree-shell {
+    width: min(100%, 34rem);
+    display: grid;
+    gap: 1.2rem;
+}
+
+.linktree-header {
+    text-align: center;
+}
+
+.linktree-logo {
+    width: 10.5rem;
+    max-width: 46vw;
+    height: auto;
+    margin: 0 auto 1rem;
+    filter: drop-shadow(0 0.6rem 1.2rem rgba(0, 0, 0, 0.62));
+}
+
+.linktree-kicker {
+    margin-bottom: 0.25rem;
+    color: #cfcfcf;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+.linktree-header h1 {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(2.4rem, 10vw, 4rem);
+    font-weight: 900;
+    line-height: 0.95;
+    text-transform: uppercase;
+    text-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.65);
+}
+
+.linktree-intro {
+    width: min(100%, 24rem);
+    margin: 0.8rem auto 0;
+    color: #e0e0e0;
+    font-size: 1rem;
+}
+
+.linktree-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.linktree-link {
+    display: grid;
+    grid-template-columns: 2.65rem minmax(0, 1fr);
+    grid-template-areas:
+        "icon label"
+        "icon detail";
+    align-items: center;
+    min-height: 4.45rem;
+    padding: 0.82rem 1rem;
+    background: rgba(13, 13, 13, 0.88);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.14);
+    border-left: 0.25rem solid #D40000;
+    border-radius: 0.5rem;
+    color: #fff;
+    box-shadow: 0 0.7rem 1.5rem rgba(0, 0, 0, 0.42);
+    transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.linktree-link:hover,
+.linktree-link:focus-visible {
+    transform: translateY(-0.125rem);
+    background: #141414;
+    border-color: rgba(255, 255, 255, 0.24);
+    border-left-color: #ff2b2b;
+    color: #fff;
+}
+
+.linktree-link-primary {
+    background: linear-gradient(135deg, #D40000, #7a0000);
+    border-left-color: #fff;
+}
+
+.linktree-link i {
+    grid-area: icon;
+    width: 2.2rem;
+    height: 2.2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.14);
+    border-radius: 50%;
+    font-size: 1.1rem;
+}
+
+.linktree-link-no-icon {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "label"
+        "detail";
+}
+
+.linktree-link span {
+    grid-area: label;
+    min-width: 0;
+    font-size: 1.05rem;
+    font-weight: 900;
+    line-height: 1.15;
+    text-transform: uppercase;
+}
+
+.linktree-link small {
+    grid-area: detail;
+    min-width: 0;
+    color: #bdbdbd;
+    font-family: Arial, sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.25;
+}
+
+.linktree-link-primary small {
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.linktree-empty {
+    margin: 0;
+    padding: 1.1rem;
+    background: rgba(13, 13, 13, 0.88);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.14);
+    border-left: 0.25rem solid #D40000;
+    border-radius: 0.5rem;
+    color: #ddd;
+    text-align: center;
+}
+
+.linktree-socials {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 0.4rem;
+}
+
+.linktree-socials a {
+    width: 2.8rem;
+    height: 2.8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.78);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 1.2rem;
+    transition: transform 0.18s ease, background-color 0.18s ease;
+}
+
+.linktree-socials a:hover,
+.linktree-socials a:focus-visible {
+    transform: translateY(-0.125rem);
+    background: #D40000;
+    color: #fff;
+}
+
+@media (max-width: 36rem) {
+    .linktree-hero {
+        min-height: calc(100vh - 4.1rem);
+        padding: 2rem 0.85rem 3rem;
+        place-items: start center;
+    }
+
+    .linktree-logo {
+        width: 8.5rem;
+    }
+
+    .linktree-link {
+        grid-template-columns: 2.25rem minmax(0, 1fr);
+        min-height: 4rem;
+        padding: 0.72rem 0.85rem;
+    }
+
+    .linktree-link i {
+        width: 1.95rem;
+        height: 1.95rem;
+        font-size: 1rem;
+    }
+
+    .linktree-link span {
+        font-size: 0.98rem;
+    }
 }

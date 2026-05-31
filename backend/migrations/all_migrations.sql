@@ -1,4 +1,4 @@
-﻿-- Consolidated SQL generated from backend/migrations
+-- Consolidated SQL generated from backend/migrations
 -- Includes raw .sql files and SQL extracted from PHP migration up() methods.
 
 -- ============================================================
@@ -13,7 +13,7 @@ ALTER TABLE gallery ADD description LONGTEXT DEFAULT NULL;
 -- version 5.x
 -- https://www.phpmyadmin.net/
 --
--- Base de donnÃ©es : `your_database_name`
+-- Base de données : `your_database_name`
 -- --------------------------------------------------------
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -59,7 +59,7 @@ DEFAULT CHARSET=utf8mb4
 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
--- Contraintes de clÃ©s Ã©trangÃ¨res
+-- Contraintes de clés étrangères
 -- --------------------------------------------------------
 
 ALTER TABLE `ticket`
@@ -73,12 +73,12 @@ ALTER TABLE `ticket`
   ON DELETE SET NULL;
 
 -- --------------------------------------------------------
--- DonnÃ©es initiales
+-- Données initiales
 -- --------------------------------------------------------
 
 INSERT INTO `ticket_category` (`name`, `slug`) VALUES
 ('Domicile', 'domicile'),
-('ExtÃ©rieur', 'exterieur');
+('Extérieur', 'exterieur');
 
 COMMIT;
 
@@ -95,16 +95,16 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(180) NOT NULL,
     roles JSON NOT NULL,
 
-    -- Mot de passe hashÃ©
+    -- Mot de passe hashé
     password VARCHAR(255) NOT NULL,
 
-    -- IdentitÃ©
+    -- Identité
     pseudo VARCHAR(50) NOT NULL,
     nom VARCHAR(100) DEFAULT NULL,
     prenom VARCHAR(100) DEFAULT NULL,
     date_naissance DATE DEFAULT NULL,
 
-    -- CoordonnÃ©es
+    -- Coordonnées
     telephone VARCHAR(20) DEFAULT NULL,
     adresse VARCHAR(255) DEFAULT NULL,
     ville VARCHAR(100) DEFAULT NULL,
@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS users (
     photo_profil VARCHAR(255) DEFAULT NULL,
     banniere_profil VARCHAR(255) DEFAULT NULL,
 
-    -- Tailles vÃªtements
+    -- Tailles vêtements
     taille_tshirt VARCHAR(10) DEFAULT NULL,
     taille_polo VARCHAR(10) DEFAULT NULL,
     taille_pull VARCHAR(10) DEFAULT NULL,
@@ -347,7 +347,7 @@ INSERT INTO merch_category (name, slug) VALUES
   ('Couvre-Chef (Bob Casquette Bonnet/Cache-Cou)', 'couvre-chef'),
   ('Cartage', 'cartage'),
   ('Echarpe', 'echarpe'),
-  ('Gadget (Drapeau, Briquet, Sacoche, Calendrier, Affiche, Lunettes, Sac Banane, Pins, Porte ClÃ©, Sac, DVD, Livre)', 'gadget'),
+  ('Gadget (Drapeau, Briquet, Sacoche, Calendrier, Affiche, Lunettes, Sac Banane, Pins, Porte Clé, Sac, DVD, Livre)', 'gadget'),
   ('Patch', 'patch'),
   ('Short', 'short'),
   ('Chaussure', 'chaussure'),
@@ -357,11 +357,11 @@ ON DUPLICATE KEY UPDATE name = VALUES(name);
 -- ============================================================
 -- Source: injectionsql151220252.sql
 -- ============================================================
--- MySQL / MariaDB (script relanÃ§able)
--- CatÃ©gories Merch + FK + seed + stocks par tailles + fix DateTimeImmutable
+-- MySQL / MariaDB (script relançable)
+-- Catégories Merch + FK + seed + stocks par tailles + fix DateTimeImmutable
 
 -- ----------------------------
--- 1) CatÃ©gories Merch
+-- 1) Catégories Merch
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS merch_category (
   id INT AUTO_INCREMENT NOT NULL,
@@ -379,7 +379,7 @@ SET @col := (
     AND TABLE_NAME = 'merch'
     AND COLUMN_NAME = 'category_id'
 );
-SET @sql := IF(@col = 0, 'ALTER TABLE merch ADD COLUMN category_id INT DEFAULT NULL', 'SELECT \"category_id dÃ©jÃ  prÃ©sent\"');
+SET @sql := IF(@col = 0, 'ALTER TABLE merch ADD COLUMN category_id INT DEFAULT NULL', 'SELECT \"category_id déjà présent\"');
 PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
 
 -- Index si absent
@@ -390,10 +390,10 @@ SET @idx := (
     AND TABLE_NAME = 'merch'
     AND INDEX_NAME = 'IDX_MERCH_CATEGORY_ID'
 );
-SET @sql := IF(@idx = 0, 'CREATE INDEX IDX_MERCH_CATEGORY_ID ON merch (category_id)', 'SELECT \"index IDX_MERCH_CATEGORY_ID dÃ©jÃ  prÃ©sent\"');
+SET @sql := IF(@idx = 0, 'CREATE INDEX IDX_MERCH_CATEGORY_ID ON merch (category_id)', 'SELECT \"index IDX_MERCH_CATEGORY_ID déjà présent\"');
 PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
 
--- FK si absente (nom fixÃ©: FK_MERCH_CATEGORY_ID)
+-- FK si absente (nom fixé: FK_MERCH_CATEGORY_ID)
 SET @fk := (
   SELECT COUNT(*)
   FROM information_schema.REFERENTIAL_CONSTRAINTS
@@ -404,11 +404,11 @@ SET @fk := (
 SET @sql := IF(
   @fk = 0,
   'ALTER TABLE merch ADD CONSTRAINT FK_MERCH_CATEGORY_ID FOREIGN KEY (category_id) REFERENCES merch_category(id) ON DELETE SET NULL',
-  'SELECT \"FK_MERCH_CATEGORY_ID dÃ©jÃ  prÃ©sente\"'
+  'SELECT \"FK_MERCH_CATEGORY_ID déjà présente\"'
 );
 PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
 
--- Seed catÃ©gories (idempotent)
+-- Seed catégories (idempotent)
 INSERT INTO merch_category (name, slug) VALUES
   ('T-shirt', 't-shirt'),
   ('Polo', 'polo'),
@@ -419,7 +419,7 @@ INSERT INTO merch_category (name, slug) VALUES
   ('Couvre-Chef (Bob Casquette Bonnet/Cache-Cou)', 'couvre-chef'),
   ('Cartage', 'cartage'),
   ('Echarpe', 'echarpe'),
-  ('Gadget (Drapeau, Briquet, Sacoche, Calendrier, Affiche, Lunettes, Sac Banane, Pins, Porte ClÃ©, Sac, DVD, Livre)', 'gadget'),
+  ('Gadget (Drapeau, Briquet, Sacoche, Calendrier, Affiche, Lunettes, Sac Banane, Pins, Porte Clé, Sac, DVD, Livre)', 'gadget'),
   ('Patch', 'patch'),
   ('Short', 'short'),
   ('Chaussure', 'chaussure'),
@@ -916,7 +916,7 @@ ALTER TABLE ticket ADD CONSTRAINT FK_97A0ADA412469DE2 FOREIGN KEY (category_id) 
 INSERT INTO ticket_category (name, slug) VALUES ('Domicile', 'domicile')
 ;
 
-INSERT INTO ticket_category (name, slug) VALUES ('ExtÃ©rieur', 'exterieur')
+INSERT INTO ticket_category (name, slug) VALUES ('Extérieur', 'exterieur')
 ;
 
 

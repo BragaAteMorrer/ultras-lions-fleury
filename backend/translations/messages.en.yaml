@@ -24,6 +24,7 @@ components_footer:
     tribune_drapeaux_fumigenes_chants_la_ville_est_rouge_et_noire: 'Tribune, flags, smoke bombs, songs: the city is red and black.'
     twitter: Twitter
     ultras_lions: Ultras Lions
+    ten_as_vu_le_debut: "Les Lioness, t'en as vu le début, t'en verras pas la fin !"
 components_navbar:
   html:
     accueil: Welcome
@@ -50,7 +51,9 @@ components_navbar:
     communiques: Press releases
     streetart: Street Art
     chants: "Chants"
-    
+    medias: "Media"
+    tout_les_medias: "All Media"
+    liens: "Links"
 email_base:
   html:
     footer_brand: Ultras Lions – FC Fleury 91

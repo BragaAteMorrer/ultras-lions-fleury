@@ -1,4 +1,4 @@
--- Final consolidated schema for Ultras Lions
+﻿-- Final consolidated schema for Ultras Lions
 -- Generated from backend/migrations, ordered to be executable on MySQL/MariaDB.
 
 SET NAMES utf8mb4;

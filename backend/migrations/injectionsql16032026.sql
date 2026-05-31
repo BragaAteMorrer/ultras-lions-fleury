@@ -1,4 +1,4 @@
--- migrations/20260316120000_add_group_page_sections.sql
+﻿-- migrations/20260316120000_add_group_page_sections.sql
 
 ALTER TABLE group_page
   ADD histoire_text LONGTEXT DEFAULT NULL,

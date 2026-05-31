@@ -1,4 +1,4 @@
--- MySQL / MariaDB (script relançable)
+﻿-- MySQL / MariaDB (script relançable)
 -- Catégories Merch + FK + seed + stocks par tailles + fix DateTimeImmutable
 
 -- ----------------------------

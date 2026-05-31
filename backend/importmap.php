@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /**
  * Returns the importmap for this application.

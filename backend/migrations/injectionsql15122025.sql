@@ -1,4 +1,4 @@
-CREATE TABLE merch_category (
+﻿CREATE TABLE merch_category (
   id INT AUTO_INCREMENT NOT NULL,
   name VARCHAR(150) NOT NULL,
   slug VARCHAR(150) NOT NULL,

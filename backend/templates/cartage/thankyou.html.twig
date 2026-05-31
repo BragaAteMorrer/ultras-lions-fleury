@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cartage{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Cartage</h1>
+        <p class="hero-subtitle">{{ paymentStatusLabel|default('Paiement en attente') }}</p>
+
+        <div class="card card-form mt-4" style="max-width: 42rem; margin-inline: auto;">
+            <p class="mb-2">{{ paymentStatusMessage|default('Nous vérifions ton paiement avec SumUp.') }}</p>
+
+            {% if checkoutId|default('') %}
+                <p class="form-section-hint mb-2"><strong>Checkout ID :</strong> {{ checkoutId }}</p>
+            {% endif %}
+
+            {% if reference|default('') %}
+                <p class="form-section-hint mb-2"><strong>Référence :</strong> {{ reference }}</p>
+            {% endif %}
+
+            <p class="form-section-hint mb-0">
+                <strong>Statut brut :</strong> {{ paymentStatus|default('UNKNOWN') }}
+            </p>
+        </div>
+
+        {% if paymentConfirmed|default(false) %}
+            <p class="hero-subtitle mt-4">Paiement valide. Ton cartage est confirme.</p>
+            {% if profileUrl|default(null) %}
+                <a href="{{ profileUrl }}" class="btn-ul mt-3">Voir mon profil</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn-ul mt-3">Me connecter</a>
+            {% endif %}
+        {% elseif registrationFound|default(false) %}
+            <p class="hero-subtitle mt-4">Si le statut reste en echec, réessaie ou contacte le groupe avec cette référence.</p>
+        {% else %}
+            <p class="hero-subtitle mt-4">Impossible de retrouver la demande de cartage. Contacte le groupe avec ta preuve de paiement.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

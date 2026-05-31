@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statut cartage{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Statut cartage</h1>
+        <p class="hero-subtitle">Verification par adresse email</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container" style="max-width: 42rem;">
+        <div class="card card-form">
+            <h2 class="section-title">Verifier une saison</h2>
+
+            <form method="post" action="{{ path('cartage_status') }}">
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label class="form-label" for="email">Email</label>
+                        <input id="email" name="email" type="email" class="form-control" required value="{{ email }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="season">Saison</label>
+                        <input id="season" name="season" class="form-control" required value="{{ season|default(currentSeason) }}">
+                    </div>
+                </div>
+
+                <button class="btn btn-danger w-100 mt-4" type="submit">Verifier</button>
+            </form>
+
+            {% if isSearched %}
+                <div class="cartage-status-result mt-4">
+                    {% if registration %}
+                        <div class="alert {{ registration.completed  'alert-success' : (registration.pending  'alert-warning' : 'alert-secondary') }}">
+                            <strong>{{ registration.statusLabel }}</strong><br>
+                            Saison {{ registration.season }} - demande du {{ registration.createdAt|date('d/m/Y H:i') }}.
+                        </div>
+                    {% else %}
+                        <div class="alert alert-secondary">
+                            Aucun cartage trouve pour {{ email }} sur la saison {{ season }}.
+                        </div>
+                    {% endif %}
+
+                    <p class="form-section-hint">
+                        Compte membre : {{ accountExists  'oui' : 'non' }}.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

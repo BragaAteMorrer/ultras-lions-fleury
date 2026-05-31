@@ -1,0 +1,13 @@
+{% extends '@!EasyAdmin/layout.html.twig' %}
+
+{% block header_logo %}
+    <a class="logo admin-navbar-logo" title="{{ ea.dashboardTitle|striptags : 'Ultras Lions' }}" href="{{ path(ea.dashboardRouteName) }}">
+        <img src="{{ asset('img/logo/Logo Final - Ultras Lions - Autre Présentation.png') }}" alt="Ultras Lions">
+    </a>
+{% endblock header_logo %}
+
+{% block responsive_header_logo %}
+    <a class="responsive-logo admin-navbar-logo" title="{{ ea.dashboardTitle|striptags : 'Ultras Lions' }}" href="{{ path(ea.dashboardRouteName) }}">
+        <img src="{{ asset('img/logo/Logo Final - Ultras Lions - Autre Présentation.png') }}" alt="Ultras Lions">
+    </a>
+{% endblock responsive_header_logo %}

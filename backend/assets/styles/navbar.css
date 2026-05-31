@@ -1,251 +1,230 @@
-/* ==============================================
-   NAVBAR ULTRA — Bande rouge / noir / blanc
-============================================== */
+/* NAVBAR ULTRA - version horizontale simple */
 
 .ultra-header {
     width: 100%;
-    font-family: "Oswald", sans-serif;
-    letter-spacing: 0.031rem;
     position: relative;
     z-index: 3000;
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 0.031rem;
 }
 
-/* Bande Ultra (écharpe) */
 .ultra-topband {
     background: linear-gradient(
         to bottom,
         #D40000 0%,
         #D40000 33%,
-        #000000 33%,
-        #000000 67%,
-        #FFFFFF 67%,
-        #FFFFFF 100%
+        #000 33%,
+        #000 67%,
+        #fff 67%,
+        #fff 100%
     );
-    padding: 0.8rem 0;
-    border-bottom: 0.187rem solid #111;
-    box-shadow: 0 0.25rem 0.625rem rgba(0,0,0,0.6);
-    overflow: visible;
-    position: relative;
-    z-index: 3000;
+    border-bottom: 0.1875rem solid #111;
+    box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.55);
 }
 
-/* ==============================================
-   LOGO
-============================================== */
+.ultra-nav-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 4.75rem;
+    flex-wrap: nowrap;
+}
 
 .ultra-brand {
     display: flex;
     align-items: center;
+    flex: 0 0 auto;
+    width: clamp(11rem, 13vw, 14rem);
+    text-decoration: none;
 }
 
 .ultra-logo {
-    width: 12rem;
-    max-width: 45vw;
+    display: block;
+    width: 10rem;
+    max-width: 100%;
     height: auto;
     object-fit: contain;
-    filter: drop-shadow(0 0 0.25rem rgba(0,0,0,0.4));
-    padding-right: 2rem;
+    filter: drop-shadow(0 0 0.25rem rgba(0, 0, 0, 0.42));
 }
 
-/* ==============================================
-   NAVIGATION DESKTOP
-============================================== */
+.ultra-burger {
+    display: none;
+    width: 3rem;
+    height: 3rem;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    margin-left: auto;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.78);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.62);
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+}
+
+.ultra-burger span {
+    width: 1.65rem;
+    height: 0.18rem;
+    display: block;
+    border-radius: 999px;
+    background: #fff;
+}
 
 .ultra-nav {
     display: none;
-    height: 3.5rem;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.2rem;
+    margin-left: auto;
+    flex: 1 1 auto;
     min-width: 0;
+    flex-wrap: nowrap;
 }
 
-@media (min-width: 62rem) { /* 992px */
-    .ultra-topband .container {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        min-width: 0;
+@media (min-width: 62rem) {
+    .ultra-burger {
+        display: none !important;
     }
 
     .ultra-nav {
         display: flex !important;
-        gap: 0.25rem;
-        margin-left: auto;
-        min-width: 0;
-        flex: 1 1 auto;
-        justify-content: flex-end;
-    }
-
-    .ultra-burger {
-        display: none;
     }
 }
 
-/* ==============================================
-   OUTLINE V4 — ÉCHARPE ULTRA / TIFO PEINT
-============================================== */
-
 .ultra-link {
-    display: flex;    
-    align-items: center;    
+    display: flex;
+    align-items: center;
     justify-content: center;
-    height: 3.5rem;    
-    padding: 0 1.2rem;    
-    color: #fff;    
-    font-size: 1.1rem;    
-    font-weight: 800;    
-    text-transform: uppercase;    
-    transition: 0.2s;    
-    text-decoration: none;    
-    text-align: center;    
-    text-shadow: 0 0 0.999rem #000;
-}/* Prevent desktop nav labels from wrapping (e.g. Table de Vente) */
-    
-    .ultra-nav .ultra-link {
-        white-space: nowrap;
-        min-width: 0;
-        padding: 0 0.8rem;
-        font-size: 1rem;
-    }
+    min-height: 3.5rem;
+    padding: 0 0.8rem;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1.1;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-shadow: 0 0 0.9rem #000;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+    pointer-events: auto;
+}
 
-    .ultra-nav .user-nav {
-        min-width: 0;
-        max-width: 14rem;
-        margin-left: auto;
-    }
-
-    .ultra-nav .user-nav .ultra-link {
-        min-width: 0;
-    }
-
-/* Hover / actif (outline renforcé) */
 .ultra-link:hover,
 .ultra-link.active {
     background: #D40000;
+    color: #fff;
+    z-index: 2;
 }
 
-/* ==============================================
-   ADAPTATION TABLETTES
-============================================== */
-
-@media (max-width: 62rem) {
-    .ultra-link {
-        height: 3.2rem;
-        padding: 0 1rem;
-    }
+.ultra-nav .dropdown {
+    flex: 0 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
-@media (max-width: 48rem) {
-    .ultra-link {
-        height: 3rem;
-        padding: 0 0.8rem;
-    }
-}
-
-/* ==============================================
-   BURGER MOBILE
-============================================== */
-
-.ultra-burger {
-    background: none;
-    border: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    cursor: pointer;
-    padding-right: 4rem;
-}
-
-.ultra-burger span {
-    width: 1.8rem;
-    height: 0.2rem;
-    background: #fff;
-}
-
-/* ==============================================
-   NAVIGATION MOBILE
-============================================== */
-
-.ultra-nav-mobile {
-    display: none;
-    flex-direction: column;
-    background: #000;
-    padding: 1rem;
-    margin-top: 1rem;
-    max-height: 30rem;
-    border-top: 0.0625rem solid rgba(255,255,255,0.1);
-}
-
-.ultra-nav-mobile .ultra-link {
-    height: auto;
-    padding: 1rem 0.5rem;
-    font-size: 1.2rem;
-    border-bottom: 0.0625rem solid rgba(255,255,255,0.15);
-}
-
-.ultra-nav-mobile .mobile-submenu .sub {
-    display: none;
-    padding-left: 1.2rem;
-    font-size: 1.05rem;
-}
-
-.ultra-nav-mobile .mobile-submenu.open .sub {
-    display: flex;
-}
-
-.ultra-nav-mobile .submenu-toggle {
-    width: 100%;
+.user-nav {
+    min-width: 0;
+    max-width: 14rem;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    padding: 1rem 0.5rem;
-    background: #000;
-    border: 0;
-    color: #fff;
-    font: inherit;
-    text-transform: uppercase;
-    -webkit-appearance: none;
-    appearance: none;
-    cursor: pointer;
+    gap: 0.15rem;
+    position: relative;
+    z-index: 1;
 }
 
-.ultra-nav-mobile .ultra-link:last-child {
-    border-bottom: none;
+.user-nav-trigger {
+    min-width: 0;
 }
 
-.ultra-nav-mobile.open {
-    display: flex;
+.user-avatar-menu {
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 2rem;
+    border: 0.125rem solid #fff;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
-/* Cache la nav desktop < 992px */
-@media (max-width: 62rem) {
-    .ultra-nav {
-        display: none !important;
-    }
+.user-nav-label {
+    display: block;
+    min-width: 0;
+    max-width: 10rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-/* Style du dropdown Ultra */
-.ultra-user-menu .dropdown-menu {
+.cart-desktop-link {
+    gap: 0.35rem;
+}
+
+.cart-count {
+    min-width: 1.35rem;
+    height: 1.35rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.35rem;
+    border-radius: 999px;
+    background: #fff;
+    color: #111;
+    font-size: 0.78rem;
+    line-height: 1;
+    text-shadow: none;
+}
+
+.language-trigger {
+    min-width: 3rem;
+    justify-content: center;
+}
+
+.flag-icon {
+    display: inline-block;
+    width: 1.65rem;
+    height: 1.1rem;
+    flex: 0 0 1.65rem;
+    border: 0.0625rem solid rgba(255, 255, 255, 0.55);
+    border-radius: 0.16rem;
+    box-shadow: 0 0.05rem 0.18rem rgba(0, 0, 0, 0.35);
+    vertical-align: -0.15rem;
+    background-color: #111;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.flag-fr { background-image: url("../img/flags/fr.svg"); }
+.flag-de { background-image: url("../img/flags/de.svg"); }
+.flag-es { background-image: url("../img/flags/es.svg"); }
+.flag-pt { background-image: url("../img/flags/pt.svg"); }
+.flag-ar { background-image: url("../img/flags/ar.svg"); }
+.flag-en { background-image: url("../img/flags/en.svg"); }
+
+.ultra-dropdown {
+    z-index: 3100;
     background: #111;
-    border: 1px solid #D40000;
-    padding: 0;
+    border: 0.0625rem solid #333;
+    padding: 0.35rem 0;
 }
 
 .ultra-dropdown .dropdown-item {
-    color: white;
-    padding: 0.75rem 1.2rem;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    font-weight: 700;
     text-transform: uppercase;
-    font-weight: 600;
 }
 
-.ultra-dropdown .dropdown-item:hover {
+.ultra-dropdown .dropdown-item:hover,
+.ultra-dropdown .dropdown-item:focus {
     background: #D40000;
     color: #fff;
 }
 
-.ultra-dropdown {
-    z-index: 3100;
-}
-
-/* Sous-menu (saisons) à droite de "Photo de Match" */
 .ultra-dropdown .dropdown-submenu {
     position: relative;
 }
@@ -269,68 +248,223 @@
     line-height: 1;
 }
 
-.user-avatar-menu {
-    width: 32px;
-    height: 32px;
+.ultra-nav-mobile {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    max-height: calc(100vh - 4.75rem);
+    overflow-y: auto;
+    background: #070707;
+    border-top: 0.0625rem solid rgba(255, 255, 255, 0.12);
+    border-bottom: 0.1875rem solid #D40000;
+    box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.45);
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ultra-nav-mobile.open {
+    display: block;
+    min-height: calc(100vh - 4.75rem);
+}
+
+.mobile-nav-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding-top: 0.85rem;
+    padding-bottom: 1rem;
+}
+
+.ultra-nav-mobile .ultra-link {
+    width: 100%;
+    min-height: 3rem;
+    justify-content: space-between;
+    padding: 0.85rem 0.95rem;
+    border: 0.0625rem solid rgba(255, 255, 255, 0.09);
+    border-radius: 0.5rem;
+    background: #111;
+    color: #fff;
+    font-size: 1rem;
+    text-align: left;
+    text-shadow: none;
+    white-space: normal;
+}
+
+.ultra-nav-mobile .ultra-link:hover,
+.ultra-nav-mobile .ultra-link.active,
+.ultra-nav-mobile .mobile-submenu.open > .submenu-toggle {
+    background: #D40000;
+    border-color: #D40000;
+}
+
+.mobile-cart-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 3.25rem;
+    padding: 0.85rem 0.95rem;
+    border: 0.0625rem solid rgba(212, 0, 0, 0.75);
+    border-radius: 0.5rem;
+    background: #240000;
+    color: #fff;
+    font-weight: 800;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.mobile-cart-link strong {
+    min-width: 1.6rem;
+    height: 1.6rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.4rem;
+    border-radius: 999px;
+    background: #fff;
+    color: #111;
+    line-height: 1;
+}
+
+.mobile-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.ultra-nav-mobile .submenu-toggle {
+    border: 0.0625rem solid rgba(255, 255, 255, 0.09);
+    cursor: pointer;
+    appearance: none;
+}
+
+.ultra-nav-mobile .submenu-toggle::after {
+    content: "+";
+    width: 1.45rem;
+    height: 1.45rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 1.45rem;
+    margin-left: 0.75rem;
+    border: 0.0625rem solid rgba(255, 255, 255, 0.34);
+    border-radius: 50%;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.ultra-nav-mobile .mobile-submenu.open .submenu-toggle::after {
+    content: "-";
+}
+
+.ultra-nav-mobile .mobile-submenu .sub {
+    display: none;
+    min-height: 2.75rem;
+    margin-left: 0.6rem;
+    padding: 0.72rem 0.85rem;
+    background: #191919;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.ultra-nav-mobile .mobile-submenu.open .sub {
+    display: flex;
+}
+
+.ultra-nav-mobile hr {
+    width: 100%;
+    margin: 0.4rem 0;
+    border: 0;
+    border-top: 0.0625rem solid rgba(255, 255, 255, 0.16);
+    opacity: 1;
+}
+
+.mobile-user-block {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 0.95rem;
+    border: 0.0625rem solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    background: #111;
+}
+
+.mobile-user-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.mobile-avatar {
+    width: 3rem;
+    height: 3rem;
+    flex: 0 0 3rem;
+    border: 0.125rem solid #D40000;
     border-radius: 50%;
     object-fit: cover;
-    margin-right: 5px;
-    border: 2px solid #fff;
 }
 
-.user-nav-trigger {
-    min-width: 0;
-}
-
-.user-nav-label {
-    display: block;
-    min-width: 0;
-    max-width: 10rem;
+.mobile-user-name {
+    margin: 0;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 800;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-transform: uppercase;
     white-space: nowrap;
 }
 
-@media (min-width: 62rem) and (max-width: 82rem) {
+@media (max-width: 62rem) {
+    .ultra-header {
+        position: sticky;
+        top: 0;
+    }
+
+    .ultra-nav-row {
+        min-height: 4.5rem;
+    }
+
     .ultra-logo {
-        width: 9.5rem;
+        width: 10rem;
+        max-width: calc(100vw - 5.5rem);
+    }
+
+    .ultra-burger {
+        display: flex;
+    }
+
+    body.mobile-nav-open {
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 30rem) {
+    .ultra-nav-row {
+        min-height: 4.1rem;
+    }
+
+    .ultra-logo {
+        width: 8.75rem;
+    }
+
+    .ultra-burger {
+        width: 2.75rem;
+        height: 2.75rem;
+    }
+
+    .mobile-nav-inner {
+        padding-left: 0.75rem;
         padding-right: 0.75rem;
     }
 
-    .ultra-nav {
-        gap: 0.1rem;
+    .ultra-nav-mobile {
+        max-height: calc(100vh - 4.1rem);
     }
 
-    .ultra-nav .ultra-link {
-        padding: 0 0.55rem;
-        font-size: 0.9rem;
-        letter-spacing: 0.015rem;
+    .ultra-nav-mobile.open {
+        min-height: calc(100vh - 4.1rem);
     }
-
-    .ultra-nav .user-nav {
-        max-width: 11rem;
-    }
-
-    .user-nav-label {
-        max-width: 7rem;
-    }
-}
-
-@media (min-width: 82rem) and (max-width: 92rem) {
-    .ultra-nav .ultra-link {
-        padding: 0 0.7rem;
-        font-size: 0.95rem;
-    }
-}
-
-.ultra-user-menu .dropdown-menu {
-    background: #111;
-    border: 1px solid #333;
-}
-.ultra-user-menu .dropdown-item {
-    color: #fff;
-}
-.ultra-user-menu .dropdown-item:hover {
-    background: #D40000;
-    color: #fff;
 }

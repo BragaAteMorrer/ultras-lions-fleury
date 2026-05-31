@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reglement interieur - Cartage{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Reglement interieur</h1>
+        <p class="hero-subtitle">Lecture obligatoire avant paiement</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container" style="max-width: 56rem;">
+        <div class="card card-form">
+            {% for message in app.flashes('danger') %}
+                <div class="alert-error">{{ message }}</div>
+            {% endfor %}
+
+            {% if errors is not empty %}
+                <div class="alert-error">
+                    {% for error in errors %}
+                        <p class="mb-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <p class="form-section-hint">Montant : {{ qrToken.amount|number_format(2, ',', ' ') }} EUR</p>
+
+            <div class="post-body">
+                {% if internalRulesPage and internalRulesPage.content %}
+                    {{ internalRulesPage.content|raw }}
+                {% else %}
+                    <p>Le reglement interieur n'est pas encore configure.</p>
+                {% endif %}
+            </div>
+
+            <form method="post" action="{{ path('cartage_rules') }}" id="cartageRulesForm" class="mt-4">
+                <input type="hidden" name="_token" value="{{ csrf_token('cartage_rules') }}">
+
+                <h3 class="form-section-title">Validation</h3>
+                <div class="card p-3 mt-3 cartage-choice-card">
+                    <label class="cartage-check-label">
+                        <input id="accept_internal_rules" type="checkbox" name="accept_internal_rules" value="1" required {{ data.accept_internal_rules|default('') == '1'  'checked' : '' }}>
+                        <span>J'ai lu et j'accepte le reglement interieur de l'association.</span>
+                    </label>
+                </div>
+
+                <h3 class="form-section-title">Paiement</h3>
+                <div class="d-grid gap-2">
+                    <label class="card p-3 cartage-radio-label">
+                        <input type="radio" name="payment_method" value="online" {{ data.payment_method|default('online') == 'online'  'checked' : '' }}>
+                        Payer par carte / PayPal
+                    </label>
+                    <label class="card p-3 cartage-radio-label">
+                        <input type="radio" name="payment_method" value="cash" {{ data.payment_method|default('') == 'cash'  'checked' : '' }}>
+                        Payer en liquide, validation par le bureau
+                    </label>
+                </div>
+
+                <button id="cartageRulesSubmit" class="btn btn-danger w-100 mt-4" type="submit" {{ data.accept_internal_rules|default('') == '1'  '' : 'disabled' }}>Continuer vers le paiement</button>
+                <a href="{{ path('cartage_form') }}" class="btn btn-outline-light w-100 mt-3">Retour au formulaire</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            var rulesCheckbox = document.getElementById('accept_internal_rules');
+            var submitButton = document.getElementById('cartageRulesSubmit');
+            if (!rulesCheckbox || !submitButton) {
+                return;
+            }
+
+            var syncSubmitState = function () {
+                submitButton.disabled = !rulesCheckbox.checked;
+            };
+
+            rulesCheckbox.addEventListener('change', syncSubmitState);
+            syncSubmitState();
+        })();
+    </script>
+{% endblock %}

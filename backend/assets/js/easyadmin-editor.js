@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
     function limitToolbar(editor) {
         const toolbarId = editor.getAttribute('toolbar');
         const toolbar = toolbarId ? document.getElementById(toolbarId) : editor.toolbarElement;

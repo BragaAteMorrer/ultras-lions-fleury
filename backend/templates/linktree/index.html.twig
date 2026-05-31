@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liens Ultras Lions{% endblock %}
+{% block body_class %}linktree-page{% endblock %}
+
+{% block body %}
+<section class="linktree-hero">
+    <div class="linktree-shell">
+        <header class="linktree-header">
+            <img
+                src="{{ asset('img/logo/Logo Final - Ultras Lions - Autre Présentation.png') }}"
+                class="linktree-logo"
+                alt="Ultras Lions"
+            >
+            <p class="linktree-kicker">FC Fleury 91</p>
+            <h1>Ultras Lions</h1>
+            <p class="linktree-intro">Tous les liens utiles du groupe au meme endroit.</p>
+        </header>
+
+        <div class="linktree-list" aria-label="Liens principaux">
+            {% for link in links %}
+                <a
+                    href="{{ link.url }}"
+                    class="linktree-link {{ link.featured  'linktree-link-primary' }} {{ link.icon  '' : 'linktree-link-no-icon' }}"
+                    {% if link.openInNewTab %}target="_blank" rel="noopener"{% endif %}
+                >
+                    {% if link.icon %}
+                        <i class="bi bi-{{ link.icon }}" aria-hidden="true"></i>
+                    {% endif %}
+                    <span>{{ link.title }}</span>
+                    {% if link.description %}
+                        <small>{{ link.description }}</small>
+                    {% endif %}
+                </a>
+            {% else %}
+                <p class="linktree-empty">Aucun lien actif pour le moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

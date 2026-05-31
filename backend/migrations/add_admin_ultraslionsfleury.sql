@@ -1,4 +1,4 @@
--- Cree ou promeut le compte ultraslionsfleury@gmail.com en admin.
+﻿-- Cree ou promeut le compte ultraslionsfleury@gmail.com en admin.
 -- Mot de passe temporaire: UltrasLions!2026
 -- Compatible avec:
 -- - table users ou `user`

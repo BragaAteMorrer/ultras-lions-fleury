@@ -1,4 +1,4 @@
-framework:
+﻿framework:
     notifier:
         chatter_transports:
         texter_transports:

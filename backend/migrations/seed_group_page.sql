@@ -1,4 +1,4 @@
--- Seed default "Le Groupe" page (FR) if table is empty
+﻿-- Seed default "Le Groupe" page (FR) if table is empty
 INSERT INTO group_page (name, description, histoire_text, mentalite_text, fonctionnement_text, rejoindre_text, se_carter_text)
 SELECT
     'Le Groupe',

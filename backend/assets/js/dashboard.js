@@ -1,4 +1,4 @@
-// public/assets/js/dashboard.js
+﻿// public/assets/js/dashboard.js
 
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('postsChart');

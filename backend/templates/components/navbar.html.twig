@@ -11,43 +11,51 @@
 {% set cartCount = merchCount + ticketCount %}
 {% set cartUrl = path('cart_index') %}
 {% set navbarDisplayName = null %}
+{% set profileUrl = null %}
+{% set adminDashboardUrl = null %}
 {% if app.user %}
     {% set navbarDisplayName = app.user.prenom ?: (app.user.email ? app.user.email|split('@')|first : 'Compte') %}
+    {% set adminDashboardUrl = is_granted('ROLE_ADMIN') ? path('app_admin_dashboard_index') : null %}
+    {% set profileUrl = adminDashboardUrl ?: path('profile_show', { id: app.user.id }) %}
 {% endif %}
+{% set currentRoute = app.request.get('_route') %}
+{% set currentLocale = app.request.locale|default('fr') %}
+{% set languageNames = {
+    fr: 'Français',
+    en: 'English',
+    es: 'Español',
+    de: 'Deutsch',
+    pt: 'Português',
+    ar: 'العربية'
+} %}
 
 <header class="ultra-header">
-
     <div class="ultra-topband">
-        <div class="container d-flex align-items-center justify-content-between">
-
-            <a href="{{ path('home') }}" class="ultra-brand d-flex align-items-center">
+        <div class="container ultra-nav-row">
+            <a href="{{ path('home') }}" class="ultra-brand" aria-label="{{ 'components_footer.html.ultras_lions'|trans }}">
                 <img src="{{ asset('img/logo/Logo Texte.png') }}" class="ultra-logo" alt="{{ 'components_footer.html.ultras_lions'|trans }}">
             </a>
 
-            <button class="ultra-burger d-lg-none" id="ultraNavToggle">
-                <span></span><span></span><span></span>
+            <button class="ultra-burger d-lg-none" id="ultraNavToggle" type="button" aria-controls="ultraNavMobile" aria-expanded="false" aria-label="{{ 'components_navbar.html.ouvrir_le_menu'|trans }}">
+                <span></span>
+                <span></span>
+                <span></span>
             </button>
 
-            <nav class="ultra-nav d-none d-lg-flex align-items-center">
-
-                <a href="{{ path('home') }}"
-                   class="ultra-link {{ app.request.get('_route') == 'home' ? 'active' }}">{{ 'components_navbar.html.accueil'|trans }}</a>
-
-                <a href="{{ path('post_index') }}"
-                   class="ultra-link {{ app.request.get('_route') starts with 'post_' ? 'active' }}">{{ 'components_navbar.html.actualites'|trans }}</a>
+            <nav class="ultra-nav d-none d-lg-flex" aria-label="{{ 'components_navbar.html.navigation_principale'|trans }}">
+                <a href="{{ path('home') }}" class="ultra-link {{ currentRoute == 'home' ? 'active' : '' }}">{{ 'components_navbar.html.accueil'|trans }}</a>
+                <a href="{{ path('post_index') }}" class="ultra-link {{ currentRoute starts with 'post_' ? 'active' : '' }}">{{ 'components_navbar.html.actualites'|trans }}</a>
 
                 <div class="dropdown">
-                    <a href="#"
-                       class="ultra-link dropdown-toggle {{ (app.request.get('_route') starts with 'event_') or (app.request.get('_route') starts with 'gallery_') or (app.request.get('_route') starts with 'media_') ? 'active' }}"
+                    <a href="{{ path('media_index') }}"
+                       class="ultra-link dropdown-toggle {{ (currentRoute starts with 'event_') or (currentRoute starts with 'gallery_') or (currentRoute starts with 'media_') or (currentRoute starts with 'gamephoto_') ? 'active' : '' }}"
                        id="eventDropdown"
                        data-bs-toggle="dropdown"
-                       aria-expanded="false">{{ 'admin_dashboard.html.galeries'|trans }}
-                    </a>
+                       aria-expanded="false">{{ 'components_navbar.html.medias'|trans }}</a>
                     <ul class="dropdown-menu ultra-dropdown" aria-labelledby="eventDropdown">
+                        <li><a class="dropdown-item" href="{{ path('media_index') }}">{{ 'components_navbar.html.tout_les_medias'|trans }}</a></li>
                         <li class="dropdown-submenu">
-                            <a class="dropdown-item dropdown-toggle" href="{{ path('gamephoto_index') }}">
-                                {{ 'components_navbar.html.photos_de_match'|trans }}
-                            </a>
+                            <a class="dropdown-item dropdown-toggle" href="{{ path('gamephoto_index') }}">{{ 'components_navbar.html.photos_de_match'|trans }}</a>
                             <ul class="dropdown-menu ultra-dropdown">
                                 {% for seasonValue in event_seasons %}
                                     {% set parts = seasonValue|split('-') %}
@@ -63,129 +71,121 @@
                         </li>
                         {% for mediaCategory in event_media_categories %}
                             <li>
-                                <a class="dropdown-item" href="{{ path('media_category', { slug: mediaCategory.slug }) }}">
-                                    {{ mediaCategory.name }}
+                                <a class="dropdown-item" href="{{ path('media_category', { slug: mediaCategory.slug }) }}">{{ mediaCategory.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <a href="{{ path('chant_index') }}" class="ultra-link {{ currentRoute starts with 'chant_' ? 'active' : '' }}">{{ 'components_navbar.html.chants'|trans }}</a>
+                <a href="{{ path('merch_index') }}" class="ultra-link {{ currentRoute starts with 'merch_' ? 'active' : '' }}">{{ 'components_navbar.html.table_de_vente'|trans }}</a>
+                <a href="{{ path('ticket_index') }}" class="ultra-link {{ currentRoute starts with 'ticket_' ? 'active' : '' }}">{{ 'components_navbar.html.billetterie'|trans }}</a>
+                <a href="{{ path('group_index') }}" class="ultra-link {{ currentRoute starts with 'group_' ? 'active' : '' }}">{{ 'components_navbar.html.le_groupe'|trans }}</a>
+                <a href="{{ path('linktree_index') }}" class="ultra-link {{ currentRoute starts with 'linktree_' ? 'active' : '' }}">{{ 'components_navbar.html.liens'|trans }}</a>
+
+                {% if app.user %}
+                    <div class="dropdown user-nav">
+                        <a class="ultra-link dropdown-toggle d-flex align-items-center user-nav-trigger"
+                           href="{{ profileUrl }}"
+                           id="userDropdown"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false"
+                           aria-label="{{ is_granted('ROLE_ADMIN') ? 'Accéder à l\'espace admin' : 'Accéder à mon profil' }}">
+                            {% if app.user.photoProfil %}
+                                <img src="/uploads/profils/{{ app.user.photoProfil }}" class="user-avatar-menu me-2" alt="">
+                            {% else %}
+                                <img src="{{ asset('img/logo/Logo CIrculaire - Final - Football Furies.png') }}" class="user-avatar-menu me-2" alt="">
+                            {% endif %}
+                            <span class="user-nav-label">{{ navbarDisplayName }}</span>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end ultra-dropdown" aria-labelledby="userDropdown">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a class="dropdown-item" href="{{ path('app_admin_dashboard_index') }}">Espace admin</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                            {% endif %}
+                            <li><a class="dropdown-item" href="{{ path('profile_show', { id: app.user.id }) }}">{{ 'components_navbar.html.mon_profil'|trans }}</a></li>
+                            <li><a class="dropdown-item" href="{{ path('profile_edit', { id: app.user.id }) }}">{{ 'components_navbar.html.modifier_mon_compte'|trans }}</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="{{ path('app_logout') }}">{{ 'components_navbar.html.deconnexion'|trans }}</a></li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="dropdown ultra-user-menu">
+                        <a class="ultra-link dropdown-toggle" href="#" id="loginDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ 'components_navbar.html.connexion'|trans }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end ultra-dropdown" aria-labelledby="loginDropdown">
+                            <li><a class="dropdown-item" href="{{ path('app_login') }}">{{ 'components_navbar.html.se_connecter'|trans }}</a></li>
+                            <li><a class="dropdown-item" href="{{ path('invitation_check') }}">{{ 'components_navbar.html.sinscrire'|trans }}</a></li>
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <div class="dropdown">
+                    <a class="ultra-link dropdown-toggle language-trigger" href="#" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{ 'components_navbar.html.changer_de_langue'|trans }}">
+                        <span class="flag-icon flag-{{ currentLocale }}" aria-hidden="true"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end ultra-dropdown" aria-labelledby="languageDropdown">
+                        {% for locale, name in languageNames %}
+                            <li>
+                                <a class="dropdown-item language-item {{ currentLocale == locale ? 'active' : '' }}" href="{{ path('locale_switch', { locale: locale }) }}" aria-label="{{ name }}">
+                                    <span class="flag-icon flag-{{ locale }}" aria-hidden="true"></span>
+                                    <span>{{ name }}</span>
                                 </a>
                             </li>
                         {% endfor %}
                     </ul>
                 </div>
 
-                <a href="{{ path('chant_index') }}"
-                   class="ultra-link {{ app.request.get('_route') starts with 'chant_' ? 'active' }}">{{ 'components_navbar.html.chants'|trans }}</a>
-
-                <a href="{{ path('merch_index') }}"
-                   class="ultra-link {{ app.request.get('_route') starts with 'merch_' ? 'active' }}">{{ 'components_navbar.html.table_de_vente'|trans }}</a>
-
-                <a href="{{ path('ticket_index') }}"
-                   class="ultra-link {{ app.request.get('_route') starts with 'ticket_' ? 'active' }}">{{ 'components_navbar.html.billetterie'|trans }}</a>
-
-                <a href="{{ path('group_index') }}"
-                   class="ultra-link {{ app.request.get('_route') starts with 'group_' ? 'active' }}" aria-expanded="false">{{ 'components_navbar.html.le_groupe'|trans }}</a>
-
-                {% if app.user %}
-                    <div class="dropdown user-nav">
-                        <a class="ultra-link dropdown-toggle d-flex align-items-center user-nav-trigger"
-                           href="#" id="userDropdown"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-
-                            {% if app.user.photoProfil %}
-                                <img src="/uploads/profils/{{ app.user.photoProfil }}"
-                                     class="user-avatar-menu me-2">
-                            {% else %}
-                                <img src="{{ asset('img/logo/Logo CIrculaire - Final - Football Furies.png') }}"
-                                     class="user-avatar-menu me-2">
-                            {% endif %}
-
-                            <span class="user-nav-label">{{ navbarDisplayName }}</span>
-                        </a>
-
-                        <ul class="dropdown-menu dropdown-menu-end ultra-dropdown" aria-labelledby="userDropdown">
-                            <li>
-                                <a class="dropdown-item" href="{{ path('profile_show', { id: app.user.id }) }}">👤 {{ 'components_navbar.html.mon_profil'|trans }}</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{{ path('profile_edit', { id: app.user.id }) }}">✏{{ 'components_navbar.html.modifier_mon_compte'|trans }}</a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">🚪 {{ 'components_navbar.html.deconnexion'|trans }}</a>
-                            </li>
-                        </ul>
-                    </div>
-                {% else %}
-                    <div class="ultra-user-menu dropdown">
-                        <a class="ultra-link dropdown-toggle" href="#" id="loginDropdown"
-                        role="button" data-bs-toggle="dropdown">🔐 {{ 'components_navbar.html.connexion'|trans }}</a>
-
-                        <ul class="dropdown-menu dropdown-menu-end ultra-dropdown">
-
-                            <li>
-                                <a class="dropdown-item" href="{{ path('app_login') }}">🔑 {{ 'components_navbar.html.se_connecter'|trans }}</a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ path('invitation_check') }}">🎟 {{ 'components_navbar.html.sinscrire'|trans }}</a>
-                            </li>
-                        </ul>
-                    </div>
-                {% endif %}
-
                 {% if cartCount > 0 %}
-                    <a href="{{ cartUrl }}" class="ultra-link" aria-label="Panier">
+                    <a href="{{ cartUrl }}" class="ultra-link cart-desktop-link {{ currentRoute starts with 'cart_' ? 'active' : '' }}" aria-label="{{ 'components_navbar.html.panier'|trans }}">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
                             <path d="M7 6H21L19.5 14H8L7 6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
                             <path d="M5 6H3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                             <path d="M9 18.5C9.82843 18.5 10.5 17.8284 10.5 17C10.5 16.1716 9.82843 15.5 9 15.5C8.17157 15.5 7.5 16.1716 7.5 17C7.5 17.8284 8.17157 18.5 9 18.5Z" fill="currentColor"/>
                             <path d="M18 18.5C18.8284 18.5 19.5 17.8284 19.5 17C19.5 16.1716 18.8284 15.5 18 15.5C17.1716 15.5 16.5 16.1716 16.5 17C16.5 17.8284 17.1716 18.5 18 18.5Z" fill="currentColor"/>
                         </svg>
+                        <span class="cart-count">{{ cartCount }}</span>
                     </a>
                 {% endif %}
-
             </nav>
         </div>
+    </div>
 
-        <nav class="ultra-nav-mobile d-lg-none" id="ultraNavMobile">
-
+    <nav class="ultra-nav-mobile d-lg-none" id="ultraNavMobile" aria-label="{{ 'components_navbar.html.navigation_principale'|trans }}">
+        <div class="container mobile-nav-inner">
             {% if cartCount > 0 %}
-            <a href="{{ cartUrl }}" class="ultra-link" aria-label="Panier">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 6H21L19.5 14H8L7 6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                    <path d="M5 6H3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    <path d="M9 18.5C9.82843 18.5 10.5 17.8284 10.5 17C10.5 16.1716 9.82843 15.5 9 15.5C8.17157 15.5 7.5 16.1716 7.5 17C7.5 17.8284 8.17157 18.5 9 18.5Z" fill="currentColor"/>
-                    <path d="M18 18.5C18.8284 18.5 19.5 17.8284 19.5 17C19.5 16.1716 18.8284 15.5 18 15.5C17.1716 15.5 16.5 16.1716 16.5 17C16.5 17.8284 17.1716 18.5 18 18.5Z" fill="currentColor"/>
-                </svg>
-            </a>
+                <a href="{{ cartUrl }}" class="mobile-cart-link" aria-label="{{ 'components_navbar.html.panier'|trans }}">
+                    <span>{{ 'components_navbar.html.panier'|trans }}</span>
+                    <strong>{{ cartCount }}</strong>
+                </a>
             {% endif %}
-            <a href="{{ path('home') }}" class="ultra-link">{{ 'components_navbar.html.accueil'|trans }}</a>
+
+            <a href="{{ path('home') }}" class="ultra-link {{ currentRoute == 'home' ? 'active' : '' }}">{{ 'components_navbar.html.accueil'|trans }}</a>
+            <a href="{{ path('post_index') }}" class="ultra-link {{ currentRoute starts with 'post_' ? 'active' : '' }}">{{ 'components_navbar.html.actualites'|trans }}</a>
+            <a href="{{ path('chant_index') }}" class="ultra-link {{ currentRoute starts with 'chant_' ? 'active' : '' }}">{{ 'components_navbar.html.chants'|trans }}</a>
+            <a href="{{ path('merch_index') }}" class="ultra-link {{ currentRoute starts with 'merch_' ? 'active' : '' }}">{{ 'components_navbar.html.table_de_vente'|trans }}</a>
+            <a href="{{ path('ticket_index') }}" class="ultra-link {{ currentRoute starts with 'ticket_' ? 'active' : '' }}">{{ 'components_navbar.html.billetterie'|trans }}</a>
+            <a href="{{ path('linktree_index') }}" class="ultra-link {{ currentRoute starts with 'linktree_' ? 'active' : '' }}">{{ 'components_navbar.html.liens'|trans }}</a>
+
             <div class="mobile-submenu">
                 <button type="button" class="ultra-link submenu-toggle" aria-expanded="false">
                     {{ 'components_navbar.html.le_groupe'|trans }}
                 </button>
-                <a href="{{ path('group_index') ~ '#notre-histoire' }}" class="ultra-link sub">
-                    {{ 'components_navbar.html.notre_histoire'|trans }}
-                </a>
-                <a href="{{ path('group_index') ~ '#notre-mentalite' }}" class="ultra-link sub">
-                    {{ 'components_navbar.html.notre_mentalite'|trans }}
-                </a>
-                <a href="{{ path('group_index') ~ '#notre-fonctionnement' }}" class="ultra-link sub">
-                    {{ 'components_navbar.html.notre_fonctionnement'|trans }}
-                </a>
-                <a href="{{ path('group_index') ~ '#pourquoi-nous-rejoindre' }}" class="ultra-link sub">
-                    {{ 'components_navbar.html.pourquoi_nous_rejoindre'|trans }}
-                </a>
+                <a href="{{ path('group_index') }}" class="ultra-link sub">{{ 'components_navbar.html.le_groupe'|trans }}</a>
+                <a href="{{ path('group_index') ~ '#notre-histoire' }}" class="ultra-link sub">{{ 'components_navbar.html.notre_histoire'|trans }}</a>
+                <a href="{{ path('group_index') ~ '#notre-mentalite' }}" class="ultra-link sub">{{ 'components_navbar.html.notre_mentalite'|trans }}</a>
+                <a href="{{ path('group_index') ~ '#notre-fonctionnement' }}" class="ultra-link sub">{{ 'components_navbar.html.notre_fonctionnement'|trans }}</a>
+                <a href="{{ path('group_index') ~ '#pourquoi-nous-rejoindre' }}" class="ultra-link sub">{{ 'components_navbar.html.pourquoi_nous_rejoindre'|trans }}</a>
             </div>
-            <a href="{{ path('post_index') }}" class="ultra-link">{{ 'components_navbar.html.actualites'|trans }}</a>
-            <a href="{{ path('chant_index') }}" class="ultra-link">{{ 'components_navbar.html.chants'|trans }}</a>
+
             <div class="mobile-submenu">
-                <button type="button" class="ultra-link submenu-toggle" aria-expanded="false">
-                    {{ 'admin_dashboard.html.galeries'|trans }}
-                </button>
+                <button type="button" class="ultra-link submenu-toggle" aria-expanded="false">{{ 'components_navbar.html.medias'|trans }}</button>
+                <a href="{{ path('media_index') }}" class="ultra-link sub">{{ 'components_navbar.html.tout_les_medias'|trans }}</a>
                 <a href="{{ path('gamephoto_index') }}" class="ultra-link sub">{{ 'components_navbar.html.photos_de_match'|trans }}</a>
                 {% for mediaCategory in event_media_categories %}
-                    <a href="{{ path('media_category', { slug: mediaCategory.slug }) }}" class="ultra-link sub">
-                        {{ mediaCategory.name }}
-                    </a>
+                    <a href="{{ path('media_category', { slug: mediaCategory.slug }) }}" class="ultra-link sub">{{ mediaCategory.name }}</a>
                 {% endfor %}
                 {% for seasonValue in event_seasons %}
                     {% set parts = seasonValue|split('-') %}
@@ -196,33 +196,43 @@
                     </a>
                 {% endfor %}
             </div>
-            <a href="{{ path('merch_index') }}" class="ultra-link">{{ 'components_navbar.html.table_de_vente'|trans }}</a>
-            <a href="{{ path('ticket_index') }}" class="ultra-link">{{ 'components_navbar.html.billetterie'|trans }}</a>
-                        <hr>
+
+            <hr>
 
             {% if app.user %}
-                <div class="mobile-user-block">
+                <a href="{{ profileUrl }}" class="mobile-user-block mobile-user-link">
                     {% if app.user.photoProfil %}
-                        <img src="/uploads/profils/{{ app.user.photoProfil }}" class="mobile-avatar">
+                        <img src="/uploads/profils/{{ app.user.photoProfil }}" class="mobile-avatar" alt="">
+                    {% else %}
+                        <img src="{{ asset('img/logo/Logo CIrculaire - Final - Football Furies.png') }}" class="mobile-avatar" alt="">
                     {% endif %}
                     <p class="mobile-user-name">{{ navbarDisplayName }}</p>
-                </div>
+                </a>
 
-                <a href="{{ path('profile_show', { id: app.user.id }) }}" class="ultra-link">👤 {{ 'components_navbar.html.mon_profil'|trans }}</a>
-                <a href="{{ path('profile_edit', { id: app.user.id }) }}" class="ultra-link">✏{{ 'components_navbar.html.modifier_mon_compte'|trans }}</a>
-                <a href="{{ path('app_logout') }}" class="ultra-link text-danger">🚪 {{ 'components_navbar.html.deconnexion'|trans }}</a>
+                <a href="{{ path('profile_show', { id: app.user.id }) }}" class="ultra-link">{{ 'components_navbar.html.mon_profil'|trans }}</a>
+                <a href="{{ path('profile_edit', { id: app.user.id }) }}" class="ultra-link">{{ 'components_navbar.html.modifier_mon_compte'|trans }}</a>
+                <a href="{{ path('app_logout') }}" class="ultra-link text-danger">{{ 'components_navbar.html.deconnexion'|trans }}</a>
             {% else %}
                 <div class="mobile-submenu">
                     <button type="button" class="ultra-link submenu-toggle" aria-expanded="false">
-                        🔐 {{ 'components_navbar.html.connexion'|trans }}
+                        {{ 'components_navbar.html.connexion'|trans }}
                     </button>
-
-                    <a href="{{ path('app_login') }}" class="ultra-link sub">🔑 {{ 'components_navbar.html.se_connecter'|trans }}</a>
-                    <a href="{{ path('invitation_check') }}" class="ultra-link sub">🎟 {{ 'components_navbar.html.saisir_un_code'|trans }}</a>
+                    <a href="{{ path('app_login') }}" class="ultra-link sub">{{ 'components_navbar.html.se_connecter'|trans }}</a>
+                    <a href="{{ path('invitation_check') }}" class="ultra-link sub">{{ 'components_navbar.html.sinscrire'|trans }}</a>
                 </div>
-                <a></a>
             {% endif %}
-        </nav>
 
-    </div>
+            <div class="mobile-submenu">
+                <button type="button" class="ultra-link submenu-toggle" aria-expanded="false">
+                    <span class="flag-icon flag-{{ currentLocale }}" aria-hidden="true"></span>
+                </button>
+                {% for locale, name in languageNames %}
+                    <a href="{{ path('locale_switch', { locale: locale }) }}" class="ultra-link sub language-mobile-item {{ currentLocale == locale ? 'active' : '' }}" aria-label="{{ name }}">
+                        <span class="flag-icon flag-{{ locale }}" aria-hidden="true"></span>
+                        <span>{{ name }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </nav>
 </header>

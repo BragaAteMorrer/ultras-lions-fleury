@@ -1,1 +1,1 @@
-ALTER TABLE gallery ADD description LONGTEXT DEFAULT NULL;
+﻿ALTER TABLE gallery ADD description LONGTEXT DEFAULT NULL;

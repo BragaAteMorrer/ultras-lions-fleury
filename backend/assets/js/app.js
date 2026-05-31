@@ -1,4 +1,4 @@
-/* =============================
+﻿/* =============================
    NAVBAR : Effet au scroll
 ============================= */
 (function () {
@@ -143,24 +143,48 @@
     }, delay);
 })();
 
-// Navbar Ultra toggle
-(function () {
-    const btn = document.getElementById("ultraNavToggle");
-    const nav = document.getElementById("ultraNav");
-
-    if (!btn || !nav) return;
-
-    btn.addEventListener("click", () => {
-        nav.classList.toggle("open");
-    });
-})();
-
+// Navbar Ultra mobile
 (() => {
     const btn = document.getElementById('ultraNavToggle');
     const nav = document.getElementById('ultraNavMobile');
     if (!btn || !nav) return;
+
+    const closeNav = () => {
+        nav.classList.remove('open');
+        btn.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('mobile-nav-open');
+    };
+
+    const openNav = () => {
+        nav.classList.add('open');
+        btn.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('mobile-nav-open');
+    };
+
     btn.addEventListener('click', () => {
-        nav.classList.toggle('open');
+        if (nav.classList.contains('open')) {
+            closeNav();
+        } else {
+            openNav();
+        }
+    });
+
+    nav.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', closeNav);
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeNav();
+        }
+    });
+
+    window.matchMedia('(min-width: 62rem)').addEventListener('change', (event) => {
+        if (event.matches) {
+            closeNav();
+        }
     });
 })();
 

@@ -1,4 +1,4 @@
-CREATE TABLE merch_order (
+﻿CREATE TABLE merch_order (
     id INT AUTO_INCREMENT NOT NULL,
     user_id INT DEFAULT NULL,
     merch_id INT NOT NULL,

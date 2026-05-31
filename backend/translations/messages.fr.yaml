@@ -26,6 +26,7 @@ components_footer:
     tribune_drapeaux_fumigenes_chants_la_ville_est_rouge_et_noire: "Tribune, drapeaux, fumigènes, chants : la ville est rouge et noire."
     twitter: "Twitter"
     ultras_lions: "Ultras Lions"
+    ten_as_vu_le_debut: "Les Lioness, t'en as vu le début, t'en verras pas la fin !"
 
 components_navbar:
   html:
@@ -53,6 +54,9 @@ components_navbar:
     communiques: "Communiqués"
     streetart: "Street Art"
     chants: "Chants"
+    medias: "Medias"
+    tout_les_medias: "Tous les médias"
+    liens: "Liens"
 
 email_base:
   html:

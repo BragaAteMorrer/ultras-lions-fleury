@@ -1,4 +1,4 @@
-vich_uploader:
+﻿vich_uploader:
     db_driver: orm
     metadata:
         type: attribute

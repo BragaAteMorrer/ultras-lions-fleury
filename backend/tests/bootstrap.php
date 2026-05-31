@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use Symfony\Component\Dotenv\Dotenv;
 
