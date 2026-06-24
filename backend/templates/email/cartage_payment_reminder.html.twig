@@ -1,0 +1,38 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %}Cartage en attente{% endblock %}
+
+{% block content %}
+    <h1>Cartage en attente</h1>
+
+    <p>Bonjour {{ registration.firstName }},</p>
+
+    <p>
+        Ta demande de cartage a bien ete enregistree, mais elle n'est pas encore marquee comme payee ou validee.
+    </p>
+
+    <ul>
+        <li>Nom : {{ registration.firstName }} {{ registration.lastName }}</li>
+        <li>Montant : {{ registration.amount|number_format(2, ',', ' ') }} EUR</li>
+        <li>Paiement choisi : {{ registration.paymentMethod == 'cash' ? 'Liquide' : 'En ligne' }}</li>
+        {% if registration.checkoutReference %}
+            <li>Reference : {{ registration.checkoutReference }}</li>
+        {% endif %}
+    </ul>
+
+    {% if registration.paymentMethod == 'cash' %}
+        <p>
+            Tu peux finaliser le paiement en liquide aupres du groupe. Une fois le paiement recu, ton cartage sera valide par le bureau.
+        </p>
+    {% else %}
+        <p>
+            Si le paiement en ligne n'a pas abouti, repasse par le QR code de cartage ou contacte le groupe pour debloquer ta situation.
+        </p>
+    {% endif %}
+
+    <p>Tu peux verifier le statut de ta demande ici :</p>
+
+    <a class="btn" href="{{ statusUrl }}">Verifier mon statut</a>
+
+    <p>Merci,<br>Ultras Lions Fleury</p>
+{% endblock %}

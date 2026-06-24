@@ -1,68 +1,122 @@
-{% extends '@EasyAdmin/page/content.html.twig' %}
+{% extends '@EasyAdmin/layout.html.twig' %}
 
-{% block title %}{{ 'admin_dashboard.html.ultras_lions_fc_fleury_91_page_admin'|trans }}{% endblock %}
-
-{% block content %}
-
-<h1 class="admin-title">🔥 {{ 'admin_dashboard.html.ultras_lions_dashboard'|trans }}</h1>
-
-<div class="stats-grid">
-    <div class="stat-card">
-        <h3>{{ 'admin_dashboard.html.articles'|trans }}</h3>
-        <p class="stat-number">{{ stats.posts }}</p>
-    </div>
-
-    <div class="stat-card">
-        <h3>{{ 'admin_dashboard.html.evenements'|trans }}</h3>
-        <p class="stat-number">{{ stats.events }}</p>
-    </div>
-
-    <div class="stat-card">
-        <h3>{{ 'admin_dashboard.html.galeries'|trans }}</h3>
-        <p class="stat-number">{{ stats.galleries }}</p>
-    </div>
-
-    <div class="stat-card">
-        <h3>{{ 'admin_dashboard.html.medias'|trans }}</h3>
-        <p class="stat-number">{{ stats.media }}</p>
-    </div>
-
-    <div class="stat-card">
-        <h3>{{ 'admin_dashboard.html.visites'|trans }}</h3>
-        <p class="stat-number">{{ stats.visits }}</p>
-    </div>
-</div>
-
-<hr class="divider">
-
-<h2 class="section-title">📈 {{ 'admin_dashboard.html.evolution_des_articles'|trans }}</h2>
-
-<canvas id="postsChart"
-        height="80"
-        data-labels='{{ chartData|map(d => d.month)|json_encode }}'
-        data-values='{{ chartData|map(d => d.total)|json_encode }}'>
-</canvas>
-
-<hr class="divider">
-
-<h2 class="section-title">📰 {{ 'admin_dashboard.html.derniers_articles_publies'|trans }}</h2>
-
-<div class="latest-posts">
-    {% for post in lastPosts %}
-        <div class="latest-post-card">
-            <h4>{{ post.title }}</h4>
-            <p class="small">{{ post.createdAt|date('d/m/Y') }}</p>
-        </div>
-    {% else %}
-        <p>{{ 'admin_dashboard.html.aucun_article_pour_le_moment'|trans }}</p>
-    {% endfor %}
-</div>
-
+{% block content_title %}
+    Tableau de bord
 {% endblock %}
 
-{% block body_javascript %}
-    {{ parent() }}
+{% block main %}
+    <div class="admin-dashboard">
+        <section class="admin-hero">
+            <div class="admin-hero-copy">
+                <p class="admin-kicker">Espace admin Ultras Lions</p>
+                <h1>Vue d'ensemble</h1>
+                <p>
+                    Pilotage du site, contenus, boutique et billetterie dans une interface dense et lisible.
+                </p>
+            </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ asset('js/dashboard.js') }}" defer></script>
+            <div class="admin-hero-aside">
+                <div class="admin-mini-stat">
+                    <span>Articles</span>
+                    <strong>{{ stats.posts|default(0) }}</strong>
+                </div>
+                <div class="admin-mini-stat">
+                    <span>Médias</span>
+                    <strong>{{ stats.media|default(0) }}</strong>
+                </div>
+                <div class="admin-mini-stat">
+                    <span>Visites</span>
+                    <strong>{{ stats.visits|default(0) }}</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="admin-shortcuts">
+            {% for action in quickActions|default([]) %}
+                <a class="admin-shortcut" href="{{ action.url }}">
+                    <i class="{{ action.icon }}" aria-hidden="true"></i>
+                    <span class="admin-shortcut-copy">
+                        <strong>{{ action.label }}</strong>
+                        <small>{{ action.description }}</small>
+                    </span>
+                </a>
+            {% endfor %}
+        </section>
+
+        <section class="admin-stat-grid">
+            <article class="admin-stat-card">
+                <span class="admin-stat-label">Articles</span>
+                <strong class="admin-stat-value">{{ stats.posts|default(0) }}</strong>
+                <span class="admin-stat-meta">Contenus publiés sur le site</span>
+            </article>
+            <article class="admin-stat-card">
+                <span class="admin-stat-label">Événements</span>
+                <strong class="admin-stat-value">{{ stats.events|default(0) }}</strong>
+                <span class="admin-stat-meta">Déplacements et actions</span>
+            </article>
+            <article class="admin-stat-card">
+                <span class="admin-stat-label">Galeries</span>
+                <strong class="admin-stat-value">{{ stats.galleries|default(0) }}</strong>
+                <span class="admin-stat-meta">Albums et photos de match</span>
+            </article>
+            <article class="admin-stat-card">
+                <span class="admin-stat-label">Médias</span>
+                <strong class="admin-stat-value">{{ stats.media|default(0) }}</strong>
+                <span class="admin-stat-meta">Images, vidéos et contenus liés</span>
+            </article>
+            <article class="admin-stat-card">
+                <span class="admin-stat-label">Visites</span>
+                <strong class="admin-stat-value">{{ stats.visits|default(0) }}</strong>
+                <span class="admin-stat-meta">Trafic total enregistré</span>
+            </article>
+        </section>
+
+        <section class="admin-layout-grid">
+            <div class="admin-panel">
+                <div class="admin-panel-head">
+                    <div>
+                        <p class="admin-kicker">Contenu</p>
+                        <h2>Derniers articles publiés</h2>
+                    </div>
+                </div>
+
+                <div class="admin-post-list">
+                    {% for post in lastPosts|default([]) %}
+                        <article class="admin-post-card">
+                            <div>
+                                <h3>{{ post.title }}</h3>
+                                <p>{{ post.createdAt ? post.createdAt|date('d/m/Y') : '' }}</p>
+                            </div>
+                        </article>
+                    {% else %}
+                        <p class="admin-empty-state">Aucun article pour le moment.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <aside class="admin-panel admin-panel-side">
+                <div class="admin-panel-head">
+                    <div>
+                        <p class="admin-kicker">Tendance</p>
+                        <h2>Evolution des articles</h2>
+                    </div>
+                </div>
+
+                <div class="admin-trend-list">
+                    {% for item in chartData|default([]) %}
+                        {% set barWidth = chartMax > 0 ? ((item.total / chartMax) * 100) : 0 %}
+                        <div class="admin-trend-row">
+                            <span class="admin-trend-label">{{ item.month }}</span>
+                            <div class="admin-trend-bar">
+                                <i style="width: {{ barWidth }}%"></i>
+                            </div>
+                            <strong class="admin-trend-value">{{ item.total }}</strong>
+                        </div>
+                    {% else %}
+                        <p class="admin-empty-state">Aucune donnée disponible.</p>
+                    {% endfor %}
+                </div>
+            </aside>
+        </section>
+    </div>
 {% endblock %}

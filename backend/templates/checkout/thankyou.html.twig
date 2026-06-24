@@ -1,39 +1,39 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
-{% block title %}Merci{% endblock %}
+{% block title %}{{ 'checkout_thankyou.html.merci'|trans }}{% endblock %}
 
 {% block body %}
     <section class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Paiement confirme</h1>
-            <p class="hero-subtitle">Merci pour ton achat</p>
+            <h1 class="hero-title">{{ 'checkout_thankyou.html.paiement_confirme'|trans }}</h1>
+            <p class="hero-subtitle">{{ 'checkout_thankyou.html.merci_pour_ton_achat'|trans }}</p>
         </div>
     </section>
 
     <div class="section">
         <div class="container" style="max-width: 56rem;">
             <div class="card p-4 bg-dark text-light border-0 shadow">
-                <p>Ton paiement a bien ete pris en compte.</p>
+                <p>{{ 'checkout_thankyou.html.paiement_pris_en_compte'|trans }}</p>
 
                 {% if checkout %}
                     <div class="mt-3">
-                        <p><strong>Numero de commande</strong> {{ checkout.checkoutReference }}</p>
-                        <p><strong>Date</strong> {{ checkout.createdAt|date('d/m/Y H:i') }}</p>
+                        <p><strong>{{ 'checkout_receipt.html.numero_de_commande'|trans }}</strong> {{ checkout.checkoutReference }}</p>
+                        <p><strong>{{ 'checkout_receipt.html.date'|trans }}</strong> {{ checkout.createdAt|date('d/m/Y H:i') }}</p>
                         {% if checkout.customerFirstName or checkout.customerLastName %}
-                            <p><strong>Nom</strong> {{ (checkout.customerFirstName ?? '') ~ ' ' ~ (checkout.customerLastName ?? '') }}</p>
+                            <p><strong>{{ 'checkout_receipt.html.nom'|trans }}</strong> {{ (checkout.customerFirstName ?? '') ~ ' ' ~ (checkout.customerLastName ?? '') }}</p>
                         {% endif %}
-                        <p><strong>Total</strong> {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}</p>
+                        <p><strong>{{ 'checkout_receipt.html.total'|trans }}</strong> {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}</p>
                     </div>
 
                     {% if ticketItems is not empty %}
-                        <h3 class="form-section-title mt-3">Billets</h3>
+                        <h3 class="form-section-title mt-3">{{ 'checkout_receipt.html.billets'|trans }}</h3>
                         <div class="table-responsive">
                             <table class="table table-dark table-striped align-middle">
                                 <thead>
                                     <tr>
-                                        <th>Match</th>
-                                        <th>Quantite</th>
-                                        <th>Total</th>
+                                    <th>{{ 'checkout_receipt.html.match'|trans }}</th>
+                                    <th>{{ 'cart_index.html.quantite'|trans }}</th>
+                                    <th>{{ 'checkout_receipt.html.total'|trans }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -50,15 +50,15 @@
                     {% endif %}
 
                     {% if merchItems is not empty %}
-                        <h3 class="form-section-title mt-3">Matos</h3>
+                        <h3 class="form-section-title mt-3">{{ 'checkout_receipt.html.matos'|trans }}</h3>
                         <div class="table-responsive">
                             <table class="table table-dark table-striped align-middle">
                                 <thead>
                                     <tr>
-                                        <th>Produit</th>
-                                        <th>Taille</th>
-                                        <th>Quantite</th>
-                                        <th>Total</th>
+                                    <th>{{ 'checkout_receipt.html.produit'|trans }}</th>
+                                    <th>{{ 'checkout_receipt.html.taille'|trans }}</th>
+                                    <th>{{ 'cart_index.html.quantite'|trans }}</th>
+                                    <th>{{ 'checkout_receipt.html.total'|trans }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -75,10 +75,10 @@
                         </div>
                     {% endif %}
 
-                    <a href="{{ path('checkout_receipt_pdf', { ref: checkout.checkoutReference }) }}" class="btn btn-outline-light mt-3" target="_blank" rel="noopener">Telecharger le PDF</a>
+                    <a href="{{ path('checkout_receipt_pdf', { ref: checkout.checkoutReference }) }}" class="btn btn-outline-light mt-3" target="_blank" rel="noopener">{{ 'checkout_receipt.html.telecharger_le_pdf'|trans }}</a>
                 {% endif %}
 
-                <a href="{{ path('home') }}" class="btn btn-danger mt-3">Retour a l'accueil</a>
+                <a href="{{ path('home') }}" class="btn btn-danger mt-3">{{ 'checkout_receipt.html.retour_a_l_accueil'|trans }}</a>
             </div>
         </div>
     </div>

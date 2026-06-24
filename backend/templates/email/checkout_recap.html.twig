@@ -1,35 +1,35 @@
-<h2>Recapitulatif de commande</h2>
+<h2>{{ 'checkout_receipt.html.recapitulatif_de_commande'|trans }}</h2>
 
 <p>
-    Numero : {{ checkout.checkoutReference }}<br>
-    Date : {{ checkout.createdAt|date('d/m/Y H:i') }}<br>
-    Total : {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}
+    {{ 'checkout_receipt.html.numero'|trans }} : {{ checkout.checkoutReference }}<br>
+    {{ 'checkout_receipt.html.date'|trans }} : {{ checkout.createdAt|date('d/m/Y H:i') }}<br>
+    {{ 'checkout_receipt.html.total'|trans }} : {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}
 </p>
 
 {% if cashNotice %}
-    <p><strong>Paiement a regler en liquide au prochain match a domicile.</strong></p>
+    <p><strong>{{ 'checkout_cash_thankyou.html.paiement_a_regler_en_liquide_au_prochain_match_a_domicile'|trans }}</strong></p>
 {% endif %}
 
 {% if ticketLines is not empty %}
-    <h3>Billets</h3>
+    <h3>{{ 'checkout_receipt.html.billets'|trans }}</h3>
     <ul>
         {% for line in ticketLines %}
             <li>
-                {{ line.opponent ?? line.title }} — Qté {{ line.quantity }} — {{ line.totalPrice|number_format(2, ',', ' ') }} EUR
+                {{ line.opponent ?? line.title }} — {{ 'cart_index.html.quantite'|trans }} {{ line.quantity }} — {{ line.totalPrice|number_format(2, ',', ' ') }} EUR
             </li>
         {% endfor %}
     </ul>
 {% endif %}
 
 {% if merchLines is not empty %}
-    <h3>Matos</h3>
+    <h3>{{ 'checkout_receipt.html.matos'|trans }}</h3>
     <ul>
         {% for line in merchLines %}
             <li>
-                {{ line.title }}{% if line.size %} ({{ line.size }}){% endif %} — Qté {{ line.quantity }} — {{ line.totalPrice|number_format(2, ',', ' ') }} EUR
+                {{ line.title }}{% if line.size %} ({{ line.size }}){% endif %} — {{ 'cart_index.html.quantite'|trans }} {{ line.quantity }} — {{ line.totalPrice|number_format(2, ',', ' ') }} EUR
             </li>
         {% endfor %}
     </ul>
 {% endif %}
 
-<p>Merci pour ta commande.</p>
+<p>{{ 'checkout_thankyou.html.paiement_pris_en_compte'|trans }}</p>

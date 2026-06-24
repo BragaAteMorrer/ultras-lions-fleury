@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\BilletwebLead;
 use App\Entity\Ticket;
 use App\Entity\TicketOrder;
 use App\Entity\PaymentCheckout;
@@ -12,6 +13,7 @@ use App\Repository\TicketRepository;
 use App\Repository\PaymentCheckoutRepository;
 use App\Service\MailService;
 use App\Service\CartService;
+use App\Service\ManagedAccountService;
 use App\Service\SumupService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,7 +48,7 @@ class TicketController extends AbstractController
     }
 
     #[Route('/{id<\\d+>}', name: 'ticket_show')]
-    public function show(Ticket $item, TicketRepository $ticketRepository): Response
+    public function show(Ticket $item, TicketRepository $ticketRepository, SessionInterface $session): Response
     {
         $isMember = $this->getUser() !== null;
         if (!$ticketRepository->isVisibleForUser($item, $isMember)) {
@@ -55,7 +57,53 @@ class TicketController extends AbstractController
 
         return $this->render('ticket/show.html.twig', [
             'item' => $item,
+            'billetwebReady' => $item->usesBilletweb() && $session->get($this->billetwebSessionKey($item), false),
         ]);
+    }
+
+    #[Route('/{id<\\d+>}/billetweb-preinscription', name: 'ticket_billetweb_lead', methods: ['POST'])]
+    public function billetwebLead(
+        Request $request,
+        SessionInterface $session,
+        Ticket $item,
+        TicketRepository $ticketRepository,
+        EntityManagerInterface $em
+    ): Response {
+        $isMember = $this->getUser() !== null;
+        if (!$item->usesBilletweb() || !$ticketRepository->isVisibleForUser($item, $isMember)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$this->isCsrfTokenValid('billetweb_lead_' . $item->getId(), (string) $request->request->get('_token'))) {
+            $this->addFlash('danger', 'Formulaire invalide, reessaie.');
+            return $this->redirectToRoute('ticket_show', ['id' => $item->getId(), '_fragment' => 'reservation']);
+        }
+
+        $firstName = trim((string) $request->request->get('firstName', ''));
+        $lastName = trim((string) $request->request->get('lastName', ''));
+        $email = trim((string) $request->request->get('email', ''));
+
+        if ($firstName === '' || $lastName === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->addFlash('danger', 'Renseigne ton prenom, ton nom et un email valide.');
+            return $this->redirectToRoute('ticket_show', ['id' => $item->getId(), '_fragment' => 'reservation']);
+        }
+
+        $user = $this->getUser() instanceof User ? $this->getUser() : null;
+
+        $lead = new BilletwebLead();
+        $lead
+            ->setTicket($item)
+            ->setUser($user)
+            ->setFirstName($firstName)
+            ->setLastName($lastName)
+            ->setEmail($email);
+
+        $em->persist($lead);
+        $em->flush();
+
+        $session->set($this->billetwebSessionKey($item), true);
+
+        return $this->redirectToRoute('ticket_show', ['id' => $item->getId(), '_fragment' => 'reservation']);
     }
 
     #[Route('/{id<\\d+>}/reserver', name: 'ticket_buy')]
@@ -64,7 +112,8 @@ class TicketController extends AbstractController
         Ticket $item,
         TicketRepository $ticketRepository,
         MailService $mailService,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        ManagedAccountService $managedAccountService
     ): Response {
         $isMember = $this->getUser() !== null;
         if (!$ticketRepository->isVisibleForUser($item, $isMember)) {
@@ -76,6 +125,7 @@ class TicketController extends AbstractController
         }
 
         $user = $this->getUser() instanceof User ? $this->getUser() : null;
+        $orderableUsers = $user instanceof User ? $managedAccountService->getOrderableUsers($user) : [];
 
         $form = $this->createForm(TicketPurchaseType::class, null, [
             'require_email' => $user === null,
@@ -93,7 +143,8 @@ class TicketController extends AbstractController
             } elseif ($quantity > $available) {
                 $form->addError(new \Symfony\Component\Form\FormError(sprintf('Stock insuffisant (disponible: %d).', $available)));
             } else {
-                $to = $user?->getUserIdentifier() ?: (string) ($data['email'] ?? '');
+                $orderUser = $user instanceof User ? $managedAccountService->resolveOrderUser($user, $request->request->get('beneficiary_user_id')) : null;
+                $to = $orderUser?->getUserIdentifier() ?: (string) ($data['email'] ?? '');
 
                 $unitPrice = (float) $item->getPrice();
                 $totalPrice = round($unitPrice * $quantity, 2);
@@ -103,7 +154,7 @@ class TicketController extends AbstractController
                 $em->persist($item);
 
                 $order = new TicketOrder();
-                $order->setUser($user);
+                $order->setUser($orderUser);
                 $order->setTicket($item);
                 $order->setEmail($to !== '' ? $to : null);
                 $order->setQuantity($quantity);
@@ -121,7 +172,7 @@ class TicketController extends AbstractController
                         subject: sprintf('Recapitulatif de ta reservation %s', $orderNumber),
                         template: 'email/ticket_order_recap.html.twig',
                         context: [
-                            'user' => $user,
+                            'user' => $orderUser,
                             'order' => [
                                 'number' => $orderNumber,
                                 'orderedAt' => new \DateTimeImmutable(),
@@ -151,6 +202,7 @@ class TicketController extends AbstractController
         return $this->render('ticket/buy.html.twig', [
             'item' => $item,
             'form' => $form->createView(),
+            'orderableUsers' => $orderableUsers,
         ]);
     }
 
@@ -225,6 +277,10 @@ class TicketController extends AbstractController
             $ticket = $byId[$row['id']] ?? null;
             if (!$ticket) {
                 continue;
+            }
+            if (!$ticketRepository->isVisibleForUser($ticket, $this->getUser() !== null)) {
+                $this->addFlash('danger', sprintf('La billetterie pour %s n\'est plus disponible.', $ticket->getOpponent()));
+                return $this->redirectToRoute('cart_index');
             }
             $qty = (int) $row['quantity'];
             $available = (int) $ticket->getStock();
@@ -332,6 +388,9 @@ class TicketController extends AbstractController
             if (!$ticket) {
                 continue;
             }
+            if (!$ticketRepository->isVisibleForUser($ticket, $this->getUser() !== null)) {
+                return new JsonResponse(['error' => 'ticket_unavailable', 'message' => 'Cette billetterie n\'est plus disponible.'], 400);
+            }
             $qty = (int) $row['quantity'];
             $available = (int) $ticket->getStock();
             if ($available < $qty) {
@@ -432,5 +491,10 @@ class TicketController extends AbstractController
         }
 
         return new JsonResponse($response);
+    }
+
+    private function billetwebSessionKey(Ticket $ticket): string
+    {
+        return 'billetweb_lead_ticket_' . $ticket->getId();
     }
 }

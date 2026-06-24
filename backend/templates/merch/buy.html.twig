@@ -1,18 +1,22 @@
-﻿{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Achat â€“ {{ item.title }}{% endblock %}
+{% block title %}Achat - {{ item.title }}{% endblock %}
 
 {% block body %}
-    <section class="hero">
-        <div class="hero-content">
+    {% set cover = item.image ?: (item.media|first) %}
+    {% set heroBackground = cover ? asset('uploads/media/' ~ cover.path) : asset('img/fond/fond1a.jpg') %}
+
+    <section class="hero merch-buy-hero" style="--merch-buy-bg: url('{{ heroBackground }}')">
+        <div class="hero-content merch-buy-hero-content">
+            <span class="merch-show-kicker">{{ 'components_navbar.html.table_de_vente'|trans }}</span>
             <h1 class="hero-title">{{ 'merch_buy.html.achat'|trans }}</h1>
             <p class="hero-subtitle">{{ item.title }}</p>
         </div>
     </section>
 
     <div class="section">
-        <div class="container" style="max-width: 46rem;">
-            <div class="card merch-buy-card">
+        <div class="container" style="max-width: 64rem;">
+            <div class="merch-buy-card merch-buy-page-shell">
                 <div class="merch-buy-header">
                     <p class="merch-buy-kicker">{{ 'components_navbar.html.table_de_vente'|trans }}</p>
                     <h2 class="merch-buy-title">{{ item.title }}</h2>
@@ -21,7 +25,7 @@
                 <div class="merch-buy-meta">
                     <div>
                         <span class="merch-buy-label">{{ 'merch_buy.html.prix_unitaire'|trans }}</span>
-                        <div class="merch-buy-value">{{ item.price|number_format(2, ',', ' ') }} &euro;</div>
+                        <div class="merch-buy-value">{{ price|number_format(2, ',', ' ') }} &euro;</div>
                     </div>
                     {% if item.category %}
                         <div>
@@ -30,7 +34,7 @@
                         </div>
                     {% endif %}
                     <div>
-                        <span class="merch-buy-label">Stock total</span>
+                        <span class="merch-buy-label">{{ 'merch_show.html.stock_total_label'|trans }}</span>
                         <div class="merch-buy-value">{{ item.totalStock }}</div>
                     </div>
                 </div>
@@ -39,7 +43,7 @@
                     <div class="alert alert-warning mb-3">{{ 'merch_buy.html.stock_non_configure_pour_cet_article_contacte_un_admin'|trans }}</div>
                 {% endif %}
 
-                {{ form_start(form, { attr: { class: 'merch-buy-form' } }) }}
+                {{ form_start(form, { attr: { class: 'merch-buy-form merch-buy-form--premium' } }) }}
                     <div class="merch-buy-grid">
                         {% if form.email is defined %}
                             <div class="merch-buy-field full">
@@ -67,6 +71,10 @@
                 {{ form_end(form) }}
 
                 <p class="merch-buy-footnote">{{ 'merch_buy.html.paiement_et_remise_a_la_table_de_vente_ou_selon_consignes_du_groupe'|trans }}</p>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <span class="badge rounded-pill text-bg-light text-dark">{{ 'merch_list.html.paiement_par_carte_via_sumup'|trans }}</span>
+                    <span class="badge rounded-pill text-bg-light text-dark">{{ 'merch_list.html.paiement_en_liquide_a_la_table_de_vente'|trans }}</span>
+                </div>
             </div>
 
             <a href="{{ path('merch_show', { id: item.id }) }}" class="btn btn-outline-light mt-4">{{ 'merch_buy.html.retour'|trans }}</a>

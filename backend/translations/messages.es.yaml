@@ -10,6 +10,7 @@ admin_dashboard:
     ultras_lions_dashboard: Ultras Lions – Panel de control
     ultras_lions_fc_fleury_91_page_admin: Ultras Lions – FC Fleury 91 - Página de administración
     visites: Visitas
+    page_d_accueil: Página de inicio
 base:
   html:
     ultras_lions_fc_fleury_91: Ultras Lions – FC Fleury 91
@@ -24,6 +25,7 @@ components_footer:
     tribune_drapeaux_fumigenes_chants_la_ville_est_rouge_et_noire: 'Tribuna, banderas, bombas de humo, canciones: la ciudad es roja y negra.'
     twitter: Gorjeo
     ultras_lions: Ultras Lions
+    ten_as_vu_le_debut: "¡Las Lioness, t'en as vu le début, t'en verras pas la fin!"
 components_navbar:
   html:
     accueil: Bienvenido
@@ -32,12 +34,12 @@ components_navbar:
     connexion: Conexión
     deconnexion: Desconectar
     le_groupe: El grupo
-    modifier_mon_compte: ️ Editar mi cuenta
+    modifier_mon_compte:  Editar mi cuenta
     mon_profil: mi perfil
     notre_histoire: "Nuestra historia"
     notre_mentalite: "Nuestra mentalidad"
     notre_fonctionnement: "Nuestro funcionamiento"
-    pourquoi_nous_rejoindre: "Por que unirte a nosotros?"
+    pourquoi_nous_rejoindre: "Por qué unirte a nosotros?"
     photos_de_match: Fotos del partido
     saisir_un_code: Introduce un código
     saison: Temporada %year_start%/%year_end%
@@ -50,7 +52,10 @@ components_navbar:
     communiques: Comunicados de prensa
     streetart: Street Art
     chants: "Chants"
-    
+    medias: "Medios de comunicación"
+    tout_les_medias: "Todos los medios de comunicación"
+    liens: "Enlaces"
+
 email_base:
   html:
     footer_brand: Ultras Lions – FC Fleury 91
@@ -94,6 +99,9 @@ events_list:
     filtrer: Filtrar
     prochains_matchs_rassemblements_actions: Próximos partidos, encuentros, acciones.
     saison: Estación
+    photos_de_match: Fotos de partidos
+    photos_de_match_saison: Fotos de partidos temporada %year_start%/%year_end%
+
 events_show:
   html:
     title: '%title% – Viajes – Ultras Lions'
@@ -118,7 +126,7 @@ group_show:
     section_mentalite_text: "Lealtad, respeto, solidaridad. Cantamos, empujamos, no soltamos nunca, en casa y fuera."
     section_fonctionnement_title: "Nuestro funcionamiento"
     section_fonctionnement_text: "El grupo funciona con voluntarios, reuniones y decisiones colectivas. Cada uno tiene su lugar, cada uno aporta."
-    section_rejoindre_title: "Por que unirte a nosotros?"
+    section_rejoindre_title: "Por qué unirte a nosotros?"
     section_rejoindre_text: "Para vivir el partido de otra manera, participar en tifos y desplazamientos y ser parte de una familia roja y negra."
     section_se_carter_title: "Se Carter"
     section_se_carter_text: "Pasa por la mesa de ventas en dia de partido, consigue tu codigo y luego registrate para acceder al area de miembros."
@@ -154,6 +162,20 @@ merch_list:
     textiles_accessoires_stickers_supports_du_groupe: Textiles, accesorios, pegatinas, soportes para grupos.
     toutes: Todo
     trier: Clasificar
+    stock_non_defini: Stock no definido
+    vitrine_officielle: Escaparate oficial
+    decouvrir_la_selection: Descubrir la selección
+    voir_le_panier: Ver carrito
+    pieces: Piezas
+    categories: Categorías
+    stock_disponible: Stock disponible
+    affinage: Filtrado
+    selectionnez_une_categorie: Seleccione una categoría
+    choisir: Elegir
+
+    moyens_de_paiement: "Métodos de pago"
+    paiement_par_carte_via_sumup: "Pago con tarjeta vía SumUp"
+    paiement_en_liquide_a_la_table_de_vente: "Pago en efectivo en la mesa de venta"
 merch_show:
   html:
     acheter: Comprar
@@ -254,12 +276,21 @@ ticket_buy:
     vs_opponent: frente a %opponent%
 ticket_list:
   html:
-    aucun_match_pour_le_moment: Aún no hay coincidencias.
+    a_domicile: Local
+    a_lexterieur: Visitante
+    billetweb: Billetweb
+    billetweb_reservation: 'Reserva Billetweb'
+    reserver: Reservar
+    billetterie_billetweb_integree: 'Integración de Billetweb'
     billetterie_ultras_lions: Venta de entradas
+    decouvrir_les_matchs: 'Descubrir partidos'
     matchs_a_domicile_et_a_lexterieur: Partidos de ida y vuelta
     matchs_disponibles: Partidos disponibles
+    selectionnez_une_categorie: 'Seleccione una categoría'
     stock: 'Existencias: %stock%'
     vs_opponent: frente a %opponent%
+    vitrine_officielle: 'Escaparate oficial'
+    aucun_match_pour_le_moment: No hay partidos por el momento.
 ticket_show:
   html:
     adversaire: 'Adversario:'
@@ -295,3 +326,46 @@ user_new:
 user_show:
   html:
     user: Usuario
+cart_index:
+  html:
+    billets: Entradas
+    billets_et_table_de_vente: 'Entradas + mesa de venta'
+    date: Fecha
+    matos: Material
+    match: Partido
+    nom: Apellido
+    panier: Carrito
+    panier_vide: 'Tu carrito está vacío.'
+    payer_avec_sumup: 'Pagar con SumUp'
+    moyens_de_paiement_sumup: 'Métodos de pago SumUp'
+    paiement_securise_sumup: 'Pago seguro con SumUp, con validación final en su página de pago.'
+    sumup_method_cards: 'Tarjeta bancaria'
+    sumup_method_cards_detail: 'Visa, Mastercard y tarjetas compatibles.'
+    sumup_method_wallets: 'Apple Pay / Google Pay'
+    sumup_method_wallets_detail: 'Según dispositivo, navegador y cuenta del comercio.'
+    sumup_method_paypal: 'PayPal vía SumUp'
+    sumup_method_paypal_detail: 'Disponible si PayPal está activado en la cuenta SumUp.'
+    sumup_method_local: 'Otros métodos locales'
+    sumup_method_local_detail: 'Según país, importe y divisa.'
+    sumup_availability_note: 'SumUp confirma la lista exacta de métodos disponibles en el momento del pago.'
+    prenom: Nombre
+    produit: Producto
+    quantite: Cantidad
+    retour_billetterie: 'Volver a la taquilla'
+    retour_table_de_vente: 'Volver a la mesa de venta'
+    sous_total_billets: 'Subtotal entradas'
+    sous_total_matos: 'Subtotal material'
+    supprimer: Eliminar
+    taille: Talla
+    total: Total
+    vider_le_panier: 'Vaciar carrito'
+    reserver_et_payer_en_liquide: 'Reservar y pagar en efectivo'
+
+
+
+
+
+
+
+
+

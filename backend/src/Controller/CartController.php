@@ -8,6 +8,7 @@ use App\Repository\MerchRepository;
 use App\Repository\TicketRepository;
 use App\Service\CartService;
 use App\Service\MailService;
+use App\Service\PaymentLogoProvider;
 use App\Service\SumupService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,73 +24,101 @@ class CartController extends AbstractController
         SessionInterface $session,
         MerchRepository $merchRepository,
         TicketRepository $ticketRepository,
-        CartService $cartService
+        CartService $cartService,
+        PaymentLogoProvider $paymentLogoProvider
     ): Response {
-        $merchCart = $cartService->getMerchCart($session);
-        $ticketCart = $cartService->getTicketCart($session);
+        try {
+            $isMember = null !== $this->getUser();
+            $merchCart = $cartService->getMerchCart($session);
+            $ticketCart = $cartService->getTicketCart($session);
 
-        $merchItems = [];
-        $ticketItems = [];
-        $total = 0.0;
-        $merchTotal = 0.0;
-        $ticketTotal = 0.0;
+            $merchItems = [];
+            $ticketItems = [];
+            $total = 0.0;
+            $merchTotal = 0.0;
+            $ticketTotal = 0.0;
 
-        $merchIds = array_values(array_unique(array_map(static fn ($i) => $i['id'], $merchCart)));
-        $merchProducts = $merchIds ? $merchRepository->findBy(['id' => $merchIds]) : [];
-        $merchById = [];
-        foreach ($merchProducts as $p) {
-            $merchById[$p->getId()] = $p;
-        }
-
-        foreach ($merchCart as $key => $row) {
-            $product = $merchById[$row['id']] ?? null;
-            if (!$product) {
-                continue;
+            $validMerchCart = array_values(array_filter(
+                $merchCart,
+                static fn ($row) => is_array($row) && isset($row['id'], $row['quantity'], $row['size'])
+            ));
+            $merchIds = array_values(array_unique(array_map(static fn ($i) => (int) $i['id'], $validMerchCart)));
+            $merchProducts = $merchIds ? $merchRepository->findBy(['id' => $merchIds]) : [];
+            $merchById = [];
+            foreach ($merchProducts as $p) {
+                $merchById[$p->getId()] = $p;
             }
-            $lineTotal = $product->getPrice() * (int) $row['quantity'];
-            $merchTotal += $lineTotal;
-            $merchItems[] = [
-                'key' => $key,
-                'product' => $product,
-                'size' => $row['size'],
-                'quantity' => (int) $row['quantity'],
-                'lineTotal' => $lineTotal,
-            ];
-        }
 
-        $ticketIds = array_values(array_unique(array_map(static fn ($i) => $i['id'], $ticketCart)));
-        $tickets = $ticketIds ? $ticketRepository->findBy(['id' => $ticketIds]) : [];
-        $ticketById = [];
-        foreach ($tickets as $t) {
-            $ticketById[$t->getId()] = $t;
-        }
-
-        foreach ($ticketCart as $key => $row) {
-            $ticket = $ticketById[$row['id']] ?? null;
-            if (!$ticket) {
-                continue;
+            foreach ($validMerchCart as $key => $row) {
+                $product = $merchById[$row['id']] ?? null;
+                if (!$product) {
+                    continue;
+                }
+                $unitPrice = $product->getPriceForUser($isMember);
+                $lineTotal = $unitPrice * (int) $row['quantity'];
+                $merchTotal += $lineTotal;
+                $merchItems[] = [
+                    'key' => $key,
+                    'product' => $product,
+                    'size' => $row['size'],
+                    'quantity' => (int) $row['quantity'],
+                    'unitPrice' => $unitPrice,
+                    'lineTotal' => $lineTotal,
+                ];
             }
-            $lineTotal = $ticket->getPrice() * (int) $row['quantity'];
-            $ticketTotal += $lineTotal;
-            $ticketItems[] = [
-                'key' => $key,
-                'ticket' => $ticket,
-                'quantity' => (int) $row['quantity'],
-                'lineTotal' => $lineTotal,
-            ];
+
+            $validTicketCart = array_values(array_filter(
+                $ticketCart,
+                static fn ($row) => is_array($row) && isset($row['id'], $row['quantity'])
+            ));
+            $ticketIds = array_values(array_unique(array_map(static fn ($i) => (int) $i['id'], $validTicketCart)));
+            $tickets = $ticketIds ? $ticketRepository->findBy(['id' => $ticketIds]) : [];
+            $ticketById = [];
+            foreach ($tickets as $t) {
+                $ticketById[$t->getId()] = $t;
+            }
+
+            foreach ($validTicketCart as $key => $row) {
+                $ticket = $ticketById[$row['id']] ?? null;
+                if (!$ticket) {
+                    continue;
+                }
+                $lineTotal = $ticket->getPrice() * (int) $row['quantity'];
+                $ticketTotal += $lineTotal;
+                $ticketItems[] = [
+                    'key' => $key,
+                    'ticket' => $ticket,
+                    'quantity' => (int) $row['quantity'],
+                    'lineTotal' => $lineTotal,
+                ];
+            }
+
+            $total = $merchTotal + $ticketTotal;
+
+            $sumupPaymentMethods = $paymentLogoProvider->sumupMethods();
+
+            return $this->render('cart/index.html.twig', [
+                'merchItems' => $merchItems,
+                'ticketItems' => $ticketItems,
+                'total' => $total,
+                'merchTotal' => $merchTotal,
+                'ticketTotal' => $ticketTotal,
+                'emailMerch' => $cartService->getMerchEmail($session),
+                'emailTicket' => $cartService->getTicketEmail($session),
+                'sumupPaymentMethods' => $sumupPaymentMethods,
+            ]);
+        } catch (\Throwable $e) {
+            return $this->render('cart/index.html.twig', [
+                'merchItems' => [],
+                'ticketItems' => [],
+                'total' => 0.0,
+                'merchTotal' => 0.0,
+                'ticketTotal' => 0.0,
+                'emailMerch' => null,
+                'emailTicket' => null,
+                'sumupPaymentMethods' => [],
+            ]);
         }
-
-        $total = $merchTotal + $ticketTotal;
-
-        return $this->render('cart/index.html.twig', [
-            'merchItems' => $merchItems,
-            'ticketItems' => $ticketItems,
-            'total' => $total,
-            'merchTotal' => $merchTotal,
-            'ticketTotal' => $ticketTotal,
-            'emailMerch' => $cartService->getMerchEmail($session),
-            'emailTicket' => $cartService->getTicketEmail($session),
-        ]);
     }
 
     #[Route('/panier/supprimer/{type}/{key}', name: 'cart_remove', methods: ['POST'])]
@@ -124,6 +153,7 @@ class CartController extends AbstractController
         EntityManagerInterface $em,
         SumupService $sumupService
     ): Response {
+        $isMember = null !== $this->getUser();
         $merchCart = $cartService->getMerchCart($session);
         $ticketCart = $cartService->getTicketCart($session);
 
@@ -149,14 +179,18 @@ class CartController extends AbstractController
         $lines = [];
         $total = 0.0;
 
-        $merchIds = array_values(array_unique(array_map(static fn ($i) => $i['id'], $merchCart)));
+        $validMerchCart = array_values(array_filter(
+            $merchCart,
+            static fn ($row) => is_array($row) && isset($row['id'], $row['quantity'], $row['size'])
+        ));
+        $merchIds = array_values(array_unique(array_map(static fn ($i) => (int) $i['id'], $validMerchCart)));
         $merchProducts = $merchIds ? $merchRepository->findBy(['id' => $merchIds]) : [];
         $merchById = [];
         foreach ($merchProducts as $p) {
             $merchById[$p->getId()] = $p;
         }
 
-        foreach ($merchCart as $row) {
+        foreach ($validMerchCart as $row) {
             $product = $merchById[$row['id']] ?? null;
             if (!$product) {
                 continue;
@@ -170,7 +204,7 @@ class CartController extends AbstractController
                 return $this->redirectToRoute('cart_index');
             }
 
-            $unit = (float) $product->getPrice();
+            $unit = (float) $product->getPriceForUser($isMember);
             $lineTotal = round($unit * $qty, 2);
             $total += $lineTotal;
             $lines[] = [
@@ -184,17 +218,25 @@ class CartController extends AbstractController
             ];
         }
 
-        $ticketIds = array_values(array_unique(array_map(static fn ($i) => $i['id'], $ticketCart)));
+        $validTicketCart = array_values(array_filter(
+            $ticketCart,
+            static fn ($row) => is_array($row) && isset($row['id'], $row['quantity'])
+        ));
+        $ticketIds = array_values(array_unique(array_map(static fn ($i) => (int) $i['id'], $validTicketCart)));
         $tickets = $ticketIds ? $ticketRepository->findBy(['id' => $ticketIds]) : [];
         $ticketById = [];
         foreach ($tickets as $t) {
             $ticketById[$t->getId()] = $t;
         }
 
-        foreach ($ticketCart as $row) {
+        foreach ($validTicketCart as $row) {
             $ticket = $ticketById[$row['id']] ?? null;
             if (!$ticket) {
                 continue;
+            }
+            if (!$ticketRepository->isVisibleForUser($ticket, $this->getUser() !== null)) {
+                $this->addFlash('danger', sprintf('La billetterie pour %s n\'est plus disponible.', $ticket->getOpponent()));
+                return $this->redirectToRoute('cart_index');
             }
             $qty = (int) $row['quantity'];
             $available = (int) $ticket->getStock();
@@ -219,6 +261,11 @@ class CartController extends AbstractController
 
         if (!$lines) {
             $this->addFlash('warning', 'Ton panier est vide.');
+            return $this->redirectToRoute('cart_index');
+        }
+
+        if ($total <= 0.0) {
+            $this->addFlash('warning', 'Cette reservation est gratuite, utilise le bouton Reserver.');
             return $this->redirectToRoute('cart_index');
         }
 
@@ -279,6 +326,7 @@ class CartController extends AbstractController
         EntityManagerInterface $em,
         MailService $mailService
     ): Response {
+        $isMember = null !== $this->getUser();
         $merchCart = $cartService->getMerchCart($session);
         $ticketCart = $cartService->getTicketCart($session);
 
@@ -304,14 +352,18 @@ class CartController extends AbstractController
         $lines = [];
         $total = 0.0;
 
-        $merchIds = array_values(array_unique(array_map(static fn ($i) => $i['id'], $merchCart)));
+        $validMerchCart = array_values(array_filter(
+            $merchCart,
+            static fn ($row) => is_array($row) && isset($row['id'], $row['quantity'], $row['size'])
+        ));
+        $merchIds = array_values(array_unique(array_map(static fn ($i) => (int) $i['id'], $validMerchCart)));
         $merchProducts = $merchIds ? $merchRepository->findBy(['id' => $merchIds]) : [];
         $merchById = [];
         foreach ($merchProducts as $p) {
             $merchById[$p->getId()] = $p;
         }
 
-        foreach ($merchCart as $row) {
+        foreach ($validMerchCart as $row) {
             $product = $merchById[$row['id']] ?? null;
             if (!$product) {
                 continue;
@@ -325,7 +377,7 @@ class CartController extends AbstractController
                 return $this->redirectToRoute('cart_index');
             }
 
-            $unit = (float) $product->getPrice();
+            $unit = (float) $product->getPriceForUser($isMember);
             $lineTotal = round($unit * $qty, 2);
             $total += $lineTotal;
             $lines[] = [
@@ -353,23 +405,31 @@ class CartController extends AbstractController
             $order->setQuantity($qty);
             $order->setUnitPrice($unit);
             $order->setTotalPrice($lineTotal);
-            $order->setPaymentMethod('cash');
+            $order->setPaymentMethod($lineTotal <= 0.0 ? 'free' : 'cash');
             $order->setExecuted(false);
             $order->setCreatedAt(new \DateTime());
             $em->persist($order);
         }
 
-        $ticketIds = array_values(array_unique(array_map(static fn ($i) => $i['id'], $ticketCart)));
+        $validTicketCart = array_values(array_filter(
+            $ticketCart,
+            static fn ($row) => is_array($row) && isset($row['id'], $row['quantity'])
+        ));
+        $ticketIds = array_values(array_unique(array_map(static fn ($i) => (int) $i['id'], $validTicketCart)));
         $tickets = $ticketIds ? $ticketRepository->findBy(['id' => $ticketIds]) : [];
         $ticketById = [];
         foreach ($tickets as $t) {
             $ticketById[$t->getId()] = $t;
         }
 
-        foreach ($ticketCart as $row) {
+        foreach ($validTicketCart as $row) {
             $ticket = $ticketById[$row['id']] ?? null;
             if (!$ticket) {
                 continue;
+            }
+            if (!$ticketRepository->isVisibleForUser($ticket, $this->getUser() !== null)) {
+                $this->addFlash('danger', sprintf('La billetterie pour %s n\'est plus disponible.', $ticket->getOpponent()));
+                return $this->redirectToRoute('cart_index');
             }
             $qty = (int) $row['quantity'];
             $available = (int) $ticket->getStock();
@@ -403,8 +463,8 @@ class CartController extends AbstractController
             $order->setQuantity($qty);
             $order->setUnitPrice($unit);
             $order->setTotalPrice($lineTotal);
-            $order->setPaymentMethod('cash');
-            $order->setPaid(false);
+            $order->setPaymentMethod($lineTotal <= 0.0 ? 'free' : 'cash');
+            $order->setPaid($lineTotal <= 0.0);
             $order->setCreatedAt(new \DateTime());
             $em->persist($order);
         }
@@ -416,8 +476,10 @@ class CartController extends AbstractController
 
         $reference = strtoupper(bin2hex(random_bytes(6)));
         $checkout = new \App\Entity\PaymentCheckout();
-        $checkout->setType('cash')
-            ->setStatus('pending')
+        $isFree = $total <= 0.0;
+
+        $checkout->setType($isFree ? 'free' : 'cash')
+            ->setStatus($isFree ? 'paid' : 'pending')
             ->setCheckoutReference($reference)
             ->setAmount($total)
             ->setCurrency('EUR')
@@ -427,6 +489,10 @@ class CartController extends AbstractController
             ->setCustomerLastName($lastName !== '' ? $lastName : null)
             ->setCart($lines)
             ->setCreatedAt(new \DateTime());
+        if ($isFree) {
+            $checkout->setPaidAt(new \DateTime());
+            $checkout->setProcessedAt(new \DateTime());
+        }
         $em->persist($checkout);
 
         $em->flush();
@@ -439,13 +505,13 @@ class CartController extends AbstractController
             try {
                 $mailService->send(
                     to: $email,
-                    subject: 'Recapitulatif de ta commande (paiement liquide)',
+                    subject: $isFree ? 'Recapitulatif de ta reservation' : 'Recapitulatif de ta commande (paiement liquide)',
                     template: 'email/checkout_recap.html.twig',
                     context: [
                         'checkout' => $checkout,
                         'ticketLines' => array_filter($lines, fn ($l) => ($l['type'] ?? '') === 'ticket'),
                         'merchLines' => array_filter($lines, fn ($l) => ($l['type'] ?? '') === 'merch'),
-                        'cashNotice' => true,
+                        'cashNotice' => !$isFree,
                     ],
                 );
                 $checkout->setEmailSentAt(new \DateTime());

@@ -3,68 +3,106 @@
 {% block title %}{{ 'merch_show.html.title'|trans({'%title%': item.title}) }}{% endblock %}
 
 {% block body %}
+    {% set cover = item.image ?: (item.media|first) %}
+    {% set heroBackground = cover ? asset('uploads/media/' ~ cover.path) : asset('img/fond/fond1a.jpg') %}
 
-<section class="hero">
-    <div class="hero-content">
-        <h1 class="hero-title">{{ item.title }}</h1>
-        <p class="hero-subtitle">{{ 'merch_show.html.table_de_vente_officielle_ultras_lions'|trans }}</p>
-    </div>
-</section>
-
-<div class="section">
-    <div class="container">
-        <div class="row g-4">
-
-            <div class="col-md-6">
-                {% set cover = item.image ?: (item.media|first) %}
-                {% if cover %}
-                    <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="img-fluid rounded shadow" alt="{{ item.title }}">
-                {% endif %}
-            </div>
-
-            <div class="col-md-6">
-                <h2>{{ item.title }}</h2>
+    <section class="hero merch-show-hero" style="--merch-show-bg: url('{{ heroBackground }}')">
+        <div class="hero-content merch-show-hero-content">
+            <span class="merch-show-kicker">{{ 'merch_show.html.table_de_vente_officielle_ultras_lions'|trans }}</span>
+            <h1 class="hero-title">{{ item.title }}</h1>
+            <p class="hero-subtitle">
                 {% if item.category %}
-                    <p class="text-muted mb-2">{{ item.category.name }}</p>
+                    {{ item.category.name }}
+                {% else %}
+                    {{ 'merch_list.html.textiles_accessoires_stickers_supports_du_groupe'|trans }}
                 {% endif %}
-                {% if item.stocks is not empty %}
-                    <p class="text-muted mb-2">{{ 'merch_show.html.stock_total'|trans({'%stock%': item.totalStock}) }}</p>
-                    <div class="text-muted" style="font-size: 0.95rem;">
-                        {% for stock in item.stocks %}
-                            <div>{{ stock.size }} : {{ stock.quantity }}</div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                <p class="product-price display-6">{{ item.price|number_format(2, ',', ' ') }} €</p>
+            </p>
 
-                <div class="product-description">
-                    {{ item.description|raw }}
+            <div class="merch-show-meta">
+                <span>{{ price|number_format(2, ',', ' ') }} €</span>
+                <span>{{ 'merch_show.html.stock_total'|trans({'%stock%': item.totalStock}) }}</span>
+                <span>{{ item.stocks is not empty ? item.stocks|length ~ ' tailles' : 'Taille unique' }}</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="section merch-show-section">
+        <div class="container">
+            <div class="merch-show-layout">
+                <div class="merch-show-media">
+                    {% if cover %}
+                        <img src="{{ asset('uploads/media/' ~ cover.path) }}" alt="{{ item.title }}">
+                    {% else %}
+                        <img src="/placeholder.jpg" alt="{{ item.title }}">
+                    {% endif %}
                 </div>
 
-                <form action="{{ path('merch_cart_add', { id: item.id }) }}" method="post" class="mt-4">
-                    {% if sizeChoices is not empty %}
-                        <label class="form-label text-light" for="size">Taille</label>
-                        <select id="size" name="size" class="form-select mb-3">
-                            {% for label, value in sizeChoices %}
-                                <option value="{{ value }}" {% if preferredSize and preferredSize == value %}selected{% endif %}>{{ label }}</option>
+                <div class="merch-buy-card merch-show-panel">
+                    <div class="merch-buy-header">
+                        <p class="merch-buy-kicker">{{ 'components_navbar.html.table_de_vente'|trans }}</p>
+                        <h2 class="merch-buy-title">{{ item.title }}</h2>
+                    </div>
+
+                    <div class="merch-buy-meta">
+                        <div>
+                            <span class="merch-buy-label">{{ 'merch_list.html.categorie'|trans }}</span>
+                            <div class="merch-buy-value">{{ item.category ? item.category.name : '—' }}</div>
+                        </div>
+                        <div>
+                            <span class="merch-buy-label">{{ 'merch_show.html.stock_total_label'|trans }}</span>
+                            <div class="merch-buy-value">{{ item.totalStock }}</div>
+                        </div>
+                        <div>
+                            <span class="merch-buy-label">{{ 'merch_buy.html.prix_unitaire'|trans }}</span>
+                            <div class="merch-buy-value">{{ price|number_format(2, ',', ' ') }} €</div>
+                        </div>
+                    </div>
+
+                    {% if item.stocks is not empty %}
+                        <div class="merch-show-stock-list">
+                            {% for stock in item.stocks %}
+                                <span>{{ stock.size }} : {{ stock.quantity }}</span>
                             {% endfor %}
-                        </select>
-                    {% else %}
-                        <input type="hidden" name="size" value="TU">
+                        </div>
                     {% endif %}
 
-                    <label class="form-label text-light" for="quantity">Quantite</label>
-                    <input id="quantity" name="quantity" type="number" min="1" value="1" class="form-control mb-3">
+                    {% if item.description %}
+                        <div class="merch-show-description">
+                            {{ item.description|raw }}
+                        </div>
+                    {% endif %}
 
-                    <button class="btn btn-danger w-100" type="submit">Ajouter au panier</button>
-                </form>
+                    <form action="{{ path('merch_cart_add', { id: item.id }) }}" method="post" class="merch-buy-form merch-show-form">
+                        <div class="merch-buy-grid">
+                            {% if sizeChoices is not empty %}
+                                <div class="merch-buy-field">
+                                    <label class="form-label" for="size">{{ 'merch_show.html.taille'|trans }}</label>
+                                    <select id="size" name="size" class="form-select">
+                                        {% for label, value in sizeChoices %}
+                                            <option value="{{ value }}" {% if preferredSize and preferredSize == value %}selected{% endif %}>{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% else %}
+                                <input type="hidden" name="size" value="TU">
+                            {% endif %}
 
-                <a href="{{ path('merch_cart') }}" class="btn btn-outline-light mt-3 w-100">Voir mon panier</a>
-                <a href="{{ path('merch_index') }}" class="btn btn-outline-light mt-3">{{ 'merch_buy.html.retour'|trans }}</a>
+                            <div class="merch-buy-field">
+                                <label class="form-label" for="quantity">{{ 'merch_show.html.quantite'|trans }}</label>
+                                <input id="quantity" name="quantity" type="number" min="1" value="1" class="form-control">
+                            </div>
+                        </div>
+
+                        <button class="btn btn-danger w-100 mt-3" type="submit">{{ 'merch_show.html.ajouter_au_panier'|trans }}</button>
+                    </form>
+
+                    <div class="merch-show-actions">
+                        <a href="{{ path('merch_cart') }}" class="btn btn-outline-light w-100">{{ 'merch_show.html.voir_mon_panier'|trans }}</a>
+                        <a href="{{ path('merch_index') }}" class="btn btn-outline-light">{{ 'merch_buy.html.retour'|trans }}</a>
+                    </div>
+                </div>
             </div>
-
         </div>
     </div>
-</div>
 
 {% endblock %}

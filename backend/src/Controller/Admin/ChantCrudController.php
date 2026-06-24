@@ -3,12 +3,12 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Chant;
+use App\Entity\SiteConfig;
 use App\Repository\SiteConfigRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -63,17 +63,21 @@ class ChantCrudController extends AbstractCrudController
     }
 
     public function editChantsText(
-        AdminContext $context,
-        EntityManagerInterface $em,
         SiteConfigRepository $siteConfigRepository,
+        EntityManagerInterface $em,
         AdminUrlGenerator $adminUrlGenerator
     ): RedirectResponse {
         $config = $siteConfigRepository->findOneBy([], ['id' => 'ASC']);
+
         if (!$config) {
-            $config = $siteConfigRepository->createDefaultConfig($em);
+            $config = new SiteConfig();
+
+            $em->persist($config);
+            $em->flush();
         }
 
         $url = $adminUrlGenerator
+            ->unsetAll()
             ->setController(ChantsTextCrudController::class)
             ->setAction(Action::EDIT)
             ->setEntityId($config->getId())

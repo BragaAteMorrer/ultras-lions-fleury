@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
 {% block title %}{{ 'ticket_list.html.billetterie_ultras_lions'|trans }}{% endblock %}
 
 {% block body %}
-    <section class="hero">
+    <section class="hero ticket-list-hero">
         <div class="hero-content">
             <h1 class="hero-title">{{ 'components_navbar.html.billetterie'|trans }}</h1>
             <p class="hero-subtitle">{{ 'ticket_list.html.matchs_a_domicile_et_a_lexterieur'|trans }}</p>
@@ -12,58 +12,92 @@
 
     <div class="section">
         <div class="container">
-            <form method="get" class="mb-4" style="max-width: 24rem;">
-                <label class="form-label text-light" for="category">{{ 'merch_list.html.categorie'|trans }}</label>
-                <div class="d-flex gap-2">
-                    <select id="category" name="category" class="form-select">
-                        <option value="" {% if selectedCategory is null %}selected{% endif %}>{{ 'merch_list.html.toutes'|trans }}</option>
-                        {% for cat in categories %}
-                            <option value="{{ cat.slug }}" {% if selectedCategory and selectedCategory.id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <button class="btn btn-outline-light" type="submit">{{ 'merch_list.html.trier'|trans }}</button>
-                </div>
-            </form>
+            <div class="merch-layout ticket-list-layout">
+                <aside class="merch-filter-panel ticket-list-filter">
+                    <div class="merch-filter-head">
+                        <span class="merch-filter-kicker">{{ 'merch_list.html.affinage'|trans }}</span>
+                        <h2 class="section-title merch-filter-title">{{ 'ticket_list.html.matchs_disponibles'|trans }}</h2>
+                        <p class="merch-filter-copy">{{ 'merch_list.html.selectionnez_une_categorie'|trans }}</p>
+                    </div>
 
-            <h2 class="section-title">{{ 'ticket_list.html.matchs_disponibles'|trans }}</h2>
+                    <form method="get" class="merch-filter-form">
+                        <label class="form-label" for="category">{{ 'merch_list.html.categorie'|trans }}</label>
+                        <select id="category" name="category" class="form-select">
+                            <option value="" {% if selectedCategory is null %}selected{% endif %}>{{ 'merch_list.html.toutes'|trans }}</option>
+                            {% for cat in categories %}
+                                <option value="{{ cat.slug }}" {% if selectedCategory and selectedCategory.id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
 
-            <div class="row g-4">
-                {% for ticket in items %}
-                    {% set isAway = ticket.matchLocation|default('')|lower|trim == 'exterieur'
-                        or (ticket.matchLocation is empty and ticket.category and ticket.category.slug == 'ext') %}
-                    {% set matchLabel = isAway
-                        ? ticket.opponent ~ ' vs FC Fleury'
-                        : 'FC Fleury vs ' ~ ticket.opponent %}
-                    <div class="col-md-4">
-                        <a href="{{ path('ticket_show', { id: ticket.id }) }}" class="card h-100">
+                        <button class="btn btn-danger w-100 merch-filter-submit" type="submit">{{ 'merch_list.html.trier'|trans }}</button>
+                    </form>
+                </aside>
 
-                            {% if ticket.image %}
-                                <img src="{{ asset('uploads/media/' ~ ticket.image.path) }}" class="event-card-img-top" alt="{{ ticket.title }}">
-                            {% else %}
-                                <img src="/placeholder.jpg" class="event-card-img-top" alt="{{ ticket.title }}">
-                            {% endif %}
+                <div class="merch-grid-wrap">
+                    <div class="merch-grid-head">
+                        <div>
+                            <h2 class="section-title">{{ 'ticket_list.html.matchs_disponibles'|trans }}</h2>
+                            <p class="merch-grid-copy">{{ 'ticket_list.html.matchs_a_domicile_et_a_lexterieur'|trans }}</p>
+                        </div>
+                    </div>
 
-                            <div class="card-body">
-                                <h3 class="card-title">{{ matchLabel }}</h3>
-                                {% if ticket.category %}
-                                    <p class="text-muted mb-1">{{ ticket.category.name }}</p>
-                                {% endif %}
-                                <p class="mb-1">{{ ticket.matchDate|date('d/m/Y H:i') }}{% if ticket.venue %} - {{ ticket.venue }}{% endif %}</p>
-                                <p class="card-price">{{ ticket.price|number_format(2, ',', ' ') }} €</p>
-                                {% if ticket.usesBilletweb %}
-                                    <p class="text-muted mb-0">Billetterie Billetweb integree</p>
-                                {% else %}
-                                    <p class="text-muted mb-0">{{ 'ticket_list.html.stock'|trans({'%stock%': ticket.stock}) }}</p>
-                                {% endif %}
+                    <div class="row g-4">
+                        {% for ticket in items %}
+                            {% set isAway = ticket.matchLocation|default('')|lower|trim == 'exterieur'
+                                or (ticket.matchLocation is empty and ticket.category and ticket.category.slug == 'ext') %}
+                            {% set matchLabel = isAway
+                                ? ticket.opponent ~ ' vs FC Fleury'
+                                : 'FC Fleury vs ' ~ ticket.opponent %}
+                            <div class="col-md-6 col-xl-4">
+                                <a href="{{ path('ticket_show', { id: ticket.id }) }}" class="card merch-product-card ticket-list-card h-100">
+                                    <div class="merch-product-media">
+                                        {% if ticket.image %}
+                                            <img src="{{ asset('uploads/media/' ~ ticket.image.path) }}" class="merch-product-image" alt="{{ ticket.title }}">
+                                        {% else %}
+                                            <img src="/placeholder.jpg" class="merch-product-image" alt="{{ ticket.title }}">
+                                        {% endif %}
+
+                                        <div class="merch-product-badges">
+                                            {% if ticket.category %}
+                                                <span class="merch-product-badge">{{ ticket.category.name }}</span>
+                                            {% endif %}
+                                            <span class="merch-product-badge merch-product-badge-stock">
+                                                {% if ticket.usesBilletweb %}
+                                                    {{ 'ticket_list.html.billetweb'|trans }}
+                                                {% else %}
+                                                    {{ 'ticket_list.html.stock'|trans({'%stock%': ticket.stock}) }}
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body merch-product-body">
+                                        <div class="merch-product-topline">
+                                            <h3 class="card-title merch-product-title">{{ matchLabel }}</h3>
+                                            <span class="merch-product-arrow">→</span>
+                                        </div>
+
+                                        <p class="merch-product-description">
+                                            {{ ticket.matchDate|date('d/m/Y H:i') }}{% if ticket.venue %} · {{ ticket.venue }}{% endif %}
+                                        </p>
+
+                                        <div class="merch-product-footer">
+                                            <p class="card-price merch-product-price">{{ ticket.price|number_format(2, ',', ' ') }} €</p>
+                                            <span class="merch-product-cta">{{ 'ticket_list.html.reserver'|trans }}</span>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
-
-                        </a>
+                        {% else %}
+                            <div class="col-12">
+                                <div class="merch-empty-state">
+                                    <h3>{{ 'ticket_list.html.aucun_match_pour_le_moment'|trans }}</h3>
+                                    <p>{{ 'ticket_list.html.matchs_a_domicile_et_a_lexterieur'|trans }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% else %}
-                    <div class="col-12">
-                        <div class="alert alert-secondary">{{ 'ticket_list.html.aucun_match_pour_le_moment'|trans }}</div>
-                    </div>
-                {% endfor %}
+                </div>
             </div>
         </div>
     </div>

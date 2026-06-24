@@ -1,18 +1,26 @@
-﻿{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}{{ 'ticket_buy.html.title'|trans({'%title%': item.title}) }}{% endblock %}
 
 {% block body %}
-    <section class="hero">
-        <div class="hero-content">
+    {% set isAway = item.matchLocation|default('')|lower|trim == 'exterieur'
+        or (item.matchLocation is empty and item.category and item.category.slug == 'ext') %}
+    {% set matchLabel = isAway
+        ? item.opponent ~ ' vs FC Fleury'
+        : 'FC Fleury vs ' ~ item.opponent %}
+    {% set heroBackground = item.image ? asset('uploads/media/' ~ item.image.path) : asset('img/fond/fond1a.jpg') %}
+
+    <section class="hero ticket-buy-hero" style="--ticket-buy-bg: url('{{ heroBackground }}')">
+        <div class="hero-content ticket-buy-hero-content">
+            <span class="merch-show-kicker">{{ 'components_navbar.html.billetterie'|trans }}</span>
             <h1 class="hero-title">{{ 'ticket_buy.html.reservation'|trans }}</h1>
-            <p class="hero-subtitle">{{ item.title }}</p>
+            <p class="hero-subtitle">{{ matchLabel }}</p>
         </div>
     </section>
 
     <div class="section">
-        <div class="container" style="max-width: 46rem;">
-            <div class="card ticket-buy-card">
+        <div class="container" style="max-width: 64rem;">
+            <div class="ticket-buy-card ticket-buy-page-shell">
                 <div class="ticket-buy-header">
                     <p class="ticket-buy-kicker">{{ 'components_navbar.html.billetterie'|trans }}</p>
                     <h2 class="ticket-buy-title">{{ 'ticket_buy.html.vs_opponent'|trans({'%opponent%': item.opponent}) }}</h2>
@@ -36,7 +44,7 @@
                     </div>
                 </div>
 
-                {{ form_start(form, { attr: { class: 'ticket-buy-form' } }) }}
+                {{ form_start(form, { attr: { class: 'ticket-buy-form ticket-buy-form--premium' } }) }}
                     {% if form.email is defined %}
                         {{ form_row(form.email) }}
                     {% endif %}

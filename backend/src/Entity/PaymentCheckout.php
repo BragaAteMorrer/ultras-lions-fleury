@@ -67,6 +67,15 @@ class PaymentCheckout
 
     public function getStatus(): string { return $this->status; }
     public function setStatus(string $status): self { $this->status = $status; return $this; }
+    public function getStatusLabel(): string
+    {
+        return match ($this->status) {
+            'paid' => 'Payé',
+            'pending' => 'En attente',
+            'failed' => 'Échoué',
+            default => $this->status,
+        };
+    }
 
     public function getSumupCheckoutId(): ?string { return $this->sumupCheckoutId; }
     public function setSumupCheckoutId(?string $id): self { $this->sumupCheckoutId = $id; return $this; }

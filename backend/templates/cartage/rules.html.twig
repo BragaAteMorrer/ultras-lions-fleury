@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'cartage_rules.html.reglement_interieur_cartage'|trans }}{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ 'cartage_rules.html.reglement_interieur'|trans }}</h1>
+        <p class="hero-subtitle">{{ 'cartage_rules.html.lecture_obligatoire_avant_paiement'|trans }}</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container" style="max-width: 56rem;">
+        <div class="card card-form">
+            {% for message in app.flashes('danger') %}
+                <div class="alert-error">{{ message }}</div>
+            {% endfor %}
+
+            {% if errors is not empty %}
+                <div class="alert-error">
+                    {% for error in errors %}
+                        <p class="mb-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <p class="form-section-hint">{{ 'cartage_rules.html.montant'|trans({'%amount%': qrToken.amount|number_format(2, ',', ' ')}) }}</p>
+
+            <div class="post-body">
+                {% if internalRulesPage and internalRulesPage.content %}
+                    {{ internalRulesPage.content|raw }}
+                {% else %}
+                    <p>{{ 'cartage_rules.html.reglement_non_configure'|trans }}</p>
+                {% endif %}
+            </div>
+
+            <form method="post" action="{{ path('cartage_rules') }}" id="cartageRulesForm" class="mt-4">
+                <input type="hidden" name="_token" value="{{ csrf_token('cartage_rules') }}">
+
+                <h3 class="form-section-title">{{ 'cartage_rules.html.validation'|trans }}</h3>
+                <div class="card p-3 mt-3 cartage-choice-card">
+                    <label class="cartage-check-label">
+                        <input id="accept_internal_rules" type="checkbox" name="accept_internal_rules" value="1" required {{ data.accept_internal_rules|default('') == '1' ? 'checked' : '' }}>
+                        <span>{{ 'cartage_rules.html.jai_lu_et_jaccepte'|trans }}</span>
+                    </label>
+                </div>
+
+                <h3 class="form-section-title">{{ 'cartage_rules.html.paiement'|trans }}</h3>
+                <div class="d-grid gap-2">
+                    <label class="card p-3 cartage-radio-label">
+                        <input type="radio" name="payment_method" value="online" {{ data.payment_method|default('online') == 'online' ? 'checked' : '' }}>
+                        {{ 'cartage_rules.html.payer_par_carte_ou_paypal'|trans }}
+                    </label>
+                    <label class="card p-3 cartage-radio-label">
+                        <input type="radio" name="payment_method" value="cash" {{ data.payment_method|default('') == 'cash' ? 'checked' : '' }}>
+                        {{ 'cartage_rules.html.payer_en_liquide_validation_par_le_bureau'|trans }}
+                    </label>
+                </div>
+
+                <button id="cartageRulesSubmit" class="btn btn-danger w-100 mt-4" type="submit" {{ data.accept_internal_rules|default('') == '1' ? '' : 'disabled' }}>{{ 'cartage_rules.html.continuer_vers_le_paiement'|trans }}</button>
+                <a href="{{ path('cartage_form') }}" class="btn btn-outline-light w-100 mt-3">{{ 'cartage_rules.html.retour_au_formulaire'|trans }}</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            var rulesCheckbox = document.getElementById('accept_internal_rules');
+            var submitButton = document.getElementById('cartageRulesSubmit');
+            if (!rulesCheckbox || !submitButton) {
+                return;
+            }
+
+            var syncSubmitState = function () {
+                submitButton.disabled = !rulesCheckbox.checked;
+            };
+
+            rulesCheckbox.addEventListener('change', syncSubmitState);
+            syncSubmitState();
+        })();
+    </script>
+{% endblock %}

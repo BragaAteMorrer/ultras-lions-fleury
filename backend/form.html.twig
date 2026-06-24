@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cartage{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Cartage</h1>
+        <p class="hero-subtitle">Inscription reservee au QR code</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container" style="max-width: 48rem;">
+        <div class="card card-form">
+            <h2 class="section-title">Infos cartage</h2>
+
+            {% for message in app.flashes('danger') %}
+                <div class="alert-error">{{ message }}</div>
+            {% endfor %}
+
+            {% if errors is not empty %}
+                <div class="alert-error">
+                    {% for error in errors %}
+                        <p class="mb-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <p class="form-section-hint">Montant : {{ qrToken.amount|number_format(2, ',', ' ') }} EUR</p>
+
+            <form method="post" action="{{ path('cartage_form') }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('cartage_register') }}">
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="first_name">Prenom</label>
+                        <input id="first_name" name="first_name" class="form-control" required value="{{ data.first_name|default('') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="last_name">Nom</label>
+                        <input id="last_name" name="last_name" class="form-control" required value="{{ data.last_name|default('') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="email">Email</label>
+                        <input id="email" name="email" type="email" class="form-control" required value="{{ data.email|default('') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="phone">Telephone</label>
+                        <input id="phone" name="phone" class="form-control" required value="{{ data.phone|default('') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="birth_date">Date de naissance</label>
+                        <input id="birth_date" name="birth_date" type="date" class="form-control" value="{{ data.birth_date|default('') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="shirt_size">Taille textile</label>
+                        <select id="shirt_size" name="shirt_size" class="form-select">
+                            {% for size in ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'] %}
+                                <option value="{{ size }}" {{ data.shirt_size|default('') == size ? 'selected' : '' }}>{{ size }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="address">Adresse</label>
+                        <input id="address" name="address" class="form-control" value="{{ data.address|default('') }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="postal_code">Code postal</label>
+                        <input id="postal_code" name="postal_code" class="form-control" value="{{ data.postal_code|default('') }}">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label" for="city">Ville</label>
+                        <input id="city" name="city" class="form-control" value="{{ data.city|default('') }}">
+                    </div>
+                </div>
+
+                <h3 class="form-section-title">Paiement</h3>
+                <div class="d-grid gap-2">
+                    <label class="card p-3">
+                        <input type="radio" name="payment_method" value="online" checked>
+                        Payer par carte / PayPal
+                    </label>
+                    <label class="card p-3">
+                        <input type="radio" name="payment_method" value="cash" {{ data.payment_method|default('') == 'cash' ? 'checked' : '' }}>
+                        Payer en liquide, validation par le bureau
+                    </label>
+                </div>
+
+                <button class="btn btn-danger w-100 mt-4" type="submit">Valider mon cartage</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[Vich\Uploadable]
@@ -27,6 +28,10 @@ class Media
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[Vich\UploadableField(mapping: 'media', fileNameProperty: 'path')]
+    #[Assert\File(
+        maxSize: '100M',
+        extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif', 'mp4'],
+    )]
     private ?File $imageFile = null;
 
     #[ORM\ManyToOne(inversedBy: 'media')]
@@ -62,6 +67,40 @@ class Media
     {
         $this->path = $path;
         return $this;
+    }
+
+    public function getExtension(): ?string
+    {
+        if (!$this->path) {
+            return null;
+        }
+
+        $extension = pathinfo($this->path, PATHINFO_EXTENSION);
+
+        return $extension ? strtolower($extension) : null;
+    }
+
+    public function isVideo(): bool
+    {
+        return in_array($this->getExtension(), ['mp4'], true);
+    }
+
+    public function isImage(): bool
+    {
+        return in_array($this->getExtension(), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif'], true);
+    }
+
+    public function getMimeType(): string
+    {
+        return match ($this->getExtension()) {
+            'mp4' => 'video/mp4',
+            'jpg', 'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'webp' => 'image/webp',
+            'avif' => 'image/avif',
+            default => 'application/octet-stream',
+        };
     }
 
     public function getAlt(): ?string { return $this->alt; }

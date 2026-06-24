@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class CheckoutController extends AbstractController
 {
-    #[Route('/merci', name: 'checkout_thankyou')]
+    #[Route('/commande/merci', name: 'checkout_thankyou')]
     public function thankYou(
         Request $request,
         PaymentCheckoutRepository $checkoutRepository,

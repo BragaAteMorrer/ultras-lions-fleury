@@ -1,5 +1,1 @@
-easy_admin:
-    design:
-        assets:
-            css:
-                - 'styles/easyadmin-home.css'
+easy_admin: ~

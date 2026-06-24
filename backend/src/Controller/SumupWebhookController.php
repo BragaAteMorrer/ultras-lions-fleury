@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\CartageRegistration;
 use App\Entity\MerchOrder;
 use App\Entity\TicketOrder;
+use App\Repository\CartageRegistrationRepository;
 use App\Repository\MerchRepository;
 use App\Repository\TicketRepository;
 use App\Repository\PaymentCheckoutRepository;
+use App\Repository\UserRepository;
+use App\Service\CartageProfileCreator;
 use App\Service\MailService;
 use App\Service\SumupService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,8 +29,11 @@ class SumupWebhookController extends AbstractController
         MailService $mailService,
         LoggerInterface $logger,
         PaymentCheckoutRepository $checkoutRepository,
+        CartageRegistrationRepository $cartageRegistrationRepository,
         MerchRepository $merchRepository,
         TicketRepository $ticketRepository,
+        UserRepository $userRepository,
+        CartageProfileCreator $cartageProfileCreator,
         EntityManagerInterface $em
     ): Response {
         $payload = $request->getContent();
@@ -51,6 +58,12 @@ class SumupWebhookController extends AbstractController
         $details = $sumupService->retrieveCheckout($checkoutId);
         $status = strtoupper((string) ($details['status'] ?? ''));
 
+        $logger->info('SumUp webhook received.', [
+            'checkout_id' => $checkoutId,
+            'status' => $status,
+            'details' => $details,
+        ]);
+
         if ($status === 'PAID' || $status === 'SUCCESSFUL' || $status === 'COMPLETED') {
             if ($checkout->getProcessedAt()) {
                 return new Response('ok', 200);
@@ -58,6 +71,36 @@ class SumupWebhookController extends AbstractController
 
             $checkout->setStatus('paid');
             $checkout->setPaidAt(new \DateTime());
+
+            if ($checkout->getType() === 'cartage') {
+                $reference = (string) $checkout->getCheckoutReference();
+                $registration = $reference !== ''
+                    ? $cartageRegistrationRepository->findOneBy(['checkoutReference' => $reference])
+                    : null;
+
+                if (!$registration instanceof CartageRegistration) {
+                    foreach ($checkout->getCart() as $line) {
+                        $registrationId = (int) ($line['cartage_registration_id'] ?? 0);
+                        if ($registrationId > 0) {
+                            $registration = $cartageRegistrationRepository->find($registrationId);
+                            break;
+                        }
+                    }
+                }
+
+                if ($registration instanceof CartageRegistration) {
+                    $registration->markPaidOnline();
+                    $user = $cartageProfileCreator->createProfileIfNeeded($registration);
+                    if ($user !== null && $checkout->getUser() === null) {
+                        $checkout->setUser($user);
+                    }
+                }
+
+                $checkout->setProcessedAt(new \DateTime());
+                $em->flush();
+
+                return new Response('ok', 200);
+            }
 
             $cart = $checkout->getCart();
             $ticketLines = [];
@@ -71,6 +114,11 @@ class SumupWebhookController extends AbstractController
                     if (!$merch) {
                         continue;
                     }
+                    $beneficiaryUser = $checkout->getUser();
+                    $beneficiaryUserId = (int) ($line['beneficiary_user_id'] ?? 0);
+                    if ($beneficiaryUserId > 0) {
+                        $beneficiaryUser = $userRepository->find($beneficiaryUserId) ?? $beneficiaryUser;
+                    }
                     $size = (string) ($line['size'] ?? 'TU');
                     $qty = (int) ($line['quantity'] ?? 1);
                     $stock = $merch->getStockForSize($size);
@@ -80,11 +128,11 @@ class SumupWebhookController extends AbstractController
                     }
 
                     $order = new MerchOrder();
-                    $order->setUser($checkout->getUser());
+                    $order->setUser($beneficiaryUser);
                     $order->setMerch($merch);
-                    $order->setEmail($checkout->getEmail());
-                    $order->setCustomerFirstName($checkout->getCustomerFirstName());
-                    $order->setCustomerLastName($checkout->getCustomerLastName());
+                    $order->setEmail((string) ($line['beneficiary_email'] ?? '') ?: $checkout->getEmail());
+                    $order->setCustomerFirstName((string) ($line['beneficiary_first_name'] ?? '') ?: $checkout->getCustomerFirstName());
+                    $order->setCustomerLastName((string) ($line['beneficiary_last_name'] ?? '') ?: $checkout->getCustomerLastName());
                     $order->setSize($size);
                     $order->setQuantity($qty);
                     $order->setUnitPrice((float) ($line['unit_price'] ?? 0));

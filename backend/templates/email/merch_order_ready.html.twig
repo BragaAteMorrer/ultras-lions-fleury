@@ -1,14 +1,14 @@
-<h2>Ta commande est prete</h2>
+<h2>{{ 'email_merch_order_ready.html.ta_commande_est_prete'|trans }}</h2>
 
-<p>Bonjour,</p>
+<p>{{ 'email_merch_order_ready.html.bonjour'|trans }}</p>
 
-<p>Ta commande merch est maintenant marquee comme executee.</p>
+<p>{{ 'email_merch_order_ready.html.ta_commande_merch_est_marquee_comme_executee'|trans }}</p>
 
 <ul>
-    <li>Produit : {{ order.merch ? order.merch.title : 'Produit' }}</li>
-    <li>Taille : {{ order.size ?? 'TU' }}</li>
-    <li>Quantite : {{ order.quantity }}</li>
-    <li>Total : {{ order.totalPrice|number_format(2, ',', ' ') }} EUR</li>
+    <li>{{ 'checkout_receipt.html.produit'|trans }} : {{ order.merch ? order.merch.title : 'Produit' }}</li>
+    <li>{{ 'checkout_receipt.html.taille'|trans }} : {{ order.size ?? 'TU' }}</li>
+    <li>{{ 'cart_index.html.quantite'|trans }} : {{ order.quantity }}</li>
+    <li>{{ 'checkout_receipt.html.total'|trans }} : {{ order.totalPrice|number_format(2, ',', ' ') }} EUR</li>
 </ul>
 
-<p>Merci.</p>
+<p>{{ 'email_merch_order_ready.html.merci'|trans }}</p>

@@ -152,3 +152,97 @@ document.addEventListener('DOMContentLoaded', initEventCategoryToggle);
 document.addEventListener('turbo:load', initEventCategoryToggle);
 document.addEventListener('DOMContentLoaded', initTicketLocationToggle);
 document.addEventListener('turbo:load', initTicketLocationToggle);
+
+function initAdminMenuHover() {
+    const isMobileMenu = () => window.matchMedia('(max-width: 86rem), (hover: none)').matches;
+    const sidebar = document.querySelector('body.ea .sidebar');
+    const mainMenu = document.querySelector('body.ea #main-menu');
+    const closeOtherItems = (currentItem) => {
+        document.querySelectorAll('body.ea #main-menu .has-submenu.expanded').forEach((openItem) => {
+            if (openItem !== currentItem) {
+                openItem.classList.remove('expanded');
+            }
+        });
+    };
+
+    if (sidebar && mainMenu && !document.getElementById('adminNavToggle')) {
+        const toggle = document.createElement('button');
+        toggle.id = 'adminNavToggle';
+        toggle.className = 'admin-burger';
+        toggle.type = 'button';
+        toggle.setAttribute('aria-controls', 'main-menu');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Ouvrir le menu');
+        toggle.innerHTML = '<span></span><span></span><span></span>';
+        sidebar.insertBefore(toggle, mainMenu);
+
+        toggle.addEventListener('click', () => {
+            const isOpen = document.body.classList.toggle('admin-mobile-nav-open');
+            toggle.classList.toggle('is-open', isOpen);
+            toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+    }
+
+    if (document.body.dataset.adminMobileSubmenusReady !== '1') {
+        document.body.dataset.adminMobileSubmenusReady = '1';
+
+        const toggleMobileSubmenu = (event) => {
+            const toggle = event.target.closest('body.ea #main-menu .has-submenu > .submenu-toggle');
+            if (!toggle || !isMobileMenu()) return;
+
+            const item = toggle.closest('.has-submenu');
+            if (!item) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+
+            const willOpen = !item.classList.contains('expanded');
+            closeOtherItems(item);
+            item.classList.toggle('expanded', willOpen);
+        };
+
+        document.addEventListener('click', toggleMobileSubmenu, true);
+    }
+
+    document.querySelectorAll('body.ea #main-menu .has-submenu').forEach((item) => {
+        if (item.dataset.hoverReady === '1') return;
+        item.dataset.hoverReady = '1';
+
+        item.addEventListener('mouseenter', () => {
+            if (!isMobileMenu()) {
+                closeOtherItems(item);
+                item.classList.add('expanded');
+            }
+        });
+
+        item.addEventListener('mouseleave', () => {
+            if (!isMobileMenu()) {
+                item.classList.remove('expanded');
+            }
+        });
+
+        item.querySelector('.submenu-toggle')?.addEventListener('click', (event) => {
+            if (!isMobileMenu()) event.preventDefault();
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!isMobileMenu() || event.target.closest('body.ea #main-menu .has-submenu')) return;
+
+        document.querySelectorAll('body.ea #main-menu .has-submenu.expanded').forEach((item) => {
+            item.classList.remove('expanded');
+        });
+    });
+
+    window.matchMedia('(min-width: 86.01rem)').addEventListener('change', (event) => {
+        if (!event.matches) return;
+
+        document.body.classList.remove('admin-mobile-nav-open');
+        document.getElementById('adminNavToggle')?.classList.remove('is-open');
+        document.getElementById('adminNavToggle')?.setAttribute('aria-expanded', 'false');
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initAdminMenuHover);
+document.addEventListener('turbo:load', initAdminMenuHover);

@@ -1,66 +1,86 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'events_list.html.deplacements_evenements_ultras_lions'|trans }}{% endblock %}
+{% block title %}{{ 'events_list.html.photos_de_match_ultras_lions'|trans }}{% endblock %}
 
 {% block body %}
-<section class="hero">
-    <div class="hero-content">
-        <h1 class="hero-title">{{ 'events_list.html.deplacements_evenements'|trans }}</h1>
-        <p class="hero-subtitle">{{ 'events_list.html.prochains_matchs_rassemblements_actions'|trans }}</p>
+{% set locale = app.request.locale|default('fr') %}
+
+<section class="hero events-hero">
+    <div class="hero-content events-hero-content">
+        <div class="events-hero-copy">
+            <span class="events-hero-kicker">{{ 'events_list.html.photos_de_match'|trans }}</span>
+            <h1 class="hero-title">{{ 'events_list.html.photos_de_match'|trans }}</h1>
+            <p class="hero-subtitle">{{ 'events_list.html.archives_deplacements_matchs'|trans }}</p>
+        </div>
     </div>
 </section>
 
-<div class="section">
+<div class="section events-section">
     <div class="container">
-        <form method="get" class="mb-4" style="max-width: 22rem;">
-            <label class="form-label text-light" for="season">{{ 'events_list.html.saison'|trans }}</label>
-            <div class="d-flex gap-2">
-                <select id="season" name="season" class="form-select">
-                    <option value="" {% if selectedSeason is empty %}selected{% endif %}>{{ 'components_navbar.html.toutes_les_saisons'|trans }}</option>
-                    {% for season in seasons %}
-                        <option value="{{ season }}" {% if selectedSeason == season %}selected{% endif %}>
-                            {{ season|replace({'-': '/'}) }}
-                        </option>
-                    {% endfor %}
-                </select>
-                <button class="btn btn-outline-light" type="submit">{{ 'events_list.html.filtrer'|trans }}</button>
-            </div>
-        </form>
+        <div class="events-toolbar">
+            <form method="get" class="events-filter">
+                <label class="form-label" for="season">{{ 'events_list.html.saison'|trans }}</label>
+                <div class="events-filter-row">
+                    <select id="season" name="season" class="form-select">
+                        <option value="" {% if selectedSeason is empty %}selected{% endif %}>{{ 'components_navbar.html.toutes_les_saisons'|trans }}</option>
+                        {% for season in seasons %}
+                            <option value="{{ season }}" {% if selectedSeason == season %}selected{% endif %}>
+                                {{ season|replace({'-': '/'}) }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-danger" type="submit">{{ 'events_list.html.filtrer'|trans }}</button>
+                </div>
+            </form>
+        </div>
 
         <h2 class="section-title">{{ 'components_navbar.html.photos_de_match'|trans }}</h2>
 
-        <div class="event-list">
+        <div class="events-grid">
             {% for event in deplacements %}
-                <article class="event-item">
-                    {% set cover = event.image ?: (event.media|first) %}
-                    {% if cover %}
-                        <a href="{{ path('event_show', { id: event.id }) }}" class="card mb-3">
-                            <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="event-card-img-top" alt="{{ event.title }}">
-                        </a>
-                    {% endif %}
+                {% set cover = event.image ?: (event.media|first) %}
+                {% set monthLabel = event.date ? event.date|format_date(locale=locale, pattern='MMM')|upper : null %}
+                <article class="event-card-v2">
+                    <a href="{{ path('event_show', { id: event.id }) }}" class="event-card-link">
+                        <div class="event-card-media">
+                            {% if cover %}
+                                <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="event-card-image-v2" alt="{{ event.title }}">
+                            {% else %}
+                                <div class="event-card-placeholder">
+                                    <span>{{ 'events_list.html.photos_de_match'|trans }}</span>
+                                </div>
+                            {% endif %}
 
-                    <div class="event-date-block">
-                        {% if event.date %}
-                            <div class="event-date-day">{{ event.date|date('d') }}</div>
-                            <div class="event-date-month">{{ event.date|date('M')|upper }}</div>
-                        {% else %}
-                            <div class="event-date-day">?</div>
-                            <div class="event-date-month">---</div>
-                        {% endif %}
-                    </div>
-
-                    <div class="event-content">
-                        <h3>
-                            <a href="{{ path('event_show', { id: event.id }) }}">
-                                {{ event.title }}
-                            </a>
-                        </h3>
-
-                        <div class="event-meta">
-                            {# Ces champs n'existent pas, je les enlève ou tu me diras si on les rajoute #}
+                            <div class="event-card-overlay">
+                                <span class="event-card-badge">{{ 'events_list.html.photos_de_match'|trans }}</span>
+                                {% if event.date %}
+                                    <span class="event-card-date-badge">
+                                        <strong>{{ event.date|format_date(locale=locale, pattern='d') }}</strong>
+                                        <em>{{ monthLabel ?: '---' }}</em>
+                                    </span>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
 
+                        <div class="event-card-body-v2">
+                            <div class="event-card-meta">
+                                {% if event.journee %}
+                                    <span class="event-card-meta-item">
+                                        <i class="bi bi-flag" aria-hidden="true"></i>
+                                        {{ 'events_list.html.journee'|trans({'%number%': event.journee}) }}
+                                    </span>
+                                {% endif %}
+                                {% if event.date %}
+                                    <span class="event-card-meta-item">
+                                        <i class="bi bi-calendar3" aria-hidden="true"></i>
+                                        {{ event.date|format_date(locale=locale, pattern='d MMMM yyyy') }}
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <h3 class="event-card-title-v2">{{ event.title }}</h3>
+                        </div>
+                    </a>
                 </article>
             {% else %}
                 <p>{{ 'events_list.html.aucune_photo_de_match_pour_le_moment'|trans }}</p>
@@ -69,33 +89,45 @@
 
         <h2 class="section-title mt-5">{{ 'admin_dashboard.html.evenements'|trans }}</h2>
 
-        <div class="event-list">
+        <div class="events-grid">
             {% for event in events %}
-                <article class="event-item">
-                    {% set cover = event.image ?: (event.media|first) %}
-                    {% if cover %}
-                        <a href="{{ path('event_show', { id: event.id }) }}" class="card mb-3">
-                            <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="event-card-img-top" alt="{{ event.title }}">
-                        </a>
-                    {% endif %}
+                {% set cover = event.image ?: (event.media|first) %}
+                {% set monthLabel = event.date ? event.date|format_date(locale=locale, pattern='MMM')|upper : null %}
+                <article class="event-card-v2">
+                    <a href="{{ path('event_show', { id: event.id }) }}" class="event-card-link">
+                        <div class="event-card-media">
+                            {% if cover %}
+                                <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="event-card-image-v2" alt="{{ event.title }}">
+                            {% else %}
+                                <div class="event-card-placeholder">
+                                    <span>{{ 'admin_dashboard.html.evenements'|trans }}</span>
+                                </div>
+                            {% endif %}
 
-                    <div class="event-date-block">
-                        {% if event.date %}
-                            <div class="event-date-day">{{ event.date|date('d') }}</div>
-                            <div class="event-date-month">{{ event.date|date('M')|upper }}</div>
-                        {% else %}
-                            <div class="event-date-day">?</div>
-                            <div class="event-date-month">---</div>
-                        {% endif %}
-                    </div>
+                            <div class="event-card-overlay">
+                                <span class="event-card-badge">{{ 'admin_dashboard.html.evenements'|trans }}</span>
+                                {% if event.date %}
+                                    <span class="event-card-date-badge">
+                                        <strong>{{ event.date|format_date(locale=locale, pattern='d') }}</strong>
+                                        <em>{{ monthLabel ?: '---' }}</em>
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
 
-                    <div class="event-content">
-                        <h3>
-                            <a href="{{ path('event_show', { id: event.id }) }}">
-                                {{ event.title }}
-                            </a>
-                        </h3>
-                    </div>
+                        <div class="event-card-body-v2">
+                            <div class="event-card-meta">
+                                {% if event.date %}
+                                    <span class="event-card-meta-item">
+                                        <i class="bi bi-calendar3" aria-hidden="true"></i>
+                                        {{ event.date|format_date(locale=locale, pattern='d MMMM yyyy') }}
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <h3 class="event-card-title-v2">{{ event.title }}</h3>
+                        </div>
+                    </a>
                 </article>
             {% else %}
                 <p>{{ 'events_list.html.aucun_evenement_pour_le_moment'|trans }}</p>

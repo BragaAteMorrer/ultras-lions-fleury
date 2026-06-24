@@ -1,31 +1,46 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
-{% block title %}Panier{% endblock %}
+{% block title %}{{ 'cart_index.html.panier'|trans }}{% endblock %}
 
 {% block body %}
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Panier</h1>
-            <p class="hero-subtitle">Billets + Table de vente</p>
+    <section class="hero cart-hero">
+        <div class="hero-content cart-hero-content">
+            <span class="merch-show-kicker">{{ 'cart_index.html.billets_et_table_de_vente'|trans }}</span>
+            <h1 class="hero-title">{{ 'cart_index.html.panier'|trans }}</h1>
+            <p class="hero-subtitle">{{ 'checkout_receipt.html.recapitulatif_de_commande'|trans }}</p>
+
+            <div class="cart-hero-stats">
+                <span>{{ merchItems|length + ticketItems|length }} lignes</span>
+                <span>{{ merchTotal|number_format(2, ',', ' ') }} EUR matos</span>
+                <span>{{ ticketTotal|number_format(2, ',', ' ') }} EUR billets</span>
+            </div>
         </div>
     </section>
 
     <div class="section">
-        <div class="container" style="max-width: 70rem;">
-            <div class="card p-4 bg-dark text-light border-0 shadow">
+        <div class="container">
+            <div class="cart-layout">
+                <div class="cart-main">
                 {% if merchItems is empty and ticketItems is empty %}
-                    <p class="text-muted">Ton panier est vide.</p>
+                    <div class="cart-empty-state">
+                        <h2>{{ 'cart_index.html.panier_vide'|trans }}</h2>
+                        <p>{{ 'cart_index.html.billets_et_table_de_vente'|trans }}</p>
+                    </div>
                 {% else %}
                     {% if ticketItems is not empty %}
-                        <h3 class="form-section-title">Billets</h3>
-                        <div class="table-responsive">
-                            <table class="table table-dark table-striped align-middle">
+                        <section class="cart-block">
+                            <div class="cart-block-head">
+                                <span class="merch-show-kicker">{{ 'cart_index.html.billets'|trans }}</span>
+                                <h2>{{ 'cart_index.html.billets'|trans }}</h2>
+                            </div>
+                            <div class="table-responsive cart-table-shell">
+                            <table class="table table-dark table-hover align-middle cart-table">
                                 <thead>
                                     <tr>
-                                        <th>Match</th>
-                                        <th>Date</th>
-                                        <th>Quantite</th>
-                                        <th>Total</th>
+                                        <th>{{ 'cart_index.html.match'|trans }}</th>
+                                        <th>{{ 'cart_index.html.date'|trans }}</th>
+                                        <th>{{ 'cart_index.html.quantite'|trans }}</th>
+                                        <th>{{ 'cart_index.html.total'|trans }}</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -38,7 +53,7 @@
                                             <td>{{ row.lineTotal|number_format(2, ',', ' ') }} EUR</td>
                                             <td>
                                                 <form action="{{ path('cart_remove', { type: 'ticket', key: row.key }) }}" method="post">
-                                                    <button class="btn btn-outline-light btn-sm" type="submit">Supprimer</button>
+                                                    <button class="btn btn-outline-light btn-sm" type="submit">{{ 'cart_index.html.supprimer'|trans }}</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -46,22 +61,27 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mt-2">
-                            <strong>Sous-total billets</strong>
-                            <strong>{{ ticketTotal|number_format(2, ',', ' ') }} EUR</strong>
-                        </div>
+                            <div class="cart-subtotal">
+                                <strong>{{ 'cart_index.html.sous_total_billets'|trans }}</strong>
+                                <strong>{{ ticketTotal|number_format(2, ',', ' ') }} EUR</strong>
+                            </div>
+                        </section>
                     {% endif %}
 
                     {% if merchItems is not empty %}
-                        <h3 class="form-section-title mt-4">Matos</h3>
-                        <div class="table-responsive">
-                            <table class="table table-dark table-striped align-middle">
+                        <section class="cart-block">
+                            <div class="cart-block-head">
+                                <span class="merch-show-kicker">{{ 'cart_index.html.matos'|trans }}</span>
+                                <h2>{{ 'cart_index.html.matos'|trans }}</h2>
+                            </div>
+                            <div class="table-responsive cart-table-shell">
+                            <table class="table table-dark table-hover align-middle cart-table">
                                 <thead>
                                     <tr>
-                                        <th>Produit</th>
-                                        <th>Taille</th>
-                                        <th>Quantite</th>
-                                        <th>Total</th>
+                                        <th>{{ 'cart_index.html.produit'|trans }}</th>
+                                        <th>{{ 'cart_index.html.taille'|trans }}</th>
+                                        <th>{{ 'cart_index.html.quantite'|trans }}</th>
+                                        <th>{{ 'cart_index.html.total'|trans }}</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -74,7 +94,7 @@
                                             <td>{{ row.lineTotal|number_format(2, ',', ' ') }} EUR</td>
                                             <td>
                                                 <form action="{{ path('cart_remove', { type: 'merch', key: row.key }) }}" method="post">
-                                                    <button class="btn btn-outline-light btn-sm" type="submit">Supprimer</button>
+                                                    <button class="btn btn-outline-light btn-sm" type="submit">{{ 'cart_index.html.supprimer'|trans }}</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -82,48 +102,82 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mt-2">
-                            <strong>Sous-total matos</strong>
-                            <strong>{{ merchTotal|number_format(2, ',', ' ') }} EUR</strong>
-                        </div>
-                    {% endif %}
-
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <strong>Total</strong>
-                        <strong>{{ total|number_format(2, ',', ' ') }} EUR</strong>
-                    </div>
-
-                    <form action="{{ path('cart_checkout') }}" method="post" class="mt-4" id="sumupCheckoutForm">
-                        {% if app.user is null %}
-                            <div class="row g-2">
-                                <div class="col-md-6">
-                                    <label class="form-label text-light" for="first_name">Prenom</label>
-                                    <input id="first_name" name="first_name" type="text" required class="form-control mb-2">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label text-light" for="last_name">Nom</label>
-                                    <input id="last_name" name="last_name" type="text" required class="form-control mb-2">
-                                </div>
+                            <div class="cart-subtotal">
+                                <strong>{{ 'cart_index.html.sous_total_matos'|trans }}</strong>
+                                <strong>{{ merchTotal|number_format(2, ',', ' ') }} EUR</strong>
                             </div>
-                            <label class="form-label text-light" for="email">Email</label>
-                            <input id="email" name="email" type="email" required value="{{ emailMerch ?? emailTicket }}" class="form-control mb-3">
-                        {% endif %}
-                        <button class="btn btn-danger w-100" type="submit">Payer avec SumUp</button>
-                    </form>
-
-                    <form action="{{ path('cart_checkout_cash') }}" method="post" class="mt-3" id="cashCheckoutForm">
-                        <button class="btn btn-outline-light w-100" type="submit">Reserver & payer en liquide</button>
-                    </form>
-
-                    <form action="{{ path('cart_clear') }}" method="post" class="mt-3">
-                        <button class="btn btn-outline-light w-100" type="submit">Vider le panier</button>
-                    </form>
+                        </section>
+                    {% endif %}
                 {% endif %}
+                </div>
+
+                <aside class="cart-summary-panel">
+                    {% if merchItems is empty and ticketItems is empty %}
+                        <div class="cart-empty-state">
+                            <h2>{{ 'cart_index.html.panier_vide'|trans }}</h2>
+                            <p>{{ 'ticket_list.html.decouvrir_les_matchs'|trans }}</p>
+                        </div>
+                    {% else %}
+                        <div class="cart-summary-head">
+                            <span class="merch-show-kicker">{{ 'cart_index.html.total'|trans }}</span>
+                            <h2>{{ total|number_format(2, ',', ' ') }} EUR</h2>
+                        </div>
+
+                        <div class="cart-summary-grid">
+                            <div>
+                                <span>{{ 'cart_index.html.sous_total_billets'|trans }}</span>
+                                <strong>{{ ticketTotal|number_format(2, ',', ' ') }} EUR</strong>
+                            </div>
+                            <div>
+                                <span>{{ 'cart_index.html.sous_total_matos'|trans }}</span>
+                                <strong>{{ merchTotal|number_format(2, ',', ' ') }} EUR</strong>
+                            </div>
+                        </div>
+
+                        <div class="payment-methods-panel cart-payment-panel">
+                            <div class="payment-methods-heading">
+                                <span class="payment-methods-kicker">SumUp</span>
+                                <h3>{{ 'cart_index.html.moyens_de_paiement_sumup'|trans }}</h3>
+                                <p>{{ 'cart_index.html.paiement_securise_sumup'|trans }}</p>
+                            </div>
+
+                            {% include 'components/payment_logos.html.twig' with { methods: sumupPaymentMethods } %}
+
+                            <p class="payment-methods-note">{{ 'cart_index.html.sumup_availability_note'|trans }}</p>
+                        </div>
+
+                        <form action="{{ path('cart_checkout') }}" method="post" class="cart-checkout-form" id="sumupCheckoutForm">
+                            {% if app.user is null %}
+                                <div class="cart-checkout-grid">
+                                    <div>
+                                        <label class="form-label text-light" for="first_name">{{ 'cart_index.html.prenom'|trans }}</label>
+                                        <input id="first_name" name="first_name" type="text" required class="form-control mb-2">
+                                    </div>
+                                    <div>
+                                        <label class="form-label text-light" for="last_name">{{ 'cart_index.html.nom'|trans }}</label>
+                                        <input id="last_name" name="last_name" type="text" required class="form-control mb-2">
+                                    </div>
+                                </div>
+                                <label class="form-label text-light" for="email">{{ 'security_login.html.email'|trans }}</label>
+                                <input id="email" name="email" type="email" required value="{{ emailMerch ?? emailTicket }}" class="form-control mb-3">
+                            {% endif %}
+                            <button class="btn btn-danger w-100" type="submit">{{ 'cart_index.html.payer_avec_sumup'|trans }}</button>
+                        </form>
+
+                        <form action="{{ path('cart_checkout_cash') }}" method="post" class="mt-3" id="cashCheckoutForm">
+                            <button class="btn btn-outline-light w-100" type="submit">{{ 'cart_index.html.reserver_et_payer_en_liquide'|trans }}</button>
+                        </form>
+
+                        <form action="{{ path('cart_clear') }}" method="post" class="mt-3">
+                            <button class="btn btn-outline-light w-100" type="submit">{{ 'cart_index.html.vider_le_panier'|trans }}</button>
+                        </form>
+                    {% endif %}
+                </aside>
             </div>
 
             <div class="d-flex gap-2 mt-4">
-                <a href="{{ path('ticket_index') }}" class="btn btn-outline-light">Retour billetterie</a>
-                <a href="{{ path('merch_index') }}" class="btn btn-outline-light">Retour table de vente</a>
+                <a href="{{ path('ticket_index') }}" class="btn btn-outline-light">{{ 'cart_index.html.retour_billetterie'|trans }}</a>
+                <a href="{{ path('merch_index') }}" class="btn btn-outline-light">{{ 'cart_index.html.retour_table_de_vente'|trans }}</a>
             </div>
         </div>
     </div>

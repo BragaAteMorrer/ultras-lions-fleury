@@ -102,15 +102,9 @@ class TicketOrderCrudController extends AbstractCrudController
             if (!$ticket instanceof Ticket) {
                 return '';
             }
-            $isAway = $ticket->getMatchLocation() ? (strtolower((string) $ticket->getMatchLocation()) === 'exterieur') : false;
-            if (!$isAway && $ticket->getCategory()) {
-                $isAway = $ticket->getCategory()->getSlug() === 'ext';
-            }
-            $label = $isAway
-                ? sprintf('%s vs FC Fleury', (string) $ticket->getOpponent())
-                : sprintf('FC Fleury vs %s', (string) $ticket->getOpponent());
+            $isAway = $this->isAwayMatch($ticket);
             $where = $isAway ? 'Exterieur' : 'Domicile';
-            return $label . ' (' . $where . ')';
+            return $this->getMatchLabel($ticket) . ' (' . $where . ')';
         })->onlyOnIndex();
         yield AssociationField::new('ticket', 'Match')->onlyOnForms();
 
@@ -123,8 +117,9 @@ class TicketOrderCrudController extends AbstractCrudController
         yield ChoiceField::new('paymentMethod', 'Paiement')->setChoices([
             'SumUp' => 'sumup',
             'Liquide' => 'cash',
+            'Gratuit' => 'free',
         ]);
-        yield BooleanField::new('paid', 'Paiement effectue');
+        yield BooleanField::new('paid', 'Paiement effectué');
         yield DateTimeField::new('createdAt', 'Date');
         yield DateTimeField::new('archivedAt', 'Archive le')->hideOnForm();
     }
@@ -159,14 +154,14 @@ class TicketOrderCrudController extends AbstractCrudController
         $orders = $ids ? $em->getRepository(TicketOrder::class)->findBy(['id' => $ids]) : [];
 
         $lines = [];
-        $lines[] = ['Date', 'Prenom', 'Nom', 'Match', 'Quantite', 'Total', 'Paiement', 'Paye'];
+        $lines[] = ['Date', 'Prenom', 'Nom', 'Match', 'Quantite', 'Total', 'Paiement', 'Payé'];
 
         foreach ($orders as $order) {
             $user = $order->getUser();
             $first = $order->getCustomerFirstName() ?: ($user?->getPrenom() ?? '');
             $last = $order->getCustomerLastName() ?: ($user?->getNom() ?? '');
             $ticket = $order->getTicket();
-            $match = $ticket ? ($ticket->getOpponent() ?? $ticket->getTitle()) : '';
+            $match = $ticket ? $this->getMatchLabel($ticket) : '';
             $lines[] = [
                 $order->getCreatedAt()?->format('d/m/Y H:i') ?? '',
                 $first,
@@ -191,7 +186,7 @@ class TicketOrderCrudController extends AbstractCrudController
 
         return new Response($out, 200, [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename=\"ticket_orders.csv\"',
+            'Content-Disposition' => 'attachment; filename="ticket_orders.csv"',
         ]);
     }
 
@@ -205,14 +200,14 @@ class TicketOrderCrudController extends AbstractCrudController
         $orders = $ids ? $em->getRepository(TicketOrder::class)->findBy(['id' => $ids]) : [];
 
         $html = '<h2>Recapitulatif commandes billets</h2>';
-        $html .= '<table width=\"100%\" cellpadding=\"6\" cellspacing=\"0\" border=\"1\" style=\"border-collapse:collapse;\">';
-        $html .= '<thead><tr><th>Date</th><th>Prenom</th><th>Nom</th><th>Match</th><th>Quantite</th><th>Total</th><th>Paiement</th><th>Paye</th></tr></thead><tbody>';
+        $html .= '<table width="100%" cellpadding="6" cellspacing="0" border="1" style="border-collapse:collapse;">';
+        $html .= '<thead><tr><th>Date</th><th>Prenom</th><th>Nom</th><th>Match</th><th>Quantite</th><th>Total</th><th>Paiement</th><th>Payé</th></tr></thead><tbody>';
         foreach ($orders as $order) {
             $user = $order->getUser();
             $first = $order->getCustomerFirstName() ?: ($user?->getPrenom() ?? '');
             $last = $order->getCustomerLastName() ?: ($user?->getNom() ?? '');
             $ticket = $order->getTicket();
-            $match = $ticket ? ($ticket->getOpponent() ?? $ticket->getTitle()) : '';
+            $match = $ticket ? $this->getMatchLabel($ticket) : '';
             $html .= '<tr>';
             $html .= '<td>' . ($order->getCreatedAt()?->format('d/m/Y H:i') ?? '') . '</td>';
             $html .= '<td>' . htmlspecialchars($first) . '</td>';
@@ -233,7 +228,29 @@ class TicketOrderCrudController extends AbstractCrudController
 
         return new Response($dompdf->output(), 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename=\"ticket_orders.pdf\"',
+            'Content-Disposition' => 'attachment; filename="ticket_orders.pdf"',
         ]);
+    }
+
+    private function getMatchLabel(Ticket $ticket): string
+    {
+        $opponent = trim((string) $ticket->getOpponent());
+
+        if ($opponent === '') {
+            return (string) $ticket->getTitle();
+        }
+
+        return $this->isAwayMatch($ticket)
+            ? sprintf('%s vs FC Fleury', $opponent)
+            : sprintf('FC Fleury vs %s', $opponent);
+    }
+
+    private function isAwayMatch(Ticket $ticket): bool
+    {
+        if ($ticket->getMatchLocation() !== null) {
+            return strtolower((string) $ticket->getMatchLocation()) === 'exterieur';
+        }
+
+        return $ticket->getCategory()?->getSlug() === 'ext';
     }
 }

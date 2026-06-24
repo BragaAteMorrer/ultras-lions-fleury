@@ -1,335 +1,548 @@
 admin_dashboard:
   html:
-    articles: "Articles"
-    aucun_article_pour_le_moment: "Aucun article pour le moment."
-    derniers_articles_publies: "Derniers articles publiés"
-    evenements: "Événements"
-    evolution_des_articles: "Évolution des articles"
-    galeries: "Galeries"
-    medias: "Médias"
-    ultras_lions_dashboard: "Ultras Lions – Dashboard"
-    ultras_lions_fc_fleury_91_page_admin: "Ultras Lions – FC Fleury 91 - Page Admin"
-    visites: "Visites"
-
+    articles: Articles
+    aucun_article_pour_le_moment: 'Aucun article pour le moment.'
+    derniers_articles_publies: 'Derniers articles publiés'
+    evenements: Événements
+    evolution_des_articles: 'Évolution des articles'
+    galeries: Galeries
+    medias: Médias
+    ultras_lions_dashboard: 'Ultras Lions – Dashboard'
+    ultras_lions_fc_fleury_91_page_admin: 'Ultras Lions – FC Fleury 91 - Page Admin'
+    visites: Visites
 base:
   html:
-    ultras_lions_fc_fleury_91: "Ultras Lions – FC Fleury 91"
-    ultras_lions_fc_fleury_91_title: Ultras Lions
-
+    ultras_lions_fc_fleury_91: 'Ultras Lions – FC Fleury 91'
+    ultras_lions_fc_fleury_91_title: 'Ultras Lions'
 components_footer:
   html:
-    copyright: "© %year% Ultras Lions — Site des Ultras FC Fleury 91."
-    espace_admin: "Espace Admin"
-    facebook: "Facebook"
-    instagram: "Instagram"
-    suivez_nous: "Suivez-nous :"
-    tribune_drapeaux_fumigenes_chants_la_ville_est_rouge_et_noire: "Tribune, drapeaux, fumigènes, chants : la ville est rouge et noire."
-    twitter: "Twitter"
-    ultras_lions: "Ultras Lions"
-
+    copyright: '© %year% Ultras Lions — Site des Ultras FC Fleury 91.'
+    espace_admin: 'Espace Admin'
+    facebook: Facebook
+    instagram: Instagram
+    suivez_nous: 'Suivez-nous :'
+    tribune_drapeaux_fumigenes_chants_la_ville_est_rouge_et_noire: 'Tribune, drapeaux, fumigènes, chants : la ville est rouge et noire.'
+    twitter: Twitter
+    ultras_lions: 'Ultras Lions'
+    ten_as_vu_le_debut: "Les Lioness, t'en as vu le début, t'en verras pas la fin !"
 components_navbar:
   html:
-    accueil: "Accueil"
-    actualites: "Actualités"
-    billetterie: "Billetterie"
-    connexion: "Connexion"
-    deconnexion: "Déconnexion"
-    le_groupe: "Le Groupe"
-    modifier_mon_compte: "️ Modifier mon compte"
-    mon_profil: "Mon profil"
-    notre_fonctionnement: "Notre fonctionnement"
-    notre_histoire: "Notre histoire"
-    notre_mentalite: "Notre mentalite"
-    photos_de_match: "Photos de match"
-    pourquoi_nous_rejoindre: "Pourquoi nous rejoindre ?"
-    saisir_un_code: "Saisir un code"
-    saison: "Saison %year_start%/%year_end%"
-    se_carter: "Se Carter"
-    se_connecter: "Se connecter"
+    accueil: Accueil
+    actualites: Actualités
+    billetterie: Billetterie
+    connexion: Connexion
+    deconnexion: Déconnexion
+    le_groupe: 'Le Groupe'
+    modifier_mon_compte: ' Modifier mon compte'
+    mon_profil: 'Mon profil'
+    notre_fonctionnement: 'Notre fonctionnement'
+    notre_histoire: 'Notre histoire'
+    notre_mentalite: 'Notre mentalite'
+    photos_de_match: 'Photos de match'
+    pourquoi_nous_rejoindre: 'Pourquoi nous rejoindre ?'
+    saisir_un_code: 'Saisir un code'
+    saison: 'Saison %year_start%/%year_end%'
+    se_carter: 'Se Carter'
+    se_connecter: 'Se connecter'
     sinscrire: "S'Inscrire"
-    table_de_vente: "Table de Vente"
-    toutes_les_saisons: "Toutes les saisons"
-    videos: "Vidéos"
-    communiques: "Communiqués"
-    streetart: "Street Art"
-    chants: "Chants"
-
+    table_de_vente: 'Table de Vente'
+    toutes_les_saisons: 'Toutes les saisons'
+    videos: Vidéos
+    communiques: Communiqués
+    streetart: 'Street Art'
+    chants: Chants
+    medias: Medias
+    tout_les_medias: 'Tous les médias'
+    liens: Liens
+    acceder_a_l_espace_admin: "Accéder à l'espace admin"
+    acceder_a_mon_profil: "Accéder à mon profil"
+    changer_de_langue: 'Changer de langue'
+    navigation_principale: 'Navigation principale'
+    ouvrir_le_menu: 'Ouvrir le menu'
+    espace_admin: 'Espace Admin'
+    panier: Panier
 email_base:
   html:
-    footer_brand: "Ultras Lions – FC Fleury 91"
-    footer_notice: "Ceci est un email automatique, merci de ne pas répondre directement."
-
+    footer_brand: 'Ultras Lions – FC Fleury 91'
+    footer_notice: 'Ceci est un email automatique, merci de ne pas répondre directement.'
 email_merch_order_recap:
   html:
-    date: "Date :"
-    la_remise_et_le_paiement_se_font_a_la_table_de_vente_ou_selon_les_cons: "La remise et le paiement se font à la table de vente (ou selon les consignes du groupe). Si tu as une question, tu peux répondre à cet email."
-    n_commande: "N° commande :"
-    note: "Note :"
-    prix: "Prix"
-    produit: "Produit"
-    qte: "Qté"
-    recapitulatif_de_commande: "Récapitulatif de commande"
-    total: "Total"
-    voir_la_table_de_vente: "Voir la table de vente"
+    date: 'Date :'
+    la_remise_et_le_paiement_se_font_a_la_table_de_vente_ou_selon_les_cons: 'La remise et le paiement se font à la table de vente (ou selon les consignes du groupe). Si tu as une question, tu peux répondre à cet email.'
+    n_commande: 'N° commande :'
+    note: 'Note :'
+    prix: Prix
+    produit: Produit
+    qte: Qté
+    recapitulatif_de_commande: 'Récapitulatif de commande'
+    total: Total
+    voir_la_table_de_vente: 'Voir la table de vente'
+
+email_merch_order_ready:
+  html:
+    bonjour: 'Bonjour,'
+    merci: 'Merci.'
+    ta_commande_est_prete: 'Ta commande est prête'
+    ta_commande_merch_est_marquee_comme_executee: 'Ta commande merch est maintenant marquée comme exécutée.'
 
 email_ticket_order_recap:
   html:
-    here_is_summary: "Voici le récapitulatif :"
-    le_paiement_et_les_infos_de_remise_retrait_se_font_selon_les_consignes: "Le paiement et les infos de remise/retrait se font selon les consignes du groupe. Si tu as une question, tu peux répondre à cet email."
-    match: "Match"
-    match_line: "%date% - vs %opponent%"
-    n_reservation: "N° réservation :"
-    recapitulatif_de_reservation: "Récapitulatif de réservation"
-    thanks_for_booking: "Merci pour ta réservation"
-    voir_la_billetterie: "Voir la billetterie"
-
+    here_is_summary: 'Voici le récapitulatif :'
+    le_paiement_et_les_infos_de_remise_retrait_se_font_selon_les_consignes: 'Le paiement et les infos de remise/retrait se font selon les consignes du groupe. Si tu as une question, tu peux répondre à cet email.'
+    match: Match
+    match_line: '%date% - vs %opponent%'
+    n_reservation: 'N° réservation :'
+    recapitulatif_de_reservation: 'Récapitulatif de réservation'
+    thanks_for_booking: 'Merci pour ta réservation'
+    voir_la_billetterie: 'Voir la billetterie'
 email_welcome:
   html:
-    acceder_au_site: "Accéder au site"
-    bienvenue_chez_les_ultras_lions: "Bienvenue chez les Ultras Lions"
-    famille_ultras_lions: "famille ULTRAS LIONS"
-    felicitations_tu_rejoins_officiellement_la: "Félicitations, tu rejoins officiellement la"
-    lequipe_est_ravie_de_taccueillir_parmi_les_notres_si_tu_as_la_moindre_: "L’équipe est ravie de t’accueillir parmi les nôtres. Si tu as la moindre question, tu peux répondre directement à cet email."
-    ton_compte_vient_detre_cree_avec_succes_et_tu_peux_maintenant_acceder_: ". Ton compte vient d’être créé avec succès et tu peux maintenant accéder aux contenus privés : déplacements, galeries, infos internes, table de vente, et plus encore."
-
+    acceder_au_site: 'Accéder au site'
+    bienvenue_chez_les_ultras_lions: 'Bienvenue chez les Ultras Lions'
+    famille_ultras_lions: 'famille ULTRAS LIONS'
+    felicitations_tu_rejoins_officiellement_la: 'Félicitations, tu rejoins officiellement la'
+    lequipe_est_ravie_de_taccueillir_parmi_les_notres_si_tu_as_la_moindre_: 'L’équipe est ravie de t’accueillir parmi les nôtres. Si tu as la moindre question, tu peux répondre directement à cet email.'
+    ton_compte_vient_detre_cree_avec_succes_et_tu_peux_maintenant_acceder_: '. Ton compte vient d’être créé avec succès et tu peux maintenant accéder aux contenus privés : déplacements, galeries, infos internes, table de vente, et plus encore.'
 events_list:
   html:
-    aucun_evenement_pour_le_moment: "Aucun événement pour le moment."
-    aucune_photo_de_match_pour_le_moment: "Aucune photo de match pour le moment."
-    deplacements_evenements: "Déplacements & événements"
-    deplacements_evenements_ultras_lions: "Déplacements & événements – Ultras Lions"
-    filtrer: "Filtrer"
-    prochains_matchs_rassemblements_actions: "Prochains matchs, rassemblements, actions"
-    saison: "Saison"
-
+    aucun_evenement_pour_le_moment: 'Aucun événement pour le moment.'
+    aucune_photo_de_match_pour_le_moment: 'Aucune photo de match pour le moment.'
+    deplacements_evenements: 'Déplacements & événements'
+    deplacements_evenements_ultras_lions: 'Déplacements & événements – Ultras Lions'
+    filtrer: Filtrer
+    photos_de_match: 'Photos de match'
+    photos_de_match_ultras_lions: 'Photos de match - Ultras Lions'
+    archives_deplacements_matchs: 'Archives des déplacements, matchs et moments du groupe'
+    journee: 'Journée %number%'
+    prochains_matchs_rassemblements_actions: 'Prochains matchs, rassemblements, actions'
+    saison: Saison
 events_show:
   html:
-    title: "%title% – Déplacement – Ultras Lions"
-
+    title: '%title% – Déplacement – Ultras Lions'
 galleries_list:
   html:
-    aucune_galerie_pour_linstant: "Aucune galerie pour l’instant."
-    dernieres_galeries: "Dernières galeries"
-    galeries_ultras_lions: "Galeries – Ultras Lions"
-    tribunes_deplacements_tifos_vie_du_groupe: "Tribunes, déplacements, tifos, vie du groupe"
-
+    aucune_galerie_pour_linstant: 'Aucune galerie pour l’instant.'
+    dernieres_galeries: 'Dernières galeries'
+    galeries_ultras_lions: 'Galeries – Ultras Lions'
+    tribunes_deplacements_tifos_vie_du_groupe: 'Tribunes, déplacements, tifos, vie du groupe'
 galleries_show:
   html:
-    aucune_photo_disponible_pour_cette_galerie: "Aucune photo disponible pour cette galerie."
-    title: "%title% – Galeries – Ultras Lions"
-
+    aucune_photo_disponible_pour_cette_galerie: 'Aucune photo disponible pour cette galerie.'
+    title: '%title% – Galeries – Ultras Lions'
 group_show:
   html:
-    identite_valeurs_histoire_tribune: "Identité, valeurs, histoire, tribune"
-    le_groupe: "Le groupe"
-    le_groupe_ultras_lions: "Le groupe – Ultras Lions"
-    section_histoire_title: "Notre histoire"
-    section_histoire_text: "Nes en tribune a Fleury, on a bati notre identite match apres match. Rouge et noir, fideles, presents partout."
-    section_mentalite_title: "Notre mentalite"
-    section_mentalite_text: "Fidelite, respect, solidarite. On chante, on pousse, on ne lache rien, a domicile comme en deplacement."
-    section_fonctionnement_title: "Notre fonctionnement"
-    section_fonctionnement_text: "Le groupe tourne grace aux benevoles, aux reunions et aux decisions collectives. Chacun a sa place, chacun met la main."
-    section_rejoindre_title: "Pourquoi nous rejoindre ?"
+    identite_valeurs_histoire_tribune: 'Identité, valeurs, histoire, tribune'
+    le_groupe: 'Le groupe'
+    le_groupe_ultras_lions: 'Le groupe – Ultras Lions'
+    section_histoire_title: 'Notre histoire'
+    section_histoire_text: 'Nes en tribune a Fleury, on a bati notre identite match apres match. Rouge et noir, fideles, presents partout.'
+    section_mentalite_title: 'Notre mentalite'
+    section_mentalite_text: 'Fidelite, respect, solidarite. On chante, on pousse, on ne lache rien, a domicile comme en deplacement.'
+    section_fonctionnement_title: 'Notre fonctionnement'
+    section_fonctionnement_text: 'Le groupe tourne grace aux benevoles, aux reunions et aux decisions collectives. Chacun a sa place, chacun met la main.'
+    section_rejoindre_title: 'Pourquoi nous rejoindre ?'
     section_rejoindre_text: "Pour vivre le match autrement, participer aux tifos et deplacements, et faire partie d'une famille rouge et noire."
-    section_se_carter_title: "Se Carter"
+    section_se_carter_title: 'Se Carter'
     section_se_carter_text: "Passe a la table de vente les jours de match, recupere ton code, puis inscris-toi pour acceder a l'espace membres."
-
 home_index:
   html:
-    aucun_evenement_prevu: "Aucun événement prévu."
-    aucune_actualite_disponible: "Aucune actualité disponible."
+    aucun_evenement_prevu: 'Aucun événement prévu.'
+    aucune_actualite_disponible: 'Aucune actualité disponible.'
     aucune_information_de_groupe_na_encore_ete_ajoutee: "Aucune information de groupe n'a encore été ajoutée."
-    banniere_du_groupe: "Bannière du groupe"
-    dernieres_actualites: "Dernières actualités"
-    galeries_photos: "Galeries photos"
-    le_site_web_du_groupe_ultras_du_fc_fleury_91: "Le site web du groupe ultras du FC Fleury 91"
-    prochain_deplacement: "Prochain déplacement"
-    ultras_lions: "ULTRAS LIONS"
-    ultras_lions_i_fc_fleury_91: "Ultras Lions – FC Fleury 91"
-    voir_les_evenements: "Voir les événements"
-
+    banniere_du_groupe: 'Bannière du groupe'
+    dernieres_actualites: 'Dernières actualités'
+    galeries_photos: 'Galeries photos'
+    le_site_web_du_groupe_ultras_du_fc_fleury_91: 'Le site web du groupe ultras du FC Fleury 91'
+    prochain_deplacement: 'Prochain déplacement'
+    ultras_lions: 'ULTRAS LIONS'
+    ultras_lions_i_fc_fleury_91: 'Ultras Lions – FC Fleury 91'
+    voir_les_evenements: 'Voir les événements'
+    article: Article
+    billetterie_billetweb: 'Billetterie Billetweb'
+    domicile: Domicile
+    evenement: Événement
+    exterieur: Extérieur
+    se_carter_text_defaut: "Passe à la table de vente les jours de match, récupère ton code, puis inscris-toi pour accéder à l'espace membres."
 members_list:
   html:
-    membres_ultras_lions: "Membres Ultras Lions"
-
+    membres_ultras_lions: 'Membres Ultras Lions'
+    taille_short: 'Taille short :'
+    taille_veste: 'Taille veste :'
 merch_buy:
   html:
-    achat: "Achat"
-    paiement_et_remise_a_la_table_de_vente_ou_selon_consignes_du_groupe: "Paiement et remise à la table de vente (ou selon consignes du groupe)."
-    prix_unitaire: "Prix unitaire :"
-    retour: "← Retour"
-    stock_non_configure_pour_cet_article_contacte_un_admin: "Stock non configuré pour cet article (contacte un admin)."
-    valider_et_recevoir_mon_recapitulatif: "Valider et recevoir mon récapitulatif"
-
+    achat: Achat
+    paiement_et_remise_a_la_table_de_vente_ou_selon_consignes_du_groupe: 'Paiement et remise à la table de vente (ou selon consignes du groupe).'
+    prix_unitaire: 'Prix unitaire :'
+    retour: '← Retour'
+    stock_non_configure_pour_cet_article_contacte_un_admin: 'Stock non configuré pour cet article (contacte un admin).'
+    valider_et_recevoir_mon_recapitulatif: 'Valider et recevoir mon récapitulatif'
 merch_list:
   html:
-    categorie: "Catégorie"
-    nos_produits: "Nos produits"
-    table_de_vente_ultras_lions: "Table de Vente – Ultras Lions"
-    textiles_accessoires_stickers_supports_du_groupe: "Textiles, accessoires, stickers, supports du groupe"
-    toutes: "Toutes"
-    trier: "Trier"
+    categorie: Catégorie
+    nos_produits: 'Nos produits'
+    table_de_vente_ultras_lions: 'Table de Vente – Ultras Lions'
+    textiles_accessoires_stickers_supports_du_groupe: 'Textiles, accessoires, stickers, supports du groupe'
+    toutes: Toutes
+    trier: Trier
+    stock_non_defini: 'Stock non défini'
+    vitrine_officielle: 'Vitrine officielle'
+    decouvrir_la_selection: 'Découvrir la sélection'
+    voir_le_panier: 'Voir le panier'
+    pieces: 'Pièces'
+    categories: 'Catégories'
+    stock_disponible: 'Stock disponible'
+    affinage: 'Affinage'
+    selectionnez_une_categorie: 'Sélectionnez une catégorie'
+    choisir: 'Choisir'
 
+    moyens_de_paiement: "Moyens de paiement"
+    paiement_par_carte_via_sumup: "Carte bancaire via SumUp"
+    paiement_en_liquide_a_la_table_de_vente: "Paiement en liquide à la table de vente"
 merch_show:
   html:
-    acheter: "Acheter"
-    stock_total: "Stock total : %stock%"
-    table_de_vente_officielle_ultras_lions: "Table de Vente officielle Ultras Lions"
-    title: "%title% – Table de Vente"
-
+    acheter: Acheter
+    stock_total: 'Stock total : %stock%'
+    table_de_vente_officielle_ultras_lions: 'Table de Vente officielle Ultras Lions'
+    title: '%title% – Table de Vente'
+    ajouter_au_panier: 'Ajouter au panier'
+    quantite: Quantité
+    taille: Taille
+    voir_mon_panier: 'Voir mon panier'
+    stock_total_label: 'Stock total'
 pages_list:
   html:
-    aucune_page_disponible: "Aucune page disponible."
-    pages: "Pages"
-    pages_informatives_du_groupe: "Pages informatives du groupe"
-    pages_ultras_lions: "Pages – Ultras Lions"
-    toutes_les_pages: "Toutes les pages"
-
+    aucune_page_disponible: 'Aucune page disponible.'
+    pages: Pages
+    pages_informatives_du_groupe: 'Pages informatives du groupe'
+    pages_ultras_lions: 'Pages – Ultras Lions'
+    toutes_les_pages: 'Toutes les pages'
 pages_show:
   html:
-    published_on: "Publié le %date%"
-    title: "%title% – Ultras Lions"
-
+    published_on: 'Publié le %date%'
+    title: '%title% – Ultras Lions'
 posts_list:
   html:
-    actualites_ultras_lions: "Actualités – Ultras Lions"
-    aucune_actu_pour_linstant: "Aucune actu pour l’instant."
-    derniers_articles: "Derniers articles"
-    infos_communiques_actions_en_tribune: "Infos, communiqués, actions en tribune"
-
+    actualites_ultras_lions: 'Actualités – Ultras Lions'
+    aucune_actu_pour_linstant: 'Aucune actu pour l’instant.'
+    derniers_articles: 'Derniers articles'
+    infos_communiques_actions_en_tribune: 'Infos, communiqués, actions en tribune'
 posts_show:
   html:
-    published_on: "Publié le %date%"
-    title: "%title%"
-
+    published_on: 'Publié le %date%'
+    title: '%title%'
 profile_edit:
   html:
-    mettre_a_jour: "Mettre à jour"
-    modifier_mon_compte: "Modifier mon compte"
-
+    mettre_a_jour: 'Mettre à jour'
+    modifier_mon_compte: 'Modifier mon compte'
 profile_show:
   html:
-    admin_role: "Bureau"
-    adresse: "Adresse :"
-    date_de_naissance: "Date de naissance :"
-    email: "Email :"
-    member_role: "Adhérant"
-    modifier_mon_profil: "Modifier mon profil"
-    nom: "Nom :"
-    polo: "Polo :"
-    pull: "Pull :"
-    short: "Short :"
-    sweat: "Sweat :"
-    t_shirt: "T-shirt :"
-    telephone: "Téléphone :"
-    veste: "Veste :"
-
+    admin_role: Bureau
+    adresse: 'Adresse :'
+    date_de_naissance: 'Date de naissance :'
+    email: 'Email :'
+    member_role: Adhérant
+    modifier_mon_profil: 'Modifier mon profil'
+    nom: 'Nom :'
+    polo: 'Polo :'
+    pull: 'Pull :'
+    short: 'Short :'
+    sweat: 'Sweat :'
+    t_shirt: 'T-shirt :'
+    telephone: 'Téléphone :'
+    veste: 'Veste :'
+    action: Action
+    aucune_commande_pour_le_moment: 'Aucune commande pour le moment.'
+    aucun_achat_pour_le_moment: 'Aucun achat pour le moment.'
+    aucun_billet_pour_le_moment: 'Aucun billet pour le moment.'
+    billetterie: Billetterie
+    billets: Billets
+    commande: Commande
+    creation: Création
+    date: Date
+    mes_achats: 'Mes achats'
+    mes_commandes: 'Mes commandes'
+    matos: Matos
+    panier: Panier
+    paye: Payé
+    statut: Statut
+    table_de_vente: 'Table de vente'
+    total: Total
+    type: Type
+    voir: Voir
+    ville: Ville
 registration_confirmation_email:
   html:
-    cheers: "Cheers!"
-    confirm_my_email: "Confirm my Email"
-    hi_please_confirm_your_email: "Hi! Please confirm your email!"
-    please_confirm_your_email_address_by_clicking_the_following_link: "Please confirm your email address by clicking the following link:"
-
+    cheers: Cheers!
+    confirm_my_email: 'Confirm my Email'
+    hi_please_confirm_your_email: 'Hi! Please confirm your email!'
+    please_confirm_your_email_address_by_clicking_the_following_link: 'Please confirm your email address by clicking the following link:'
 registration_register:
   html:
-    register: "Register"
-
+    register: Register
 security_forgot_password:
   html:
-    entrez_votre_adresse_email_et_nous_vous_enverrons_un_lien_pour_reiniti: "Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe."
-    envoyer_le_lien: "Envoyer le lien"
-    mot_de_passe_oublie: "Mot de passe oublié"
-    retour_a_la_connexion: "Retour à la connexion"
-    votre_email: "Votre email"
-
+    entrez_votre_adresse_email_et_nous_vous_enverrons_un_lien_pour_reiniti: 'Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.'
+    envoyer_le_lien: 'Envoyer le lien'
+    mot_de_passe_oublie: 'Mot de passe oublié'
+    retour_a_la_connexion: 'Retour à la connexion'
+    votre_email: 'Votre email'
 security_invitation:
   html:
-    code_dinvitation: "Code d’invitation"
+    code_dinvitation: 'Code d’invitation'
     lors_de_votre_cartage_a_la_table_de_vente_un_code_vous_a_ete_remis_pou: "Lors de votre Cartage à la table de vente, un code vous à été remis pour pouvoir créer un compte de membre sur le site, attention ce dernier n'est valable qu'une semaine ! En cas d'oubli d'inscription au bout de cet semaine ou de perte de ce dernier, veuillez contacter les responsables du groupe pour qu'un nouveau vous soit donnée, ce code est à usage unique !"
-    rejoindre_les_ultras_lions: "Rejoindre les Ultras Lions"
-    valider: "Valider"
-
+    rejoindre_les_ultras_lions: 'Rejoindre les Ultras Lions'
+    valider: Valider
 security_login:
   html:
-    email: "Email"
-    mot_de_passe: "Mot de passe"
-    mot_de_passe_oublie: "Mot de passe oublié ?"
-
+    email: Email
+    mot_de_passe: 'Mot de passe'
+    mot_de_passe_oublie: 'Mot de passe oublié ?'
 security_register:
   html:
-    coordonnees: "Coordonnées"
-    creer_mon_compte: "Créer mon compte"
-    identite: "Identité"
-    informations_de_connexion: "Informations de connexion"
-    inscription: "Inscription"
-    photo: "Photo"
-    tailles: "Tailles"
-
+    coordonnees: Coordonnées
+    creer_mon_compte: 'Créer mon compte'
+    identite: Identité
+    informations_de_connexion: 'Informations de connexion'
+    inscription: Inscription
+    photo: Photo
+    tailles: Tailles
 security_reset_password:
   html:
-    nouveau_mot_de_passe: "Nouveau mot de passe"
-
+    nouveau_mot_de_passe: 'Nouveau mot de passe'
 staff_index:
   html:
-    staff: "STAFF"
-    staff_ultras_lions: "Staff Ultras Lions"
-
+    staff: STAFF
+    staff_ultras_lions: 'Staff Ultras Lions'
 ticket_buy:
   html:
-    match: "Match :"
-    paiement_et_remise_selon_les_consignes_du_groupe: "Paiement et remise selon les consignes du groupe."
-    reservation: "Réservation"
-    stock: "- Stock :"
-    title: "Réservation - %title%"
-    vs_opponent: "vs %opponent%"
-
+    match: 'Match :'
+    paiement_et_remise_selon_les_consignes_du_groupe: 'Paiement et remise selon les consignes du groupe.'
+    reservation: Réservation
+    stock: '- Stock :'
+    title: 'Réservation - %title%'
+    vs_opponent: 'vs %opponent%'
 ticket_list:
   html:
-    aucun_match_pour_le_moment: "Aucun match pour le moment."
-    billetterie_ultras_lions: "Billetterie"
+    a_domicile: Domicile
+    a_lexterieur: Extérieur
+    billetweb: Billetweb
+    billetweb_reservation: 'Réservation Billetweb'
+    reserver: 'Réserver'
+    billetterie_billetweb_integree: 'Billetterie Billetweb intégrée'
+    billetterie_ultras_lions: Billetterie
+    decouvrir_les_matchs: 'Découvrir les matchs'
     matchs_a_domicile_et_a_lexterieur: "Matchs à domicile et à l'extérieur"
-    matchs_disponibles: "Matchs disponibles"
-    stock: "Stock : %stock%"
-    vs_opponent: "vs %opponent%"
-
+    matchs_disponibles: 'Matchs disponibles'
+    selectionnez_une_categorie: 'Sélectionnez une catégorie'
+    stock: 'Stock : %stock%'
+    vs_opponent: 'vs %opponent%'
+    vitrine_officielle: 'Vitrine officielle'
+    aucun_match_pour_le_moment: 'Aucun match pour le moment.'
 ticket_show:
   html:
-    adversaire: "Adversaire :"
-    complet: "Complet"
-    lieu: "Lieu :"
-    prix: "Prix :"
-    reserver: "Réserver"
-    stock: "Stock : %stock%"
-    title: "%title% - Billetterie"
-
+    adversaire: 'Adversaire :'
+    complet: Complet
+    lieu: 'Lieu :'
+    prix: 'Prix :'
+    reserver: Réserver
+    stock: 'Stock : %stock%'
+    title: '%title% - Billetterie'
+    billetterie_billetweb_integree: "La billetterie de ce match à domicile est intégrée via Billetweb."
+    billetterie_billetweb_title: 'Billetterie Billetweb - %match%'
+    ouvrir_la_billetterie_billetweb: 'Ouvrir la billetterie Billetweb'
+    quantite: Quantité
 user__delete_form:
   html:
-    delete: "Delete"
-
+    delete: Delete
 user_edit:
   html:
-    back_to_list: "back to list"
-    edit_user: "Edit User"
-
+    back_to_list: 'back to list'
+    edit_user: 'Edit User'
 user_index:
   html:
-    actions: "actions"
-    create_new: "Create new"
-    edit: "edit"
-    id: "Id"
-    isverified: "IsVerified"
-    no_records_found: "no records found"
-    password: "Password"
-    roles: "Roles"
-    show: "show"
-    user_index: "User index"
-
+    actions: actions
+    create_new: 'Create new'
+    edit: edit
+    id: Id
+    isverified: IsVerified
+    no_records_found: 'no records found'
+    password: Password
+    roles: Roles
+    show: show
+    user_index: 'User index'
 user_new:
   html:
-    create_new_user: "Create new User"
-    new_user: "New User"
-
+    create_new_user: 'Create new User'
+    new_user: 'New User'
 user_show:
   html:
-    user: "User"
+    user: User
+media_index:
+  html:
+    aucun_media_pour_le_moment: 'Aucun média pour le moment.'
+    media: Média
+    photos_de_match_communiques_et_videos: 'Photos de match, communiqués et vidéos'
+    video: Vidéo
+cart_index:
+  html:
+    billets: Billets
+    billets_et_table_de_vente: 'Billets + Table de vente'
+    date: Date
+    matos: Matos
+    match: Match
+    nom: Nom
+    panier: Panier
+    panier_vide: 'Ton panier est vide.'
+    payer_avec_sumup: 'Payer avec SumUp'
+    moyens_de_paiement_sumup: 'Moyens de paiement SumUp'
+    paiement_securise_sumup: 'Paiement sécurisé par SumUp, avec validation finale sur leur page de paiement.'
+    sumup_method_cards: 'Carte bancaire'
+    sumup_method_cards_detail: 'Visa, Mastercard et cartes compatibles.'
+    sumup_method_wallets: 'Apple Pay / Google Pay'
+    sumup_method_wallets_detail: 'Selon appareil, navigateur et compte marchand.'
+    sumup_method_paypal: 'PayPal via SumUp'
+    sumup_method_paypal_detail: 'Disponible si PayPal est activé sur le compte SumUp.'
+    sumup_method_local: 'Autres moyens locaux'
+    sumup_method_local_detail: 'Selon pays, montant et devise.'
+    sumup_availability_note: 'La liste exacte des moyens proposés est confirmée par SumUp au moment du paiement.'
+    prenom: Prénom
+    produit: Produit
+    quantite: Quantité
+    retour_billetterie: 'Retour billetterie'
+    retour_table_de_vente: 'Retour table de vente'
+    sous_total_billets: 'Sous-total billets'
+    sous_total_matos: 'Sous-total matos'
+    supprimer: Supprimer
+    taille: Taille
+    total: Total
+    vider_le_panier: 'Vider le panier'
+    reserver_et_payer_en_liquide: 'Réserver et payer en liquide'
+checkout_thankyou:
+  html:
+    merci: Merci
+    merci_pour_ton_achat: 'Merci pour ton achat'
+    paiement_confirme: 'Paiement confirmé'
+    paiement_pris_en_compte: 'Ton paiement a bien été pris en compte.'
+checkout_cash_thankyou:
+  html:
+    a_regler_au_prochain_match_a_domicile: "À régler au prochain match à domicile"
+    cartage_en_attente: 'Paiement en liquide'
+    merci_ta_commande_est_enregistree: 'Merci ! Ta commande est enregistrée.'
+    paiement_a_regler_en_liquide_au_prochain_match_a_domicile: "Paiement à régler en liquide au prochain match à domicile."
+checkout_receipt:
+  html:
+    a_conserver_comme_preuve_achat: "À conserver comme preuve d'achat."
+    billets: Billets
+    commande: Commande
+    date: Date
+    liquide: Liquide
+    matos: Matos
+    match: Match
+    nom: Nom
+    numero: Numéro
+    numero_de_commande: 'Numéro de commande'
+    paiement: Paiement
+    produit: Produit
+    recapitulatif_de_commande: 'Récapitulatif de commande'
+    retour_a_l_accueil: "Retour à l'accueil"
+    sumup: SumUp
+    taille: Taille
+    telecharger_le_pdf: 'Télécharger le PDF'
+    total: Total
+cartage_thankyou:
+  html:
+    cartage: Cartage
+    checkout_id: 'Checkout ID :'
+    impossible_de_retrouver_la_demande: 'Impossible de retrouver la demande de cartage. Contacte le groupe avec ta preuve de paiement.'
+    me_connecter: 'Me connecter'
+    nous_verifions_ton_paiement_avec_sumup: 'Nous vérifions ton paiement avec SumUp.'
+    paiement_en_attente: 'Paiement en attente'
+    paiement_valide_cartage_confirme: 'Paiement valide. Ton cartage est confirmé.'
+    reference: 'Référence :'
+    statut_brut: 'Statut brut :'
+    statut_echec_reessaie_ou_contacte_le_groupe: 'Si le statut reste en échec, réessaie ou contacte le groupe avec cette référence.'
+    voir_mon_profil: 'Voir mon profil'
+cartage_cash_thankyou:
+  html:
+    cartage_en_attente: 'Cartage en attente'
+    ta_demande_est_enregistree: 'Ta demande est enregistrée. Ton compte sera créé quand le bureau validera le paiement en liquide.'
+cartage_form:
+  html:
+    apres_ce_formulaire_tu_devras_lire_et_accepter_le_reglement: "Après ce formulaire, tu devras lire et accepter le règlement intérieur avant d'accéder au paiement. Tu peux aussi vérifier un cartage par email sur "
+    cartage: Cartage
+    choisir: Choisir...
+    compte_deja_existant: "Compte déjà existant pour cette adresse email. Le cartage servira de renouvellement et mettra le profil à jour après validation."
+    confirmer_le_mot_de_passe: 'Confirmer le mot de passe'
+    continuer_vers_le_reglement: 'Continuer vers le règlement'
+    code_postal: 'Code postal'
+    date_de_naissance: 'Date de naissance'
+    infos_cartage: 'Infos cartage'
+    inscription_reservee_au_qr_code: 'Inscription réservée au QR code'
+    la_page_de_statut: 'la page de statut'
+    mot_de_passe: 'Mot de passe'
+    mot_de_passe_requis_uniquement_si_aucun_compte_existe: "Mot de passe requis uniquement si aucun compte n'existe déjà avec cet email."
+    mot_de_passe_requis_creation_de_compte: "Mot de passe requis pour la création d'un compte."
+    nom: Nom
+    pour_la_saison: 'pour la saison'
+    prenom: Prénom
+    saison_montant: 'Saison %season% - Montant : %amount% EUR'
+    formulaire_de_contact: 'Formulaire de contact'
+cartage_rules:
+  html:
+    continuer_vers_le_paiement: 'Continuer vers le paiement'
+    jai_lu_et_jaccepte: "J'ai lu et j'accepte le règlement intérieur de l'association."
+    lecture_obligatoire_avant_paiement: 'Lecture obligatoire avant paiement'
+    montant: 'Montant : %amount% EUR'
+    paiement: Paiement
+    payer_en_liquide_validation_par_le_bureau: 'Payer en liquide, validation par le bureau'
+    payer_par_carte_ou_paypal: 'Payer par carte / PayPal'
+    reglement_interieur: 'Règlement intérieur'
+    reglement_interieur_cartage: 'Règlement intérieur - Cartage'
+    reglement_non_configure: "Le règlement intérieur n'est pas encore configuré."
+    retour_au_formulaire: 'Retour au formulaire'
+    validation: Validation
+cartage_status:
+  html:
+    aucun_cartage_trouve: 'Aucun cartage trouvé pour %email% sur la saison %season%.'
+    compte_membre: 'Compte membre : %value%.'
+    saison: Saison
+    saison_demande: 'Saison %season% - demande du %date%.'
+    statut_cartage: 'Statut cartage'
+    verifier: Vérifier
+    verifier_une_saison: 'Vérifier une saison'
+    verification_par_adresse_email: 'Vérification par adresse email'
+cartage_locked:
+  html:
+    cartage: Cartage
+    cartage_bloque: 'Cartage bloqué'
+linktree_index:
+  html:
+    aucun_lien_actif_pour_le_moment: 'Aucun lien actif pour le moment.'
+    liens_principaux: 'Liens principaux'
+    liens_ultras_lions: 'Liens Ultras Lions'
+    tous_les_liens_utiles_du_groupe_au_meme_endroit: 'Tous les liens utiles du groupe au même endroit.'
+profile_order:
+  html:
+    attente: Attente
+    commande: Commande
+    date: Date
+    liquide: Liquide
+    paiement: Paiement
+    paiement_a_regler_en_liquide_au_prochain_match: "Paiement à régler en liquide au prochain match à domicile"
+    paiement_liquide: 'Paiement liquide'
+    paye: Payé
+    prix: Prix
+    refuse: Refusé
+    statut: Statut
+    total: Total
+    type: Type
+
+
+
+
+
+
+
+
+
+

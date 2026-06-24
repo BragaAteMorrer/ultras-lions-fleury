@@ -11,6 +11,7 @@ use App\Repository\MerchCategoryRepository;
 use App\Repository\PaymentCheckoutRepository;
 use App\Service\MerchSizingService;
 use App\Service\CartService;
+use App\Service\PaymentLogoProvider;
 use App\Service\SumupService;
 use App\Service\MailService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,7 +26,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class MerchController extends AbstractController
 {
     #[Route('/', name: 'merch_index')]
-    public function index(Request $request, MerchRepository $merchRepository, MerchCategoryRepository $categoryRepository): Response
+    public function index(
+        Request $request,
+        MerchRepository $merchRepository,
+        MerchCategoryRepository $categoryRepository,
+        PaymentLogoProvider $paymentLogoProvider
+    ): Response
     {
         $categories = $categoryRepository->findBy([], ['name' => 'ASC']);
         $selectedCategory = null;
@@ -37,11 +43,18 @@ class MerchController extends AbstractController
 
         $isMember = $this->getUser() !== null;
         $items = $merchRepository->findVisibleForUser($selectedCategory, $isMember);
+        $prices = [];
+        foreach ($items as $item) {
+            $prices[$item->getId()] = $item->getPriceForUser($isMember);
+        }
 
         return $this->render('merch/list.html.twig', [
             'items' => $items,
+            'prices' => $prices,
+            'isMember' => $isMember,
             'categories' => $categories,
             'selectedCategory' => $selectedCategory,
+            'sumupPaymentMethods' => $paymentLogoProvider->sumupMethods(),
         ]);
     }
 
@@ -59,6 +72,8 @@ class MerchController extends AbstractController
 
         return $this->render('merch/show.html.twig', [
             'item' => $item,
+            'price' => $item->getPriceForUser($isMember),
+            'isMember' => $isMember,
             'sizeChoices' => $sizeChoices,
             'preferredSize' => $preferredSize,
         ]);
@@ -115,7 +130,7 @@ class MerchController extends AbstractController
                 } else {
                     $to = $user?->getUserIdentifier() ?: (string) ($data['email'] ?? '');
 
-                    $unitPrice = (float) $item->getPrice();
+                    $unitPrice = $item->getPriceForUser($user !== null);
                     $totalPrice = round($unitPrice * $quantity, 2);
 
                     $orderNumber = strtoupper(bin2hex(random_bytes(4)));
@@ -159,6 +174,8 @@ class MerchController extends AbstractController
 
         return $this->render('merch/buy.html.twig', [
             'item' => $item,
+            'price' => $item->getPriceForUser($isMember),
+            'isMember' => $isMember,
             'form' => $form->createView(),
             'sizeChoices' => $sizeChoices,
             'stockConfigured' => $stockConfigured,
@@ -241,7 +258,7 @@ class MerchController extends AbstractController
                 return $this->redirectToRoute('cart_index');
             }
 
-            $unit = (float) $product->getPrice();
+            $unit = $product->getPriceForUser($this->getUser() instanceof User);
             $lineTotal = round($unit * $qty, 2);
             $total += $lineTotal;
             $lines[] = [
@@ -348,7 +365,7 @@ class MerchController extends AbstractController
                 return new JsonResponse(['error' => 'insufficient_stock', 'message' => 'Stock insuffisant.'], 400);
             }
 
-            $unit = (float) $product->getPrice();
+            $unit = $product->getPriceForUser($this->getUser() instanceof User);
             $lineTotal = round($unit * $qty, 2);
             $total += $lineTotal;
             $lines[] = [

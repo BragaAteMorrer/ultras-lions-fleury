@@ -10,6 +10,7 @@ admin_dashboard:
     ultras_lions_dashboard: Ultras Lions – Painel
     ultras_lions_fc_fleury_91_page_admin: Ultras Lions – FC Fleury 91 - Página Admin
     visites: Visitas
+    page_d_accueil: Página inicial
 base:
   html:
     ultras_lions_fc_fleury_91: Ultras Lions – FC Fleury 91
@@ -32,12 +33,12 @@ components_navbar:
     connexion: Conexão
     deconnexion: Desconectar
     le_groupe: O Grupo
-    modifier_mon_compte: ️ Editar minha conta
+    modifier_mon_compte:  Editar minha conta
     mon_profil: Meu perfil
     notre_histoire: "Nossa historia"
     notre_mentalite: "Nossa mentalidade"
     notre_fonctionnement: "Nosso funcionamento"
-    pourquoi_nous_rejoindre: "Por que se juntar a nos?"
+    pourquoi_nous_rejoindre: "Por que se juntar a nós?"
     photos_de_match: Combine fotos
     saisir_un_code: Insira um código
     saison: Temporada %year_start%/%year_end%
@@ -94,6 +95,7 @@ events_list:
     filtrer: Filtro
     prochains_matchs_rassemblements_actions: Próximos jogos, encontros, ações
     saison: Temporada
+    photos_de_match: Fotos de jogos
 events_show:
   html:
     title: '%title% – Viagens – Ultras Lions'
@@ -118,7 +120,7 @@ group_show:
     section_mentalite_text: "Lealdade, respeito, uniao. Cantamos, empurramos, nao largamos nunca, em casa e fora."
     section_fonctionnement_title: "Nosso funcionamento"
     section_fonctionnement_text: "O grupo funciona com voluntarios, reunioes e decisoes coletivas. Cada um tem seu lugar, cada um contribui."
-    section_rejoindre_title: "Por que se juntar a nos?"
+    section_rejoindre_title: "Por que se juntar a nós?"
     section_rejoindre_text: "Para viver o jogo de outro jeito, participar de tifos e viagens e fazer parte de uma familia rubro-negra."
     section_se_carter_title: "Se Carter"
     section_se_carter_text: "Passe na mesa de vendas em dia de jogo, pegue seu codigo e depois se registre para acessar a area de membros."
@@ -154,6 +156,20 @@ merch_list:
     textiles_accessoires_stickers_supports_du_groupe: Têxteis, acessórios, adesivos, suportes de grupo
     toutes: Todos
     trier: Organizar
+    stock_non_defini: Estoque não definido
+    vitrine_officielle: Vitrine oficial
+    decouvrir_la_selection: Descobrir a seleção
+    voir_le_panier: Ver carrinho
+    pieces: Peças
+    categories: Categorias
+    stock_disponible: Stock disponível
+    affinage: Filtragem
+    selectionnez_une_categorie: Selecione uma categoria
+    choisir: Escolher
+
+    moyens_de_paiement: "Métodos de pagamento"
+    paiement_par_carte_via_sumup: "Pagamento com cartão via SumUp"
+    paiement_en_liquide_a_la_table_de_vente: "Pagamento em dinheiro na mesa de vendas"
 merch_show:
   html:
     acheter: Comprar
@@ -254,12 +270,21 @@ ticket_buy:
     vs_opponent: versus %opponent%
 ticket_list:
   html:
-    aucun_match_pour_le_moment: Nenhuma correspondência ainda.
+    a_domicile: Casa
+    a_lexterieur: Fora
+    billetweb: Billetweb
+    billetweb_reservation: 'Reserva Billetweb'
+    reserver: Reservar
+    billetterie_billetweb_integree: 'Integração Billetweb'
     billetterie_ultras_lions: Ingressos
+    decouvrir_les_matchs: 'Descobrir jogos'
     matchs_a_domicile_et_a_lexterieur: Jogos em casa e fora
     matchs_disponibles: Partidas disponíveis
+    selectionnez_une_categorie: 'Selecione uma categoria'
     stock: 'Estoque: %stock%'
     vs_opponent: versus %opponent%
+    vitrine_officielle: 'Vitrine oficial'
+    aucun_match_pour_le_moment: 'Nenhum jogo no momento.'
 ticket_show:
   html:
     adversaire: 'Adversário:'
@@ -287,7 +312,7 @@ user_index:
     password: Senha
     roles: Funções
     show: mostrar
-    user_index: Índice de usuário
+    user_index: índice de usuário
 user_new:
   html:
     create_new_user: Criar novo usuário
@@ -295,3 +320,47 @@ user_new:
 user_show:
   html:
     user: Usuário
+cart_index:
+  html:
+    billets: Bilhetes
+    billets_et_table_de_vente: 'Bilhetes + banca de venda'
+    date: Data
+    matos: Material
+    match: Jogo
+    nom: Apelido
+    panier: Carrinho
+    panier_vide: 'O teu carrinho está vazio.'
+    payer_avec_sumup: 'Pagar com SumUp'
+    moyens_de_paiement_sumup: 'Métodos de pagamento SumUp'
+    paiement_securise_sumup: 'Pagamento seguro pela SumUp, com validação final na página de pagamento.'
+    sumup_method_cards: 'Cartão bancário'
+    sumup_method_cards_detail: 'Visa, Mastercard e cartões compatíveis.'
+    sumup_method_wallets: 'Apple Pay / Google Pay'
+    sumup_method_wallets_detail: 'Consoante o dispositivo, navegador e conta do comerciante.'
+    sumup_method_paypal: 'PayPal via SumUp'
+    sumup_method_paypal_detail: 'Disponível se o PayPal estiver ativado na conta SumUp.'
+    sumup_method_local: 'Outros métodos locais'
+    sumup_method_local_detail: 'Consoante o país, montante e moeda.'
+    sumup_availability_note: 'A lista exata dos métodos disponíveis é confirmada pela SumUp no momento do pagamento.'
+    prenom: Nome
+    produit: Produto
+    quantite: Quantidade
+    retour_billetterie: 'Voltar à bilheteira'
+    retour_table_de_vente: 'Voltar à banca de venda'
+    sous_total_billets: 'Subtotal bilhetes'
+    sous_total_matos: 'Subtotal material'
+    supprimer: Remover
+    taille: Tamanho
+    total: Total
+    vider_le_panier: 'Esvaziar carrinho'
+    reserver_et_payer_en_liquide: 'Reservar e pagar em dinheiro'
+
+
+
+
+
+
+
+
+
+

@@ -33,6 +33,9 @@ class SiteConfigCrudController extends AbstractCrudController
         yield TextField::new('siteName', 'Nom du site');
         yield TextField::new('heroTitle', 'Titre hero');
         yield TextareaField::new('heroSubtitle', 'Sous-titre hero')->hideOnIndex();
+        yield AssociationField::new('backgroundImage', 'Photo d arriere-plan')
+            ->renderAsEmbeddedForm(MediaCrudController::class)
+            ->hideOnIndex();
 
     }
 }

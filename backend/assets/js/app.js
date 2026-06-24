@@ -1,4 +1,21 @@
 /* =============================
+   LOADING SCREEN
+============================= */
+(function () {
+    const hideLoader = () => {
+        document.body.classList.add('is-loaded');
+    };
+
+    if (document.readyState === 'complete') {
+        window.setTimeout(hideLoader, 250);
+        return;
+    }
+
+    window.addEventListener('load', () => window.setTimeout(hideLoader, 250));
+    window.setTimeout(hideLoader, 1800);
+})();
+
+/* =============================
    NAVBAR : Effet au scroll
 ============================= */
 (function () {
@@ -108,41 +125,6 @@
     });
 })();
 
-/* =============================
-   HERO SLIDER BACKGROUND
-============================= */
-(function () {
-    const hero = document.getElementById('heroSlider');
-    if (!hero) return;
-
-    let images;
-
-    try {
-        images = JSON.parse(hero.dataset.heroImages.replace(/&quot;/g, '"'));
-    } catch (e) {
-        console.warn("Hero images JSON invalide.");
-        images = [];
-    }
-
-    if (!images.length) return;
-
-    let index = 0;
-    const delay = 7000;
-
-    const updateBg = () => {
-        hero.style.backgroundImage = `
-            linear-gradient(120deg, rgba(0,0,0,0.8), rgba(0,0,0,0.3)),
-            url('${images[index]}')
-        `;
-    };
-
-    updateBg();
-    setInterval(() => {
-        index = (index + 1) % images.length;
-        updateBg();
-    }, delay);
-})();
-
 // Navbar Ultra toggle
 (function () {
     const btn = document.getElementById("ultraNavToggle");
@@ -160,7 +142,8 @@
     const nav = document.getElementById('ultraNavMobile');
     if (!btn || !nav) return;
     btn.addEventListener('click', () => {
-        nav.classList.toggle('open');
+        const isOpen = nav.classList.toggle('open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
 })();
 
@@ -176,35 +159,4 @@
             toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         });
     });
-})();
-
-// Slider de background sur le hero
-(function () {
-    const hero = document.getElementById('heroSlider');
-    if (!hero) return;
-
-    const raw = hero.dataset.heroImages;
-    let images;
-    try {
-        images = JSON.parse(raw.replace(/&quot;/g, '"'));
-    } catch (e) {
-        images = [];
-    }
-    if (!images.length) return;
-
-    let index = 0;
-    const delay = 7000; // 7s
-
-    const setBg = () => {
-        hero.style.backgroundImage = `
-            linear-gradient(120deg, rgba(0,0,0,0.8), rgba(0,0,0,0.3)),
-            url('` + images[index] + `')
-        `;
-    };
-
-    setBg();
-    setInterval(() => {
-        index = (index + 1) % images.length;
-        setBg();
-    }, delay);
 })();

@@ -10,6 +10,7 @@ admin_dashboard:
     ultras_lions_dashboard: Ultras Lions – Dashboard
     ultras_lions_fc_fleury_91_page_admin: Ultras Lions – FC Fleury 91 – Admin-Seite
     visites: Besuche
+    page_d_accueil: Startseite
 base:
   html:
     ultras_lions_fc_fleury_91: Ultras Lions – FC Fleury 91
@@ -24,6 +25,7 @@ components_footer:
     tribune_drapeaux_fumigenes_chants_la_ville_est_rouge_et_noire: 'Tribüne, Fahnen, Rauchbomben, Lieder: Die Stadt ist rot und schwarz.'
     twitter: Twitter
     ultras_lions: Ultras Lions
+    ten_as_vu_le_debut: "Les Lioness, t'en as vu le début, t'en verras pas la fin !"
 components_navbar:
   html:
     accueil: Willkommen
@@ -32,7 +34,7 @@ components_navbar:
     connexion: Verbindung
     deconnexion: Trennen
     le_groupe: Die Gruppe
-    modifier_mon_compte: ️ Bearbeiten Sie mein Konto
+    modifier_mon_compte:  Bearbeiten Sie mein Konto
     mon_profil: Mein Profil
     notre_histoire: "Unsere Geschichte"
     notre_mentalite: "Unsere Mentalitaet"
@@ -50,6 +52,10 @@ components_navbar:
     communiques: Pressemitteilungen
     streetart: Street Art
     chants: "Chants"
+    medias: "Medias"
+    tout_les_medias: "All Medias"
+    liens: "Links"
+
 email_base:
   html:
     footer_brand: Ultras Lions – FC Fleury 91
@@ -93,6 +99,8 @@ events_list:
     filtrer: Filter
     prochains_matchs_rassemblements_actions: Kommende Spiele, Versammlungen, Aktionen
     saison: Jahreszeit
+    photos_de_match: Spielfotos
+    photos_de_match_saison: Spielfotos Saison %year_start%/%year_end%
 events_show:
   html:
     title: '%title% – Reisen – Ultras Lions'
@@ -153,6 +161,20 @@ merch_list:
     textiles_accessoires_stickers_supports_du_groupe: Textilien, Accessoires, Aufkleber, Gruppenstützen
     toutes: Alle
     trier: Sortieren
+    stock_non_defini: Lagerbestand nicht definiert
+    vitrine_officielle: Offizielle Auswahl
+    decouvrir_la_selection: Auswahl entdecken
+    voir_le_panier: Warenkorb ansehen
+    pieces: Teile
+    categories: Kategorien
+    stock_disponible: Verfügbarer Bestand
+    affinage: Filterung
+    selectionnez_une_categorie: Kategorie auswählen
+    choisir: Wählen
+
+    moyens_de_paiement: "Zahlungsarten"
+    paiement_par_carte_via_sumup: "Kartenzahlung über SumUp"
+    paiement_en_liquide_a_la_table_de_vente: "Barzahlung am Verkaufstisch"
 merch_show:
   html:
     acheter: Kaufen
@@ -203,7 +225,7 @@ profile_show:
 registration_confirmation_email:
   html:
     cheers: Prost!
-    confirm_my_email: Bestätige meine E-Mail
+    confirm_my_email: Bestátige meine E-Mail
     hi_please_confirm_your_email: Hallo! Bitte bestätigen Sie Ihre E-Mail!
     please_confirm_your_email_address_by_clicking_the_following_link: 'Bitte bestätigen Sie Ihre E-Mail-Adresse, indem Sie auf den folgenden Link klicken:'
 registration_register:
@@ -253,12 +275,21 @@ ticket_buy:
     vs_opponent: vs. %opponent%
 ticket_list:
   html:
-    aucun_match_pour_le_moment: Noch keine Übereinstimmungen.
+    a_domicile: Heim
+    a_lexterieur: Auswärts
+    billetweb: Billetweb
+    billetweb_reservation: 'Billetweb-Reservierung'
+    reserver: Reservieren
+    billetterie_billetweb_integree: 'Billetweb-Integration'
     billetterie_ultras_lions: Ticketverkauf – Ultras Lions
+    decouvrir_les_matchs: 'Spiele entdecken'
     matchs_a_domicile_et_a_lexterieur: Heim- und Auswärtsspiele
     matchs_disponibles: Übereinstimmungen verfügbar
+    selectionnez_une_categorie: 'Kategorie auswählen'
     stock: 'Lagerbestand: %stock%'
     vs_opponent: vs. %opponent%
+    vitrine_officielle: 'Offizielle Auswahl'
+    aucun_match_pour_le_moment: Zur Zeit keine Spiele.
 ticket_show:
   html:
     adversaire: 'Gegner:'
@@ -294,3 +325,46 @@ user_new:
 user_show:
   html:
     user: Benutzer
+cart_index:
+  html:
+    billets: Tickets
+    billets_et_table_de_vente: 'Tickets + Verkaufstisch'
+    date: Datum
+    matos: Material
+    match: Spiel
+    nom: Nachname
+    panier: Warenkorb
+    panier_vide: 'Dein Warenkorb ist leer.'
+    payer_avec_sumup: 'Mit SumUp bezahlen'
+    moyens_de_paiement_sumup: 'SumUp-Zahlungsarten'
+    paiement_securise_sumup: 'Sichere Zahlung über SumUp, mit abschließender Bestätigung auf der Zahlungsseite.'
+    sumup_method_cards: 'Bankkarte'
+    sumup_method_cards_detail: 'Visa, Mastercard und kompatible Karten.'
+    sumup_method_wallets: 'Apple Pay / Google Pay'
+    sumup_method_wallets_detail: 'Je nach Gerät, Browser und Händlerkonto.'
+    sumup_method_paypal: 'PayPal über SumUp'
+    sumup_method_paypal_detail: 'Verfügbar, wenn PayPal im SumUp-Konto aktiviert ist.'
+    sumup_method_local: 'Weitere lokale Methoden'
+    sumup_method_local_detail: 'Je nach Land, Betrag und Währung.'
+    sumup_availability_note: 'Die genaue Liste verfügbarer Methoden wird von SumUp beim Bezahlen bestätigt.'
+    prenom: Vorname
+    produit: Produkt
+    quantite: Menge
+    retour_billetterie: 'Zurück zum Ticketverkauf'
+    retour_table_de_vente: 'Zurück zum Verkaufstisch'
+    sous_total_billets: 'Zwischensumme Tickets'
+    sous_total_matos: 'Zwischensumme Material'
+    supprimer: Entfernen
+    taille: Größe
+    total: Gesamt
+    vider_le_panier: 'Warenkorb leeren'
+    reserver_et_payer_en_liquide: 'Reservieren und bar bezahlen'
+
+
+
+
+
+
+
+
+

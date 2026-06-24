@@ -34,6 +34,30 @@ class CartService
         $this->setMerchCart($session, $cart);
     }
 
+    public function addMerchLine(SessionInterface $session, int $id, string $size): void
+    {
+        $size = $size !== '' ? $size : 'TU';
+        $cart = $this->getMerchCart($session);
+        $cart[$id . '|' . $size . '|' . bin2hex(random_bytes(4))] = [
+            'id' => $id,
+            'size' => $size,
+            'quantity' => 1,
+        ];
+        $this->setMerchCart($session, $cart);
+    }
+
+    public function getMerchQuantity(SessionInterface $session, int $id): int
+    {
+        $quantity = 0;
+        foreach ($this->getMerchCart($session) as $row) {
+            if ((int) ($row['id'] ?? 0) === $id) {
+                $quantity += (int) ($row['quantity'] ?? 0);
+            }
+        }
+
+        return $quantity;
+    }
+
     public function removeMerch(SessionInterface $session, string $key): void
     {
         $cart = $this->getMerchCart($session);

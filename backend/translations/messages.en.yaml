@@ -24,6 +24,7 @@ components_footer:
     tribune_drapeaux_fumigenes_chants_la_ville_est_rouge_et_noire: 'Tribune, flags, smoke bombs, songs: the city is red and black.'
     twitter: Twitter
     ultras_lions: Ultras Lions
+    ten_as_vu_le_debut: "Les Lioness, t'en as vu le début, t'en verras pas la fin !"
 components_navbar:
   html:
     accueil: Welcome
@@ -32,7 +33,7 @@ components_navbar:
     connexion: Connection
     deconnexion: Disconnect
     le_groupe: The Group
-    modifier_mon_compte: ️ Edit my account
+    modifier_mon_compte:  Edit my account
     mon_profil: My profile
     notre_histoire: "Our history"
     notre_mentalite: "Our mindset"
@@ -50,7 +51,9 @@ components_navbar:
     communiques: Press releases
     streetart: Street Art
     chants: "Chants"
-    
+    medias: "Media"
+    tout_les_medias: "All Media"
+    liens: "Links"
 email_base:
   html:
     footer_brand: Ultras Lions – FC Fleury 91
@@ -94,6 +97,8 @@ events_list:
     filtrer: Filter
     prochains_matchs_rassemblements_actions: Upcoming matches, gatherings, actions
     saison: Season
+    photos_de_match: Match photos
+    photos_de_match_saison: Match photos season %year_start%/%year_end%
 events_show:
   html:
     title: '%title% – Travel – Ultras Lions'
@@ -154,6 +159,20 @@ merch_list:
     textiles_accessoires_stickers_supports_du_groupe: Textiles, accessories, stickers, group supports
     toutes: All
     trier: Sort
+    stock_non_defini: Stock not defined
+    vitrine_officielle: Official showcase
+    decouvrir_la_selection: Discover the selection
+    voir_le_panier: View cart
+    pieces: Pieces
+    categories: Categories
+    stock_disponible: Stock available
+    affinage: Filtering
+    selectionnez_une_categorie: Select a category
+    choisir: Choose
+
+    moyens_de_paiement: "Payment methods"
+    paiement_par_carte_via_sumup: "Card payment via SumUp"
+    paiement_en_liquide_a_la_table_de_vente: "Cash payment at the sales table"
 merch_show:
   html:
     acheter: Buy
@@ -254,12 +273,21 @@ ticket_buy:
     vs_opponent: vs %opponent%
 ticket_list:
   html:
-    aucun_match_pour_le_moment: No matches yet.
+    a_domicile: Home
+    a_lexterieur: Away
+    billetweb: Billetweb
+    billetweb_reservation: 'Billetweb reservation'
+    reserver: Reserve
+    billetterie_billetweb_integree: 'Billetweb integration'
     billetterie_ultras_lions: Ticketing
+    decouvrir_les_matchs: 'Discover matches'
     matchs_a_domicile_et_a_lexterieur: Home and away matches
     matchs_disponibles: Matches available
+    selectionnez_une_categorie: 'Select a category'
     stock: 'Stock: %stock%'
     vs_opponent: vs %opponent%
+    vitrine_officielle: 'Official showcase'
+    aucun_match_pour_le_moment: No matches at the moment.
 ticket_show:
   html:
     adversaire: 'Opponent:'
@@ -295,3 +323,46 @@ user_new:
 user_show:
   html:
     user: User
+cart_index:
+  html:
+    billets: Tickets
+    billets_et_table_de_vente: 'Tickets + sales table'
+    date: Date
+    matos: Gear
+    match: Match
+    nom: Last name
+    panier: Cart
+    panier_vide: 'Your cart is empty.'
+    payer_avec_sumup: 'Pay with SumUp'
+    moyens_de_paiement_sumup: 'SumUp payment methods'
+    paiement_securise_sumup: 'Secure payment by SumUp, with final validation on their payment page.'
+    sumup_method_cards: 'Bank card'
+    sumup_method_cards_detail: 'Visa, Mastercard and compatible cards.'
+    sumup_method_wallets: 'Apple Pay / Google Pay'
+    sumup_method_wallets_detail: 'Depending on device, browser and merchant account.'
+    sumup_method_paypal: 'PayPal via SumUp'
+    sumup_method_paypal_detail: 'Available if PayPal is enabled on the SumUp account.'
+    sumup_method_local: 'Other local methods'
+    sumup_method_local_detail: 'Depending on country, amount and currency.'
+    sumup_availability_note: 'The exact list of available methods is confirmed by SumUp at payment time.'
+    prenom: First name
+    produit: Product
+    quantite: Quantity
+    retour_billetterie: 'Back to ticketing'
+    retour_table_de_vente: 'Back to sales table'
+    sous_total_billets: 'Tickets subtotal'
+    sous_total_matos: 'Gear subtotal'
+    supprimer: Remove
+    taille: Size
+    total: Total
+    vider_le_panier: 'Empty cart'
+    reserver_et_payer_en_liquide: 'Reserve and pay in cash'
+
+
+
+
+
+
+
+
+

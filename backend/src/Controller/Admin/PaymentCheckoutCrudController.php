@@ -30,7 +30,8 @@ class PaymentCheckoutCrudController extends AbstractCrudController
     {
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('type', 'Type');
-        yield TextField::new('status', 'Statut');
+        yield TextField::new('status', 'Statut')
+            ->formatValue(fn ($value, ?PaymentCheckout $checkout) => $checkout?->getStatusLabel() ?? (string) $value);
         yield TextField::new('sumupCheckoutId', 'Checkout ID')->hideOnForm();
         yield TextField::new('checkoutReference', 'Reference')->hideOnForm();
         yield NumberField::new('amount', 'Montant');
@@ -38,7 +39,7 @@ class PaymentCheckoutCrudController extends AbstractCrudController
         yield AssociationField::new('user', 'Utilisateur')->hideOnForm();
         yield TextField::new('email', 'Email')->hideOnForm();
         yield DateTimeField::new('createdAt', 'Cree le');
-        yield DateTimeField::new('paidAt', 'Paye le')->hideOnForm();
+        yield DateTimeField::new('paidAt', 'Payé le')->hideOnForm();
         yield DateTimeField::new('processedAt', 'Traite le')->hideOnForm();
     }
 }

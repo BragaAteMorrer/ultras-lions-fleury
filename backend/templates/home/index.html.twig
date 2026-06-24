@@ -1,20 +1,17 @@
-﻿{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}{{ 'home_index.html.ultras_lions_i_fc_fleury_91'|trans }}{% endblock %}
 
 {% block body %}
 
-{% set hero_images = [
-    asset('img/fond/fond1a.jpg'),
-    asset('img/fond/fond1b.jpg'),
-    asset('img/fond/fond2.jpg')
-] %}
+<section class="hero home-hero">
     <div class="hero-overlay"></div>
     <div class="hero-content">
         <img src="{{ asset('img/logo/Logo Final - Ultras Lions - Autre Présentation.png') }}" class="hero-ultra-logo" alt="{{ 'components_footer.html.ultras_lions'|trans }}">
-        <h1 class="hero-title">{{ 'home_index.html.ultras_lions'|trans }}</h1>
-        <p class="hero-subtitle">{{ 'home_index.html.le_site_web_du_groupe_ultras_du_fc_fleury_91'|trans }}</p>
+        <h1 class="hero-title">{{ site_config.heroTitle|default(null) ?: ('home_index.html.ultras_lions'|trans) }}</h1>
+        <p class="hero-subtitle">{{ site_config.heroSubtitle|default(null) ?: ('home_index.html.le_site_web_du_groupe_ultras_du_fc_fleury_91'|trans) }}</p>
     </div>
+</section>
 
 {# ------------------------------
    DERNIERES ACTUALITES (POSTS + EVENEMENTS)
@@ -31,7 +28,7 @@
                         <a href="{{ path('post_show', { slug: item.slug }) }}" class="card h-100">
 
                             {% if item.image %}
-                                <img src="{{ asset('uploads/media/' ~ item.image.path) }}" class="card-img-top" alt="{{ item.title }}">
+                                {% include 'components/media.html.twig' with { media: item.image, class: 'card-img-top', alt: item.title } %}
                             {% endif %}
 
                             <div class="card-body">
@@ -46,7 +43,7 @@
 
                             {% set cover = item.image ?: (item.media|first) %}
                             {% if cover %}
-                                <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="card-img-top" alt="{{ item.title }}">
+                                {% include 'components/media.html.twig' with { media: cover, class: 'card-img-top', alt: item.title } %}
                             {% endif %}
 
                             <div class="card-body">
@@ -86,14 +83,14 @@
                 <div class="col-md-4">
                     <a href="{{ path('ticket_show', { id: ticket.id }) }}" class="card h-100">
                         {% if ticket.image %}
-                            <img src="{{ asset('uploads/media/' ~ ticket.image.path) }}" class="card-img-top" alt="{{ ticket.title }}">
+                            {% include 'components/media.html.twig' with { media: ticket.image, class: 'card-img-top', alt: ticket.title } %}
                         {% endif %}
 
                         <div class="card-body">
                             <h3 class="card-title">{{ matchLabel }}</h3>
                             {% if ticket.matchLocation %}
                                 <span class="badge bg-secondary text-uppercase mb-2">
-                                    {{ ticket.matchLocation == 'domicile' ? 'Domicile' : 'Ext�rieur' }}
+                                    {{ ticket.matchLocation == 'domicile' ? 'Domicile' : 'Extérieur' }}
                                 </span>
                             {% endif %}
                             <p class="card-text">
@@ -103,7 +100,7 @@
                             {% if ticket.usesBilletweb %}
                                 <p class="card-text fw-bold">Billetterie Billetweb</p>
                             {% else %}
-                                <p class="card-text fw-bold">{{ ticket.price }} �</p>
+                                <p class="card-text fw-bold">{{ ticket.price|number_format(2, ',', ' ') }} €</p>
                             {% endif %}
                         </div>
                     </a>
@@ -131,7 +128,7 @@
 
                     {% set cover = gal.media|first %}
                     {% if cover %}
-                        <img src="{{ asset('uploads/media/' ~ cover.path) }}" alt="{{ gal.title }}">
+                        {% include 'components/media.html.twig' with { media: cover, alt: gal.title } %}
                     {% endif %}
 
                     <div class="card-content">
@@ -142,6 +139,40 @@
         </div>
     </div>
 </section>
+
+{% if gadgets is defined and gadgets|length > 0 %}
+<section class="section gadgets-section">
+    <div class="container">
+        <div class="section-heading-row">
+            <h2 class="section-title">Gadgets du groupe</h2>
+            <a href="{{ path('gadget_index') }}" class="section-link">Tout voir</a>
+        </div>
+
+        <div class="gadgets-grid">
+            {% for gadget in gadgets %}
+                <a href="{{ path('gadget_index') }}" class="gadget-card">
+                    <div class="gadget-card-media">
+                        {% if gadget.image %}
+                            {% include 'components/media.html.twig' with { media: gadget.image, alt: gadget.title } %}
+                        {% else %}
+                            <span>UL</span>
+                        {% endif %}
+                    </div>
+                    <div class="gadget-card-body">
+                        {% if gadget.productionLabel %}
+                            <span class="gadget-card-kicker">{{ gadget.productionLabel }}</span>
+                        {% endif %}
+                        <h3>{{ gadget.title }}</h3>
+                        {% if gadget.description %}
+                            <p>{{ gadget.description|striptags|slice(0, 95) ~ '...' }}</p>
+                        {% endif %}
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
 
 {# ------------------------------
    LE GROUPE

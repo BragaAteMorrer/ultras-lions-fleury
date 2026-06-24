@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'cartage_status.html.statut_cartage'|trans }}{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ 'cartage_status.html.statut_cartage'|trans }}</h1>
+        <p class="hero-subtitle">{{ 'cartage_status.html.verification_par_adresse_email'|trans }}</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container" style="max-width: 42rem;">
+        <div class="card card-form">
+            <h2 class="section-title">{{ 'cartage_status.html.verifier_une_saison'|trans }}</h2>
+
+            <form method="post" action="{{ path('cartage_status') }}">
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label class="form-label" for="email">{{ 'security_login.html.email'|trans }}</label>
+                        <input id="email" name="email" type="email" class="form-control" required value="{{ email }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="season">{{ 'cartage_status.html.saison'|trans }}</label>
+                        <input id="season" name="season" class="form-control" required value="{{ season|default(currentSeason) }}">
+                    </div>
+                </div>
+
+                <button class="btn btn-danger w-100 mt-4" type="submit">{{ 'cartage_status.html.verifier'|trans }}</button>
+            </form>
+
+            {% if isSearched %}
+                <div class="cartage-status-result mt-4">
+                    {% if registration %}
+                        <div class="alert {{ registration.completed ? 'alert-success' : (registration.pending ? 'alert-warning' : 'alert-secondary') }}">
+                            <strong>{{ registration.statusLabel }}</strong><br>
+                            {{ 'cartage_status.html.saison_demande'|trans({'%season%': registration.season, '%date%': registration.createdAt|date('d/m/Y H:i')}) }}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-secondary">
+                            {{ 'cartage_status.html.aucun_cartage_trouve'|trans({'%email%': email, '%season%': season}) }}
+                        </div>
+                    {% endif %}
+
+                    <p class="form-section-hint">
+                        {{ 'cartage_status.html.compte_membre'|trans({'%value%': accountExists ? 'oui' : 'non'}) }}
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gadgets du groupe{% endblock %}
+
+{% block body %}
+<section class="hero page-hero compact-hero">
+    <div class="hero-content">
+        <span class="hero-kicker">Productions Ultras Lions</span>
+        <h1 class="hero-title">Gadgets du groupe</h1>
+        <p class="hero-subtitle">Objets, stickers, souvenirs et productions sorties par le groupe</p>
+    </div>
+</section>
+
+<section class="section gadgets-section">
+    <div class="container">
+        <div class="gadgets-grid gadgets-grid-full">
+            {% for gadget in gadgets %}
+                <article class="gadget-card">
+                    <div class="gadget-card-media">
+                        {% if gadget.image %}
+                            {% include 'components/media.html.twig' with { media: gadget.image, alt: gadget.title } %}
+                        {% else %}
+                            <span>UL</span>
+                        {% endif %}
+                    </div>
+                    <div class="gadget-card-body">
+                        {% if gadget.productionLabel %}
+                            <span class="gadget-card-kicker">{{ gadget.productionLabel }}</span>
+                        {% endif %}
+                        <h2>{{ gadget.title }}</h2>
+                        {% if gadget.description %}
+                            <p>{{ gadget.description|nl2br }}</p>
+                        {% endif %}
+                    </div>
+                </article>
+            {% else %}
+                <p>Aucun gadget visible pour le moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

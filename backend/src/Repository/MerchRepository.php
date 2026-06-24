@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Merch;
+use App\Entity\MerchCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

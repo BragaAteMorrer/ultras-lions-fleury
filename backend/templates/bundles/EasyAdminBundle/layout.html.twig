@@ -1,0 +1,33 @@
+{% extends '@!EasyAdmin/layout.html.twig' %}
+
+{% block head_javascript %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MDCC90XZCY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-MDCC90XZCY');
+    </script>
+
+    {{ parent() }}
+{% endblock %}
+
+{% block header_logo %}
+    <a class="logo admin-navbar-logo"
+       title="Ultras Lions"
+       href="{{ path(ea.dashboardRouteName) }}">
+        <img src="{{ asset('img/logo/Logo Texte.png') }}"
+             alt="Ultras Lions"
+             style="max-height: 42px;">
+    </a>
+{% endblock %}
+
+{% block responsive_header_logo %}
+    <a class="responsive-logo admin-navbar-logo"
+       title="Ultras Lions"
+       href="{{ path(ea.dashboardRouteName) }}">
+        <img src="{{ asset('img/logo/Logo Texte.png') }}"
+             alt="Ultras Lions"
+             style="max-height: 32px;">
+    </a>
+{% endblock %}

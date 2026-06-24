@@ -3,11 +3,15 @@
 {% block title %}{{ 'events_show.html.title'|trans({'%title%': event.title}) }}{% endblock %}
 
 {% block body %}
+{% set locale = app.request.locale|default('fr') %}
 <section class="hero">
     <div class="hero-content">
         <h1 class="hero-title">{{ event.title }}</h1>
         {% if event.date %}
-            <p class="hero-subtitle">📅 {{ event.date|date('d/m/Y') }}</p>
+            <p class="hero-subtitle event-show-date">
+                <i class="bi bi-calendar3" aria-hidden="true"></i>
+                <span>{{ event.date|format_date(locale=locale, pattern='d MMMM yyyy') }}</span>
+            </p>
         {% endif %}
     </div>
 </section>

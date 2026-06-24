@@ -59,21 +59,21 @@
 
         {% if app.user and app.user.id == user.id %}
             <div class="profile-info-card mt-4">
-                <h2 class="section-title">Mes achats</h2>
+                <h2 class="section-title">{{ 'profile_show.html.mes_achats'|trans }}</h2>
 
-                <h3 class="form-section-title">Mes commandes</h3>
+                <h3 class="form-section-title">{{ 'profile_show.html.mes_commandes'|trans }}</h3>
                 {% if paymentCheckouts is empty %}
-                    <p class="text-muted">Aucune commande pour le moment.</p>
+                    <p class="text-muted">{{ 'profile_show.html.aucune_commande_pour_le_moment'|trans }}</p>
                 {% else %}
                     <div class="table-responsive">
                         <table class="table table-dark table-striped align-middle">
                             <thead>
                                 <tr>
-                                    <th>Type</th>
-                                    <th>Statut</th>
-                                    <th>Total</th>
-                                    <th>Creation</th>
-                                    <th>Action</th>
+                                    <th>{{ 'profile_show.html.type'|trans }}</th>
+                                    <th>{{ 'profile_show.html.statut'|trans }}</th>
+                                    <th>{{ 'profile_show.html.total'|trans }}</th>
+                                    <th>{{ 'profile_show.html.creation'|trans }}</th>
+                                    <th>{{ 'profile_show.html.action'|trans }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -83,18 +83,18 @@
                                     <tr>
                                         <td>
                                             {% if p.type == 'ticket' %}
-                                                Billetterie
+                                                {{ 'profile_show.html.billetterie'|trans }}
                                             {% elseif p.type == 'merch' %}
-                                                Table de vente
+                                                {{ 'profile_show.html.table_de_vente'|trans }}
                                             {% else %}
-                                                Panier
+                                                {{ 'profile_show.html.panier'|trans }}
                                             {% endif %}
                                         </td>
                                         <td><span class="badge {{ badge }}">{{ p.status }}</span></td>
                                         <td>{{ p.amount|number_format(2, ',', ' ') }} {{ p.currency }}</td>
                                         <td>{{ p.createdAt|date('d/m/Y H:i') }}</td>
                                         <td>
-                                            <a class="btn btn-sm btn-outline-light" href="{{ path('profile_order_show', { id: p.id }) }}">Voir</a>
+                                            <a class="btn btn-sm btn-outline-light" href="{{ path('profile_order_show', { id: p.id }) }}">{{ 'profile_show.html.voir'|trans }}</a>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -103,20 +103,20 @@
                     </div>
                 {% endif %}
 
-                <h3 class="form-section-title">Billets</h3>
+                <h3 class="form-section-title">{{ 'profile_show.html.billets'|trans }}</h3>
                 {% if ticketOrders is empty %}
-                    <p class="text-muted">Aucun billet pour le moment.</p>
+                    <p class="text-muted">{{ 'profile_show.html.aucun_billet_pour_le_moment'|trans }}</p>
                 {% else %}
                     <div class="table-responsive">
                         <table class="table table-dark table-striped align-middle">
                             <thead>
                                 <tr>
-                                    <th>Match</th>
-                                    <th>Date</th>
-                                    <th>Quantite</th>
-                                    <th>Total</th>
-                                    <th>Statut</th>
-                                    <th>Commande</th>
+                                    <th>{{ 'profile_show.html.match'|trans }}</th>
+                                    <th>{{ 'profile_show.html.date'|trans }}</th>
+                                    <th>{{ 'cart_index.html.quantite'|trans }}</th>
+                                    <th>{{ 'profile_show.html.total'|trans }}</th>
+                                    <th>{{ 'profile_show.html.statut'|trans }}</th>
+                                    <th>{{ 'profile_show.html.commande'|trans }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -127,7 +127,7 @@
                                         <td>{{ t.matchDate|date('d/m/Y H:i') }}</td>
                                         <td>{{ order.quantity }}</td>
                                         <td>{{ order.totalPrice|number_format(2, ',', ' ') }} EUR</td>
-                                        <td><span class="badge bg-success">Paye</span></td>
+                                        <td><span class="badge bg-success">{{ 'profile_show.html.paye'|trans }}</span></td>
                                         <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
                                     </tr>
                                 {% endfor %}
@@ -136,20 +136,20 @@
                     </div>
                 {% endif %}
 
-                <h3 class="form-section-title mt-4">Matos</h3>
+                <h3 class="form-section-title mt-4">{{ 'profile_show.html.matos'|trans }}</h3>
                 {% if merchOrders is empty %}
-                    <p class="text-muted">Aucun achat pour le moment.</p>
+                    <p class="text-muted">{{ 'profile_show.html.aucun_achat_pour_le_moment'|trans }}</p>
                 {% else %}
                     <div class="table-responsive">
                         <table class="table table-dark table-striped align-middle">
                             <thead>
                                 <tr>
-                                    <th>Produit</th>
-                                    <th>Taille</th>
-                                    <th>Quantite</th>
-                                    <th>Total</th>
-                                    <th>Statut</th>
-                                    <th>Commande</th>
+                                    <th>{{ 'checkout_receipt.html.produit'|trans }}</th>
+                                    <th>{{ 'checkout_receipt.html.taille'|trans }}</th>
+                                    <th>{{ 'cart_index.html.quantite'|trans }}</th>
+                                    <th>{{ 'profile_show.html.total'|trans }}</th>
+                                    <th>{{ 'profile_show.html.statut'|trans }}</th>
+                                    <th>{{ 'profile_show.html.commande'|trans }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -159,7 +159,7 @@
                                         <td>{{ order.size ?? 'TU' }}</td>
                                         <td>{{ order.quantity }}</td>
                                         <td>{{ order.totalPrice|number_format(2, ',', ' ') }} €</td>
-                                        <td><span class="badge bg-success">Paye</span></td>
+                                        <td><span class="badge bg-success">{{ 'profile_show.html.paye'|trans }}</span></td>
                                         <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
                                     </tr>
                                 {% endfor %}
@@ -167,8 +167,6 @@
                         </table>
                     </div>
                 {% endif %}
-
-                
             </div>
         {% endif %}
 

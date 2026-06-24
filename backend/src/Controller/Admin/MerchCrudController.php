@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Merch;
 use App\Form\MerchStockType;
+use App\Service\AutoNewsPublisher;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -16,6 +18,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class MerchCrudController extends AbstractCrudController
 {
+    public function __construct(private AutoNewsPublisher $autoNewsPublisher)
+    {
+    }
+
     public static function getEntityFqcn(): string
     {
         return Merch::class;
@@ -33,7 +39,10 @@ class MerchCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('title', 'Titre');
         yield AssociationField::new('category', 'Categorie');
-        yield NumberField::new('price', 'Prix');
+        yield NumberField::new('price', 'Prix non-connecte');
+        yield NumberField::new('memberPrice', 'Prix connecte')
+            ->setRequired(false)
+            ->setHelp('Si vide, le prix non-connecte est utilise.');
         yield ChoiceField::new('audience', 'Audience')
             ->setChoices([
                 'Matos generaliste (public)' => 'public',
@@ -62,5 +71,23 @@ class MerchCrudController extends AbstractCrudController
             ->allowAdd()
             ->allowDelete()
             ->onlyOnForms();
+    }
+
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        parent::persistEntity($entityManager, $entityInstance);
+
+        if ($entityInstance instanceof Merch) {
+            $this->autoNewsPublisher->publishMerchNews($entityInstance);
+        }
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        parent::updateEntity($entityManager, $entityInstance);
+
+        if ($entityInstance instanceof Merch) {
+            $this->autoNewsPublisher->publishMerchNews($entityInstance);
+        }
     }
 }

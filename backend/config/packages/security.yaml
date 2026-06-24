@@ -40,6 +40,7 @@ security:
 
         # Pages utilisateur connectées
         - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/profil, roles: ROLE_USER }
 
         # Page d'inscription accessible si pas connecté
         - { path: ^/register, roles: PUBLIC_ACCESS }

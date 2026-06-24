@@ -1,0 +1,17 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %}{{ subject }}{% endblock %}
+
+{% block content %}
+    <h1>{{ subject }}</h1>
+
+    {% if user.prenom %}
+        <p>Bonjour {{ user.prenom }},</p>
+    {% else %}
+        <p>Bonjour,</p>
+    {% endif %}
+
+    <div>
+        {{ body|nl2br }}
+    </div>
+{% endblock %}

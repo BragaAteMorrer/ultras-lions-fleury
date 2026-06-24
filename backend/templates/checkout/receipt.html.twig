@@ -1,8 +1,8 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="fr">
 <head>
     <meta charset="utf-8">
-    <title>Commande {{ checkout.checkoutReference }}</title>
+    <title>{{ 'checkout_receipt.html.commande'|trans }} {{ checkout.checkoutReference }}</title>
     <style>
         @page { margin: 0; }
         body { font-family: Arial, sans-serif; color: #111; margin: 0; }
@@ -50,7 +50,7 @@
         {% if logoPath %}
             <img class="logo" src="{{ logoPath }}" alt="Ultras Lions">
         {% endif %}
-        <div class="subtitle">Recapitulatif de commande</div>
+        <div class="subtitle">{{ 'checkout_receipt.html.recapitulatif_de_commande'|trans }}</div>
     </div>
 
     <div class="page">
@@ -61,28 +61,28 @@
         <div class="card">
             <div class="row">
                 <div class="col">
-                    <div class="label">Numero</div>
+                    <div class="label">{{ 'checkout_receipt.html.numero'|trans }}</div>
                     <div class="value">{{ checkout.checkoutReference }}</div>
                 </div>
                 <div class="col">
-                    <div class="label">Date</div>
+                    <div class="label">{{ 'checkout_receipt.html.date'|trans }}</div>
                     <div class="value">{{ checkout.createdAt|date('d/m/Y H:i') }}</div>
                 </div>
                 <div class="col">
-                    <div class="label">Nom</div>
+                    <div class="label">{{ 'checkout_receipt.html.nom'|trans }}</div>
                     <div class="value">{{ (checkout.customerFirstName ?? '') ~ ' ' ~ (checkout.customerLastName ?? '') }}</div>
                 </div>
                 <div class="col">
-                    <div class="label">Total</div>
+                    <div class="label">{{ 'checkout_receipt.html.total'|trans }}</div>
                     <div class="value">{{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}</div>
                 </div>
                 <div class="col">
-                    <div class="label">Paiement</div>
+                    <div class="label">{{ 'checkout_receipt.html.paiement'|trans }}</div>
                     <div class="value">
                         {% if checkout.type == 'cash' %}
-                            Liquide
+                            {{ 'checkout_receipt.html.liquide'|trans }}
                         {% elseif checkout.type == 'ticket' or checkout.type == 'merch' or checkout.type == 'mixed' %}
-                            SumUp
+                            {{ 'checkout_receipt.html.sumup'|trans }}
                         {% else %}
                             —
                         {% endif %}
@@ -92,13 +92,13 @@
         </div>
 
         {% if ticketItems is not empty %}
-            <div class="section-title">Billets</div>
+            <div class="section-title">{{ 'checkout_receipt.html.billets'|trans }}</div>
             <table>
                 <thead>
                     <tr>
-                        <th>Match</th>
-                        <th>Quantite</th>
-                        <th>Total</th>
+                        <th>{{ 'checkout_receipt.html.match'|trans }}</th>
+                        <th>{{ 'cart_index.html.quantite'|trans }}</th>
+                        <th>{{ 'checkout_receipt.html.total'|trans }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -114,14 +114,14 @@
         {% endif %}
 
         {% if merchItems is not empty %}
-            <div class="section-title">Matos</div>
+            <div class="section-title">{{ 'checkout_receipt.html.matos'|trans }}</div>
             <table>
                 <thead>
                     <tr>
-                        <th>Produit</th>
-                        <th>Taille</th>
-                        <th>Quantite</th>
-                        <th>Total</th>
+                        <th>{{ 'checkout_receipt.html.produit'|trans }}</th>
+                        <th>{{ 'checkout_receipt.html.taille'|trans }}</th>
+                        <th>{{ 'cart_index.html.quantite'|trans }}</th>
+                        <th>{{ 'checkout_receipt.html.total'|trans }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -137,8 +137,8 @@
             </table>
         {% endif %}
 
-        <div class="total">Total: {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}</div>
-        <div class="footer">A conserver comme preuve d'achat.</div>
+        <div class="total">{{ 'checkout_receipt.html.total'|trans }}: {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}</div>
+        <div class="footer">{{ 'checkout_receipt.html.a_conserver_comme_preuve_achat'|trans }}</div>
     </div>
 </body>
 </html>

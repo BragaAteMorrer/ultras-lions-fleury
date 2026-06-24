@@ -8,8 +8,9 @@
 body {
     color: #f2f2f2;
     background:
-        linear-gradient(120deg, rgba(0,0,0,0.85), rgba(0,0,0,0.4)),
-        url('../img/fond/fond1a.jpg') bottom center / cover no-repeat;
+        radial-gradient(circle at 50% 0%, rgba(212, 0, 0, 0.22), transparent 34rem),
+        linear-gradient(120deg, rgba(0,0,0,0.92), rgba(0,0,0,0.62)),
+        var(--site-bg-image, url('../img/fond/fond1a.jpg')) bottom center / cover no-repeat fixed;
     font-family: "Oswald", sans-serif;
     line-height: 1.5;
 }
@@ -88,6 +89,996 @@ img {
     border-left: 0.25rem solid #D40000; /* 4px → 0.25rem */
     margin-bottom: 1.8rem;
     color: #fff;
+}
+
+/* ==============================================
+   TABLE DE VENTE
+============================================== */
+.merch-hero {
+    min-height: 58vh;
+    overflow: hidden;
+}
+
+.merch-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(0,0,0,0.78), rgba(0,0,0,0.48) 55%, rgba(0,0,0,0.78)),
+        linear-gradient(180deg, rgba(212,0,0,0.18), transparent 36%);
+    pointer-events: none;
+}
+
+.merch-hero-content {
+    position: relative;
+    z-index: 2;
+    width: min(72rem, 100%);
+    margin-top: 0;
+    padding-top: 3rem;
+    display: grid;
+    gap: 1.15rem;
+}
+
+.merch-hero-copy {
+    display: grid;
+    gap: 0.9rem;
+    max-width: 52rem;
+}
+
+.merch-hero-kicker {
+    color: #ff3d3d;
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.merch-payment-choices {
+    display: grid;
+    gap: 0.85rem;
+    width: min(100%, 50rem);
+    padding: 1rem 1.1rem 1.05rem;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    border-radius: 0.75rem;
+    background: rgba(8, 8, 8, 0.62);
+    box-shadow: 0 1rem 2.2rem rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(4px);
+}
+
+.merch-payment-heading {
+    display: grid;
+    gap: 0.25rem;
+}
+
+.merch-payment-heading span {
+    color: rgba(255,255,255,0.82);
+    font-size: 0.82rem;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.merch-payment-heading p {
+    margin: 0;
+    color: rgba(255,255,255,0.66);
+    font-size: 0.88rem;
+    line-height: 1.35;
+}
+
+.merch-payment-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.payment-logos-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.payment-logo-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem;
+    border: 0.0625rem solid rgba(255,255,255,0.08);
+    border-radius: 0.75rem;
+    background: rgba(255,255,255,0.05);
+    box-shadow: inset 0 0 0 0.0625rem rgba(255,255,255,0.03);
+}
+
+.payment-logo-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    padding: 0.7rem 0.85rem;
+    border-radius: 0.55rem;
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(245,245,245,0.96));
+    overflow: hidden;
+}
+
+.payment-logo-image {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.payment-logo-fallback {
+    color: #101010;
+    font-size: 1rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.payment-logo-label {
+    color: rgba(255,255,255,0.72);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.merch-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.merch-hero-secondary {
+    border-color: rgba(255,255,255,0.24);
+    color: #fff;
+}
+
+.merch-hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+    width: min(100%, 32rem);
+}
+
+.merch-stat {
+    padding: 0.85rem 0.9rem;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    border-radius: 0.65rem;
+    background: rgba(0,0,0,0.6);
+    box-shadow: 0 0.85rem 1.6rem rgba(0,0,0,0.28);
+}
+
+.merch-stat strong {
+    display: block;
+    color: #fff;
+    font-size: 1.55rem;
+    line-height: 1;
+}
+
+.merch-stat span {
+    display: block;
+    margin-top: 0.35rem;
+    color: rgba(255,255,255,0.72);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.merch-show-hero,
+.merch-buy-hero,
+.ticket-buy-hero,
+.cart-hero,
+.ticket-show-hero,
+.ticket-list-hero {
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+}
+
+.merch-show-hero::before,
+.merch-buy-hero::before,
+.ticket-buy-hero::before,
+.cart-hero::before,
+.ticket-show-hero::before,
+.ticket-list-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(0,0,0,0.82), rgba(0,0,0,0.52) 52%, rgba(0,0,0,0.82)),
+        linear-gradient(180deg, rgba(212,0,0,0.18), transparent 36%);
+    pointer-events: none;
+}
+
+.merch-show-hero {
+    min-height: 32rem;
+    background-image: linear-gradient(90deg, rgba(0,0,0,0.18), rgba(0,0,0,0.72)), var(--merch-show-bg, url('../img/fond/fond1a.jpg'));
+}
+
+.merch-buy-hero {
+    min-height: 26rem;
+    background-image: linear-gradient(90deg, rgba(0,0,0,0.22), rgba(0,0,0,0.72)), var(--merch-buy-bg, url('../img/fond/fond1a.jpg'));
+}
+
+.ticket-buy-hero {
+    min-height: 26rem;
+    background-image: linear-gradient(90deg, rgba(0,0,0,0.22), rgba(0,0,0,0.72)), var(--ticket-buy-bg, url('../img/fond/fond1a.jpg'));
+}
+
+.cart-hero {
+    min-height: 22rem;
+    background-image: linear-gradient(90deg, rgba(0,0,0,0.22), rgba(0,0,0,0.72)), var(--cart-hero-bg, url('../img/fond/fond1a.jpg'));
+}
+
+.ticket-show-hero {
+    background-image: linear-gradient(90deg, rgba(0,0,0,0.22), rgba(0,0,0,0.72)), var(--ticket-show-bg, url('../img/fond/fond1a.jpg'));
+}
+
+.ticket-list-hero {
+    min-height: 28rem;
+    background-image: linear-gradient(90deg, rgba(0,0,0,0.16), rgba(0,0,0,0.68)), url('../img/fond/fond1a.jpg');
+}
+
+.merch-show-hero-content,
+.merch-buy-hero-content,
+.ticket-buy-hero-content,
+.cart-hero-content,
+.ticket-show-hero-inner {
+    position: relative;
+    z-index: 2;
+    width: min(76rem, 100%);
+    margin-top: 0;
+    padding-top: 2rem;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.merch-show-kicker {
+    color: #ff3d3d;
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.merch-show-meta,
+.cart-hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.merch-show-meta span,
+.cart-hero-stats span {
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.65);
+    border: 0.0625rem solid rgba(255,255,255,0.14);
+    color: rgba(255,255,255,0.9);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.merch-show-section {
+    padding-top: 2.2rem;
+}
+
+.merch-show-layout {
+    display: grid;
+    grid-template-columns: minmax(18rem, 0.92fr) minmax(0, 1.08fr);
+    gap: 1.25rem;
+    align-items: start;
+}
+
+.merch-show-media {
+    overflow: hidden;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    border-radius: 0.85rem;
+    background: #070707;
+    box-shadow: 0 1.25rem 2.5rem rgba(0,0,0,0.4);
+}
+
+.merch-show-media img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+.merch-show-panel {
+    min-width: 0;
+}
+
+.merch-show-description {
+    margin: 0.75rem 0 1.1rem;
+    color: rgba(255,255,255,0.84);
+    line-height: 1.7;
+}
+
+.merch-show-stock-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.25rem 0 1rem;
+}
+
+.merch-show-stock-list span {
+    padding: 0.45rem 0.7rem;
+    border-radius: 999px;
+    border: 0.0625rem solid rgba(255,255,255,0.11);
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.8);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.merch-show-form {
+    margin-top: 1rem;
+}
+
+.merch-show-actions {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.cart-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 0.8fr);
+    gap: 1.25rem;
+    align-items: start;
+}
+
+.cart-main {
+    display: grid;
+    gap: 1.1rem;
+    min-width: 0;
+}
+
+.cart-summary-panel {
+    position: sticky;
+    top: 6rem;
+    padding: 1.2rem;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    border-radius: 0.85rem;
+    background: linear-gradient(145deg, rgba(18,18,18,0.98), rgba(8,8,8,0.94));
+    box-shadow: 0 1.25rem 2.5rem rgba(0,0,0,0.42);
+}
+
+.cart-summary-head h2 {
+    margin: 0.35rem 0 0;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.cart-summary-grid {
+    display: grid;
+    gap: 0.75rem;
+    margin: 1rem 0 1.1rem;
+}
+
+.cart-summary-grid div {
+    padding: 0.8rem 0.9rem;
+    border: 0.0625rem solid rgba(255,255,255,0.08);
+    border-radius: 0.65rem;
+    background: rgba(255,255,255,0.03);
+}
+
+.cart-summary-grid span {
+    display: block;
+    color: rgba(255,255,255,0.64);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.cart-summary-grid strong {
+    display: block;
+    margin-top: 0.35rem;
+    color: #fff;
+    font-size: 1.05rem;
+}
+
+.cart-block {
+    padding: 1.15rem;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    border-radius: 0.85rem;
+    background: linear-gradient(145deg, rgba(18,18,18,0.96), rgba(8,8,8,0.92));
+    box-shadow: 0 1.15rem 2.4rem rgba(0,0,0,0.38);
+}
+
+.cart-block-head {
+    display: grid;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.cart-block-head h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.cart-table-shell {
+    border: 0.0625rem solid rgba(255,255,255,0.08);
+    border-radius: 0.65rem;
+    overflow: hidden;
+}
+
+.cart-table {
+    margin-bottom: 0;
+}
+
+.cart-table th,
+.cart-table td {
+    padding: 0.85rem 0.9rem;
+    border-color: rgba(255,255,255,0.06);
+}
+
+.cart-table thead th {
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.8);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.cart-subtotal {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.85rem;
+    padding-top: 0.85rem;
+    border-top: 0.0625rem solid rgba(255,255,255,0.08);
+}
+
+.cart-empty-state {
+    padding: 2rem;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    border-radius: 0.85rem;
+    background: rgba(8,8,8,0.72);
+}
+
+.cart-empty-state h2 {
+    margin: 0 0 0.4rem;
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.cart-empty-state p {
+    margin: 0;
+    color: rgba(255,255,255,0.7);
+}
+
+.cart-payment-panel {
+    margin-top: 0;
+}
+
+.cart-checkout-form {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.cart-checkout-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.cart-checkout-grid .form-control {
+    margin-bottom: 0;
+}
+
+.merch-catalogue-section {
+    padding-top: 2rem;
+}
+
+.merch-layout {
+    display: grid;
+    grid-template-columns: minmax(18rem, 22rem) minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+}
+
+.merch-filter-panel {
+    position: sticky;
+    top: 6rem;
+    padding: 1rem;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    border-radius: 0.75rem;
+    background: rgba(8,8,8,0.72);
+    box-shadow: 0 1rem 2rem rgba(0,0,0,0.35);
+    backdrop-filter: blur(4px);
+}
+
+.merch-filter-head {
+    display: grid;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+}
+
+.merch-filter-kicker {
+    color: #ff3d3d;
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.merch-filter-title {
+    margin-bottom: 0;
+}
+
+.merch-filter-copy {
+    margin: 0;
+    color: rgba(255,255,255,0.68);
+}
+
+.merch-filter-form {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.merch-filter-submit {
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+}
+
+.merch-category-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.merch-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.1rem;
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.merch-chip.active,
+.merch-chip:hover {
+    background: #D40000;
+    border-color: #D40000;
+}
+
+.merch-grid-wrap {
+    min-width: 0;
+}
+
+.merch-grid-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.merch-grid-copy {
+    margin: 0;
+    color: rgba(255,255,255,0.68);
+    max-width: 48ch;
+}
+
+.merch-product-card {
+    display: block;
+    overflow: hidden;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    border-radius: 0.7rem;
+    background: linear-gradient(145deg, rgba(18,18,18,0.98), rgba(6,6,6,0.94));
+    box-shadow: 0 1.1rem 2.4rem rgba(0,0,0,0.4);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.merch-product-card:hover {
+    transform: translateY(-0.25rem);
+    border-color: rgba(212, 0, 0, 0.72);
+    box-shadow: 0 1.35rem 3rem rgba(0,0,0,0.55);
+}
+
+.merch-product-media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #050505;
+}
+
+.merch-product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.merch-product-card:hover .merch-product-image {
+    transform: scale(1.045);
+}
+
+.merch-product-badges {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.75rem;
+    background: linear-gradient(180deg, rgba(0,0,0,0.48), transparent 45%, rgba(0,0,0,0.64));
+}
+
+.merch-product-badge {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    padding: 0.3rem 0.55rem;
+    border: 0.0625rem solid rgba(255,255,255,0.16);
+    border-radius: 999px;
+    background: rgba(0,0,0,0.78);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.merch-product-badge-stock {
+    align-self: flex-end;
+}
+
+.merch-product-body {
+    padding: 1rem;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.merch-product-topline {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.merch-product-title {
+    margin: 0;
+    color: #fff;
+    font-size: 1.08rem;
+    line-height: 1.15;
+    text-transform: uppercase;
+}
+
+.merch-product-arrow {
+    color: #ff5b5b;
+    font-size: 1.6rem;
+    line-height: 1;
+}
+
+.merch-product-description {
+    margin: 0;
+    color: rgba(255,255,255,0.68);
+    font-size: 0.92rem;
+}
+
+.merch-product-footer {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.merch-product-price {
+    margin: 0;
+    color: #fff;
+    font-size: 1.35rem;
+}
+
+.merch-product-cta {
+    color: #fff;
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.merch-empty-state {
+    padding: 2rem;
+    border: 0.0625rem dashed rgba(255,255,255,0.16);
+    border-radius: 0.75rem;
+    background: rgba(255,255,255,0.03);
+    text-align: center;
+}
+
+.merch-empty-state h3 {
+    margin: 0 0 0.35rem;
+    color: #fff;
+    font-size: 1.15rem;
+    text-transform: uppercase;
+}
+
+.merch-empty-state p {
+    margin: 0;
+    color: rgba(255,255,255,0.68);
+}
+
+/* ==============================================
+   LINKTREE
+============================================== */
+.linktree-page {
+    --site-bg-image: radial-gradient(circle at top, rgba(212,0,0,0.14), transparent 32rem), linear-gradient(120deg, rgba(0,0,0,0.95), rgba(0,0,0,0.78));
+}
+
+.linktree-page .ultra-header,
+.linktree-page .ultra-footer {
+    display: none;
+}
+
+.linktree-hero {
+    min-height: 100vh;
+    display: grid;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+.linktree-shell {
+    width: min(42rem, calc(100% - 2rem));
+    margin: 0 auto;
+    padding: 1.5rem;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    border-radius: 0.85rem;
+    background:
+        linear-gradient(180deg, rgba(212,0,0,0.16), transparent 42%),
+        rgba(8,8,8,0.82);
+    box-shadow: 0 1.4rem 3rem rgba(0,0,0,0.45);
+    backdrop-filter: blur(6px);
+}
+
+.linktree-header {
+    display: grid;
+    justify-items: center;
+    gap: 0.7rem;
+    text-align: center;
+    margin-bottom: 1.2rem;
+}
+
+.linktree-logo {
+    width: min(14rem, 72vw);
+    height: auto;
+}
+
+.linktree-kicker {
+    margin: 0;
+    color: #ff4d4d;
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+.linktree-header h1 {
+    margin: 0;
+    color: #fff;
+    font-size: 2.4rem;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.linktree-intro {
+    margin: 0;
+    color: rgba(255,255,255,0.74);
+    max-width: 30rem;
+}
+
+.linktree-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.linktree-highlight {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.35rem;
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.linktree-list {
+    display: grid;
+    gap: 0.7rem;
+}
+
+.linktree-link {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.95rem 1rem;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    border-radius: 0.75rem;
+    background: linear-gradient(145deg, rgba(18,18,18,0.96), rgba(6,6,6,0.94));
+    box-shadow: 0 1rem 2rem rgba(0,0,0,0.28);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.linktree-link:hover,
+.linktree-link:focus-visible {
+    transform: translateY(-0.15rem);
+    border-color: rgba(212,0,0,0.7);
+    box-shadow: 0 1.25rem 2.5rem rgba(0,0,0,0.36);
+}
+
+.linktree-link-primary {
+    background: linear-gradient(135deg, rgba(212,0,0,0.3), rgba(255,255,255,0.04));
+}
+
+.linktree-link i:first-child,
+.linktree-link i:last-child {
+    flex: 0 0 auto;
+    color: #ff5a5a;
+    font-size: 1.1rem;
+}
+
+.linktree-link-text {
+    min-width: 0;
+    display: grid;
+    gap: 0.15rem;
+    flex: 1 1 auto;
+}
+
+.linktree-link-text strong {
+    color: #fff;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+.linktree-link-text small {
+    color: rgba(255,255,255,0.68);
+    line-height: 1.25;
+}
+
+.linktree-empty {
+    margin: 0;
+    color: rgba(255,255,255,0.68);
+    text-align: center;
+}
+
+@media (max-width: 38rem) {
+    .linktree-shell {
+        width: calc(100% - 1rem);
+        padding: 1.1rem;
+    }
+
+    .linktree-header h1 {
+        font-size: 2rem;
+    }
+}
+
+.media-feed-card {
+    overflow: hidden;
+}
+
+.media-card-thumb {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #000;
+}
+
+.media-card-thumb img,
+.media-card-thumb video {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+.media-feed-type {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin: 0 0 0.65rem;
+    padding: 0.25rem 0.55rem;
+    background: #D40000;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.media-video-card {
+    background: #0b0b0b;
+    border-color: #242424;
+}
+
+.media-video-card .card-body {
+    padding-top: 0.95rem;
+}
+
+.media-video-card .media-card-thumb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.48));
+    pointer-events: none;
+}
+
+.media-video-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    width: 4rem;
+    height: 2.75rem;
+    transform: translate(-50%, -50%);
+    background: #D40000;
+    border-radius: 0.6rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.45);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.media-video-play::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 52%;
+    transform: translate(-45%, -50%);
+    border-top: 0.55rem solid transparent;
+    border-bottom: 0.55rem solid transparent;
+    border-left: 0.9rem solid #fff;
+}
+
+.media-video-badge {
+    position: absolute;
+    right: 0.65rem;
+    bottom: 0.65rem;
+    z-index: 2;
+    padding: 0.18rem 0.45rem;
+    background: rgba(0,0,0,0.86);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.media-video-card:hover .media-video-play {
+    transform: translate(-50%, -50%) scale(1.06);
+    background: #ff0000;
+}
+
+.media-video-card .media-feed-type {
+    background: #ff0000;
 }
 
 .group-section {
@@ -224,6 +1215,29 @@ img {
     max-height: 14rem;
     object-fit: contain;
     margin: 0 auto;
+}
+
+.card video,
+.post-main-image video,
+.gallery-grid video,
+.group-banner,
+.ticket-show-poster video {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+}
+
+.card video,
+.event-card-img-top {
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+}
+
+.gallery-grid video,
+.post-main-image video,
+.ticket-show-poster video {
+    background: #000;
+    border-radius: 0.625rem;
 }
 
 .card-content {
@@ -394,6 +1408,304 @@ img {
 /* ==============================================
    BILLETTERIE - ACHAT
 ============================================== */
+
+.ticket-show-hero {
+    min-height: 28rem;
+    display: flex;
+    align-items: end;
+    padding: 7rem 1.5rem 4rem;
+    background-size: cover;
+    background-position: center;
+    border-bottom: 0.25rem solid #D40000;
+}
+
+.ticket-show-hero-inner {
+    width: min(76rem, 100%);
+    margin: 0 auto;
+}
+
+.ticket-show-kicker,
+.ticket-show-eyebrow {
+    margin: 0 0 0.7rem;
+    color: #d6d6d6;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+}
+
+.ticket-show-title {
+    max-width: 58rem;
+    margin: 0;
+    color: #fff;
+    font-size: clamp(2.2rem, 7vw, 5rem);
+    font-weight: 900;
+    line-height: 0.95;
+    text-transform: uppercase;
+}
+
+.ticket-show-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1.4rem;
+}
+
+.ticket-show-hero-meta span {
+    padding: 0.55rem 0.8rem;
+    background: rgba(0, 0, 0, 0.72);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.16);
+    border-radius: 0.35rem;
+    color: #fff;
+    font-weight: 700;
+}
+
+.ticket-show-section {
+    padding-bottom: 2.5rem;
+}
+
+.ticket-show-summary {
+    display: grid;
+    grid-template-columns: minmax(16rem, 0.8fr) minmax(0, 1.2fr);
+    gap: 2rem;
+    align-items: stretch;
+}
+
+.ticket-show-poster {
+    min-height: 25rem;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    border: 0.0625rem solid #262626;
+    background: #111;
+}
+
+.ticket-show-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ticket-show-poster video {
+    height: 100%;
+    object-fit: cover;
+}
+
+.ticket-show-panel {
+    padding: 2rem;
+    border-radius: 0.5rem;
+    border: 0.0625rem solid #262626;
+    background: linear-gradient(135deg, rgba(18, 18, 18, 0.98), rgba(31, 31, 31, 0.94));
+    box-shadow: 0 1.25rem 2.5rem rgba(0, 0, 0, 0.42);
+}
+
+.ticket-show-panel h2 {
+    margin: 0 0 1.25rem;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.ticket-show-panel .table {
+    margin-bottom: 0;
+}
+
+.ticket-show-panel .form-control,
+.ticket-show-panel .form-select {
+    background: #141414;
+    border: 0.0625rem solid #2a2a2a;
+    color: #fff;
+}
+
+.ticket-show-panel .form-control:focus,
+.ticket-show-panel .form-select:focus {
+    outline: none;
+    border-color: #D40000;
+    box-shadow: 0 0 0 0.15rem rgba(212, 0, 0, 0.35);
+}
+
+.ticket-show-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+    margin-bottom: 1.4rem;
+}
+
+.ticket-show-facts div {
+    padding: 0.9rem;
+    border-radius: 0.4rem;
+    background: #0d0d0d;
+    border: 0.0625rem solid #242424;
+}
+
+.ticket-show-facts span {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: #8f8f8f;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.ticket-show-facts strong {
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+.ticket-show-description {
+    margin: 1.2rem 0;
+    color: #d5d5d5;
+    line-height: 1.65;
+}
+
+.ticket-show-stock-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: -0.4rem 0 1.2rem;
+}
+
+.ticket-show-stock-list span {
+    padding: 0.45rem 0.65rem;
+    border-radius: 0.35rem;
+    background: #0d0d0d;
+    border: 0.0625rem solid #242424;
+    color: #d8d8d8;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.ticket-show-actions {
+    display: grid;
+    gap: 0.8rem;
+    margin-top: 1.4rem;
+}
+
+.ticket-show-inline-form {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.ticket-show-inline-form .form-control,
+.ticket-show-inline-form .form-select {
+    background: #141414;
+    border: 0.0625rem solid #2a2a2a;
+    color: #fff;
+}
+
+.ticket-show-inline-form .form-control:focus,
+.ticket-show-inline-form .form-select:focus {
+    outline: none;
+    border-color: #D40000;
+    box-shadow: 0 0 0 0.15rem rgba(212, 0, 0, 0.35);
+}
+
+.ticket-show-inline-form label {
+    margin: 0;
+    color: #cfcfcf;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.ticket-show-main-cta {
+    width: 100%;
+    margin-top: 0.4rem;
+    padding: 0.9rem 1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.ticket-billetweb-band {
+    padding: 3rem 1rem 4rem;
+    background: #080808;
+    border-top: 0.0625rem solid #202020;
+    border-bottom: 0.0625rem solid #202020;
+}
+
+.ticket-billetweb-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.ticket-billetweb-heading h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.ticket-billetweb-fallback {
+    color: #d9d9d9;
+    font-weight: 800;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-bottom: 0.125rem solid #D40000;
+}
+
+.ticket-billetweb-shell {
+    position: relative;
+    min-height: 48rem;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    border: 0.0625rem solid #2b2b2b;
+    background: #101010;
+    box-shadow: 0 1.25rem 2.5rem rgba(0, 0, 0, 0.5);
+}
+
+.ticket-billetweb-shell iframe {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    min-height: 48rem;
+    border: 0;
+    background: #fff;
+}
+
+.ticket-billetweb-loader {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #111, #191919);
+}
+
+@media (max-width: 56rem) {
+    .ticket-show-summary,
+    .ticket-show-facts {
+        grid-template-columns: 1fr;
+    }
+
+    .ticket-show-hero {
+        min-height: 24rem;
+        padding-top: 5.5rem;
+    }
+
+    .ticket-show-panel {
+        padding: 1.4rem;
+    }
+
+    .ticket-billetweb-heading {
+        align-items: start;
+        flex-direction: column;
+    }
+
+    .ticket-billetweb-shell,
+    .ticket-billetweb-shell iframe {
+        min-height: 42rem;
+    }
+}
 
 .ticket-buy-card {
     padding: 2rem;
@@ -1064,4 +2376,626 @@ form .btn {
     border-radius: 0.5rem;
     box-shadow: 0 0.75rem 1.5rem rgba(0,0,0,0.45);
     margin: 1rem 0;
+}
+
+/* ===============================
+   PREMIUM SHELL
+================================ */
+.site-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background:
+        radial-gradient(circle at center, rgba(212, 0, 0, 0.18), transparent 24rem),
+        #020202;
+    transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+.site-loader-mark {
+    display: grid;
+    justify-items: center;
+    gap: 1.2rem;
+}
+
+.site-loader-mark img {
+    width: min(16rem, 58vw);
+    filter: drop-shadow(0 1rem 1.7rem rgba(0, 0, 0, 0.7));
+}
+
+.site-loader-mark span {
+    width: 8rem;
+    height: 0.2rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.site-loader-mark span::after {
+    content: "";
+    display: block;
+    width: 45%;
+    height: 100%;
+    background: #D40000;
+    animation: loader-sweep 1s ease-in-out infinite;
+}
+
+body.is-loaded .site-loader {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+@keyframes loader-sweep {
+    0% { transform: translateX(-110%); }
+    100% { transform: translateX(240%); }
+}
+
+.home-hero,
+.page-hero {
+    min-height: calc(100vh - 4.5rem);
+    overflow: hidden;
+    background-image:
+        linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.92)),
+        var(--site-bg-image, url('../img/fond/fond1a.jpg'));
+    background-size: cover;
+    background-position: center;
+    border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.12);
+}
+
+.home-hero::before,
+.page-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(212,0,0,0.14), transparent 28%, transparent 72%, rgba(255,255,255,0.07)),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 8rem);
+    pointer-events: none;
+}
+
+.home-hero .hero-content,
+.page-hero .hero-content {
+    position: relative;
+    z-index: 2;
+    width: min(72rem, 100%);
+    margin-top: 0;
+    padding-top: 3rem;
+}
+
+.home-hero .hero-title,
+.page-hero .hero-title {
+    max-width: 14ch;
+    font-size: 5.8rem;
+    line-height: 0.9;
+    text-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.75);
+}
+
+.home-hero .hero-subtitle,
+.page-hero .hero-subtitle {
+    max-width: 54rem;
+    color: rgba(255,255,255,0.9);
+}
+
+.hero-kicker,
+.events-hero-kicker {
+    color: #ff3d3d;
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.compact-hero {
+    min-height: 44vh;
+}
+
+.section {
+    position: relative;
+}
+
+.section-heading-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+}
+
+.section-heading-row .section-title {
+    margin-bottom: 0;
+}
+
+.section-link {
+    color: #fff;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 0.125rem solid #D40000;
+}
+
+.card,
+.group-section,
+.ticket-show-panel,
+.merch-buy-card,
+.ticket-buy-card,
+.profile-info-card {
+    border-color: rgba(255,255,255,0.12);
+    background: linear-gradient(145deg, rgba(18,18,18,0.96), rgba(7,7,7,0.92));
+    box-shadow: 0 1.25rem 3rem rgba(0,0,0,0.42);
+}
+
+/* ===============================
+   PHOTOS DE MATCH
+================================ */
+.events-hero {
+    min-height: 52vh;
+}
+
+.events-section {
+    padding-top: 2rem;
+}
+
+.events-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+}
+
+.events-filter {
+    width: min(100%, 34rem);
+    padding: 1rem;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    border-radius: 0.5rem;
+    background: rgba(8,8,8,0.72);
+}
+
+.events-filter-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.75rem;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.35rem;
+}
+
+.event-card-v2 {
+    min-width: 0;
+}
+
+.event-card-link,
+.gadget-card {
+    display: block;
+    height: 100%;
+    overflow: hidden;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    border-radius: 0.5rem;
+    background: linear-gradient(145deg, rgba(18,18,18,0.98), rgba(6,6,6,0.94));
+    box-shadow: 0 1.1rem 2.4rem rgba(0,0,0,0.4);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.event-card-link:hover,
+.gadget-card:hover {
+    transform: translateY(-0.25rem);
+    border-color: rgba(212, 0, 0, 0.75);
+    box-shadow: 0 1.35rem 3rem rgba(0,0,0,0.55);
+}
+
+.event-card-media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #050505;
+}
+
+.event-card-image-v2,
+.event-card-media img,
+.event-card-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.event-card-link:hover .event-card-image-v2 {
+    transform: scale(1.045);
+}
+
+.event-card-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 0.75rem;
+    background: linear-gradient(180deg, rgba(0,0,0,0.58), transparent 52%, rgba(0,0,0,0.64));
+}
+
+.event-card-badge,
+.event-card-date-badge {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(0,0,0,0.78);
+    border: 0.0625rem solid rgba(255,255,255,0.16);
+}
+
+.event-card-badge {
+    padding: 0.35rem 0.55rem;
+    color: #fff;
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.event-card-date-badge {
+    flex-direction: column;
+    min-width: 3.15rem;
+    padding: 0.35rem 0.5rem;
+    text-align: center;
+}
+
+.event-card-date-badge strong {
+    font-size: 1.3rem;
+    line-height: 1;
+}
+
+.event-card-date-badge em {
+    font-style: normal;
+    font-size: 0.68rem;
+    color: #ff4a4a;
+}
+
+.event-card-body-v2,
+.gadget-card-body {
+    padding: 1rem;
+}
+
+.event-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-bottom: 0.75rem;
+}
+
+.event-card-meta-item {
+    color: rgba(255,255,255,0.72);
+    font-size: 0.82rem;
+}
+
+.event-card-title-v2 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.25rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+}
+
+.event-card-placeholder {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    color: rgba(255,255,255,0.75);
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.event-show-hero {
+    min-height: 58vh;
+}
+
+.event-show-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.event-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 0.8rem;
+}
+
+.event-gallery-item {
+    grid-column: span 4;
+    display: block;
+    overflow: hidden;
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    border-radius: 0.45rem;
+    background: #050505;
+    box-shadow: 0 0.9rem 2rem rgba(0,0,0,0.36);
+}
+
+.event-gallery-item:first-child {
+    grid-column: span 8;
+    grid-row: span 2;
+}
+
+.event-gallery-item img,
+.event-gallery-item video {
+    width: 100%;
+    height: 100%;
+    min-height: 15rem;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    transition: transform 0.25s ease;
+}
+
+.event-gallery-item:hover img {
+    transform: scale(1.035);
+}
+
+/* ===============================
+   GADGETS
+================================ */
+.gadgets-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.gadgets-grid-full {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gadget-card-media {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #070707;
+}
+
+.gadget-card-media img,
+.gadget-card-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gadget-card-media span {
+    color: #D40000;
+    font-size: 2.4rem;
+    font-weight: 900;
+}
+
+.gadget-card-kicker {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: #ff4747;
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.gadget-card h2,
+.gadget-card h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.15rem;
+    text-transform: uppercase;
+}
+
+.gadget-card p {
+    margin: 0.65rem 0 0;
+    color: rgba(255,255,255,0.72);
+}
+
+/* ===============================
+   PAYMENTS
+================================ */
+.payment-methods-panel {
+    border: 0.0625rem solid rgba(255,255,255,0.12);
+    border-radius: 0.45rem;
+    padding: 1rem;
+    background:
+        linear-gradient(135deg, rgba(212,0,0,0.2), rgba(255,255,255,0.04)),
+        #090909;
+}
+
+.payment-methods-heading {
+    display: grid;
+    gap: 0.25rem;
+    margin-bottom: 0.9rem;
+}
+
+.payment-methods-kicker {
+    color: #ff4747;
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.payment-methods-heading h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+.payment-methods-heading p,
+.payment-methods-note {
+    margin: 0;
+    color: rgba(255,255,255,0.68);
+}
+
+.payment-methods-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.65rem;
+}
+
+.payment-method-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-width: 0;
+    padding: 0.8rem;
+    border: 0.0625rem solid rgba(255,255,255,0.1);
+    border-radius: 0.4rem;
+    background: rgba(255,255,255,0.045);
+}
+
+.payment-method-icon {
+    display: inline-grid;
+    flex: 0 0 2.25rem;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: #D40000;
+    color: #fff;
+    font-size: 1.05rem;
+}
+
+.payment-method-item strong,
+.payment-method-item small {
+    display: block;
+}
+
+.payment-method-item strong {
+    color: #fff;
+    line-height: 1.1;
+}
+
+.payment-method-item small {
+    margin-top: 0.2rem;
+    color: rgba(255,255,255,0.66);
+    line-height: 1.25;
+}
+
+.payment-methods-note {
+    margin-top: 0.85rem;
+    font-size: 0.84rem;
+}
+
+@media (max-width: 62rem) {
+    .events-grid,
+    .gadgets-grid,
+    .gadgets-grid-full {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .event-gallery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .event-gallery-item,
+    .event-gallery-item:first-child {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    .home-hero .hero-title,
+    .page-hero .hero-title {
+        font-size: 4.2rem;
+    }
+
+    .payment-methods-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .merch-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .merch-show-layout,
+    .cart-layout,
+    .ticket-show-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .merch-filter-panel {
+        position: static;
+    }
+
+    .merch-hero-stats {
+        width: 100%;
+    }
+
+    .cart-summary-panel {
+        position: static;
+    }
+
+    .cart-checkout-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-logos-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 38rem) {
+    .events-filter-row,
+    .events-grid,
+    .event-gallery-grid,
+    .gadgets-grid,
+    .gadgets-grid-full {
+        grid-template-columns: 1fr;
+    }
+
+    .events-toolbar {
+        justify-content: stretch;
+    }
+
+    .home-hero .hero-title,
+    .page-hero .hero-title {
+        font-size: 3.2rem;
+    }
+
+    .payment-methods-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .merch-hero .hero-title {
+        font-size: 3.1rem;
+    }
+
+    .merch-payment-choices {
+        width: 100%;
+    }
+
+    .merch-hero-actions {
+        align-items: stretch;
+    }
+
+    .merch-show-meta,
+    .cart-hero-stats,
+    .ticket-show-hero-meta {
+        width: 100%;
+    }
+
+    .cart-subtotal {
+        flex-direction: column;
+    }
+
+    .merch-hero-actions .btn,
+    .merch-hero-actions .btn-ul {
+        width: 100%;
+        text-align: center;
+    }
+
+    .payment-logos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .merch-grid-head {
+        align-items: start;
+        flex-direction: column;
+    }
+
+    .merch-product-footer,
+    .merch-product-topline {
+        flex-direction: column;
+        align-items: start;
+    }
 }

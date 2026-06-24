@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Ticket;
+use App\Service\AutoNewsPublisher;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -10,12 +11,17 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class TicketCrudController extends AbstractCrudController
 {
+    public function __construct(private AutoNewsPublisher $autoNewsPublisher)
+    {
+    }
+
     public static function getEntityFqcn(): string
     {
         return Ticket::class;
@@ -36,6 +42,12 @@ class TicketCrudController extends AbstractCrudController
         yield AssociationField::new('category', 'Categorie');
         yield TextField::new('opponent', 'Adversaire');
         yield DateTimeField::new('matchDate', 'Date du match');
+        yield DateTimeField::new('memberAvailabilityDate', 'Disponible connectes')
+            ->setRequired(false)
+            ->setHelp('Laisser vide pour rendre ce billet disponible immediatement aux utilisateurs connectes.');
+        yield DateTimeField::new('guestAvailabilityDate', 'Disponible visiteurs')
+            ->setRequired(false)
+            ->setHelp('Laisser vide pour rendre ce billet disponible immediatement aux visiteurs non connectes.');
         yield ChoiceField::new('matchLocation', 'Lieu du match')
             ->setChoices([
                 'Domicile' => 'domicile',
@@ -48,7 +60,8 @@ class TicketCrudController extends AbstractCrudController
             ->setRequired(false)
             ->setHelp('Renseigner le lien Billetweb integre uniquement pour un match a domicile.');
         yield NumberField::new('price', 'Prix');
-        yield NumberField::new('stock', 'Stock');
+        yield IntegerField::new('stock', 'Stock')
+            ->setHelp('Pour un match avec lien Billetweb, le stock interne reste a 0.');
         yield TextareaField::new('description', 'Description')->hideOnIndex();
         yield AssociationField::new('image', 'Image')->renderAsEmbeddedForm(MediaCrudController::class);
     }
@@ -57,6 +70,9 @@ class TicketCrudController extends AbstractCrudController
     {
         if ($entityInstance instanceof Ticket) {
             $this->normalizeTicket($entityInstance);
+            parent::persistEntity($entityManager, $entityInstance);
+            $this->autoNewsPublisher->publishTicketNews($entityInstance);
+            return;
         }
 
         parent::persistEntity($entityManager, $entityInstance);
@@ -66,6 +82,9 @@ class TicketCrudController extends AbstractCrudController
     {
         if ($entityInstance instanceof Ticket) {
             $this->normalizeTicket($entityInstance);
+            parent::updateEntity($entityManager, $entityInstance);
+            $this->autoNewsPublisher->publishTicketNews($entityInstance);
+            return;
         }
 
         parent::updateEntity($entityManager, $entityInstance);
@@ -73,12 +92,14 @@ class TicketCrudController extends AbstractCrudController
 
     private function normalizeTicket(Ticket $ticket): void
     {
-        if ($ticket->isHomeMatch()) {
+        if ($ticket->usesBilletweb()) {
             $ticket->setPrice(0.0);
             $ticket->setStock(0);
             return;
         }
 
-        $ticket->setBilletwebUrl(null);
+        if (!$ticket->isHomeMatch()) {
+            $ticket->setBilletwebUrl(null);
+        }
     }
 }

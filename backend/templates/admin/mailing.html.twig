@@ -1,0 +1,80 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block content_title %}
+    Envoyer un mail
+{% endblock %}
+
+{% block main %}
+    <form method="post" class="admin-mailing">
+        <input type="hidden" name="_token" value="{{ csrf_token('admin_mailing') }}">
+
+        <section class="admin-mailing-panel">
+            <div class="admin-mailing-head">
+                <div>
+                    <p class="admin-kicker">Communication</p>
+                    <h1>Mail aux utilisateurs</h1>
+                </div>
+                <div class="admin-mailing-actions">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        Envoyer
+                    </button>
+                </div>
+            </div>
+
+            <div class="admin-mailing-grid">
+                <div class="admin-mailing-editor">
+                    <label class="form-label" for="mailSubject">Sujet</label>
+                    <input id="mailSubject" class="form-control" type="text" name="subject" required value="{{ subject }}">
+
+                    <label class="form-label" for="mailBody">Corps du mail</label>
+                    <textarea id="mailBody" class="form-control admin-mailing-textarea" name="body" rows="14" required>{{ body }}</textarea>
+                    <p class="form-text">Le message reprend automatiquement l'habillage mail Ultras Lions.</p>
+                </div>
+
+                <aside class="admin-mailing-recipients">
+                    <div class="admin-mailing-recipients-head">
+                        <div>
+                            <h2>Destinataires</h2>
+                            <p>{{ users|length }} utilisateur(s)</p>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" type="button" data-mailing-toggle-users>
+                            Tout selectionner
+                        </button>
+                    </div>
+
+                    <div class="admin-mailing-user-list">
+                        {% for user in users %}
+                            {% set userName = ((user.prenom ?? '') ~ ' ' ~ (user.nom ?? ''))|trim %}
+                            <label class="admin-mailing-user">
+                                <input
+                                    type="checkbox"
+                                    name="users[]"
+                                    value="{{ user.id }}"
+                                    {% if user.id in selectedIds %}checked{% endif %}
+                                >
+                                <span>
+                                    <strong>{{ userName ?: user.email }}</strong>
+                                    <small>{{ user.email }}</small>
+                                </span>
+                            </label>
+                        {% else %}
+                            <p class="admin-empty-state">Aucun utilisateur disponible.</p>
+                        {% endfor %}
+                    </div>
+                </aside>
+            </div>
+        </section>
+    </form>
+
+    <script>
+        document.querySelector('[data-mailing-toggle-users]')?.addEventListener('click', (event) => {
+            const checkboxes = Array.from(document.querySelectorAll('.admin-mailing-user input[type="checkbox"]'));
+            const shouldCheck = checkboxes.some((checkbox) => !checkbox.checked);
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = shouldCheck;
+            });
+            event.currentTarget.textContent = shouldCheck ? 'Tout deselectionner' : 'Tout selectionner';
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,7 @@
+RewriteEngine On
+
+RewriteCond %{DOCUMENT_ROOT}/backend/public%{REQUEST_URI} -f [OR]
+RewriteCond %{DOCUMENT_ROOT}/backend/public%{REQUEST_URI} -d
+RewriteRule ^(.*)$ backend/public/$1 [L]
+
+RewriteRule ^(.*)$ backend/public/index.php [L]

@@ -1,0 +1,258 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'cartage_form.html.cartage'|trans }}{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ 'cartage_form.html.cartage'|trans }}</h1>
+        <p class="hero-subtitle">{{ 'cartage_form.html.inscription_reservee_au_qr_code'|trans }}</p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container" style="max-width: 48rem;">
+        <div class="card card-form">
+            <h2 class="section-title">{{ 'cartage_form.html.infos_cartage'|trans }}</h2>
+
+            {% for message in app.flashes('danger') %}
+                <div class="alert-error">{{ message }}</div>
+            {% endfor %}
+
+            {% if errors is not empty %}
+                <div class="alert-error">
+                    {% for error in errors %}
+                        <p class="mb-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <p class="form-section-hint">
+                {{ 'cartage_form.html.saison_montant'|trans({'%season%': currentSeason|default(''), '%amount%': qrToken.amount|number_format(2, ',', ' ')}) }}
+            </p>
+
+            {% if data.email|default('') %}
+                {% if accountExists|default(false) %}
+                    <div class="alert alert-secondary">
+                        {{ 'cartage_form.html.compte_deja_existant'|trans }}
+                    </div>
+                {% endif %}
+
+                {% if seasonRegistration|default(null) %}
+                    <div class="alert {{ seasonRegistration.completed ? 'alert-success' : 'alert-warning' }}">
+                        {{ seasonRegistration.statusLabel }} {{ 'cartage_form.html.pour_la_saison'|trans }} {{ seasonRegistration.season }}.
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            <form method="post" action="{{ path('cartage_form') }}" id="cartageForm">
+                <input type="hidden" name="_token" value="{{ csrf_token('cartage_register') }}">
+
+                <h3 class="form-section-title">{{ 'cartage_form.html.formulaire_de_contact'|trans }}</h3>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="prenom">{{ 'cartage_form.html.prenom'|trans }}</label>
+                        <input id="prenom" name="prenom" class="form-control" required value="{{ data.prenom|default('') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="nom">{{ 'cartage_form.html.nom'|trans }}</label>
+                        <input id="nom" name="nom" class="form-control" required value="{{ data.nom|default('') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="email">{{ 'security_login.html.email'|trans }}</label>
+                        <input id="email" name="email" type="email" class="form-control" required value="{{ data.email|default('') }}" data-cartage-email-status-url="/cartage/email-status">
+                        <div id="cartageEmailStatus" class="form-section-hint mb-0"></div>
+                    </div>
+                    <div id="cartagePasswordFields" class="col-12 {{ accountExists|default(false) ? 'd-none' : '' }}">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="plainPassword">{{ 'cartage_form.html.mot_de_passe'|trans }}</label>
+                                <input id="plainPassword" name="plainPassword" type="password" class="form-control" autocomplete="new-password">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="confirmPassword">{{ 'cartage_form.html.confirmer_le_mot_de_passe'|trans }}</label>
+                                <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" autocomplete="new-password">
+                            </div>
+                            <div class="col-12">
+                                <p class="form-section-hint mb-0">{{ 'cartage_form.html.mot_de_passe_requis_creation_de_compte'|trans }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="telephone">{{ 'profile_show.html.telephone'|trans }}</label>
+                        <input id="telephone" name="telephone" class="form-control" required value="{{ data.telephone|default('') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="birth_date">{{ 'cartage_form.html.date_de_naissance'|trans }}</label>
+                        <input id="birth_date" name="birth_date" type="date" class="form-control" required max="{{ 'now'|date('Y-m-d') }}" value="{{ data.birth_date|default('') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="tailleTshirt">T-shirt</label>
+                        <select id="tailleTshirt" name="tailleTshirt" class="form-select">
+                            <option value="">{{ 'cartage_form.html.choisir'|trans }}</option>
+                            {% for size in ['XS', 'S', 'M', 'L', 'XL', 'XXL'] %}
+                                <option value="{{ size }}" {{ data.tailleTshirt|default('') == size ? 'selected' : '' }}>{{ size }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="taillePolo">Polo</label>
+                        <select id="taillePolo" name="taillePolo" class="form-select">
+                            <option value="">{{ 'cartage_form.html.choisir'|trans }}</option>
+                            {% for size in ['XS', 'S', 'M', 'L', 'XL', 'XXL'] %}
+                                <option value="{{ size }}" {{ data.taillePolo|default('') == size ? 'selected' : '' }}>{{ size }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="adresse">{{ 'profile_show.html.adresse'|trans }}</label>
+                        <input id="adresse" name="adresse" class="form-control" value="{{ data.adresse|default('') }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="codePostal">{{ 'cartage_form.html.code_postal'|trans }}</label>
+                        <input id="codePostal" name="codePostal" class="form-control" value="{{ data.codePostal|default('') }}">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label" for="ville">{{ 'profile_show.html.ville'|trans }}</label>
+                        <input id="ville" name="ville" class="form-control" value="{{ data.ville|default('') }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="taillePull">Pull</label>
+                        <select id="taillePull" name="taillePull" class="form-select">
+                            <option value="">{{ 'cartage_form.html.choisir'|trans }}</option>
+                            {% for size in ['XS', 'S', 'M', 'L', 'XL', 'XXL'] %}
+                                <option value="{{ size }}" {{ data.taillePull|default('') == size ? 'selected' : '' }}>{{ size }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="tailleSweat">Sweat</label>
+                        <select id="tailleSweat" name="tailleSweat" class="form-select">
+                            <option value="">{{ 'cartage_form.html.choisir'|trans }}</option>
+                            {% for size in ['XS', 'S', 'M', 'L', 'XL', 'XXL'] %}
+                                <option value="{{ size }}" {{ data.tailleSweat|default('') == size ? 'selected' : '' }}>{{ size }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="tailleVeste">Veste</label>
+                        <select id="tailleVeste" name="tailleVeste" class="form-select">
+                            <option value="">{{ 'cartage_form.html.choisir'|trans }}</option>
+                            {% for size in ['XS', 'S', 'M', 'L', 'XL', 'XXL'] %}
+                                <option value="{{ size }}" {{ data.tailleVeste|default('') == size ? 'selected' : '' }}>{{ size }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="tailleShort">Short</label>
+                        <select id="tailleShort" name="tailleShort" class="form-select">
+                            <option value="">{{ 'cartage_form.html.choisir'|trans }}</option>
+                            {% for size in ['XS', 'S', 'M', 'L', 'XL', 'XXL'] %}
+                                <option value="{{ size }}" {{ data.tailleShort|default('') == size ? 'selected' : '' }}>{{ size }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <p class="form-section-hint mt-3">
+                    {{ 'cartage_form.html.apres_ce_formulaire_tu_devras_lire_et_accepter_le_reglement'|trans }}
+                    <a href="/cartage/statut">{{ 'cartage_form.html.la_page_de_statut'|trans }}</a>.
+                </p>
+
+                <button class="btn btn-danger w-100 mt-4" type="submit">{{ 'cartage_form.html.continuer_vers_le_reglement'|trans }}</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            var emailInput = document.getElementById('email');
+            var statusBox = document.getElementById('cartageEmailStatus');
+            var passwordFields = document.getElementById('cartagePasswordFields');
+            var passwordInputs = [
+                document.getElementById('plainPassword'),
+                document.getElementById('confirmPassword')
+            ].filter(Boolean);
+
+            if (!emailInput || !statusBox || !passwordFields) {
+                return;
+            }
+
+            var setPasswordVisible = function (visible) {
+                passwordFields.classList.toggle('d-none', !visible);
+                passwordInputs.forEach(function (input) {
+                    input.required = visible;
+                    if (!visible) {
+                        input.value = '';
+                    }
+                });
+            };
+
+            var setStatus = function (message, type) {
+                statusBox.textContent = message || '';
+                statusBox.classList.remove('text-success', 'text-warning', 'text-danger');
+                if (type) {
+                    statusBox.classList.add(type);
+                }
+            };
+
+            var checkEmail = function () {
+                var email = emailInput.value.trim();
+                var url = emailInput.dataset.cartageEmailStatusUrl;
+                if (!email || !url) {
+                    setStatus('', null);
+                    setPasswordVisible(true);
+                    return;
+                }
+
+                fetch(url + 'email=' + encodeURIComponent(email), {
+                    headers: { 'Accept': 'application/json' }
+                })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error('Email status unavailable');
+                        }
+
+                        return response.json();
+                    })
+                    .then(function (payload) {
+                        if (!payload.validEmail) {
+                            setStatus('', null);
+                            setPasswordVisible(true);
+                            return;
+                        }
+
+                        setPasswordVisible(!payload.accountExists);
+
+                        if (payload.registration && payload.registration.completed) {
+                            setStatus('Cartage déjà valide pour la saison ' + payload.season.replace('-', '/') + '.', 'text-success');
+                            return;
+                        }
+
+                        if (payload.registration && payload.registration.pending) {
+                            setStatus('Cartage déjà en attente pour la saison ' + payload.season.replace('-', '/') + '.', 'text-warning');
+                            return;
+                        }
+
+                        if (payload.accountExists) {
+                            setStatus('Compte trouvé : ce cartage sera traité comme un renouvellement.', 'text-success');
+                            return;
+                        }
+
+                        setStatus('Aucun compte trouvé : un compte sera créé après validation du cartage.', 'text-warning');
+                    })
+                    .catch(function () {
+                        setStatus('', null);
+                    });
+            };
+
+            emailInput.addEventListener('blur', checkEmail);
+            emailInput.addEventListener('change', checkEmail);
+            checkEmail();
+        })();
+    </script>
+{% endblock %}

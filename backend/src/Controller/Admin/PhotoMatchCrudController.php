@@ -9,6 +9,7 @@ use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
@@ -20,6 +21,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\TextFilter;
 
 class PhotoMatchCrudController extends AbstractCrudController
 {
@@ -41,6 +43,12 @@ class PhotoMatchCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Photo de match')
             ->setEntityLabelInPlural('Photos de match')
             ->setDefaultSort(['date' => 'DESC']);
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add(TextFilter::new('opponent', 'Adversaire'));
     }
 
     public function createEntity(string $entityFqcn)
@@ -91,7 +99,9 @@ class PhotoMatchCrudController extends AbstractCrudController
 
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('title', 'Titre')->onlyOnIndex();
-        yield TextField::new('opponent', 'Adversaire')->setRequired(false);
+        yield TextField::new('opponent', 'Adversaire')
+            ->setRequired(false)
+            ->setSortable(true);
         yield ChoiceField::new('matchLocation', 'Lieu du match')
             ->setChoices([
                 'Domicile' => 'domicile',

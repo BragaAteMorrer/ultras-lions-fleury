@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
 {% block title %}{{ 'group_show.html.le_groupe_ultras_lions'|trans }}{% endblock %}
 
@@ -24,12 +24,12 @@
     <div class="container">
         <div class="group-layout">
             <aside class="group-sidenav">
-                <div class="group-sidenav-title">Le Groupe</div>
-                <a href="#notre-histoire" class="group-sidenav-link">Notre histoire</a>
-                <a href="#notre-mentalite" class="group-sidenav-link">Notre mentalite</a>
-                <a href="#notre-fonctionnement" class="group-sidenav-link">Notre fonctionnement</a>
-                <a href="#pourquoi-nous-rejoindre" class="group-sidenav-link">Pourquoi nous rejoindre ?</a>
-                <a href="#se-carter" class="group-sidenav-link">Se Carter</a>
+                <div class="group-sidenav-title">{{ 'group_show.html.le_groupe'|trans }}</div>
+                <a href="#notre-histoire" class="group-sidenav-link">{{ 'components_navbar.html.notre_histoire'|trans }}</a>
+                <a href="#notre-mentalite" class="group-sidenav-link">{{ 'components_navbar.html.notre_mentalite'|trans }}</a>
+                <a href="#notre-fonctionnement" class="group-sidenav-link">{{ 'components_navbar.html.notre_fonctionnement'|trans }}</a>
+                <a href="#pourquoi-nous-rejoindre" class="group-sidenav-link">{{ 'components_navbar.html.pourquoi_nous_rejoindre'|trans }}</a>
+                <a href="#se-carter" class="group-sidenav-link">{{ 'components_navbar.html.se_carter'|trans }}</a>
             </aside>
 
             <div class="group-main">
@@ -43,7 +43,7 @@
 
                 <div class="group-section" id="notre-histoire">
                     <h2>{{ 'group_show.html.section_histoire_title'|trans }}</h2>
-                    {% set histoireText = (group and group.histoireText) ? group.histoireText : 'Nés en tribune à Fleury, on a bâti notre identité match après match. Rouge et noir, fidèles, présents partout.' %}
+                    {% set histoireText = (group and group.histoireText) ? group.histoireText : 'group_show.html.section_histoire_text'|trans %}
                     <div class="rich-content">
                         {% if group and group.histoireText %}
                             {{ histoireText|raw }}
@@ -55,7 +55,7 @@
 
                 <div class="group-section" id="notre-mentalite">
                     <h2>{{ 'group_show.html.section_mentalite_title'|trans }}</h2>
-                    {% set mentaliteText = (group and group.mentaliteText) ? group.mentaliteText : 'Fidélité, respect, solidarité. On chante, on pousse, on ne lâche rien, à domicile comme en déplacement.' %}
+                    {% set mentaliteText = (group and group.mentaliteText) ? group.mentaliteText : 'group_show.html.section_mentalite_text'|trans %}
                     <div class="rich-content">
                         {% if group and group.mentaliteText %}
                             {{ mentaliteText|raw }}
@@ -67,7 +67,7 @@
 
                 <div class="group-section" id="notre-fonctionnement">
                     <h2>{{ 'group_show.html.section_fonctionnement_title'|trans }}</h2>
-                    {% set fonctionnementText = (group and group.fonctionnementText) ? group.fonctionnementText : 'Le groupe tourne grâce aux bénévoles, aux réunions et aux décisions collectives. Chacun a sa place, chacun met la main.' %}
+                    {% set fonctionnementText = (group and group.fonctionnementText) ? group.fonctionnementText : 'group_show.html.section_fonctionnement_text'|trans %}
                     <div class="rich-content">
                         {% if group and group.fonctionnementText %}
                             {{ fonctionnementText|raw }}
@@ -79,7 +79,7 @@
 
                 <div class="group-section" id="pourquoi-nous-rejoindre">
                     <h2>{{ 'group_show.html.section_rejoindre_title'|trans }}</h2>
-                    {% set rejoindreText = (group and group.rejoindreText) ? group.rejoindreText : 'Pour vivre le match autrement, participer aux tifos et déplacements, et faire partie d’une famille rouge et noire.' %}
+                    {% set rejoindreText = (group and group.rejoindreText) ? group.rejoindreText : 'group_show.html.section_rejoindre_text'|trans %}
                     <div class="rich-content">
                         {% if group and group.rejoindreText %}
                             {{ rejoindreText|raw }}
@@ -91,7 +91,7 @@
 
                 <div class="group-section" id="se-carter">
                     <h2>{{ 'group_show.html.section_se_carter_title'|trans }}</h2>
-                    {% set seCarterText = (group and group.seCarterText) ? group.seCarterText : 'Passe à la table de vente les jours de match, récupère ton code, puis inscris-toi pour accéder à l’espace membres.' %}
+                    {% set seCarterText = (group and group.seCarterText) ? group.seCarterText : 'group_show.html.section_se_carter_text'|trans %}
                     <div class="rich-content">
                         {% if group and group.seCarterText %}
                             {{ seCarterText|raw }}

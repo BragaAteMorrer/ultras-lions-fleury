@@ -10,6 +10,7 @@ admin_dashboard:
     ultras_lions_dashboard: Ultras Lions – لوحة القيادة
     ultras_lions_fc_fleury_91_page_admin: Ultras Lions – FC Fleury 91 - صفحة الإدارة
     visites: الزيارات
+    page_d_accueil: الصفحة الرئيسية
 base:
   html:
     ultras_lions_fc_fleury_91: ألتراس لايونز – إف سي فلوري 91
@@ -24,6 +25,7 @@ components_footer:
     tribune_drapeaux_fumigenes_chants_la_ville_est_rouge_et_noire: 'منبر، أعلام، قنابل دخان، أغاني: المدينة حمراء وسوداء.'
     twitter: تغريد
     ultras_lions: ألتراس ليونز
+    ten_as_vu_le_debut: "Les Lioness, t'en as vu le début, t'en verras pas la fin !"
 components_navbar:
   html:
     accueil: مرحباً
@@ -50,6 +52,10 @@ components_navbar:
     communiques: بيانات صحفية
     streetart: فن الشارع
     chants: "Chants"
+    medias: "Medias"
+    tout_les_medias: "All Medias"
+    liens: "Links"
+
 email_base:
   html:
     footer_brand: ألتراس لايونز – إف سي فلوري 91
@@ -93,6 +99,8 @@ events_list:
     filtrer: فلتر
     prochains_matchs_rassemblements_actions: المباريات القادمة والتجمعات والإجراءات
     saison: موسم
+    photos_de_match: صور المباراة
+    photos_de_match_saison: صور المباراة الموسم %year_start%/%year_end%
 events_show:
   html:
     title: '%title% – سفر – أولتراس ليونز'
@@ -153,6 +161,20 @@ merch_list:
     textiles_accessoires_stickers_supports_du_groupe: المنسوجات والإكسسوارات والملصقات والدعم الجماعي
     toutes: الجميع
     trier: نوع
+    stock_non_defini: لم يتم تحديد المخزون
+    vitrine_officielle: الواجهة الرسمية
+    decouvrir_la_selection: اكتشف الاختيارات
+    voir_le_panier: عرض السلة
+    pieces: قطع
+    categories: فئات
+    stock_disponible: المخزون المتاح
+    affinage: التصفية
+    selectionnez_une_categorie: اختر فئة
+    choisir: اختر
+
+    moyens_de_paiement: "طرق الدفع"
+    paiement_par_carte_via_sumup: "الدفع بالبطاقة عبر SumUp"
+    paiement_en_liquide_a_la_table_de_vente: "الدفع النقدي على طاولة البيع"
 merch_show:
   html:
     acheter: يشتري
@@ -253,12 +275,21 @@ ticket_buy:
     vs_opponent: مقابل %opponent%
 ticket_list:
   html:
-    aucun_match_pour_le_moment: لا توجد مباريات حتى الآن.
+    a_domicile: البيت
+    a_lexterieur: خارج الأرض
+    billetweb: Billetweb
+    billetweb_reservation: 'حجز Billetweb'
+    reserver: احجز
+    billetterie_billetweb_integree: 'تكامل Billetweb'
     billetterie_ultras_lions: حجز التذاكر - ألتراس ليونز
+    decouvrir_les_matchs: 'اكتشف المباريات'
     matchs_a_domicile_et_a_lexterieur: مباريات الذهاب والإياب
     matchs_disponibles: المباريات المتاحة
+    selectionnez_une_categorie: 'اختر فئة'
     stock: 'المخزون: %stock%'
     vs_opponent: مقابل %opponent%
+    vitrine_officielle: 'الواجهة الرسمية'
+    aucun_match_pour_le_moment: لا توجد مباريات في الوقت الراهن.
 ticket_show:
   html:
     adversaire: 'الخصم:'
@@ -294,3 +325,47 @@ user_new:
 user_show:
   html:
     user: مستخدم
+cart_index:
+  html:
+    billets: تذاكر
+    billets_et_table_de_vente: 'التذاكر + طاولة البيع'
+    date: التاريخ
+    matos: معدات
+    match: مباراة
+    nom: اللقب
+    panier: السلة
+    panier_vide: 'سلتك فارغة.'
+    payer_avec_sumup: 'الدفع عبر SumUp'
+    moyens_de_paiement_sumup: 'وسائل الدفع عبر SumUp'
+    paiement_securise_sumup: 'دفع آمن عبر SumUp، مع التحقق النهائي على صفحة الدفع الخاصة بهم.'
+    sumup_method_cards: 'بطاقة بنكية'
+    sumup_method_cards_detail: 'Visa و Mastercard والبطاقات المتوافقة.'
+    sumup_method_wallets: 'Apple Pay / Google Pay'
+    sumup_method_wallets_detail: 'حسب الجهاز والمتصفح وحساب التاجر.'
+    sumup_method_paypal: 'PayPal عبر SumUp'
+    sumup_method_paypal_detail: 'متاح إذا كان PayPal مفعلا على حساب SumUp.'
+    sumup_method_local: 'وسائل محلية أخرى'
+    sumup_method_local_detail: 'حسب البلد والمبلغ والعملة.'
+    sumup_availability_note: 'تؤكد SumUp القائمة الدقيقة للوسائل المتاحة عند الدفع.'
+    prenom: الاسم
+    produit: المنتج
+    quantite: الكمية
+    retour_billetterie: 'العودة إلى التذاكر'
+    retour_table_de_vente: 'العودة إلى طاولة البيع'
+    sous_total_billets: 'المجموع الفرعي للتذاكر'
+    sous_total_matos: 'المجموع الفرعي للمعدات'
+    supprimer: حذف
+    taille: المقاس
+    total: المجموع
+    vider_le_panier: 'إفراغ السلة'
+    reserver_et_payer_en_liquide: 'الحجز والدفع نقدا'
+
+
+
+
+
+
+
+
+
+

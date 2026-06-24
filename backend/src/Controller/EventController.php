@@ -32,9 +32,8 @@ class EventController extends AbstractController
             ->join('e.category', 'cat')
             ->where('cat.section = :section')
             ->setParameter('section', 'photos_de_match')
-            ->addOrderBy('e.season', 'DESC')
-            ->addOrderBy('e.journee', 'ASC')
-            ->addOrderBy('e.date', 'ASC');
+            ->orderBy('e.date', 'DESC')
+            ->addOrderBy('e.id', 'DESC');
 
         if ($selectedSeason !== '') {
             $deplacementsQb

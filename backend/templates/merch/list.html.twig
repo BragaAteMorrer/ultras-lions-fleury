@@ -1,62 +1,148 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
 {% block title %}{{ 'merch_list.html.table_de_vente_ultras_lions'|trans }}{% endblock %}
 
 {% block body %}
+{% set totalProducts = items|length %}
+{% set totalStock = 0 %}
+{% for product in items %}
+    {% set totalStock = totalStock + (product.totalStock|default(0)) %}
+{% endfor %}
 
-<section class="hero">
-    <div class="hero-content">
-        <h1 class="hero-title">{{ 'components_navbar.html.table_de_vente'|trans }}</h1>
-        <p class="hero-subtitle">{{ 'merch_list.html.textiles_accessoires_stickers_supports_du_groupe'|trans }}</p>
+<section class="hero merch-hero">
+    <div class="hero-content merch-hero-content">
+        <div class="merch-hero-copy">
+            <span class="merch-hero-kicker">{{ 'merch_list.html.vitrine_officielle'|trans }}</span>
+            <h1 class="hero-title">{{ 'components_navbar.html.table_de_vente'|trans }}</h1>
+            <p class="hero-subtitle">{{ 'merch_list.html.textiles_accessoires_stickers_supports_du_groupe'|trans }}</p>
+
+            <div class="merch-payment-choices mt-4">
+                <div class="merch-payment-heading">
+                    <span>{{ 'merch_list.html.moyens_de_paiement'|trans }}</span>
+                    <p>Carte bancaire via SumUp ou en Liquide sur place</p>
+                </div>
+                {% include 'components/payment_logos.html.twig' with { methods: sumupPaymentMethods|default([]) } %}
+                <div class="merch-payment-tags">
+                    <span class="badge rounded-pill text-bg-light text-dark">{{ 'merch_list.html.paiement_par_carte_via_sumup'|trans }}</span>
+                    <span class="badge rounded-pill text-bg-light text-dark">{{ 'merch_list.html.paiement_en_liquide_a_la_table_de_vente'|trans }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="merch-hero-actions">
+            <a href="#catalogue" class="btn-ul">{{ 'merch_list.html.decouvrir_la_selection'|trans }}</a>
+            <a href="{{ path('merch_cart') }}" class="btn btn-outline-light merch-hero-secondary">{{ 'merch_list.html.voir_le_panier'|trans }}</a>
+        </div>
+
+        <div class="merch-hero-stats">
+            <div class="merch-stat">
+                <strong>{{ totalProducts }}</strong>
+                <span>{{ 'merch_list.html.pieces'|trans }}</span>
+            </div>
+            <div class="merch-stat">
+                <strong>{{ categories|length }}</strong>
+                <span>{{ 'merch_list.html.categories'|trans }}</span>
+            </div>
+            <div class="merch-stat">
+                <strong>{{ totalStock }}</strong>
+                <span>{{ 'merch_list.html.stock_disponible'|trans }}</span>
+            </div>
+        </div>
     </div>
 </section>
 
-<div class="section">
+<div class="section merch-catalogue-section" id="catalogue">
     <div class="container">
-        <form method="get" class="mb-4" style="max-width: 24rem;">
-            <label class="form-label text-light" for="category">{{ 'merch_list.html.categorie'|trans }}</label>
-            <div class="d-flex gap-2">
-                <select id="category" name="category" class="form-select">
-                    <option value="" {% if selectedCategory is null %}selected{% endif %}>{{ 'merch_list.html.toutes'|trans }}</option>
-                    {% for cat in categories %}
-                        <option value="{{ cat.slug }}" {% if selectedCategory and selectedCategory.id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
-                    {% endfor %}
-                </select>
-                <button class="btn btn-outline-light" type="submit">{{ 'merch_list.html.trier'|trans }}</button>
-            </div>
-        </form>
-
-        <h2 class="section-title">{{ 'merch_list.html.nos_produits'|trans }}</h2>
-
-        <div class="row g-4">
-            {% for product in items %}
-                <div class="col-md-4">
-                    <a href="{{ path('merch_show', { id: product.id }) }}" class="card h-100">
-
-                        {% set cover = product.image ?: (product.media|first) %}
-                        {% if cover %}
-                            <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="event-card-img-top" alt="{{ product.title }}">
-                        {% else %}
-                            <img src="/placeholder.jpg" class="event-card-img-top" alt="{{ product.title }}">
-                        {% endif %}
-
-                        <div class="card-body">
-                            <h3 class="card-title">{{ product.title }}</h3>
-                            {% if product.category %}
-                                <p class="text-muted mb-1">{{ product.category.name }}</p>
-                            {% endif %}
-                            {% if product.description %}
-                                <p class="mb-1">{{ product.description|striptags|slice(0, 90) ~ '...' }}</p>
-                            {% endif %}
-                            <p class="card-price">{{ product.price|number_format(2, ',', ' ') }} €</p>
-                            <p class="text-muted mb-0">{% if product.stocks is empty %}Stock non defini{% else %}{{ 'merch_show.html.stock_total'|trans({'%stock%': product.totalStock}) }}{% endif %}</p>
-                        </div>
-
-                    </a>
+        <div class="merch-layout">
+            <aside class="merch-filter-panel">
+                <div class="merch-filter-head">
+                    <span class="merch-filter-kicker">{{ 'merch_list.html.affinage'|trans }}</span>
+                    <h2 class="section-title merch-filter-title">{{ 'merch_list.html.nos_produits'|trans }}</h2>
+                    <p class="merch-filter-copy">{{ 'merch_list.html.selectionnez_une_categorie'|trans }}</p>
                 </div>
-            {% endfor %}
+
+                <form method="get" class="merch-filter-form">
+                    <label class="form-label" for="category">{{ 'merch_list.html.categorie'|trans }}</label>
+                    <select id="category" name="category" class="form-select">
+                        <option value="" {% if selectedCategory is null %}selected{% endif %}>{{ 'merch_list.html.toutes'|trans }}</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat.slug }}" {% if selectedCategory and selectedCategory.id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button class="btn btn-danger w-100 merch-filter-submit" type="submit">{{ 'merch_list.html.trier'|trans }}</button>
+                </form>
+
+                <div class="merch-category-chips">
+                    <a href="{{ path('merch_index') }}" class="merch-chip {{ selectedCategory is null ? 'active' : '' }}">{{ 'merch_list.html.toutes'|trans }}</a>
+                    {% for cat in categories %}
+                        <a href="{{ path('merch_index', { category: cat.slug }) }}" class="merch-chip {{ selectedCategory and selectedCategory.id == cat.id ? 'active' : '' }}">{{ cat.name }}</a>
+                    {% endfor %}
+                </div>
+            </aside>
+
+            <div class="merch-grid-wrap">
+                <div class="merch-grid-head">
+                    <h2 class="section-title">{{ 'merch_list.html.nos_produits'|trans }}</h2>
+                    <p class="merch-grid-copy">{{ 'merch_list.html.textiles_accessoires_stickers_supports_du_groupe'|trans }}</p>
+                </div>
+
+                <div class="row g-4">
+                    {% for product in items %}
+                        {% set cover = product.image ?: (product.media|first) %}
+                        {% set stockValue = product.totalStock|default(0) %}
+                        <div class="col-md-6 col-xl-4">
+                            <a href="{{ path('merch_show', { id: product.id }) }}" class="card merch-product-card h-100">
+                                <div class="merch-product-media">
+                                    {% if cover %}
+                                        <img src="{{ asset('uploads/media/' ~ cover.path) }}" class="merch-product-image" alt="{{ product.title }}">
+                                    {% else %}
+                                        <img src="/placeholder.jpg" class="merch-product-image" alt="{{ product.title }}">
+                                    {% endif %}
+
+                                    <div class="merch-product-badges">
+                                        {% if product.category %}
+                                            <span class="merch-product-badge">{{ product.category.name }}</span>
+                                        {% endif %}
+                                        <span class="merch-product-badge merch-product-badge-stock">
+                                            {% if product.stocks is empty %}
+                                                {{ 'merch_list.html.stock_non_defini'|trans }}
+                                            {% else %}
+                                                {{ 'merch_show.html.stock_total'|trans({'%stock%': stockValue}) }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="card-body merch-product-body">
+                                    <div class="merch-product-topline">
+                                        <h3 class="card-title merch-product-title">{{ product.title }}</h3>
+                                    </div>
+
+                                    {% if product.description %}
+                                        <p class="merch-product-description">{{ product.description|striptags|slice(0, 96) ~ '...' }}</p>
+                                    {% endif %}
+
+                                    <div class="merch-product-footer">
+                                        <p class="card-price merch-product-price">{{ prices[product.id]|default(product.price)|number_format(2, ',', ' ') }} €</p>
+                                        <span class="merch-product-cta">{{ 'merch_list.html.choisir'|trans }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="col-12">
+                            <div class="merch-empty-state">
+                                <h3>{{ 'merch_list.html.stock_non_defini'|trans }}</h3>
+                                <p>{{ 'merch_list.html.selectionnez_une_categorie'|trans }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 {% endblock %}
+

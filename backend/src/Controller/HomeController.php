@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Entity\Gadget;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -91,12 +92,26 @@ class HomeController extends AbstractController
             ->getQuery()
             ->getOneOrNullResult();
 
+        // 6. Gadgets produits par le groupe
+        $gadgets = $em->createQueryBuilder()
+            ->select('g', 'image')
+            ->from(Gadget::class, 'g')
+            ->leftJoin('g.image', 'image')
+            ->andWhere('g.visible = :visible')
+            ->setParameter('visible', true)
+            ->orderBy('g.position', 'ASC')
+            ->addOrderBy('g.createdAt', 'DESC')
+            ->setMaxResults(4)
+            ->getQuery()
+            ->getResult();
+
         return $this->render('home/index.html.twig', [
             'latest_items' => $latestItems,
             'tickets' => $tickets,
             'galleries' => $galleries,
             'merch' => $merch,
             'group' => $group,
+            'gadgets' => $gadgets,
         ]);
     }
 }

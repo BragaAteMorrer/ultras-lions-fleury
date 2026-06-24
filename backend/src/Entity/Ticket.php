@@ -24,6 +24,12 @@ class Ticket
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $matchDate = null;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $guestAvailabilityDate = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $memberAvailabilityDate = null;
+
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $matchLocation = null;
 
@@ -53,7 +59,7 @@ class Ticket
 
     public function __toString(): string
     {
-        return (string) $this->title;
+        return $this->getMatchLabel();
     }
 
     public function getId(): ?int { return $this->id; }
@@ -79,6 +85,22 @@ class Ticket
     public function setMatchDate(\DateTimeInterface $matchDate): self
     {
         $this->matchDate = $matchDate;
+        return $this;
+    }
+
+    public function getGuestAvailabilityDate(): ?\DateTimeInterface { return $this->guestAvailabilityDate; }
+
+    public function setGuestAvailabilityDate(?\DateTimeInterface $guestAvailabilityDate): self
+    {
+        $this->guestAvailabilityDate = $guestAvailabilityDate;
+        return $this;
+    }
+
+    public function getMemberAvailabilityDate(): ?\DateTimeInterface { return $this->memberAvailabilityDate; }
+
+    public function setMemberAvailabilityDate(?\DateTimeInterface $memberAvailabilityDate): self
+    {
+        $this->memberAvailabilityDate = $memberAvailabilityDate;
         return $this;
     }
 
@@ -151,8 +173,59 @@ class Ticket
         return $this->matchLocation === null || $this->matchLocation === 'domicile';
     }
 
+    public function isAwayMatch(): bool
+    {
+        if ($this->matchLocation !== null) {
+            return strtolower((string) $this->matchLocation) === 'exterieur';
+        }
+
+        return $this->category?->getSlug() === 'ext';
+    }
+
+    public function getMatchLabel(): string
+    {
+        $opponent = trim((string) $this->opponent);
+
+        if ($opponent === '') {
+            return (string) $this->title;
+        }
+
+        return $this->isAwayMatch()
+            ? sprintf('%s vs FC Fleury', $opponent)
+            : sprintf('FC Fleury vs %s', $opponent);
+    }
+
     public function usesBilletweb(): bool
     {
         return $this->isHomeMatch() && $this->billetwebUrl !== null && trim($this->billetwebUrl) !== '';
+    }
+
+    public function isArchived(?\DateTimeInterface $now = null): bool
+    {
+        if (!$this->matchDate) {
+            return false;
+        }
+
+        $now ??= new \DateTimeImmutable();
+
+        return $this->matchDate <= $now;
+    }
+
+    public function getAvailabilityDateForUser(bool $isMember): ?\DateTimeInterface
+    {
+        return $isMember ? $this->memberAvailabilityDate : $this->guestAvailabilityDate;
+    }
+
+    public function isAvailableForUser(bool $isMember, ?\DateTimeInterface $now = null): bool
+    {
+        $now ??= new \DateTimeImmutable();
+
+        if ($this->isArchived($now)) {
+            return false;
+        }
+
+        $availabilityDate = $this->getAvailabilityDateForUser($isMember);
+
+        return $availabilityDate === null || $availabilityDate <= $now;
     }
 }
