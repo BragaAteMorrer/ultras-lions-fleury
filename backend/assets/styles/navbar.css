@@ -384,6 +384,24 @@
     color: #fff;
 }
 
+.mobile-admin-link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.7rem;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.mobile-admin-link i {
+    font-size: 1.05rem;
+    color: #ff5252;
+}
+
+.mobile-admin-link span {
+    display: inline-block;
+    min-width: 0;
+}
+
 .mobile-user-link .mobile-avatar {
     flex: 0 0 auto;
     width: 2.75rem;
@@ -450,6 +468,10 @@
     .ultra-burger {
         width: 2.75rem;
         height: 2.75rem;
+    }
+
+    .mobile-admin-link {
+        min-height: 3.15rem;
     }
 }
 

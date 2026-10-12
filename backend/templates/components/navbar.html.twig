@@ -20,7 +20,7 @@
 {% endif %}
 {% set currentRoute = app.request.get('_route') %}
 {% set currentLocale = app.request.locale|default('fr') %}
-{% set boutiqueActive = currentRoute starts with 'merch_' or currentRoute starts with 'ticket_' %}
+{% set boutiqueActive = currentRoute starts with 'merch_' or currentRoute starts with 'ticket_' or currentRoute starts with 'donation_' %}
 {% set groupActive = currentRoute starts with 'group_' %}
 {% set mediaActive = (currentRoute starts with 'event_') or (currentRoute starts with 'gallery_') or (currentRoute starts with 'media_') or (currentRoute starts with 'gamephoto_') %}
 {% set languageNames = {
@@ -86,6 +86,7 @@
                     <ul class="dropdown-menu ultra-dropdown" aria-labelledby="boutiqueDropdown">
                         <li><a class="dropdown-item {{ currentRoute starts with 'merch_' ? 'active' : '' }}" href="{{ path('merch_index') }}">{{ 'components_navbar.html.table_de_vente'|trans }}</a></li>
                         <li><a class="dropdown-item {{ currentRoute starts with 'ticket_' ? 'active' : '' }}" href="{{ path('ticket_index') }}">{{ 'components_navbar.html.billetterie'|trans }}</a></li>
+                        <li><a class="dropdown-item {{ currentRoute starts with 'donation_' ? 'active' : '' }}" href="{{ path('donation_index') }}">{{ 'components_navbar.html.dons'|trans }}</a></li>
                         <li>
                             <a class="dropdown-item {{ currentRoute starts with 'cartage_' ? 'active' : '' }}"
                                href="{{ path('cartage_qr_scan', {
@@ -231,6 +232,7 @@
                 <button type="button" class="ultra-link submenu-toggle {{ boutiqueActive ? 'active' : '' }}" aria-expanded="false">Boutique</button>
                 <a href="{{ path('merch_index') }}" class="ultra-link sub {{ currentRoute starts with 'merch_' ? 'active' : '' }}">{{ 'components_navbar.html.table_de_vente'|trans }}</a>
                 <a href="{{ path('ticket_index') }}" class="ultra-link sub {{ currentRoute starts with 'ticket_' ? 'active' : '' }}">{{ 'components_navbar.html.billetterie'|trans }}</a>
+                <a href="{{ path('donation_index') }}" class="ultra-link sub {{ currentRoute starts with 'donation_' ? 'active' : '' }}">{{ 'components_navbar.html.dons'|trans }}</a>
                 <a href="{{ path('cartage_qr_scan', {
                     token: 'b817cb0f36ccf57d512e0387182734c3163e6c5ecbce7a16'
                 }) }}" class="ultra-link sub {{ currentRoute starts with 'cartage_' ? 'active' : '' }}">
@@ -263,6 +265,13 @@
                     {% endif %}
                     <p class="mobile-user-name">{{ navbarDisplayName }}</p>
                 </a>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ adminDashboardUrl }}" class="ultra-link mobile-admin-link">
+                        <i class="bi bi-shield-lock-fill" aria-hidden="true"></i>
+                        <span>{{ 'components_navbar.html.espace_admin'|trans }}</span>
+                    </a>
+                {% endif %}
 
                 <a href="{{ path('profile_show', { id: app.user.id }) }}" class="ultra-link">{{ 'components_navbar.html.mon_profil'|trans }}</a>
                 <a href="{{ path('profile_edit', { id: app.user.id }) }}" class="ultra-link">{{ 'components_navbar.html.modifier_mon_compte'|trans }}</a>

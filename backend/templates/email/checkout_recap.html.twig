@@ -1,35 +1,53 @@
-<h2>{{ 'checkout_receipt.html.recapitulatif_de_commande'|trans }}</h2>
+{% extends 'email/base.html.twig' %}
 
-<p>
-    {{ 'checkout_receipt.html.numero'|trans }} : {{ checkout.checkoutReference }}<br>
-    {{ 'checkout_receipt.html.date'|trans }} : {{ checkout.createdAt|date('d/m/Y H:i') }}<br>
-    {{ 'checkout_receipt.html.total'|trans }} : {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}
-</p>
+{% block title %}Recapitulatif de commande{% endblock %}
+{% block header_subtitle %}Confirmation de commande{% endblock %}
+{% block header_title %}Recapitulatif de commande{% endblock %}
 
-{% if cashNotice %}
-    <p><strong>{{ 'checkout_cash_thankyou.html.paiement_a_regler_en_liquide_au_prochain_match_a_domicile'|trans }}</strong></p>
-{% endif %}
+{% block content %}
+    <p>Bonjour,</p>
 
-{% if ticketLines is not empty %}
-    <h3>{{ 'checkout_receipt.html.billets'|trans }}</h3>
-    <ul>
-        {% for line in ticketLines %}
-            <li>
-                {{ line.opponent ?? line.title }} — {{ 'cart_index.html.quantite'|trans }} {{ line.quantity }} — {{ line.totalPrice|number_format(2, ',', ' ') }} EUR
-            </li>
-        {% endfor %}
-    </ul>
-{% endif %}
+    <p>
+        Voici le recapitulatif de ta commande {{ checkout.checkoutReference }}.
+    </p>
 
-{% if merchLines is not empty %}
-    <h3>{{ 'checkout_receipt.html.matos'|trans }}</h3>
-    <ul>
-        {% for line in merchLines %}
-            <li>
-                {{ line.title }}{% if line.size %} ({{ line.size }}){% endif %} — {{ 'cart_index.html.quantite'|trans }} {{ line.quantity }} — {{ line.totalPrice|number_format(2, ',', ' ') }} EUR
-            </li>
-        {% endfor %}
-    </ul>
-{% endif %}
+    <div class="card">
+        <ul>
+            <li>Reference : {{ checkout.checkoutReference }}</li>
+            <li>Date : {{ checkout.createdAt|date('d/m/Y H:i') }}</li>
+            <li>Total : {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}</li>
+        </ul>
+    </div>
 
-<p>{{ 'checkout_thankyou.html.paiement_pris_en_compte'|trans }}</p>
+    {% if cashNotice %}
+        <p class="note"><strong>Paiement a regler en liquide :</strong> tu recevras les instructions de remise ou de retrait selon le contexte de la commande.</p>
+    {% endif %}
+
+    {% if ticketLines is not empty %}
+        <h2>Billets</h2>
+        <div class="card">
+            <ul>
+                {% for line in ticketLines %}
+                    <li>
+                        {{ line.opponent ?? line.title }} - Quantite {{ line.quantity }} - {{ line.totalPrice|number_format(2, ',', ' ') }} EUR
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {% if merchLines is not empty %}
+        <h2>Matos</h2>
+        <div class="card">
+            <ul>
+                {% for line in merchLines %}
+                    <li>
+                        {{ line.title }}{% if line.size %} ({{ line.size }}){% endif %} - Quantite {{ line.quantity }} - {{ line.totalPrice|number_format(2, ',', ' ') }} EUR
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <p class="note">Merci pour ta commande. Si tu as une question, reponds a cet email.</p>
+{% endblock %}

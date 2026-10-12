@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/table-de-vente')]
 class MerchController extends AbstractController
@@ -66,7 +67,7 @@ class MerchController extends AbstractController
         $preferredSize = $sizingService->getPreferredSizeForUser($item, $user);
 
         $isMember = $this->getUser() !== null;
-        if (!$isMember && $item->getAudience() === 'members') {
+        if (!$item->isVisibleForUser($isMember)) {
             throw $this->createNotFoundException();
         }
 
@@ -88,7 +89,7 @@ class MerchController extends AbstractController
         EntityManagerInterface $em
     ): Response {
         $isMember = $this->getUser() !== null;
-        if (!$isMember && $item->getAudience() === 'members') {
+        if (!$item->isVisibleForUser($isMember)) {
             throw $this->createNotFoundException();
         }
 
@@ -195,6 +196,11 @@ class MerchController extends AbstractController
         SessionInterface $session,
         CartService $cartService
     ): Response {
+        $isMember = $this->getUser() !== null;
+        if (!$item->isVisibleForUser($isMember)) {
+            throw $this->createNotFoundException();
+        }
+
         $size = (string) $request->request->get('size', 'TU');
         $qty = (int) $request->request->get('quantity', 1);
         $cartService->addMerch($session, $item->getId(), $size, $qty);
@@ -292,7 +298,13 @@ class MerchController extends AbstractController
         $em->flush();
 
         $description = sprintf('Table de vente - %d article(s)', count($lines));
-        $response = $sumupService->createHostedCheckout($total, 'EUR', $reference, $description);
+        $response = $sumupService->createHostedCheckout(
+            $total,
+            'EUR',
+            $reference,
+            $description,
+            $this->generateUrl('checkout_thankyou', [], UrlGeneratorInterface::ABSOLUTE_URL)
+        );
 
         if (!empty($response['_error'])) {
             $this->addFlash('danger', sprintf(
@@ -398,7 +410,13 @@ class MerchController extends AbstractController
         $em->flush();
 
         $description = sprintf('Table de vente - %d article(s)', count($lines));
-        $response = $sumupService->createHostedCheckout($total, 'EUR', $reference, $description);
+        $response = $sumupService->createHostedCheckout(
+            $total,
+            'EUR',
+            $reference,
+            $description,
+            $this->generateUrl('checkout_thankyou', [], UrlGeneratorInterface::ABSOLUTE_URL)
+        );
 
         if (!empty($response['_error'])) {
             $checkout->setStatus('failed');

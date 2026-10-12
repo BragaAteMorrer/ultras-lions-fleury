@@ -1,0 +1,62 @@
+{% set cover = cover|default(post.image ?: (post.media|first)) %}
+{% set excerptSource = excerpt|default(post.content|default('')) %}
+{% set excerptText = excerptSource ? excerptSource|striptags|replace({"\n": ' '})|trim : '' %}
+{% set featuredLength = 260 %}
+
+<article class="news-featured">
+    <a href="{{ path('post_show', { slug: post.slug }) }}" class="news-featured-link">
+        <div class="news-featured-media{% if cover and cover.isVideo %} news-featured-media--video{% endif %}">
+            {% if cover %}
+                {% include 'components/media.html.twig' with {
+                    media: cover,
+                    class: 'news-featured-media-item',
+                    alt: post.title,
+                    loading: 'eager',
+                    controls: false,
+                    preload: 'metadata'
+                } %}
+            {% else %}
+                <div class="news-featured-placeholder" aria-hidden="true">
+                    <span class="news-featured-placeholder-kicker">À la une</span>
+                    <strong>Ultras Lions</strong>
+                    <span>Actualités</span>
+                </div>
+            {% endif %}
+
+            <div class="news-featured-scrim" aria-hidden="true"></div>
+        </div>
+
+        <div class="news-featured-body">
+            <div class="news-featured-topline">
+                <span class="news-rail-kicker">À la une</span>
+                {% if post.category %}
+                    <span class="news-chip">{{ post.category.name }}</span>
+                {% endif %}
+            </div>
+
+            <h2 class="news-featured-title">{{ post.title }}</h2>
+
+            {% if excerptText %}
+                <p class="news-featured-excerpt">
+                    {{ excerptText|slice(0, featuredLength) }}{% if excerptText|length > featuredLength %}…{% endif %}
+                </p>
+            {% endif %}
+
+            <div class="news-featured-meta">
+                {% if post.createdAt %}
+                    <span>
+                        <i class="bi bi-calendar3" aria-hidden="true"></i>
+                        {{ post.createdAt|date('d/m/Y') }}
+                    </span>
+                {% endif %}
+
+                <span>
+                    <i class="bi bi-arrow-right-short" aria-hidden="true"></i>
+                    Lire l'article
+                </span>
+            </div>
+
+            <span class="btn-ul news-featured-cta">Lire l'article</span>
+        </div>
+    </a>
+</article>

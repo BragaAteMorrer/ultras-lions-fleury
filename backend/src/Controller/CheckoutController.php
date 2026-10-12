@@ -33,19 +33,27 @@ class CheckoutController extends AbstractController
         $items = [];
         $ticketItems = [];
         $merchItems = [];
+        $sumupStatus = '';
+        $paymentStatusLabel = 'Paiement en attente';
+        $paymentStatusMessage = 'Nous verifions ton paiement avec SumUp.';
 
         if ($ref !== '') {
             $checkout = $checkoutRepository->findOneBy(['checkoutReference' => $ref]);
             if ($checkout) {
                 if ($checkout->getStatus() !== 'paid' && $checkout->getSumupCheckoutId()) {
                     $details = $sumupService->retrieveCheckout($checkout->getSumupCheckoutId());
-                    $status = strtoupper((string) ($details['status'] ?? ''));
-                    if ($status === 'PAID' || $status === 'SUCCESSFUL' || $status === 'COMPLETED') {
+                    $sumupStatus = strtoupper((string) ($details['status'] ?? ''));
+                    if ($sumupStatus === 'PAID' || $sumupStatus === 'SUCCESSFUL' || $sumupStatus === 'COMPLETED') {
                         $checkout->setStatus('paid');
                         $checkout->setPaidAt(new \DateTime());
                         $em->flush();
+                    } elseif (in_array($sumupStatus, ['FAILED', 'DECLINED', 'CANCELLED', 'CANCELED', 'EXPIRED'], true)) {
+                        $checkout->setStatus('failed');
+                        $em->flush();
                     }
                 }
+
+                [$paymentStatusLabel, $paymentStatusMessage] = $this->getPaymentStatusView($checkout->getStatus(), $sumupStatus);
 
                 if ($checkout->getStatus() === 'paid') {
                     $cartService->clearMerch($session);
@@ -109,11 +117,43 @@ class CheckoutController extends AbstractController
             }
         }
 
+        if (!$checkout) {
+            $paymentStatusLabel = 'Commande introuvable';
+            $paymentStatusMessage = 'Impossible de retrouver cette commande. Contacte le groupe avec ta preuve de paiement.';
+        }
+
         return $this->render('checkout/thankyou.html.twig', [
             'checkout' => $checkout,
             'ticketItems' => $ticketItems,
             'merchItems' => $merchItems,
+            'paymentStatusLabel' => $paymentStatusLabel,
+            'paymentStatusMessage' => $paymentStatusMessage,
+            'paymentStatus' => $sumupStatus !== '' ? $sumupStatus : ($checkout?->getStatus() ?? 'UNKNOWN'),
         ]);
+    }
+
+    /**
+     * @return array{0: string, 1: string}
+     */
+    private function getPaymentStatusView(string $checkoutStatus, string $sumupStatus): array
+    {
+        if ($checkoutStatus === 'paid') {
+            return ['Paiement confirme', 'Ton paiement a bien ete pris en compte.'];
+        }
+
+        if ($checkoutStatus === 'failed' || in_array($sumupStatus, ['FAILED', 'DECLINED', 'CANCELLED', 'CANCELED', 'EXPIRED'], true)) {
+            return ['Paiement refuse', 'SumUp a refuse ou expire le paiement. Tu peux reessayer ou contacter le groupe si le montant a ete debite.'];
+        }
+
+        if (in_array($sumupStatus, ['PENDING', 'WAITING'], true) || $checkoutStatus === 'pending') {
+            return ['Paiement en attente', 'Nous verifions ton paiement avec SumUp. La commande sera confirmee automatiquement apres validation.'];
+        }
+
+        if ($sumupStatus !== '') {
+            return ['Statut SumUp: '.$sumupStatus, 'Le retour SumUp a ete recu, mais le statut exact est inhabituel.'];
+        }
+
+        return ['Paiement non verifie', 'Aucun statut SumUp definitif n a encore ete recu pour cette commande.'];
     }
 
     #[Route('/merci/pdf', name: 'checkout_receipt_pdf')]
@@ -156,9 +196,8 @@ class CheckoutController extends AbstractController
         }
 
         $projectDir = (string) $this->getParameter('kernel.project_dir');
-        $publicDir = $projectDir . '/public';
-        $logoPath = realpath($publicDir . '/assets/img/logo/Logo Final - Ultras Lions - Autre Présentation-lIhYrhj.png');
-        $watermarkPath = realpath($publicDir . '/assets/img/logo/Idée 2a-monochrome-2tSiFCz.png');
+        $logoPath = realpath($projectDir . '/assets/img/logo/Logo Final - Ultras Lions - Autre Présentation.png');
+        $watermarkPath = realpath($projectDir . '/assets/img/logo/Idée 2a-monochrome.png');
 
         $html = $this->renderView('checkout/receipt.html.twig', [
             'checkout' => $checkout,
@@ -170,7 +209,7 @@ class CheckoutController extends AbstractController
 
         $options = new \Dompdf\Options();
         $options->set('isRemoteEnabled', true);
-        $options->set('chroot', $publicDir);
+        $options->set('chroot', $projectDir);
 
         $dompdf = new \Dompdf\Dompdf($options);
         $dompdf->loadHtml($html, 'UTF-8');

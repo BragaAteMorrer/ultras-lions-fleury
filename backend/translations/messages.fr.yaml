@@ -46,6 +46,7 @@ components_navbar:
     se_connecter: 'Se connecter'
     sinscrire: "S'Inscrire"
     table_de_vente: 'Table de Vente'
+    dons: Dons
     toutes_les_saisons: 'Toutes les saisons'
     videos: Vidéos
     communiques: Communiqués
@@ -188,6 +189,7 @@ merch_list:
     vitrine_officielle: 'Vitrine officielle'
     decouvrir_la_selection: 'Découvrir la sélection'
     voir_le_panier: 'Voir le panier'
+    soutenir_le_groupe: 'Soutenir le groupe'
     pieces: 'Pièces'
     categories: 'Catégories'
     stock_disponible: 'Stock disponible'
@@ -270,6 +272,7 @@ profile_show:
     type: Type
     voir: Voir
     ville: Ville
+    changer_mon_mot_de_passe: 'Changer mon mot de passe'
 registration_confirmation_email:
   html:
     cheers: Cheers!
@@ -309,6 +312,8 @@ security_register:
 security_reset_password:
   html:
     nouveau_mot_de_passe: 'Nouveau mot de passe'
+    confirm_new_password: 'Confirmer le nouveau mot de passe'
+    submit: 'Mettre à jour'
 staff_index:
   html:
     staff: STAFF
@@ -536,6 +541,283 @@ profile_order:
     statut: Statut
     total: Total
     type: Type
+    match: Match
+    product: Produit
+
+profile_change_password:
+  html:
+    heading: 'Changer mon mot de passe'
+    submit: 'Mettre à jour'
+    title: 'Changer mon mot de passe'
+
+profile:
+  email:
+    request_subject: 'Demande de gestion de compte Ultras Lions'
+  flash:
+    access_denied_show: 'Tu ne peux voir que ton profil ou un compte associé.'
+    access_denied_orders: 'Tu ne peux voir que tes commandes.'
+    access_denied_manage_links: 'Tu ne peux gérer que tes propres associations de compte.'
+    access_denied_unlink: 'Tu ne peux délier que tes propres associations.'
+    access_denied_edit: 'Tu ne peux modifier que ton profil ou un compte associé.'
+    access_denied_password: 'Tu ne peux changer que ton propre mot de passe.'
+    invalid_form: 'Formulaire invalide, réessaie.'
+    no_account_found: 'Aucun compte trouvé avec cet email.'
+    cannot_associate_own_account: 'Tu ne peux pas associer ton propre compte.'
+    already_linked: 'Ce compte est déjà associé.'
+    pending_request_exists: 'Une demande est déjà en attente pour ce compte.'
+    request_sent: 'Demande envoyée. Le compte devra valider par email.'
+    request_created_email_failed: "Demande créée, mais l'email n'a pas pu être envoyé."
+    link_not_found_or_expired: 'Demande introuvable ou expirée.'
+    association_validated: 'Association de compte validée.'
+    association_deleted: 'Association supprimée.'
+    updated: 'Profil mis à jour !'
+    current_password_incorrect: 'Le mot de passe actuel est incorrect.'
+    password_updated: 'Mot de passe mis à jour.'
+
+reset_password:
+  email:
+    subject: 'Réinitialisation de ton mot de passe'
+  flash:
+    invalid_csrf: 'Token CSRF invalide.'
+    link_sent_if_exists: "Si cette adresse existe, un lien de réinitialisation vient d'être envoyé."
+    link_invalid_or_expired: 'Ce lien de réinitialisation est invalide ou expiré.'
+    password_min_length: 'Le mot de passe doit contenir au moins 8 caractères.'
+    password_uppercase: 'Le mot de passe doit contenir au moins une majuscule.'
+    password_lowercase: 'Le mot de passe doit contenir au moins une minuscule.'
+    password_number: 'Le mot de passe doit contenir au moins un chiffre.'
+    password_special: 'Le mot de passe doit contenir au moins un caractère spécial.'
+    passwords_mismatch: 'Les mots de passe ne correspondent pas.'
+    updated: 'Ton mot de passe a été mis à jour. Tu peux te connecter.'
+
+
+
+email_admin_custom:
+  html:
+    bonjour: Bonjour
+    header_subtitle: 'Message administratif'
+
+admin:
+  navigation:
+    mailing: 'Envoyer un mail'
+  mailing:
+    html:
+      title: 'Admin - Mailing'
+      heading: 'Envoyer un mail'
+      send: Envoyer
+      communication: Communication
+      subject: Sujet
+      body: 'Corps du mail'
+      message_hint: "Le message reprend automatiquement l'habillage mail Ultras Lions."
+      recipients: Destinataires
+      users_count_suffix: 'utilisateur(s)'
+      select_all: 'Tout sélectionner'
+      deselect_all: 'Tout désélectionner'
+      no_user: 'Aucun utilisateur disponible.'
+      preview_default_subject: 'Aperçu du mail'
+      preview_default_header_subtitle: 'Aperçu avant envoi'
+      preview_recipient_name: 'Aperçu admin'
+    flash:
+      invalid_form: 'Formulaire invalide, réessaie.'
+      select_one_user: 'Sélectionne au moins un utilisateur.'
+      enter_subject: 'Renseigne un sujet.'
+      enter_header_title: 'Renseigne un en-tête.'
+      enter_header_subtitle: "Renseigne une accroche d'en-tête."
+      enter_body: 'Rédige le corps du mail.'
+      sent_count: '%count% mail(s) envoyé(s).'
+      preview_csrf_invalid: 'Token CSRF invalide.'
+  crud:
+    preview_admin: 'Aperçu admin'
+
+donation:
+  page:
+    title: 'Soutenir le groupe'
+    kicker: 'Boutique > Dons'
+    subtitle: 'Chaque don aide le groupe à financer les déplacements, la vie en tribune et les actions du collectif.'
+    minimum_note: 'Montant minimum autorisé'
+    preset_count: 'Montants rapides disponibles'
+    currency_note: 'Devise de paiement'
+    copy_kicker: 'Soutien direct'
+    support_title: 'Pourquoi donner ?'
+    support_text: 'Les dons sont versés via le même parcours de paiement SumUp, puis enregistrés dans la boutique pour le suivi administratif.'
+    benefit_1: 'Financer les déplacements et le matériel de tribune.'
+    benefit_2: 'Soutenir les actions du groupe sur la saison.'
+    security_note: 'Paiement sécurisé via SumUp et suivi dans l’administration.'
+    resume_title: 'Don repris'
+    resume_heading: 'Finaliser ton don'
+    form_kicker: 'Formulaire'
+    form_heading: 'Choisis un montant et valide ton soutien'
+  form:
+    amount_choice: 'Montant du don'
+    custom_amount: 'Montant personnalisé'
+    custom_amount_hint: 'Minimum %min% EUR, maximum %max% EUR.'
+    first_name: 'Prénom'
+    last_name: 'Nom'
+    email: 'Email'
+    anonymous: 'Don anonyme'
+    message: 'Message de soutien'
+    submit: 'Passer au paiement'
+    validation:
+      amount_choice_required: 'Choisis un montant.'
+      invalid_amount_choice: 'Montant présélectionné invalide.'
+      custom_amount_required: 'Renseigne un montant.'
+      custom_amount_too_low: 'Le montant doit être au moins de %min% EUR.'
+      custom_amount_too_high: 'Le montant ne peut pas dépasser %max% EUR.'
+      first_name_required: 'Le prénom est obligatoire.'
+      last_name_required: 'Le nom est obligatoire.'
+      email_required: 'L’adresse email est obligatoire.'
+      email_invalid: 'L’adresse email est invalide.'
+      message_too_long: 'Le message ne peut pas dépasser 500 caractères.'
+  flash:
+    invalid_submission: 'Le formulaire de don a expiré ou a déjà été utilisé.'
+    sumup_error: 'Le paiement SumUp a échoué : %message%'
+    checkout_creation_failed: 'Impossible de créer la session de paiement.'
+  payment_description: 'Don de %amount% EUR'
+  payment_state:
+    pending: 'Paiement en attente'
+    pending_message: 'Nous attendons la confirmation du paiement par SumUp.'
+    confirmed: 'Paiement confirmé'
+    confirmed_message: 'Ton don a bien été pris en compte.'
+    unavailable: 'Statut indisponible'
+    unavailable_message: 'La confirmation du paiement n’a pas encore pu être récupérée.'
+    amount_mismatch: 'Montant incohérent'
+    amount_mismatch_message: 'Le montant renvoyé par le prestataire ne correspond pas au don enregistré.'
+    failed: 'Paiement échoué'
+    failed_message: 'Le paiement a été refusé ou annulé.'
+    cancelled: 'Paiement annulé'
+    cancelled_message: 'Tu peux relancer un nouveau don quand tu veux.'
+  status:
+    title: 'Statut du don'
+    kicker: 'Don'
+    message: 'Tu peux vérifier le statut de ton don ci-dessous.'
+    not_found_title: 'Don introuvable'
+    not_found_message: 'Nous n’avons pas retrouvé de don associé à cette référence.'
+    cancelled_title: 'Don annulé'
+    cancelled_message: 'Le paiement a été annulé. Tu peux recommencer si besoin.'
+    failed_title: 'Don en échec'
+    failed_message: 'Le paiement a échoué. Tu peux réessayer.'
+    retry: 'Réessayer'
+    back_home: 'Retour à l’accueil'
+    paid: 'Payé'
+    failed: 'Échoué'
+    cancelled: 'Annulé'
+    refunded: 'Remboursé'
+    pending: 'En attente'
+  thankyou:
+    title: 'Merci pour ton don'
+    kicker: 'Confirmation'
+    subtitle: 'Ton soutien a bien été enregistré.'
+    confirmed_message: 'Merci pour ton don de %amount%.'
+    anonymous_message: 'Merci pour ce don anonyme de %amount%.'
+    missing: 'Aucun don n’a pu être retrouvé.'
+    reference: 'Référence'
+    date: 'Date'
+    amount: 'Montant'
+    status: 'Statut'
+    message: 'Message'
+    back_shop: 'Retour à la boutique'
+    back_home: 'Retour à l’accueil'
+
+email:
+  donation_recap:
+    subject: 'Récapitulatif de ton don'
+
+email_donation_recap:
+  html:
+    title: 'Récapitulatif de don'
+    header_subtitle: 'Merci pour ton soutien'
+    header_title: 'Ton don est confirmé'
+    greeting: 'Bonjour,'
+    thanks: 'Merci pour ton don et pour ton soutien au groupe.'
+    reference: 'Référence :'
+    date: 'Date :'
+    amount: 'Montant :'
+    status: 'Statut :'
+    message: 'Message :'
+    note: 'Cet email est généré automatiquement après la confirmation du paiement.'
+
+form:
+  user:
+    roles:
+      user: Utilisateur
+      admin: Administrateur
+    password: 'Mot de passe'
+    verified: 'Vérifié ?'
+  registration:
+    invite_code: 'Code d’invitation'
+    first_name: Prénom
+    last_name: Nom
+    email: Email
+    password: 'Mot de passe'
+    confirm_password: 'Confirmer le mot de passe'
+    phone: Téléphone
+    address: Adresse
+    city: Ville
+    postal_code: 'Code postal'
+    tshirt_size: 'T-shirt'
+    sweatshirt_size: Sweat
+    jacket_size: Veste
+    short_size: Short
+    profile_photo: 'Photo de profil'
+    placeholder:
+      phone: '+33612345678 / +32460123456…'
+      choose: 'Choisir…'
+    validation:
+      invite_code_required: 'Le code est obligatoire.'
+      email_required: 'Adresse email requise.'
+      password_required: 'Mot de passe requis'
+      password_min_length: 'Minimum 8 caractères'
+      password_uppercase: 'Il doit contenir au moins une majuscule.'
+      password_lowercase: 'Il doit contenir au moins une minuscule.'
+      password_number: 'Il doit contenir au moins un chiffre.'
+      password_special: 'Il doit contenir au moins un caractère spécial.'
+      confirm_password_required: 'Tu dois confirmer le mot de passe.'
+      phone_invalid: 'Numéro de téléphone invalide.'
+      phone_format: 'Format téléphonique incorrect.'
+      postal_code_invalid: 'Code postal invalide.'
+      passwords_mismatch: 'Les mots de passe ne correspondent pas.'
+  profile:
+    email: 'Adresse email'
+    first_name: Prénom
+    last_name: Nom
+    birth_date: 'Date de naissance'
+    phone: Téléphone
+    address: Adresse
+    city: Ville
+    postal_code: 'Code postal'
+    profile_photo: 'Photo de profil'
+    tshirt_size: 'Taille T-shirt'
+    polo_size: 'Taille Polo'
+    pullover_size: 'Taille Pull'
+    sweatshirt_size: 'Taille Sweat'
+    jacket_size: 'Taille Veste'
+    short_size: 'Taille Short'
+    placeholder:
+      phone: '+33612345678 ou +32460123456 (international)'
+      address: 'Ex : 45 rue de la République'
+      city: 'Ex : Montréal, Bruxelles, Paris'
+      postal_code: 'Ex : 75001, H2Y 1C6…'
+      choose: 'Choisir...'
+    validation:
+      minimum_age: 'Tu dois avoir au moins 12 ans.'
+      phone_invalid: 'Numéro de téléphone invalide.'
+      phone_format: 'Format téléphonique incorrect.'
+      address_invalid: 'Adresse invalide (caractères non autorisés).'
+      city_invalid: 'Ville invalide.'
+      postal_code_invalid: 'Code postal invalide.'
+  profile_password:
+    current: 'Mot de passe actuel'
+    new: 'Nouveau mot de passe'
+    confirm: 'Confirmation'
+    validation:
+      current_required: 'Saisis ton mot de passe actuel.'
+      new_required: 'Saisis un nouveau mot de passe.'
+      min_length: 'Le mot de passe doit contenir au moins 8 caracteres.'
+      uppercase: 'Le mot de passe doit contenir au moins une majuscule.'
+      lowercase: 'Le mot de passe doit contenir au moins une minuscule.'
+      number: 'Le mot de passe doit contenir au moins un chiffre.'
+      special: 'Le mot de passe doit contenir au moins un caractere special.'
+      confirm_required: 'Confirme le nouveau mot de passe.'
+      passwords_mismatch: 'Les mots de passe ne correspondent pas.'
 
 
 

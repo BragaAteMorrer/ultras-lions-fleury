@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/cartage')]
 class CartageController extends AbstractController
@@ -439,7 +440,8 @@ class CartageController extends AbstractController
             $registration->getAmount(),
             'EUR',
             $reference,
-            sprintf('Cartage - %s %s', $registration->getFirstName(), $registration->getLastName())
+            sprintf('Cartage - %s %s', $registration->getFirstName(), $registration->getLastName()),
+            $this->generateUrl('cartage_payment_return', [], UrlGeneratorInterface::ABSOLUTE_URL)
         );
 
         if (!empty($response['_error'])) {
@@ -523,7 +525,8 @@ class CartageController extends AbstractController
             $registration->getAmount(),
             'EUR',
             $reference,
-            sprintf('Cartage - %s %s', $registration->getFirstName(), $registration->getLastName())
+            sprintf('Cartage - %s %s', $registration->getFirstName(), $registration->getLastName()),
+            $this->generateUrl('cartage_payment_return', [], UrlGeneratorInterface::ABSOLUTE_URL)
         );
 
         if (!empty($response['_error'])) {

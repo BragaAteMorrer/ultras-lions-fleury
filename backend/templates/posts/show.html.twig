@@ -1,42 +1,137 @@
-﻿{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}{{ 'posts_show.html.title'|trans({'%title%': post.title}) }}{% endblock %}
 
+{% block meta_description %}
+    {% set excerpt = post.content ? post.content|striptags|replace({"\n": ' '})|trim : '' %}
+    {{ excerpt ? excerpt|slice(0, 155) : 'Lire l\'article complet sur le site des Ultras Lions du FC Fleury 91.' }}
+{% endblock %}
+
+{% block body_class %}news-page news-article-page{% endblock %}
+
 {% block body %}
-<section class="hero">
-    <div class="hero-content">
+{% set cover = post.image ?: (post.media|first) %}
+{% set excerpt = post.content ? post.content|striptags|replace({"\n": ' '})|trim : '' %}
+
+<section class="hero page-hero news-article-hero">
+    <div class="hero-content content-shell-3xl news-article-hero-content">
+        <nav class="news-breadcrumb" aria-label="Fil d'ariane">
+            <a href="{{ path('home') }}">Accueil</a>
+            <span>/</span>
+            <a href="{{ path('post_index') }}">Actualités</a>
+            {% if post.category %}
+                <span>/</span>
+                <span>{{ post.category.name }}</span>
+            {% endif %}
+        </nav>
+
+        <div class="news-hero-meta">
+            {% if post.category %}
+                <span class="news-chip">{{ post.category.name }}</span>
+            {% endif %}
+
+            {% if post.createdAt %}
+                <span class="news-meta-pill">
+                    <i class="bi bi-calendar3" aria-hidden="true"></i>
+                    {{ post.createdAt|date('d/m/Y') }}
+                </span>
+            {% endif %}
+        </div>
+
         <h1 class="hero-title">{{ post.title }}</h1>
-        <p class="hero-subtitle">{{ 'posts_show.html.published_on'|trans({'%date%': post.createdAt|date('d/m/Y')}) }}</p>
+
+        {% if excerpt %}
+            <p class="hero-subtitle news-article-subtitle">
+                {{ excerpt|slice(0, 180) }}{% if excerpt|length > 180 %}…{% endif %}
+            </p>
+        {% endif %}
+
+        {% if postPreview|default(false) %}
+            <div class="news-preview-banner">
+                Aperçu interne. Cette version n’est visible que pour les administrateurs.
+            </div>
+        {% endif %}
     </div>
 </section>
 
-<div class="section">
-    <div class="container">
-        <article class="post-show">
-
-            {% if post.image %}
-                <div class="post-main-image">
-                    <a href="{{ asset('uploads/media/' ~ post.image.path) }}" data-lightbox="post-main">
-                        <img src="{{ asset('uploads/media/' ~ post.image.path) }}" alt="{{ post.title }}">
-                    </a>
+<section class="section news-article-section">
+    <div class="content-shell-3xl news-article-layout">
+        <article class="news-article-main">
+            {% if cover %}
+                <div class="news-article-cover">
+                    {% include 'components/media.html.twig' with {
+                        media: cover,
+                        class: 'news-article-cover-media',
+                        alt: post.title,
+                        loading: 'eager',
+                        controls: false,
+                        preload: 'metadata'
+                    } %}
                 </div>
             {% endif %}
 
-            {% if post.media is not empty %}
-                <div class="cards mt-4">
-                    {% for media in post.media %}
-                        <a href="{{ asset('uploads/media/' ~ media.path) }}" class="card" data-lightbox="post-gallery">
-                            <img src="{{ asset('uploads/media/' ~ media.path) }}" alt="{{ media.alt ?: post.title }}">
-                        </a>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            <div class="post-body rich-content">
+            <div class="news-article-content rich-content">
                 {{ post.content|raw }}
             </div>
 
+            {% if post.media is not empty %}
+                <section class="news-article-gallery">
+                    <div class="section-heading-row news-heading-row">
+                        <div>
+                            <span class="news-rail-kicker">Galerie</span>
+                            <h2 class="section-title">Visuels liés</h2>
+                        </div>
+                    </div>
+
+                    <div class="news-gallery-grid">
+                        {% for media in post.media %}
+                            {% if media.path and (not cover or media.id != cover.id) %}
+                                <a href="{{ asset('uploads/media/' ~ media.path) }}" class="news-gallery-item" data-lightbox="post-gallery">
+                                    {% include 'components/media.html.twig' with {
+                                        media: media,
+                                        class: 'news-gallery-item-media',
+                                        alt: media.alt ?: post.title,
+                                        loading: 'lazy',
+                                        controls: false,
+                                        preload: 'metadata'
+                                    } %}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endif %}
         </article>
+
+        <aside class="news-article-aside">
+            <div class="news-sidebar-panel">
+                <span class="news-rail-kicker">Détails</span>
+                <h2>En bref</h2>
+
+                <dl class="news-details-list">
+                    {% if post.category %}
+                        <div>
+                            <dt>Catégorie</dt>
+                            <dd>{{ post.category.name }}</dd>
+                        </div>
+                    {% endif %}
+
+                    {% if post.createdAt %}
+                        <div>
+                            <dt>Publié le</dt>
+                            <dd>{{ post.createdAt|date('d/m/Y') }}</dd>
+                        </div>
+                    {% endif %}
+
+                    <div>
+                        <dt>Lecture</dt>
+                        <dd>Article éditorial</dd>
+                    </div>
+                </dl>
+
+                <a href="{{ path('post_index') }}" class="btn-ul">Retour aux actualités</a>
+            </div>
+        </aside>
     </div>
-</div>
+</section>
 {% endblock %}

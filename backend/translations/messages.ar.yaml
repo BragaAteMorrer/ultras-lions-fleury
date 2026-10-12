@@ -222,6 +222,7 @@ profile_show:
     t_shirt: 'تي شيرت:'
     telephone: 'هاتف :'
     veste: 'سترة :'
+    changer_mon_mot_de_passe: 'تغيير كلمة المرور الخاصة بي'
 registration_confirmation_email:
   html:
     cheers: هتافات!
@@ -261,6 +262,8 @@ security_register:
 security_reset_password:
   html:
     nouveau_mot_de_passe: كلمة المرور الجديدة
+    confirm_new_password: 'تأكيد كلمة المرور الجديدة'
+    submit: 'تحديث'
 staff_index:
   html:
     staff: طاقم عمل
@@ -359,6 +362,190 @@ cart_index:
     total: المجموع
     vider_le_panier: 'إفراغ السلة'
     reserver_et_payer_en_liquide: 'الحجز والدفع نقدا'
+
+profile_order:
+  html:
+    attente: انتظار
+    commande: طلب
+    date: التاريخ
+    liquide: نقدًا
+    paiement: الدفع
+    paiement_a_regler_en_liquide_au_prochain_match: "يجب تسوية الدفع نقدًا في المباراة التالية على أرضنا"
+    paiement_liquide: 'الدفع نقدًا'
+    paye: مدفوع
+    prix: السعر
+    refuse: مرفوض
+    statut: الحالة
+    total: المجموع
+    type: النوع
+    match: مباراة
+    product: منتج
+
+profile_change_password:
+  html:
+    heading: 'تغيير كلمة المرور الخاصة بي'
+    submit: 'تحديث'
+    title: 'تغيير كلمة المرور الخاصة بي'
+
+profile:
+  email:
+    request_subject: 'طلب إدارة حساب Ultras Lions'
+  flash:
+    access_denied_show: 'يمكنك فقط عرض ملفك الشخصي أو حسابًا مرتبطًا.'
+    access_denied_orders: 'يمكنك فقط عرض طلباتك.'
+    access_denied_manage_links: 'يمكنك فقط إدارة روابط حسابك.'
+    access_denied_unlink: 'يمكنك فقط إلغاء ربط ارتباطاتك الخاصة.'
+    access_denied_edit: 'يمكنك فقط تعديل ملفك الشخصي أو حسابًا مرتبطًا.'
+    access_denied_password: 'يمكنك فقط تغيير كلمة المرور الخاصة بك.'
+    invalid_form: 'النموذج غير صالح، حاول مرة أخرى.'
+    no_account_found: 'لم يتم العثور على حساب بهذا البريد الإلكتروني.'
+    cannot_associate_own_account: 'لا يمكنك ربط حسابك الخاص.'
+    already_linked: 'هذا الحساب مرتبط بالفعل.'
+    pending_request_exists: 'هناك طلب قيد الانتظار بالفعل لهذا الحساب.'
+    request_sent: 'تم إرسال الطلب. يجب على الحساب تأكيده عبر البريد الإلكتروني.'
+    request_created_email_failed: 'تم إنشاء الطلب، لكن تعذر إرسال البريد الإلكتروني.'
+    link_not_found_or_expired: 'الطلب غير موجود أو منتهي الصلاحية.'
+    association_validated: 'تمت المصادقة على ربط الحساب.'
+    association_deleted: 'تم حذف الربط.'
+    updated: 'تم تحديث الملف الشخصي!'
+    current_password_incorrect: 'كلمة المرور الحالية غير صحيحة.'
+    password_updated: 'تم تحديث كلمة المرور.'
+
+reset_password:
+  email:
+    subject: 'إعادة تعيين كلمة المرور الخاصة بك'
+  flash:
+    invalid_csrf: 'رمز CSRF غير صالح.'
+    link_sent_if_exists: 'إذا كان هذا العنوان موجودًا، فقد تم إرسال رابط لإعادة التعيين للتو.'
+    link_invalid_or_expired: 'رابط إعادة التعيين هذا غير صالح أو منتهي الصلاحية.'
+    password_min_length: 'يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل.'
+    password_uppercase: 'يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل.'
+    password_lowercase: 'يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل.'
+    password_number: 'يجب أن تحتوي كلمة المرور على رقم واحد على الأقل.'
+    password_special: 'يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل.'
+    passwords_mismatch: 'كلمات المرور غير متطابقة.'
+    updated: 'تم تحديث كلمة المرور الخاصة بك. يمكنك تسجيل الدخول.'
+
+email_admin_custom:
+  html:
+    bonjour: مرحبًا
+    header_subtitle: 'رسالة إدارية'
+
+admin:
+  navigation:
+    mailing: 'إرسال بريد إلكتروني'
+  mailing:
+    html:
+      title: 'الإدارة - البريد الجماعي'
+      heading: 'إرسال بريد إلكتروني'
+      send: إرسال
+      communication: التواصل
+      subject: الموضوع
+      body: 'محتوى البريد الإلكتروني'
+      message_hint: 'تستخدم الرسالة تلقائيًا تخطيط بريد إلكتروني Ultras Lions.'
+      recipients: المستلمين
+      users_count_suffix: 'مستخدم(ين)'
+      select_all: 'تحديد الكل'
+      deselect_all: 'إلغاء تحديد الكل'
+      no_user: 'لا يوجد مستخدمون متاحون.'
+      preview_default_subject: 'معاينة البريد الإلكتروني'
+      preview_default_header_subtitle: 'معاينة قبل الإرسال'
+      preview_recipient_name: 'معاينة المسؤول'
+    flash:
+      invalid_form: 'النموذج غير صالح، حاول مرة أخرى.'
+      select_one_user: 'اختر مستخدمًا واحدًا على الأقل.'
+      enter_subject: 'أدخل موضوعًا.'
+      enter_header_title: 'أدخل عنوان الرأس.'
+      enter_header_subtitle: 'أدخل العنوان الفرعي للرأس.'
+      enter_body: 'اكتب نص البريد الإلكتروني.'
+      sent_count: 'تم إرسال %count% بريد إلكتروني.'
+      preview_csrf_invalid: 'رمز CSRF غير صالح.'
+  crud:
+    preview_admin: 'معاينة المسؤول'
+
+form:
+  user:
+    roles:
+      user: مستخدم
+      admin: مسؤول
+    password: 'كلمة المرور'
+    verified: 'تم التحقق؟'
+  registration:
+    invite_code: 'رمز الدعوة'
+    first_name: الاسم الأول
+    last_name: اسم العائلة
+    email: البريد الإلكتروني
+    password: 'كلمة المرور'
+    confirm_password: 'تأكيد كلمة المرور'
+    phone: الهاتف
+    address: العنوان
+    city: المدينة
+    postal_code: 'الرمز البريدي'
+    tshirt_size: قميص
+    sweatshirt_size: سويت شيرت
+    jacket_size: سترة
+    short_size: شورت
+    profile_photo: 'صورة الملف الشخصي'
+    placeholder:
+      phone: '+33612345678 / +32460123456…'
+      choose: 'اختر…'
+    validation:
+      invite_code_required: 'الرمز مطلوب.'
+      email_required: 'عنوان البريد الإلكتروني مطلوب.'
+      password_required: 'كلمة المرور مطلوبة.'
+      password_min_length: 'الحد الأدنى 8 أحرف.'
+      password_uppercase: 'يجب أن تحتوي على حرف كبير واحد على الأقل.'
+      password_lowercase: 'يجب أن تحتوي على حرف صغير واحد على الأقل.'
+      password_number: 'يجب أن تحتوي على رقم واحد على الأقل.'
+      password_special: 'يجب أن تحتوي على رمز خاص واحد على الأقل.'
+      confirm_password_required: 'يجب تأكيد كلمة المرور.'
+      phone_invalid: 'رقم الهاتف غير صالح.'
+      phone_format: 'تنسيق الهاتف غير صالح.'
+      postal_code_invalid: 'الرمز البريدي غير صالح.'
+      passwords_mismatch: 'كلمات المرور غير متطابقة.'
+  profile:
+    email: 'عنوان البريد الإلكتروني'
+    first_name: الاسم الأول
+    last_name: اسم العائلة
+    birth_date: 'تاريخ الميلاد'
+    phone: الهاتف
+    address: العنوان
+    city: المدينة
+    postal_code: 'الرمز البريدي'
+    profile_photo: 'صورة الملف الشخصي'
+    tshirt_size: 'مقاس القميص'
+    polo_size: 'مقاس البولو'
+    pullover_size: 'مقاس الكنزة'
+    sweatshirt_size: 'مقاس السويت شيرت'
+    jacket_size: 'مقاس السترة'
+    short_size: 'مقاس الشورت'
+    placeholder:
+      phone: '+33612345678 أو +32460123456 (دولي)'
+      address: 'مثال: 45 rue de la République'
+      city: 'مثال: مونتريال، بروكسل، باريس'
+      postal_code: 'مثال: 75001، H2Y 1C6…'
+      choose: 'اختر...'
+    validation:
+      minimum_age: 'يجب أن يكون عمرك 12 سنة على الأقل.'
+      phone_invalid: 'رقم الهاتف غير صالح.'
+      phone_format: 'تنسيق الهاتف غير صالح.'
+      address_invalid: 'العنوان غير صالح (أحرف غير مسموحة).'
+      city_invalid: 'المدينة غير صالحة.'
+      postal_code_invalid: 'الرمز البريدي غير صالح.'
+  profile_password:
+    current: 'كلمة المرور الحالية'
+    new: 'كلمة المرور الجديدة'
+    confirm: 'التأكيد'
+    validation:
+      current_required: 'أدخل كلمة المرور الحالية.'
+      new_required: 'أدخل كلمة مرور جديدة.'
+      min_length: 'يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل.'
+      uppercase: 'يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل.'
+      lowercase: 'يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل.'
+      number: 'يجب أن تحتوي كلمة المرور على رقم واحد على الأقل.'
+      special: 'يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل.'
+      confirm_required: 'أكد كلمة المرور الجديدة.'
+      passwords_mismatch: 'كلمات المرور غير متطابقة.'
 
 
 

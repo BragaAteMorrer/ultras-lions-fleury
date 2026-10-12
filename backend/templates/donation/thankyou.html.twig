@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'donation.thankyou.title'|trans }}{% endblock %}
+
+{% block body %}
+    <section class="hero donation-hero donation-hero--success">
+        <div class="hero-content donation-hero-content">
+            <span class="hero-kicker">{{ 'donation.thankyou.kicker'|trans }}</span>
+            <h1 class="hero-title">{{ paymentStatusLabel|default('donation.thankyou.title'|trans) }}</h1>
+            <p class="hero-subtitle">{{ paymentStatusMessage|default('donation.thankyou.subtitle'|trans) }}</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container content-shell-lg">
+            <div class="donation-result-card">
+                {% if donation %}
+                    <p class="donation-result-intro">
+                        {% if donation.isAnonymous %}
+                            {{ 'donation.thankyou.anonymous_message'|trans({ '%amount%': donation.amount|number_format(2, ',', ' ') ~ ' ' ~ donation.currency }) }}
+                        {% else %}
+                            {{ 'donation.thankyou.confirmed_message'|trans({ '%amount%': donation.amount|number_format(2, ',', ' ') ~ ' ' ~ donation.currency }) }}
+                        {% endif %}
+                    </p>
+
+                    <dl class="donation-result-grid">
+                        <div>
+                            <dt>{{ 'donation.thankyou.reference'|trans }}</dt>
+                            <dd>{{ checkout.checkoutReference }}</dd>
+                        </div>
+                        <div>
+                            <dt>{{ 'donation.thankyou.date'|trans }}</dt>
+                            <dd>{{ donation.createdAt|date('d/m/Y H:i') }}</dd>
+                        </div>
+                        <div>
+                            <dt>{{ 'donation.thankyou.amount'|trans }}</dt>
+                            <dd>{{ donation.amount|number_format(2, ',', ' ') }} {{ donation.currency }}</dd>
+                        </div>
+                        <div>
+                            <dt>{{ 'donation.thankyou.status'|trans }}</dt>
+                            <dd>{{ paymentStatus|default(donation.status) }}</dd>
+                        </div>
+                    </dl>
+
+                    {% if donation.message %}
+                        <div class="donation-result-message">
+                            <h2>{{ 'donation.thankyou.message'|trans }}</h2>
+                            <p>{{ donation.message|e }}</p>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <p class="donation-result-intro">{{ 'donation.thankyou.missing'|trans }}</p>
+                {% endif %}
+
+                <div class="donation-result-actions">
+                    <a href="{{ path('merch_index') }}" class="btn btn-danger">{{ 'donation.thankyou.back_shop'|trans }}</a>
+                    <a href="{{ path('home') }}" class="btn btn-outline-light">{{ 'donation.thankyou.back_home'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

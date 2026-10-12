@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\PaymentCheckout;
 use App\Entity\UserAccountLink;
 use App\Form\ProfileType;
+use App\Form\ProfilePasswordType;
 use App\Repository\BilletwebLeadRepository;
 use App\Repository\CartageRegistrationRepository;
 use App\Repository\CartageQrTokenRepository;
@@ -18,14 +19,23 @@ use App\Service\MailService;
 use App\Service\ManagedAccountService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProfileController extends AbstractController
 {
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+    ) {
+    }
+
     #[Route('/profil/{id<\d+>}', name: 'profile_show')]
     public function show(
         User $user,
@@ -41,7 +51,7 @@ class ProfileController extends AbstractController
     {
         $currentUser = $this->getUser();
         if (!$currentUser instanceof User || (!$this->isGranted('ROLE_ADMIN') && !$managedAccountService->canAccessUser($currentUser, $user))) {
-            throw $this->createAccessDeniedException('Tu ne peux voir que ton profil ou un compte associe.');
+            throw $this->createAccessDeniedException($this->translator->trans('profile.flash.access_denied_show'));
         }
 
         $currentSeason = $this->getCurrentCartageSeason($cartageQrTokenRepository);
@@ -93,7 +103,7 @@ class ProfileController extends AbstractController
     ): Response {
         $current = $this->getUser();
         if (!$current instanceof User || (!$this->isGranted('ROLE_ADMIN') && (!$checkout->getUser() instanceof User || !$managedAccountService->canAccessUser($current, $checkout->getUser())))) {
-            throw $this->createAccessDeniedException("Tu ne peux voir que tes commandes.");
+            throw $this->createAccessDeniedException($this->translator->trans('profile.flash.access_denied_orders'));
         }
 
         $lines = $checkout->getCart();
@@ -112,7 +122,7 @@ class ProfileController extends AbstractController
             foreach ($lines as $row) {
                 $product = $byId[$row['merch_id'] ?? 0] ?? null;
                 $items[] = [
-                    'title' => $row['title'] ?? ($product?->getTitle() ?? 'Produit'),
+                    'title' => $row['title'] ?? ($product?->getTitle() ?? $this->translator->trans('profile_order.html.product')),
                     'size' => $row['size'] ?? 'TU',
                     'quantity' => (int) ($row['quantity'] ?? 1),
                     'unit_price' => (float) ($row['unit_price'] ?? 0),
@@ -131,7 +141,7 @@ class ProfileController extends AbstractController
             foreach ($lines as $row) {
                 $ticket = $byId[$row['ticket_id'] ?? 0] ?? null;
                 $items[] = [
-                    'title' => $row['title'] ?? ($ticket?->getTitle() ?? 'Match'),
+                    'title' => $row['title'] ?? ($ticket?->getTitle() ?? $this->translator->trans('profile_order.html.match')),
                     'opponent' => $row['opponent'] ?? ($ticket?->getOpponent() ?? ''),
                     'match_date' => $ticket?->getMatchDate(),
                     'quantity' => (int) ($row['quantity'] ?? 1),
@@ -145,7 +155,7 @@ class ProfileController extends AbstractController
                 $lineType = (string) ($row['type'] ?? '');
                 if ($lineType === 'ticket') {
                     $ticketItems[] = [
-                        'title' => $row['title'] ?? 'Match',
+                        'title' => $row['title'] ?? $this->translator->trans('profile_order.html.match'),
                         'opponent' => $row['opponent'] ?? '',
                         'match_date' => $row['match_date'] ?? null,
                         'quantity' => (int) ($row['quantity'] ?? 1),
@@ -154,7 +164,7 @@ class ProfileController extends AbstractController
                     ];
                 } else {
                     $merchItems[] = [
-                        'title' => $row['title'] ?? 'Produit',
+                        'title' => $row['title'] ?? $this->translator->trans('profile_order.html.product'),
                         'size' => $row['size'] ?? 'TU',
                         'quantity' => (int) ($row['quantity'] ?? 1),
                         'unit_price' => (float) ($row['unit_price'] ?? 0),
@@ -182,11 +192,11 @@ class ProfileController extends AbstractController
         MailService $mailService
     ): Response {
         if ($this->getUser() !== $user) {
-            throw $this->createAccessDeniedException('Tu ne peux gerer que tes propres associations de compte.');
+            throw $this->createAccessDeniedException($this->translator->trans('profile.flash.access_denied_manage_links'));
         }
 
         if (!$this->isCsrfTokenValid('managed_account_request_'.$user->getId(), (string) $request->request->get('_token'))) {
-            $this->addFlash('danger', 'Formulaire invalide, reessaie.');
+            $this->addFlash('danger', $this->translator->trans('profile.flash.invalid_form'));
             return $this->redirectToRoute('profile_show', ['id' => $user->getId()]);
         }
 
@@ -194,19 +204,24 @@ class ProfileController extends AbstractController
         $managedUser = $email !== '' ? $userRepository->findOneByEmail($email) : null;
 
         if (!$managedUser instanceof User) {
-            $this->addFlash('danger', 'Aucun compte trouve avec cet email.');
+            $this->addFlash('danger', $this->translator->trans('profile.flash.no_account_found'));
             return $this->redirectToRoute('profile_show', ['id' => $user->getId()]);
         }
 
         if ($managedUser->getId() === $user->getId()) {
-            $this->addFlash('danger', 'Tu ne peux pas associer ton propre compte.');
+            $this->addFlash('danger', $this->translator->trans('profile.flash.cannot_associate_own_account'));
             return $this->redirectToRoute('profile_show', ['id' => $user->getId()]);
         }
 
         $existing = $accountLinkRepository->findExisting($user, $managedUser);
         if ($existing instanceof UserAccountLink) {
             if ($existing->isAccepted() || !$existing->isExpired()) {
-                $this->addFlash('warning', $existing->isAccepted() ? 'Ce compte est deja associe.' : 'Une demande est deja en attente pour ce compte.');
+                $this->addFlash(
+                    'warning',
+                    $existing->isAccepted()
+                        ? $this->translator->trans('profile.flash.already_linked')
+                        : $this->translator->trans('profile.flash.pending_request_exists')
+                );
                 return $this->redirectToRoute('profile_show', ['id' => $user->getId()]);
             }
 
@@ -227,16 +242,20 @@ class ProfileController extends AbstractController
         try {
             $mailService->send(
                 to: (string) $managedUser->getEmail(),
-                subject: 'Demande de gestion de compte Ultras Lions',
+                subject: $this->translator->trans('profile.email.request_subject'),
                 template: 'email/account_link_request.html.twig',
                 context: [
                     'guardian' => (string) $user,
-                    'acceptUrl' => $this->generateUrl('profile_managed_account_accept', ['token' => $link->getToken()], 0),
+                    'acceptUrl' => $this->generateUrl(
+                        'profile_managed_account_accept',
+                        ['token' => $link->getToken()],
+                        UrlGeneratorInterface::ABSOLUTE_URL
+                    ),
                 ]
             );
-            $this->addFlash('success', 'Demande envoyee. Le compte devra valider par email.');
+            $this->addFlash('success', $this->translator->trans('profile.flash.request_sent'));
         } catch (\Throwable) {
-            $this->addFlash('warning', 'Demande creee, mais l email n a pas pu etre envoye.');
+            $this->addFlash('warning', $this->translator->trans('profile.flash.request_created_email_failed'));
         }
 
         return $this->redirectToRoute('profile_show', ['id' => $user->getId()]);
@@ -250,13 +269,13 @@ class ProfileController extends AbstractController
     ): Response {
         $link = $accountLinkRepository->findOneBy(['token' => $token]);
         if (!$link instanceof UserAccountLink || $link->isExpired()) {
-            throw $this->createNotFoundException('Demande introuvable ou expiree.');
+            throw $this->createNotFoundException($this->translator->trans('profile.flash.link_not_found_or_expired'));
         }
 
         $link->accept();
         $em->flush();
 
-        $this->addFlash('success', 'Association de compte validee.');
+        $this->addFlash('success', $this->translator->trans('profile.flash.association_validated'));
         $managedUser = $link->getManagedUser();
 
         return $this->redirectToRoute('profile_show', [
@@ -272,18 +291,18 @@ class ProfileController extends AbstractController
     ): Response {
         $current = $this->getUser();
         if (!$current instanceof User || ($link->getGuardian()?->getId() !== $current->getId() && $link->getManagedUser()?->getId() !== $current->getId())) {
-            throw $this->createAccessDeniedException('Tu ne peux delier que tes propres associations.');
+            throw $this->createAccessDeniedException($this->translator->trans('profile.flash.access_denied_unlink'));
         }
 
         if (!$this->isCsrfTokenValid('managed_account_unlink_'.$link->getId(), (string) $request->request->get('_token'))) {
-            $this->addFlash('danger', 'Formulaire invalide, reessaie.');
+            $this->addFlash('danger', $this->translator->trans('profile.flash.invalid_form'));
             return $this->redirectToRoute('profile_show', ['id' => $current->getId()]);
         }
 
         $em->remove($link);
         $em->flush();
 
-        $this->addFlash('success', 'Association supprimee.');
+        $this->addFlash('success', $this->translator->trans('profile.flash.association_deleted'));
 
         return $this->redirectToRoute('profile_show', ['id' => $current->getId()]);
     }
@@ -298,7 +317,7 @@ class ProfileController extends AbstractController
     {
         $currentUser = $this->getUser();
         if (!$currentUser instanceof User || (!$this->isGranted('ROLE_ADMIN') && !$managedAccountService->canAccessUser($currentUser, $user))) {
-            throw $this->createAccessDeniedException("Tu ne peux modifier que ton profil ou un compte associe.");
+            throw $this->createAccessDeniedException($this->translator->trans('profile.flash.access_denied_edit'));
         }
 
         $form = $this->createForm(ProfileType::class, $user);
@@ -326,7 +345,7 @@ class ProfileController extends AbstractController
 
             $em->flush();
 
-            $this->addFlash('success', 'Profil mis à jour !');
+            $this->addFlash('success', $this->translator->trans('profile.flash.updated'));
 
             return $this->redirectToRoute('profile_show', [
                 'id' => $user->getId()
@@ -334,6 +353,43 @@ class ProfileController extends AbstractController
         }
 
         return $this->render('profile/edit.html.twig', [
+            'form' => $form,
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/profil/{id<\d+>}/mot-de-passe', name: 'profile_change_password', methods: ['GET', 'POST'])]
+    public function changePassword(
+        Request $request,
+        User $user,
+        EntityManagerInterface $em,
+        UserPasswordHasherInterface $passwordHasher
+    ): Response {
+        $currentUser = $this->getUser();
+        if (!$currentUser instanceof User || $currentUser->getId() !== $user->getId()) {
+            throw $this->createAccessDeniedException($this->translator->trans('profile.flash.access_denied_password'));
+        }
+
+        $form = $this->createForm(ProfilePasswordType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $currentPassword = (string) $form->get('currentPassword')->getData();
+            if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
+                $form->get('currentPassword')->addError(new FormError($this->translator->trans('profile.flash.current_password_incorrect')));
+            } else {
+                $newPassword = trim((string) $form->get('plainPassword')->getData());
+                $user->setPassword($passwordHasher->hashPassword($user, $newPassword));
+                $user->eraseCredentials();
+                $em->flush();
+
+                $this->addFlash('success', $this->translator->trans('profile.flash.password_updated'));
+
+                return $this->redirectToRoute('profile_show', ['id' => $user->getId()]);
+            }
+        }
+
+        return $this->render('profile/change_password.html.twig', [
             'form' => $form,
             'user' => $user,
         ]);

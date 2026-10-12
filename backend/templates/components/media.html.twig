@@ -6,10 +6,18 @@
 {% if media and media.path %}
     {% set mediaSrc = asset('uploads/media/' ~ media.path) %}
     {% if media.video %}
-        <video class="{{ mediaClass }}" {% if mediaControls %}controls{% else %}muted playsinline{% endif %} preload="{{ mediaPreload }}">
+        <video class="{{ mediaClass }}" {% if mediaControls %}controls{% else %}muted playsinline{% endif %} preload="{{ mediaPreload }}" {% if poster is defined and poster %}poster="{{ poster }}"{% endif %}>
             <source src="{{ mediaSrc }}" type="{{ media.mimeType }}">
         </video>
     {% else %}
-        <img src="{{ mediaSrc }}" class="{{ mediaClass }}" alt="{{ mediaAlt }}">
+        <img
+            src="{{ mediaSrc }}"
+            class="{{ mediaClass }}"
+            alt="{{ mediaAlt }}"
+            loading="{{ loading|default('lazy') }}"
+            decoding="{{ decoding|default('async') }}"
+            {% if width is defined and width %}width="{{ width }}"{% endif %}
+            {% if height is defined and height %}height="{{ height }}"{% endif %}
+        >
     {% endif %}
 {% endif %}

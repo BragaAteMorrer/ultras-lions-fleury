@@ -5,15 +5,15 @@
 {% block body %}
     <section class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">{{ 'checkout_thankyou.html.paiement_confirme'|trans }}</h1>
+            <h1 class="hero-title">{{ paymentStatusLabel|default('checkout_thankyou.html.paiement_confirme'|trans) }}</h1>
             <p class="hero-subtitle">{{ 'checkout_thankyou.html.merci_pour_ton_achat'|trans }}</p>
         </div>
     </section>
 
     <div class="section">
-        <div class="container" style="max-width: 56rem;">
+        <div class="container content-shell-lg">
             <div class="card p-4 bg-dark text-light border-0 shadow">
-                <p>{{ 'checkout_thankyou.html.paiement_pris_en_compte'|trans }}</p>
+                <p>{{ paymentStatusMessage|default('checkout_thankyou.html.paiement_pris_en_compte'|trans) }}</p>
 
                 {% if checkout %}
                     <div class="mt-3">
@@ -23,6 +23,7 @@
                             <p><strong>{{ 'checkout_receipt.html.nom'|trans }}</strong> {{ (checkout.customerFirstName ?? '') ~ ' ' ~ (checkout.customerLastName ?? '') }}</p>
                         {% endif %}
                         <p><strong>{{ 'checkout_receipt.html.total'|trans }}</strong> {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}</p>
+                        <p><strong>Statut brut :</strong> {{ paymentStatus|default(checkout.status) }}</p>
                     </div>
 
                     {% if ticketItems is not empty %}

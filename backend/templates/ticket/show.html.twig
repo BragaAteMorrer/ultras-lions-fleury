@@ -8,6 +8,7 @@
     {% set matchLabel = isAway
         ? item.opponent ~ ' vs FC Fleury'
         : 'FC Fleury vs ' ~ item.opponent %}
+    {% set accessLabel = item.accessLabel %}
     {% set heroBackground = item.image ? asset('uploads/media/' ~ item.image.path) : asset('img/fond/fond1a.jpg') %}
 
     <section class="hero ticket-show-hero" style="--ticket-show-bg: url('{{ heroBackground }}')">
@@ -20,6 +21,7 @@
                     <span>{{ item.venue }}</span>
                 {% endif %}
                 <span>{{ item.price|number_format(2, ',', ' ') }} €</span>
+                <span>{{ accessLabel }}</span>
                 {% if not item.usesBilletweb %}
                     <span>{{ 'ticket_show.html.stock'|trans({'%stock%': item.stock}) }}</span>
                 {% endif %}
@@ -66,7 +68,13 @@
                         </div>
                     {% endif %}
 
-                    {% if item.usesBilletweb %}
+                    {% if not item.openToGuests %}
+                        <div class="ticket-show-description">
+                            <p><strong>Billetterie ouverte uniquement aux membres.</strong></p>
+                        </div>
+                    {% endif %}
+
+                    {% if item.usesBilletweb and salesOpen %}
                         <div class="ticket-billetweb-band">
                             <div class="ticket-billetweb-heading">
                                 <p>{{ 'ticket_show.html.billetterie_billetweb_integree'|trans }}</p>
@@ -86,7 +94,7 @@
                             </a>
                         </div>
                     {% else %}
-                        {% if item.stock > 0 %}
+                        {% if salesOpen and item.stock > 0 %}
                             <form action="{{ path('ticket_cart_add', { id: item.id }) }}" method="post" class="ticket-show-inline-form">
                                 <div>
                                     <label class="form-label" for="quantity">{{ 'ticket_show.html.quantite'|trans }}</label>
@@ -95,6 +103,10 @@
                                 <button class="btn btn-danger w-100" type="submit">{{ 'merch_show.html.ajouter_au_panier'|trans }}</button>
                             </form>
                             <a href="{{ path('ticket_cart') }}" class="btn btn-outline-light w-100 mt-3">{{ 'merch_show.html.voir_mon_panier'|trans }}</a>
+                        {% elseif not item.openToGuests and not viewerIsMember %}
+                            <button class="btn btn-secondary w-100" disabled>Billetterie ouverte uniquement aux membres</button>
+                        {% elseif not salesOpen %}
+                            <button class="btn btn-secondary w-100" disabled>Billetterie bientot ouverte</button>
                         {% else %}
                             <button class="btn btn-secondary w-100" disabled>{{ 'ticket_show.html.complet'|trans }}</button>
                         {% endif %}

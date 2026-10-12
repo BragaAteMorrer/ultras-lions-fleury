@@ -15,6 +15,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class TrixUploadController extends AbstractController
 {
     #[Route('/admin/trix-upload', name: 'admin_trix_upload', methods: ['POST'])]
+    #[Route('/admin/manage/trix-upload', name: 'admin_manage_trix_upload', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function upload(Request $request, EntityManagerInterface $em): Response
     {
@@ -36,7 +37,11 @@ class TrixUploadController extends AbstractController
         }
 
         return new JsonResponse([
+            'id' => $media->getId(),
             'url' => '/uploads/media/'.$media->getPath(),
+            'path' => $media->getPath(),
+            'alt' => $media->getAlt(),
+            'kind' => $media->isVideo() ? 'video' : 'image',
         ]);
     }
 }

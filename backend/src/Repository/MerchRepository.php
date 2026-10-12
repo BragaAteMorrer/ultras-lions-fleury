@@ -23,8 +23,9 @@ class MerchRepository extends ServiceEntityRepository
     public function findVisibleForUser(?MerchCategory $category, bool $isMember): array
     {
         $qb = $this->createQueryBuilder('m')
+            ->leftJoin('m.image', 'img')
             ->leftJoin('m.category', 'cat')
-            ->addSelect('cat')
+            ->addSelect('img, cat')
             ->orderBy('m.id', 'DESC');
 
         if ($category) {
@@ -34,9 +35,16 @@ class MerchRepository extends ServiceEntityRepository
 
         if (!$isMember) {
             $qb->andWhere('m.audience = :audiencePublic')
-                ->setParameter('audiencePublic', 'public');
+                ->andWhere('(m.publicUntil IS NULL OR m.publicUntil >= :now)')
+                ->setParameter('audiencePublic', 'public')
+                ->setParameter('now', new \DateTimeImmutable());
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function isVisibleForUser(Merch $merch, bool $isMember, ?\DateTimeInterface $now = null): bool
+    {
+        return $merch->isVisibleForUser($isMember, $now);
     }
 }

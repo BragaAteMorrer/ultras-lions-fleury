@@ -16,9 +16,15 @@ use Symfony\Component\Form\Extension\Core\Type\{
     FileType
 };
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProfileType extends AbstractType
 {
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+    ) {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /* =======================================================
@@ -26,7 +32,7 @@ class ProfileType extends AbstractType
          * ======================================================= */
         $builder
             ->add('email', EmailType::class, [
-                'label' => 'Adresse email',
+                'label' => 'form.profile.email',
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\Email(),
@@ -34,23 +40,23 @@ class ProfileType extends AbstractType
             ])
 
             ->add('prenom', TextType::class, [
-                'label' => 'Prénom',
+                'label' => 'form.profile.first_name',
                 'required' => false,
             ])
 
             ->add('nom', TextType::class, [
-                'label' => 'Nom',
+                'label' => 'form.profile.last_name',
                 'required' => false,
             ])
 
             ->add('dateNaissance', DateType::class, [
-                'label' => 'Date de naissance',
+                'label' => 'form.profile.birth_date',
                 'widget' => 'single_text',
                 'required' => false,
                 'constraints' => [
                     new Assert\LessThan(
                         value: '-12 years',
-                        message: 'Tu dois avoir au moins 12 ans.'
+                        message: 'form.profile.validation.minimum_age'
                     ),
                     new Assert\GreaterThan('-120 years'),
                 ]
@@ -61,10 +67,10 @@ class ProfileType extends AbstractType
          * ======================================================= */
         $builder
             ->add('telephone', TelType::class, [
-                'label' => 'Téléphone',
+                'label' => 'form.profile.phone',
                 'required' => false,
                 'attr' => [
-                    'placeholder' => '+33612345678 ou +32460123456 (international)',
+                    'placeholder' => $this->translator->trans('form.profile.placeholder.phone'),
                 ],
                 'constraints' => [
                     new Assert\Length(min: 5, max: 20),
@@ -77,10 +83,10 @@ class ProfileType extends AbstractType
                             $parsed = $lib->parse($value, null);
 
                             if (!$lib->isValidNumber($parsed)) {
-                                $context->buildViolation('Numéro de téléphone invalide.')->addViolation();
+                                $context->buildViolation('form.profile.validation.phone_invalid')->addViolation();
                             }
                         } catch (\Exception) {
-                            $context->buildViolation('Format téléphonique incorrect.')->addViolation();
+                            $context->buildViolation('form.profile.validation.phone_format')->addViolation();
                         }
                     })
                 ],
@@ -91,41 +97,41 @@ class ProfileType extends AbstractType
          * ======================================================= */
         $builder
             ->add('adresse', TextType::class, [
-                'label' => 'Adresse',
+                'label' => 'form.profile.address',
                 'required' => false,
                 'constraints' => [
                     new Assert\Length(max: 255),
                     new Assert\Regex([
                         'pattern' => '/^[0-9A-Za-zÀ-ÿ\'\-,. ]{3,255}$/u',
-                        'message' => 'Adresse invalide (caractères non autorisés).',
+                        'message' => 'form.profile.validation.address_invalid',
                     ]),
                 ],
-                'attr' => ['placeholder' => 'Ex : 45 rue de la République']
+                'attr' => ['placeholder' => $this->translator->trans('form.profile.placeholder.address')]
             ])
 
             ->add('ville', TextType::class, [
-                'label' => 'Ville',
+                'label' => 'form.profile.city',
                 'required' => false,
                 'constraints' => [
                     new Assert\Length(max: 100),
                     new Assert\Regex([
                         'pattern' => '/^[A-Za-zÀ-ÿ\'\- ]{2,100}$/u',
-                        'message' => 'Ville invalide.',
+                        'message' => 'form.profile.validation.city_invalid',
                     ]),
                 ],
-                'attr' => ['placeholder' => 'Ex : Montréal, Bruxelles, Paris']
+                'attr' => ['placeholder' => $this->translator->trans('form.profile.placeholder.city')]
             ])
 
             ->add('codePostal', TextType::class, [
-                'label' => 'Code postal',
+                'label' => 'form.profile.postal_code',
                 'required' => false,
                 'constraints' => [
                     new Assert\Regex([
                         'pattern' => '/^[A-Za-z0-9\- ]{3,12}$/',
-                        'message' => 'Code postal invalide.',
+                        'message' => 'form.profile.validation.postal_code_invalid',
                     ])
                 ],
-                'attr' => ['placeholder' => 'Ex : 75001, H2Y 1C6…']
+                'attr' => ['placeholder' => $this->translator->trans('form.profile.placeholder.postal_code')]
             ]);
 
         /* =======================================================
@@ -133,7 +139,7 @@ class ProfileType extends AbstractType
          * ======================================================= */
         $builder
             ->add('photoProfil', FileType::class, [
-                'label' => 'Photo de profil',
+                'label' => 'form.profile.profile_photo',
                 'mapped' => false,
                 'required' => false,
             ]);
@@ -152,39 +158,39 @@ class ProfileType extends AbstractType
 
         $builder
             ->add('tailleTshirt', ChoiceType::class, [
-                'label' => 'Taille T-shirt',
+                'label' => 'form.profile.tshirt_size',
                 'choices' => $sizes,
-                'placeholder' => 'Choisir...',
+                'placeholder' => $this->translator->trans('form.profile.placeholder.choose'),
                 'required' => false
             ])
             ->add('taillePolo', ChoiceType::class, [
-                'label' => 'Taille Polo',
+                'label' => 'form.profile.polo_size',
                 'choices' => $sizes,
-                'placeholder' => 'Choisir...',
+                'placeholder' => $this->translator->trans('form.profile.placeholder.choose'),
                 'required' => false
             ])
             ->add('taillePull', ChoiceType::class, [
-                'label' => 'Taille Pull',
+                'label' => 'form.profile.pullover_size',
                 'choices' => $sizes,
-                'placeholder' => 'Choisir...',
+                'placeholder' => $this->translator->trans('form.profile.placeholder.choose'),
                 'required' => false
             ])
             ->add('tailleSweat', ChoiceType::class, [
-                'label' => 'Taille Sweat',
+                'label' => 'form.profile.sweatshirt_size',
                 'choices' => $sizes,
-                'placeholder' => 'Choisir...',
+                'placeholder' => $this->translator->trans('form.profile.placeholder.choose'),
                 'required' => false
             ])
             ->add('tailleVeste', ChoiceType::class, [
-                'label' => 'Taille Veste',
+                'label' => 'form.profile.jacket_size',
                 'choices' => $sizes,
-                'placeholder' => 'Choisir...',
+                'placeholder' => $this->translator->trans('form.profile.placeholder.choose'),
                 'required' => false
             ])
             ->add('tailleShort', ChoiceType::class, [
-                'label' => 'Taille Short',
+                'label' => 'form.profile.short_size',
                 'choices' => $sizes,
-                'placeholder' => 'Choisir...',
+                'placeholder' => $this->translator->trans('form.profile.placeholder.choose'),
                 'required' => false
             ]);
     }

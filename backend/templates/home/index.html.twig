@@ -10,6 +10,12 @@
         <img src="{{ asset('img/logo/Logo Final - Ultras Lions - Autre Présentation.png') }}" class="hero-ultra-logo" alt="{{ 'components_footer.html.ultras_lions'|trans }}">
         <h1 class="hero-title">{{ site_config.heroTitle|default(null) ?: ('home_index.html.ultras_lions'|trans) }}</h1>
         <p class="hero-subtitle">{{ site_config.heroSubtitle|default(null) ?: ('home_index.html.le_site_web_du_groupe_ultras_du_fc_fleury_91'|trans) }}</p>
+
+        <div class="merch-hero-actions mt-4">
+            <a href="{{ path('merch_index') }}" class="btn-ul">{{ 'components_navbar.html.table_de_vente'|trans }}</a>
+            <a href="{{ path('ticket_index') }}" class="btn btn-outline-light">{{ 'components_navbar.html.billetterie'|trans }}</a>
+            <a href="{{ path('donation_index') }}" class="btn btn-outline-warning">{{ 'components_navbar.html.dons'|trans }}</a>
+        </div>
     </div>
 </section>
 

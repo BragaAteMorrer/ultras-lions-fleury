@@ -16,22 +16,22 @@
             <h1 class="hero-title">{{ 'components_navbar.html.table_de_vente'|trans }}</h1>
             <p class="hero-subtitle">{{ 'merch_list.html.textiles_accessoires_stickers_supports_du_groupe'|trans }}</p>
 
-            <div class="merch-payment-choices mt-4">
-                <div class="merch-payment-heading">
-                    <span>{{ 'merch_list.html.moyens_de_paiement'|trans }}</span>
-                    <p>Carte bancaire via SumUp ou en Liquide sur place</p>
-                </div>
-                {% include 'components/payment_logos.html.twig' with { methods: sumupPaymentMethods|default([]) } %}
-                <div class="merch-payment-tags">
-                    <span class="badge rounded-pill text-bg-light text-dark">{{ 'merch_list.html.paiement_par_carte_via_sumup'|trans }}</span>
-                    <span class="badge rounded-pill text-bg-light text-dark">{{ 'merch_list.html.paiement_en_liquide_a_la_table_de_vente'|trans }}</span>
-                </div>
+        <div class="merch-payment-choices mt-4">
+            <div class="merch-payment-heading">
+                <span>{{ 'merch_list.html.moyens_de_paiement'|trans }}</span>
+                <p>Carte bancaire via SumUp ou en Liquide sur place</p>
+            </div>
+            {% include 'components/payment_logos.html.twig' with { methods: sumupPaymentMethods|default([]) } %}
+            <div class="merch-payment-tags">
+                <span class="badge rounded-pill text-bg-light text-dark">{{ 'merch_list.html.paiement_par_carte_via_sumup'|trans }}</span>
+                <span class="badge rounded-pill text-bg-light text-dark">{{ 'merch_list.html.paiement_en_liquide_a_la_table_de_vente'|trans }}</span>
             </div>
         </div>
 
         <div class="merch-hero-actions">
             <a href="#catalogue" class="btn-ul">{{ 'merch_list.html.decouvrir_la_selection'|trans }}</a>
             <a href="{{ path('merch_cart') }}" class="btn btn-outline-light merch-hero-secondary">{{ 'merch_list.html.voir_le_panier'|trans }}</a>
+            <a href="{{ path('donation_index') }}" class="btn btn-outline-warning merch-hero-donation">{{ 'merch_list.html.soutenir_le_groupe'|trans }}</a>
         </div>
 
         <div class="merch-hero-stats">
@@ -145,4 +145,3 @@
 </div>
 
 {% endblock %}
-

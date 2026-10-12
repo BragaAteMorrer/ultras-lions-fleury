@@ -54,6 +54,12 @@ class CartagePaymentReturnController extends AbstractController
         if ($checkout instanceof PaymentCheckout) {
             $reference = (string) ($checkout->getCheckoutReference() ?: $reference);
             $checkoutId = (string) ($checkout->getSumupCheckoutId() ?: $checkoutId);
+
+            if ($checkout->getType() !== 'cartage') {
+                return $this->redirectToRoute('checkout_thankyou', [
+                    'ref' => $reference,
+                ]);
+            }
         }
 
         if ($reference === '') {

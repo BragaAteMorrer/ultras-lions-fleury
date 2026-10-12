@@ -5,26 +5,34 @@
 <section class="auth-hero">
     <h1 class="hero-title">{{ 'components_navbar.html.connexion'|trans }}</h1>
 </section>
-    <div class="cards cards-single">
-        <div class="card card-form">
+<section class="section">
+    <div class="container content-shell-sm">
+        <div class="cards cards-single">
+            <div class="card card-form">
+                <h2 class="section-title">{{ 'components_navbar.html.connexion'|trans }}</h2>
 
-            {% if error %}
-                <div class="alert-error">
-                    {{ error.messageKey|trans(error.messageData, 'security') }}
-                </div>
-            {% endif %}
+                {% if error %}
+                    <div class="alert-error">
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
 
-            <form method="post" class="auth-form">
-                <input type="email" name="_username" value="{{ last_username }}" placeholder="{{ 'security_login.html.email'|trans }}" required>
+                <form method="post" class="auth-form">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                <input type="password" name="_password" placeholder="{{ 'security_login.html.mot_de_passe'|trans }}" required>
+                    <label for="login-email">{{ 'security_login.html.email'|trans }}</label>
+                    <input id="login-email" type="email" name="_username" value="{{ last_username }}" autocomplete="email" required>
 
-                <button class="btn-ul">{{ 'components_navbar.html.connexion'|trans }}</button>
-            </form>
+                    <label for="login-password">{{ 'security_login.html.mot_de_passe'|trans }}</label>
+                    <input id="login-password" type="password" name="_password" autocomplete="current-password" required>
 
-            <a href="{{ path('forgot_password') }}" class="link-small">{{ 'security_login.html.mot_de_passe_oublie'|trans }}</a>
+                    <button class="btn-ul" type="submit">{{ 'components_navbar.html.connexion'|trans }}</button>
+                </form>
 
+                <a href="{{ path('forgot_password') }}" class="link-small">{{ 'security_login.html.mot_de_passe_oublie'|trans }}</a>
+            </div>
         </div>
     </div>
+</section>
 
 {% endblock %}

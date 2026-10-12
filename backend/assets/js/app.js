@@ -160,3 +160,71 @@
         });
     });
 })();
+
+(() => {
+    const form = document.querySelector('.donation-form');
+    if (!form) return;
+
+    const amountOptions = Array.from(form.querySelectorAll('[data-donation-amount-option]'));
+    const customGroup = form.querySelector('[data-donation-custom-amount]');
+    const customInput = form.querySelector('[data-donation-custom-input]');
+    const customRadio = form.querySelector('input[type="radio"][value="custom"]');
+    const anonymousCard = form.querySelector('.donation-anonymous-card');
+    const anonymousInput = form.querySelector('.donation-anonymous-input');
+
+    const syncAmountState = (focusCustom = false) => {
+        amountOptions.forEach((option) => {
+            const input = option.querySelector('input[type="radio"]');
+            option.classList.toggle('is-selected', Boolean(input?.checked));
+        });
+
+        const customSelected = Boolean(form.querySelector('input[type="radio"][value="custom"]')?.checked);
+        customGroup?.classList.toggle('is-selected', customSelected);
+
+        if (customInput instanceof HTMLInputElement && customInput.value.trim() !== '' && customRadio instanceof HTMLInputElement && !customRadio.checked) {
+            customRadio.checked = true;
+        }
+
+        if (customSelected && focusCustom && customInput instanceof HTMLElement && document.activeElement !== customInput) {
+            customInput.focus({ preventScroll: true });
+            if (typeof customInput.select === 'function' && 'value' in customInput && customInput.value !== '') {
+                customInput.select();
+            }
+        }
+    };
+
+    const syncCustomChoice = () => {
+        if (customRadio instanceof HTMLInputElement && !customRadio.checked) {
+            customRadio.checked = true;
+        }
+
+        syncAmountState(true);
+    };
+
+    const syncAnonymousState = () => {
+        anonymousCard?.classList.toggle('is-selected', Boolean(anonymousInput?.checked));
+    };
+
+    form.addEventListener('change', (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+
+        if (target.matches('input[type="radio"][name$="[amountChoice]"]')) {
+            syncAmountState(target.getAttribute('value') === 'custom');
+        }
+
+        if (target === customInput) {
+            syncCustomChoice();
+        }
+
+        if (target.matches('.donation-anonymous-input')) {
+            syncAnonymousState();
+        }
+    });
+
+    customInput?.addEventListener('input', syncCustomChoice);
+    customInput?.addEventListener('focus', syncCustomChoice);
+
+    syncAmountState();
+    syncAnonymousState();
+})();

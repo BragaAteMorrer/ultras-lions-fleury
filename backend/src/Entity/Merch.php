@@ -28,6 +28,9 @@ class Merch
     #[ORM\Column(length: 20)]
     private ?string $audience = 'public';
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $publicUntil = null;
+
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
@@ -46,6 +49,12 @@ class Merch
     /** @var Collection<int, MerchStock> */
     #[ORM\OneToMany(mappedBy: 'merch', targetEntity: MerchStock::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $stocks;
+
+    #[ORM\Column(options: ['default' => false])]
+    private bool $displayInGadgetHistory = false;
+
+    #[ORM\OneToOne(mappedBy: 'sourceMerch', targetEntity: Gadget::class)]
+    private ?Gadget $gadgetHistoryEntry = null;
 
     public function __construct()
     {
@@ -98,6 +107,17 @@ class Merch
     public function setAudience(string $audience): self
     {
         $this->audience = $audience;
+        return $this;
+    }
+
+    public function getPublicUntil(): ?\DateTimeInterface
+    {
+        return $this->publicUntil;
+    }
+
+    public function setPublicUntil(?\DateTimeInterface $publicUntil): self
+    {
+        $this->publicUntil = $publicUntil;
         return $this;
     }
 
@@ -207,5 +227,36 @@ class Merch
         }
 
         return $total;
+    }
+
+    public function isVisibleForUser(bool $isMember, ?\DateTimeInterface $now = null): bool
+    {
+        if (!$isMember && $this->audience !== 'public') {
+            return false;
+        }
+
+        if ($isMember) {
+            return true;
+        }
+
+        $now ??= new \DateTimeImmutable();
+
+        return $this->publicUntil === null || $this->publicUntil >= $now;
+    }
+
+    public function isDisplayInGadgetHistory(): bool { return $this->displayInGadgetHistory; }
+
+    public function setDisplayInGadgetHistory(bool $displayInGadgetHistory): self
+    {
+        $this->displayInGadgetHistory = $displayInGadgetHistory;
+        return $this;
+    }
+
+    public function getGadgetHistoryEntry(): ?Gadget { return $this->gadgetHistoryEntry; }
+
+    public function setGadgetHistoryEntry(?Gadget $gadgetHistoryEntry): self
+    {
+        $this->gadgetHistoryEntry = $gadgetHistoryEntry;
+        return $this;
     }
 }

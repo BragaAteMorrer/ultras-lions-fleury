@@ -7,6 +7,9 @@
 <section class="hero">
     <div class="hero-content">
         <h1 class="hero-title">{{ event.title }}</h1>
+        {% if eventPreview|default(false) %}
+            <p class="hero-subtitle">Mode previsualisation admin</p>
+        {% endif %}
         {% if event.date %}
             <p class="hero-subtitle event-show-date">
                 <i class="bi bi-calendar3" aria-hidden="true"></i>

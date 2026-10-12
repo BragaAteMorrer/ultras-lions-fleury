@@ -1,45 +1,51 @@
-{% extends '@EasyAdmin/layout.html.twig' %}
+{% extends 'admin/layout.html.twig' %}
 
-{% block content_title %}
-    Envoyer un mail
+{% block title %}{{ 'admin.mailing.html.title'|trans }}{% endblock %}
+{% block admin_title %}{{ 'admin.mailing.html.heading'|trans }}{% endblock %}
+
+{% block admin_actions %}
+    <button class="btn btn-danger btn-sm" type="submit" form="adminMailingForm">
+        <i class="bi bi-envelope" aria-hidden="true"></i>
+        {{ 'admin.mailing.html.send'|trans }}
+    </button>
 {% endblock %}
 
-{% block main %}
-    <form method="post" class="admin-mailing">
+{% block body %}
+    <form method="post" class="admin-mailing" id="adminMailingForm">
         <input type="hidden" name="_token" value="{{ csrf_token('admin_mailing') }}">
 
         <section class="admin-mailing-panel">
             <div class="admin-mailing-head">
                 <div>
-                    <p class="admin-kicker">Communication</p>
-                    <h1>Mail aux utilisateurs</h1>
+                    <p class="admin-kicker">{{ 'admin.mailing.html.communication'|trans }}</p>
+                    <h1>{{ 'admin.mailing.html.heading'|trans }}</h1>
                 </div>
                 <div class="admin-mailing-actions">
                     <button class="btn btn-primary" type="submit">
-                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                        Envoyer
+                        <i class="bi bi-envelope" aria-hidden="true"></i>
+                        {{ 'admin.mailing.html.send'|trans }}
                     </button>
                 </div>
             </div>
 
             <div class="admin-mailing-grid">
                 <div class="admin-mailing-editor">
-                    <label class="form-label" for="mailSubject">Sujet</label>
+                    <label class="form-label" for="mailSubject">{{ 'admin.mailing.html.subject'|trans }}</label>
                     <input id="mailSubject" class="form-control" type="text" name="subject" required value="{{ subject }}">
 
-                    <label class="form-label" for="mailBody">Corps du mail</label>
+                    <label class="form-label" for="mailBody">{{ 'admin.mailing.html.body'|trans }}</label>
                     <textarea id="mailBody" class="form-control admin-mailing-textarea" name="body" rows="14" required>{{ body }}</textarea>
-                    <p class="form-text">Le message reprend automatiquement l'habillage mail Ultras Lions.</p>
+                    <p class="form-text">{{ 'admin.mailing.html.message_hint'|trans }}</p>
                 </div>
 
                 <aside class="admin-mailing-recipients">
                     <div class="admin-mailing-recipients-head">
                         <div>
-                            <h2>Destinataires</h2>
-                            <p>{{ users|length }} utilisateur(s)</p>
+                            <h2>{{ 'admin.mailing.html.recipients'|trans }}</h2>
+                            <p>{{ users|length }} {{ 'admin.mailing.html.users_count_suffix'|trans }}</p>
                         </div>
-                        <button class="btn btn-secondary btn-sm" type="button" data-mailing-toggle-users>
-                            Tout selectionner
+                        <button class="btn btn-secondary btn-sm" type="button" data-mailing-toggle-users data-label-select-all="{{ 'admin.mailing.html.select_all'|trans }}" data-label-deselect-all="{{ 'admin.mailing.html.deselect_all'|trans }}">
+                            {{ 'admin.mailing.html.select_all'|trans }}
                         </button>
                     </div>
 
@@ -59,7 +65,7 @@
                                 </span>
                             </label>
                         {% else %}
-                            <p class="admin-empty-state">Aucun utilisateur disponible.</p>
+                            <p class="admin-empty-state">{{ 'admin.mailing.html.no_user'|trans }}</p>
                         {% endfor %}
                     </div>
                 </aside>
@@ -74,7 +80,8 @@
             checkboxes.forEach((checkbox) => {
                 checkbox.checked = shouldCheck;
             });
-            event.currentTarget.textContent = shouldCheck ? 'Tout deselectionner' : 'Tout selectionner';
+            const button = event.currentTarget;
+            button.textContent = shouldCheck ? button.dataset.labelDeselectAll : button.dataset.labelSelectAll;
         });
     </script>
 {% endblock %}

@@ -1,0 +1,48 @@
+form:
+  registration:
+    validation:
+      invite_code_required: 'Le code est obligatoire.'
+      email_required: 'Adresse email requise.'
+      password_required: 'Mot de passe requis'
+      password_min_length: 'Minimum 8 caractères'
+      password_uppercase: 'Il doit contenir au moins une majuscule.'
+      password_lowercase: 'Il doit contenir au moins une minuscule.'
+      password_number: 'Il doit contenir au moins un chiffre.'
+      password_special: 'Il doit contenir au moins un caractère spécial.'
+      confirm_password_required: 'Tu dois confirmer le mot de passe.'
+      phone_invalid: 'Numéro de téléphone invalide.'
+      phone_format: 'Format téléphonique incorrect.'
+      postal_code_invalid: 'Code postal invalide.'
+      passwords_mismatch: 'Les mots de passe ne correspondent pas.'
+  profile:
+    validation:
+      minimum_age: 'Tu dois avoir au moins 12 ans.'
+      phone_invalid: 'Numéro de téléphone invalide.'
+      phone_format: 'Format téléphonique incorrect.'
+      address_invalid: 'Adresse invalide (caractères non autorisés).'
+      city_invalid: 'Ville invalide.'
+      postal_code_invalid: 'Code postal invalide.'
+  profile_password:
+    validation:
+      current_required: 'Saisis ton mot de passe actuel.'
+      new_required: 'Saisis un nouveau mot de passe.'
+      min_length: 'Le mot de passe doit contenir au moins 8 caracteres.'
+      uppercase: 'Le mot de passe doit contenir au moins une majuscule.'
+      lowercase: 'Le mot de passe doit contenir au moins une minuscule.'
+      number: 'Le mot de passe doit contenir au moins un chiffre.'
+      special: 'Le mot de passe doit contenir au moins un caractere special.'
+      confirm_required: 'Confirme le nouveau mot de passe.'
+      passwords_mismatch: 'Les mots de passe ne correspondent pas.'
+  donation:
+    form:
+      validation:
+        amount_choice_required: 'Choisis un montant.'
+        invalid_amount_choice: 'Montant présélectionné invalide.'
+        custom_amount_required: 'Renseigne un montant.'
+        custom_amount_too_low: 'Le montant doit être au moins de %min% EUR.'
+        custom_amount_too_high: 'Le montant ne peut pas dépasser %max% EUR.'
+        first_name_required: 'Le prénom est obligatoire.'
+        last_name_required: 'Le nom est obligatoire.'
+        email_required: 'L’adresse email est obligatoire.'
+        email_invalid: 'L’adresse email est invalide.'
+        message_too_long: 'Le message ne peut pas dépasser 500 caractères.'

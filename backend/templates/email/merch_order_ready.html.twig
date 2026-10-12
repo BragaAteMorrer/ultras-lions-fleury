@@ -1,14 +1,22 @@
-<h2>{{ 'email_merch_order_ready.html.ta_commande_est_prete'|trans }}</h2>
+{% extends 'email/base.html.twig' %}
 
-<p>{{ 'email_merch_order_ready.html.bonjour'|trans }}</p>
+{% block title %}Commande prete{% endblock %}
+{% block header_subtitle %}Suivi de commande{% endblock %}
+{% block header_title %}Ta commande est prete{% endblock %}
 
-<p>{{ 'email_merch_order_ready.html.ta_commande_merch_est_marquee_comme_executee'|trans }}</p>
+{% block content %}
+    <p>Bonjour {{ order.customerFirstName|default('') }},</p>
 
-<ul>
-    <li>{{ 'checkout_receipt.html.produit'|trans }} : {{ order.merch ? order.merch.title : 'Produit' }}</li>
-    <li>{{ 'checkout_receipt.html.taille'|trans }} : {{ order.size ?? 'TU' }}</li>
-    <li>{{ 'cart_index.html.quantite'|trans }} : {{ order.quantity }}</li>
-    <li>{{ 'checkout_receipt.html.total'|trans }} : {{ order.totalPrice|number_format(2, ',', ' ') }} EUR</li>
-</ul>
+    <p>Ta commande merch est marquee comme executee.</p>
 
-<p>{{ 'email_merch_order_ready.html.merci'|trans }}</p>
+    <div class="card">
+        <ul>
+            <li>Produit : {{ order.merch ? order.merch.title : 'Produit' }}</li>
+            <li>Taille : {{ order.size ?? 'TU' }}</li>
+            <li>Quantite : {{ order.quantity }}</li>
+            <li>Total : {{ order.totalPrice|number_format(2, ',', ' ') }} EUR</li>
+        </ul>
+    </div>
+
+    <p class="note">Merci pour ton soutien.</p>
+{% endblock %}

@@ -30,6 +30,9 @@ class Ticket
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $memberAvailabilityDate = null;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    private bool $openToGuests = true;
+
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $matchLocation = null;
 
@@ -101,6 +104,17 @@ class Ticket
     public function setMemberAvailabilityDate(?\DateTimeInterface $memberAvailabilityDate): self
     {
         $this->memberAvailabilityDate = $memberAvailabilityDate;
+        return $this;
+    }
+
+    public function isOpenToGuests(): bool
+    {
+        return $this->openToGuests;
+    }
+
+    public function setOpenToGuests(bool $openToGuests): self
+    {
+        $this->openToGuests = $openToGuests;
         return $this;
     }
 
@@ -224,8 +238,19 @@ class Ticket
             return false;
         }
 
+        if (!$isMember && !$this->openToGuests) {
+            return false;
+        }
+
         $availabilityDate = $this->getAvailabilityDateForUser($isMember);
 
         return $availabilityDate === null || $availabilityDate <= $now;
+    }
+
+    public function getAccessLabel(): string
+    {
+        return $this->openToGuests
+            ? 'Ouverte aux non-membres'
+            : 'Ouverte uniquement aux membres';
     }
 }

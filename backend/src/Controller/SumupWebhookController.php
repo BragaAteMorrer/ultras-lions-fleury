@@ -3,14 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\CartageRegistration;
+use App\Entity\Donation;
 use App\Entity\MerchOrder;
 use App\Entity\TicketOrder;
 use App\Repository\CartageRegistrationRepository;
+use App\Repository\DonationRepository;
 use App\Repository\MerchRepository;
 use App\Repository\TicketRepository;
 use App\Repository\PaymentCheckoutRepository;
 use App\Repository\UserRepository;
 use App\Service\CartageProfileCreator;
+use App\Service\DonationPaymentService;
 use App\Service\MailService;
 use App\Service\SumupService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,11 +32,13 @@ class SumupWebhookController extends AbstractController
         MailService $mailService,
         LoggerInterface $logger,
         PaymentCheckoutRepository $checkoutRepository,
+        DonationRepository $donationRepository,
         CartageRegistrationRepository $cartageRegistrationRepository,
         MerchRepository $merchRepository,
         TicketRepository $ticketRepository,
         UserRepository $userRepository,
         CartageProfileCreator $cartageProfileCreator,
+        DonationPaymentService $donationPaymentService,
         EntityManagerInterface $em
     ): Response {
         $payload = $request->getContent();
@@ -63,6 +68,20 @@ class SumupWebhookController extends AbstractController
             'status' => $status,
             'details' => $details,
         ]);
+
+        if ($checkout->getType() === 'donation') {
+            $donation = $donationRepository->findOneBy(['paymentCheckout' => $checkout]);
+            if (!$donation instanceof Donation) {
+                return new Response('ok', 200);
+            }
+
+            $result = $donationPaymentService->synchronizeFromGateway($donation, $checkout, $details);
+            if (($result['confirmed'] ?? false) === true) {
+                $donationPaymentService->sendConfirmationMail($donation, $checkout);
+            }
+
+            return new Response('ok', 200);
+        }
 
         if ($status === 'PAID' || $status === 'SUCCESSFUL' || $status === 'COMPLETED') {
             if ($checkout->getProcessedAt()) {

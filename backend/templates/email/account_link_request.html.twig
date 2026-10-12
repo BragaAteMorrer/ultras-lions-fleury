@@ -1,28 +1,20 @@
 {% extends 'email/base.html.twig' %}
 
 {% block title %}Demande de gestion de compte{% endblock %}
-{% block header_subtitle %}Partage de compte ULTRAS LIONS{% endblock %}
+{% block header_subtitle %}Partage de compte Ultras Lions{% endblock %}
+{% block header_title %}Demande de gestion de compte{% endblock %}
 
 {% block content %}
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
-        <tr>
-            <td class="email-card email-card--accent">
-                <div class="email-badge">Connexion partagee</div>
-                <h1 class="email-title">Demande de gestion de compte</h1>
-                <p class="email-subtitle">
-                    <strong>{{ guardian }}</strong> souhaite pouvoir gerer ton compte ULTRAS LIONS pour les commandes et les suivis.
-                </p>
-                <p class="email-copy">Si tu es d'accord, valide la demande avec le bouton ci-dessous.</p>
-                <a href="{{ acceptUrl }}" class="email-button">Valider l'association</a>
-            </td>
-        </tr>
-    </table>
+    <p><strong>{{ guardian }}</strong> souhaite pouvoir gerer ton compte Ultras Lions pour les commandes et le suivi des services associes.</p>
 
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
-        <tr>
-            <td class="email-note email-note--soft">
-                Si tu n'es pas a l'origine de cette demande, tu peux ignorer ce mail.
-            </td>
-        </tr>
-    </table>
+    <div class="card">
+        <p>Si tu es d'accord, valide la demande avec le bouton ci-dessous.</p>
+        <p style="margin-bottom: 0;">
+            <a href="{{ acceptUrl }}" class="button">Valider l'association</a>
+        </p>
+    </div>
+
+    <p class="note">
+        Si tu n'es pas a l'origine de cette demande, tu peux ignorer cet email.
+    </p>
 {% endblock %}

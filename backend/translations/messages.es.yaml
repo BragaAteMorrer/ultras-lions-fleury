@@ -223,6 +223,7 @@ profile_show:
     t_shirt: 'Camiseta:'
     telephone: 'Teléfono :'
     veste: 'Chaqueta :'
+    changer_mon_mot_de_passe: 'Cambiar mi contraseña'
 registration_confirmation_email:
   html:
     cheers: ¡Salud!
@@ -262,6 +263,8 @@ security_register:
 security_reset_password:
   html:
     nouveau_mot_de_passe: Nueva contraseña
+    confirm_new_password: Confirmar nueva contraseña
+    submit: Actualizar
 staff_index:
   html:
     staff: PERSONAL
@@ -361,10 +364,176 @@ cart_index:
     vider_le_panier: 'Vaciar carrito'
     reserver_et_payer_en_liquide: 'Reservar y pagar en efectivo'
 
+profile_order:
+  html:
+    match: Partido
+    product: Producto
 
+profile_change_password:
+  html:
+    heading: 'Cambiar mi contraseña'
+    submit: Actualizar
+    title: 'Cambiar mi contraseña'
 
+profile:
+  email:
+    request_subject: 'Solicitud de gestión de cuenta de Ultras Lions'
+  flash:
+    access_denied_show: 'Solo puedes ver tu perfil o una cuenta vinculada.'
+    access_denied_orders: 'Solo puedes ver tus propios pedidos.'
+    access_denied_manage_links: 'Solo puedes gestionar tus propias asociaciones de cuenta.'
+    access_denied_unlink: 'Solo puedes desvincular tus propias asociaciones.'
+    access_denied_edit: 'Solo puedes modificar tu perfil o una cuenta vinculada.'
+    access_denied_password: 'Solo puedes cambiar tu propia contraseña.'
+    invalid_form: 'Formulario inválido, inténtalo de nuevo.'
+    no_account_found: 'No se encontró ninguna cuenta con ese correo.'
+    cannot_associate_own_account: 'No puedes asociar tu propia cuenta.'
+    already_linked: 'Esta cuenta ya está asociada.'
+    pending_request_exists: 'Ya hay una solicitud pendiente para esta cuenta.'
+    request_sent: 'Solicitud enviada. La cuenta deberá validarla por correo.'
+    request_created_email_failed: 'Solicitud creada, pero no se pudo enviar el correo.'
+    link_not_found_or_expired: 'Solicitud no encontrada o caducada.'
+    association_validated: 'Asociación de cuenta validada.'
+    association_deleted: 'Asociación eliminada.'
+    updated: '¡Perfil actualizado!'
+    current_password_incorrect: 'La contraseña actual es incorrecta.'
+    password_updated: 'Contraseña actualizada.'
 
+reset_password:
+  email:
+    subject: 'Restablece tu contraseña'
+  flash:
+    invalid_csrf: 'Token CSRF inválido.'
+    link_sent_if_exists: 'Si esta dirección existe, se ha enviado un enlace de restablecimiento.'
+    link_invalid_or_expired: 'Este enlace de restablecimiento es inválido o ha caducado.'
+    password_min_length: 'La contraseña debe contener al menos 8 caracteres.'
+    password_uppercase: 'La contraseña debe contener al menos una letra mayúscula.'
+    password_lowercase: 'La contraseña debe contener al menos una letra minúscula.'
+    password_number: 'La contraseña debe contener al menos un número.'
+    password_special: 'La contraseña debe contener al menos un carácter especial.'
+    passwords_mismatch: 'Las contraseñas no coinciden.'
+    updated: 'Tu contraseña ha sido actualizada. Ya puedes iniciar sesión.'
 
+email_admin_custom:
+  html:
+    bonjour: Hola
+    header_subtitle: 'Mensaje administrativo'
+
+admin:
+  navigation:
+    mailing: 'Enviar un correo'
+  mailing:
+    html:
+      title: 'Admin - Mailing'
+      heading: 'Enviar un correo'
+      send: Enviar
+      communication: Comunicación
+      subject: Asunto
+      body: 'Cuerpo del correo'
+      message_hint: 'El mensaje usa automáticamente el estilo de correo de Ultras Lions.'
+      recipients: Destinatarios
+      users_count_suffix: 'usuario(s)'
+      select_all: 'Seleccionar todo'
+      deselect_all: 'Deseleccionar todo'
+      no_user: 'No hay usuarios disponibles.'
+      preview_default_subject: 'Vista previa del correo'
+      preview_default_header_subtitle: 'Vista previa antes del envío'
+      preview_recipient_name: 'Vista previa admin'
+    flash:
+      invalid_form: 'Formulario inválido, inténtalo de nuevo.'
+      select_one_user: 'Selecciona al menos un usuario.'
+      enter_subject: 'Introduce un asunto.'
+      enter_header_title: 'Introduce un título de encabezado.'
+      enter_header_subtitle: 'Introduce un subtítulo de encabezado.'
+      enter_body: 'Escribe el cuerpo del correo.'
+      sent_count: '%count% correo(s) enviado(s).'
+      preview_csrf_invalid: 'Token CSRF inválido.'
+  crud:
+    preview_admin: 'Vista previa admin'
+
+form:
+  user:
+    roles:
+      user: Usuario
+      admin: Administrador
+    password: Contraseña
+    verified: '¿Verificado?'
+  registration:
+    invite_code: 'Código de invitación'
+    first_name: Nombre
+    last_name: Apellido
+    email: Correo electrónico
+    password: Contraseña
+    confirm_password: 'Confirmar contraseña'
+    phone: Teléfono
+    address: Dirección
+    city: Ciudad
+    postal_code: 'Código postal'
+    tshirt_size: Camiseta
+    sweatshirt_size: Sudadera
+    jacket_size: Chaqueta
+    short_size: Pantalón corto
+    profile_photo: 'Foto de perfil'
+    placeholder:
+      phone: '+33612345678 / +32460123456…'
+      choose: 'Elegir…'
+    validation:
+      invite_code_required: 'El código es obligatorio.'
+      email_required: 'La dirección de correo es obligatoria.'
+      password_required: 'La contraseña es obligatoria.'
+      password_min_length: 'Mínimo 8 caracteres.'
+      password_uppercase: 'Debe contener al menos una mayúscula.'
+      password_lowercase: 'Debe contener al menos una minúscula.'
+      password_number: 'Debe contener al menos un número.'
+      password_special: 'Debe contener al menos un carácter especial.'
+      confirm_password_required: 'Debes confirmar la contraseña.'
+      phone_invalid: 'Número de teléfono inválido.'
+      phone_format: 'Formato telefónico inválido.'
+      postal_code_invalid: 'Código postal inválido.'
+      passwords_mismatch: 'Las contraseñas no coinciden.'
+  profile:
+    email: 'Dirección de correo'
+    first_name: Nombre
+    last_name: Apellido
+    birth_date: 'Fecha de nacimiento'
+    phone: Teléfono
+    address: Dirección
+    city: Ciudad
+    postal_code: 'Código postal'
+    profile_photo: 'Foto de perfil'
+    tshirt_size: 'Talla camiseta'
+    polo_size: 'Talla polo'
+    pullover_size: 'Talla jersey'
+    sweatshirt_size: 'Talla sudadera'
+    jacket_size: 'Talla chaqueta'
+    short_size: 'Talla pantalón corto'
+    placeholder:
+      phone: '+33612345678 o +32460123456 (internacional)'
+      address: 'Ej.: 45 rue de la République'
+      city: 'Ej.: Montreal, Bruselas, París'
+      postal_code: 'Ej.: 75001, H2Y 1C6…'
+      choose: 'Elegir...'
+    validation:
+      minimum_age: 'Debes tener al menos 12 años.'
+      phone_invalid: 'Número de teléfono inválido.'
+      phone_format: 'Formato telefónico inválido.'
+      address_invalid: 'Dirección inválida (caracteres no autorizados).'
+      city_invalid: 'Ciudad inválida.'
+      postal_code_invalid: 'Código postal inválido.'
+  profile_password:
+    current: 'Contraseña actual'
+    new: 'Nueva contraseña'
+    confirm: 'Confirmación'
+    validation:
+      current_required: 'Introduce tu contraseña actual.'
+      new_required: 'Introduce una nueva contraseña.'
+      min_length: 'La contraseña debe contener al menos 8 caracteres.'
+      uppercase: 'La contraseña debe contener al menos una mayúscula.'
+      lowercase: 'La contraseña debe contener al menos una minúscula.'
+      number: 'La contraseña debe contener al menos un número.'
+      special: 'La contraseña debe contener al menos un carácter especial.'
+      confirm_required: 'Confirma la nueva contraseña.'
+      passwords_mismatch: 'Las contraseñas no coinciden.'
 
 
 

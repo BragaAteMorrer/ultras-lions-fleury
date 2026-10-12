@@ -36,6 +36,10 @@ class Gadget
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
+    #[ORM\OneToOne(inversedBy: 'gadgetHistoryEntry')]
+    #[ORM\JoinColumn(name: 'source_merch_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    private ?Merch $sourceMerch = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -101,6 +105,14 @@ class Gadget
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    public function getSourceMerch(): ?Merch { return $this->sourceMerch; }
+
+    public function setSourceMerch(?Merch $sourceMerch): self
+    {
+        $this->sourceMerch = $sourceMerch;
         return $this;
     }
 }

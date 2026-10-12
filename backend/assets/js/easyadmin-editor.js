@@ -70,7 +70,7 @@
         formData.append('file', file);
 
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/admin/trix-upload', true);
+        xhr.open('POST', '/admin/manage/trix-upload', true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
         xhr.upload.addEventListener('progress', (event) => {

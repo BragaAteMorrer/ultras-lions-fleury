@@ -1,0 +1,35 @@
+form:
+  registration:
+    validation:
+      invite_code_required: 'El código es obligatorio.'
+      email_required: 'La dirección de correo es obligatoria.'
+      password_required: 'La contraseña es obligatoria.'
+      password_min_length: 'Mínimo 8 caracteres.'
+      password_uppercase: 'Debe contener al menos una mayúscula.'
+      password_lowercase: 'Debe contener al menos una minúscula.'
+      password_number: 'Debe contener al menos un número.'
+      password_special: 'Debe contener al menos un carácter especial.'
+      confirm_password_required: 'Debes confirmar la contraseña.'
+      phone_invalid: 'Número de teléfono inválido.'
+      phone_format: 'Formato telefónico inválido.'
+      postal_code_invalid: 'Código postal inválido.'
+      passwords_mismatch: 'Las contraseñas no coinciden.'
+  profile:
+    validation:
+      minimum_age: 'Debes tener al menos 12 años.'
+      phone_invalid: 'Número de teléfono inválido.'
+      phone_format: 'Formato telefónico inválido.'
+      address_invalid: 'Dirección inválida (caracteres no autorizados).'
+      city_invalid: 'Ciudad inválida.'
+      postal_code_invalid: 'Código postal inválido.'
+  profile_password:
+    validation:
+      current_required: 'Introduce tu contraseña actual.'
+      new_required: 'Introduce una nueva contraseña.'
+      min_length: 'La contraseña debe contener al menos 8 caracteres.'
+      uppercase: 'La contraseña debe contener al menos una mayúscula.'
+      lowercase: 'La contraseña debe contener al menos una minúscula.'
+      number: 'La contraseña debe contener al menos un número.'
+      special: 'La contraseña debe contener al menos un carácter especial.'
+      confirm_required: 'Confirma la nueva contraseña.'
+      passwords_mismatch: 'Las contraseñas no coinciden.'

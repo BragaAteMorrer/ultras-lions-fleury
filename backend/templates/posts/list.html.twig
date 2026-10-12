@@ -1,41 +1,139 @@
-﻿{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}{{ 'posts_list.html.actualites_ultras_lions'|trans }}{% endblock %}
 
+{% block meta_description %}
+    Actualités, communiqués et actions en tribune des Ultras Lions du FC Fleury 91.
+{% endblock %}
+
+{% block body_class %}news-page{% endblock %}
+
 {% block body %}
-<section class="hero">
-    <div class="hero-content">
-        <h1 class="hero-title">{{ 'components_navbar.html.actualites'|trans }}</h1>
-        <p class="hero-subtitle">{{ 'posts_list.html.infos_communiques_actions_en_tribune'|trans }}</p>
+{% set searchQuery = searchTerm ? { q: searchTerm } : {} %}
+
+<section class="hero events-hero news-front-hero">
+    <div class="hero-content events-hero-content">
+        <div class="events-hero-copy">
+            <span class="events-hero-kicker">Infos, tribune et vie du groupe</span>
+            <h1 class="hero-title">{{ 'components_navbar.html.actualites'|trans }}</h1>
+            <p class="hero-subtitle">
+                {{ hasFilters
+                    ? 'Affichage des actualités correspondant à tes critères.'
+                    : 'Communiqués, actions en tribune et temps forts du groupe.' }}
+            </p>
+        </div>
     </div>
 </section>
 
-<div class="section">
-    <div class="container">
-        <h2 class="section-title">{{ 'posts_list.html.derniers_articles'|trans }}</h2>
+<section class="section news-section">
+    <div class="content-shell-3xl news-section-shell">
+        <div class="news-front-toolbar">
+            <form method="get" class="events-filter news-front-filter" role="search">
+                <label class="form-label" for="newsSearch">Rechercher une actualité</label>
 
-        <div class="cards">
-            {% for post in posts %}
-                <a href="{{ path('post_show', { slug: post.slug }) }}" class="card">
+                <div class="news-front-filter-row">
+                    <input
+                        id="newsSearch"
+                        type="search"
+                        name="q"
+                        class="form-control"
+                        value="{{ searchTerm }}"
+                        placeholder="Rechercher une actualité..."
+                    >
 
-                    {% if post.image %}
-                        <img src="{{ asset('uploads/media/' ~ post.image.path) }}" alt="{{ post.title }}">
-                    {% endif %}
+                    <select id="newsCategory" name="category" class="form-select">
+                        <option value="">Toutes les catégories</option>
+                        {% for category in availableCategories %}
+                            <option value="{{ category.slug }}" {% if selectedCategorySlug == category.slug %}selected{% endif %}>
+                                {{ category.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
 
-                    <div class="card-content">
-                        <h3>{{ post.title }}</h3>
+                    <button type="submit" class="btn btn-danger">Filtrer</button>
+                </div>
 
-                        <p class="card-meta">
-                            {{ post.createdAt|date('d/m/Y') }}
-                        </p>
-
-                        <p>{{ post.content|striptags|slice(0, 140) ~ '…' }}</p>
+                {% if hasFilters %}
+                    <div class="news-front-filter-foot">
+                        <a href="{{ path('post_index') }}" class="news-filter-reset">Réinitialiser les filtres</a>
                     </div>
-                </a>
-            {% else %}
-                <p>{{ 'posts_list.html.aucune_actu_pour_linstant'|trans }}</p>
-            {% endfor %}
+                {% endif %}
+            </form>
         </div>
+
+        <div class="section-heading-row news-heading-row">
+            <div>
+                <span class="news-front-filter-summary">
+                {{ pagination.totalItems }} résultat{{ pagination.totalItems > 1 ? 's' : '' }}
+                    {% if selectedCategory %}
+                        dans {{ selectedCategory.name }}
+                    {% endif %}
+                    {% if searchTerm %}
+                        pour "{{ searchTerm }}"
+                    {% endif %}
+                </span>
+                <h2 class="section-title">{{ hasFilters ? 'Actualités filtrées' : 'Toutes les actualités' }}</h2>
+            </div>
+        </div>
+
+        {% if posts is not empty or (featuredPost and not hasFilters and pagination.page == 1) %}
+            <div class="news-front-grid">
+                {% if featuredPost and not hasFilters and pagination.page == 1 %}
+                    {% include 'posts/_card.html.twig' with { post: featuredPost, lead: true, actionLabel: 'Lire l\'article' } %}
+                {% endif %}
+
+                {% for post in posts %}
+                    {% include 'posts/_card.html.twig' with { post: post, actionLabel: 'Lire l\'article' } %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="news-empty-state">
+                <h3>Actualités introuvables</h3>
+                <p>
+                    {% if hasFilters %}
+                        Aucune actualité ne correspond à cette recherche.
+                    {% else %}
+                        Aucune actualité pour le moment.
+                    {% endif %}
+                </p>
+                {% if hasFilters %}
+                    <a href="{{ path('post_index') }}" class="btn-ul">Voir toutes les actualités</a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if pagination.totalPages > 1 %}
+            <nav class="news-pagination" aria-label="Pagination des actualités">
+                <div class="news-pagination-summary">
+                    Page {{ pagination.page }} / {{ pagination.totalPages }}
+                </div>
+
+                <div class="news-pagination-links">
+                    {% set previousQuery = pagination.query|merge({ page: pagination.page - 1 }) %}
+                    {% set nextQuery = pagination.query|merge({ page: pagination.page + 1 }) %}
+
+                    <a
+                        class="news-pagination-link {{ pagination.hasPrevious ? '' : 'is-disabled' }}"
+                        href="{{ pagination.hasPrevious ? path('post_index', previousQuery) : '#' }}"
+                        aria-disabled="{{ pagination.hasPrevious ? 'false' : 'true' }}"
+                    >
+                        <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                        Précédent
+                    </a>
+
+                    <span class="news-pagination-current">Page {{ pagination.page }}</span>
+
+                    <a
+                        class="news-pagination-link {{ pagination.hasNext ? '' : 'is-disabled' }}"
+                        href="{{ pagination.hasNext ? path('post_index', nextQuery) : '#' }}"
+                        aria-disabled="{{ pagination.hasNext ? 'false' : 'true' }}"
+                    >
+                        Suivant
+                        <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </nav>
+        {% endif %}
     </div>
-</div>
+</section>
 {% endblock %}

@@ -3,10 +3,13 @@
 {% block title %}{{ 'ticket_list.html.billetterie_ultras_lions'|trans }}{% endblock %}
 
 {% block body %}
-    <section class="hero ticket-list-hero">
-        <div class="hero-content">
-            <h1 class="hero-title">{{ 'components_navbar.html.billetterie'|trans }}</h1>
-            <p class="hero-subtitle">{{ 'ticket_list.html.matchs_a_domicile_et_a_lexterieur'|trans }}</p>
+    <section class="hero merch-hero ticket-list-hero">
+        <div class="hero-content merch-hero-content">
+            <div class="merch-hero-copy">
+                <span class="merch-hero-kicker">{{ 'ticket_list.html.vitrine_officielle'|trans }}</span>
+                <h1 class="hero-title">{{ 'components_navbar.html.billetterie'|trans }}</h1>
+                <p class="hero-subtitle">{{ 'ticket_list.html.matchs_a_domicile_et_a_lexterieur'|trans }}</p>
+            </div>
         </div>
     </section>
 
@@ -68,6 +71,9 @@
                                                     {{ 'ticket_list.html.stock'|trans({'%stock%': ticket.stock}) }}
                                                 {% endif %}
                                             </span>
+                                            {% if not ticket.openToGuests %}
+                                                <span class="merch-product-badge merch-product-badge-stock">{{ ticket.accessLabel }}</span>
+                                            {% endif %}
                                         </div>
                                     </div>
 

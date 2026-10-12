@@ -61,14 +61,21 @@
 }
 
 .footer-socials a {
-    display: inline-block;
+    display: inline-grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
     margin-right: 0.5rem;
-    padding: 0.4rem 0.8rem;
     background: #D40000;
     border-radius: 0.25rem;
     color: #fff;
     font-weight: 700;
     transition: 0.2s;
+}
+
+.footer-socials a i {
+    font-size: 1.1rem;
+    line-height: 1;
 }
 
 .footer-socials a:hover {

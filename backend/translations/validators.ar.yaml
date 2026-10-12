@@ -1,0 +1,35 @@
+form:
+  registration:
+    validation:
+      invite_code_required: 'الرمز مطلوب.'
+      email_required: 'عنوان البريد الإلكتروني مطلوب.'
+      password_required: 'كلمة المرور مطلوبة.'
+      password_min_length: 'الحد الأدنى 8 أحرف.'
+      password_uppercase: 'يجب أن تحتوي على حرف كبير واحد على الأقل.'
+      password_lowercase: 'يجب أن تحتوي على حرف صغير واحد على الأقل.'
+      password_number: 'يجب أن تحتوي على رقم واحد على الأقل.'
+      password_special: 'يجب أن تحتوي على رمز خاص واحد على الأقل.'
+      confirm_password_required: 'يجب تأكيد كلمة المرور.'
+      phone_invalid: 'رقم الهاتف غير صالح.'
+      phone_format: 'تنسيق الهاتف غير صالح.'
+      postal_code_invalid: 'الرمز البريدي غير صالح.'
+      passwords_mismatch: 'كلمات المرور غير متطابقة.'
+  profile:
+    validation:
+      minimum_age: 'يجب أن يكون عمرك 12 سنة على الأقل.'
+      phone_invalid: 'رقم الهاتف غير صالح.'
+      phone_format: 'تنسيق الهاتف غير صالح.'
+      address_invalid: 'العنوان غير صالح (أحرف غير مسموحة).'
+      city_invalid: 'المدينة غير صالحة.'
+      postal_code_invalid: 'الرمز البريدي غير صالح.'
+  profile_password:
+    validation:
+      current_required: 'أدخل كلمة المرور الحالية.'
+      new_required: 'أدخل كلمة مرور جديدة.'
+      min_length: 'يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل.'
+      uppercase: 'يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل.'
+      lowercase: 'يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل.'
+      number: 'يجب أن تحتوي كلمة المرور على رقم واحد على الأقل.'
+      special: 'يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل.'
+      confirm_required: 'أكد كلمة المرور الجديدة.'
+      passwords_mismatch: 'كلمات المرور غير متطابقة.'

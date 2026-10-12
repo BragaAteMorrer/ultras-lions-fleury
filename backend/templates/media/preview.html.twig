@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Apercu Media{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Apercu Media</h1>
+        {% if mediaPreview|default(false) %}
+            <p class="hero-subtitle">Mode previsualisation admin</p>
+        {% endif %}
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+        <article class="media-preview-card">
+            <div class="media-preview-card__visual">
+                {% if media.path %}
+                    {% if media.isVideo %}
+                        <video controls preload="metadata">
+                            <source src="{{ asset('uploads/media/' ~ media.path) }}">
+                        </video>
+                    {% else %}
+                        <img src="{{ asset('uploads/media/' ~ media.path) }}" alt="{{ media.alt ?: media.path }}">
+                    {% endif %}
+                {% else %}
+                    <div class="media-preview-card__empty">Aucun fichier renseigne</div>
+                {% endif %}
+            </div>
+
+            <div class="media-preview-card__body">
+                <h2>{{ media.alt ?: 'Media sans titre' }}</h2>
+                <p>{{ media.path ?: 'Aucun chemin defini' }}</p>
+            </div>
+        </article>
+    </div>
+</div>
+{% endblock %}

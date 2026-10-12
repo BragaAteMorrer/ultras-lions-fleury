@@ -1,0 +1,142 @@
+:root {
+    --space-2xs: 0.25rem;
+    --space-xs: 0.5rem;
+    --space-sm: 0.75rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+
+    --radius-sm: 0.375rem;
+    --radius-md: 0.625rem;
+    --radius-lg: 0.85rem;
+    --radius-xl: 1.1rem;
+    --radius-pill: 999px;
+
+    --container-sm: 40rem;
+    --container-md: 48rem;
+    --container-lg: 56rem;
+    --container-xl: 64rem;
+    --container-2xl: 72rem;
+    --container-3xl: 80rem;
+    --container-4xl: 88rem;
+
+    --text-xs: clamp(0.72rem, 0.68rem + 0.15vw, 0.82rem);
+    --text-sm: clamp(0.85rem, 0.82rem + 0.18vw, 0.95rem);
+    --text-base: clamp(1rem, 0.96rem + 0.2vw, 1.08rem);
+    --text-lg: clamp(1.08rem, 1rem + 0.35vw, 1.25rem);
+    --text-xl: clamp(1.3rem, 1.1rem + 0.7vw, 1.8rem);
+    --text-2xl: clamp(1.7rem, 1.25rem + 1.2vw, 2.4rem);
+    --text-3xl: clamp(2.1rem, 1.5rem + 2.2vw, 3.6rem);
+    --text-hero: clamp(2.8rem, 1.8rem + 4vw, 5.4rem);
+
+    --shadow-sm: 0 0.5rem 1rem rgba(0, 0, 0, 0.18);
+    --shadow-md: 0 0.9rem 1.75rem rgba(0, 0, 0, 0.28);
+    --shadow-lg: 0 1.25rem 2.75rem rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 1.8rem 3.5rem rgba(0, 0, 0, 0.52);
+
+    --z-header: 3000;
+    --z-dropdown: 3100;
+    --z-overlay: 4000;
+    --z-loader: 9999;
+
+    --header-h: clamp(3.5rem, 4vw, 5rem);
+}
+
+html {
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+img,
+video,
+canvas,
+svg {
+    max-width: 100%;
+}
+
+img,
+video {
+    height: auto;
+}
+
+iframe {
+    max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+:focus-visible {
+    outline: 0.15rem solid #D40000;
+    outline-offset: 0.15rem;
+}
+
+.content-shell,
+.content-shell-sm,
+.content-shell-md,
+.content-shell-lg,
+.content-shell-xl,
+.content-shell-2xl,
+.content-shell-3xl {
+    width: min(calc(100% - 2rem), var(--content-shell-width, var(--container-xl)));
+    margin-inline: auto;
+}
+
+.content-shell {
+    --content-shell-width: var(--container-xl);
+}
+
+.content-shell-sm {
+    --content-shell-width: var(--container-sm);
+}
+
+.content-shell-md {
+    --content-shell-width: var(--container-md);
+}
+
+.content-shell-lg {
+    --content-shell-width: var(--container-lg);
+}
+
+.content-shell-xl {
+    --content-shell-width: var(--container-xl);
+}
+
+.content-shell-2xl {
+    --content-shell-width: var(--container-2xl);
+}
+
+.content-shell-3xl {
+    --content-shell-width: var(--container-3xl);
+}
+
+.fluid-grid {
+    display: grid;
+    gap: clamp(1rem, 1.5vw, 1.5rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+}
+
+.fluid-grid--compact {
+    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+}
+
+.fluid-grid--dense {
+    grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+}
+
+.cluster {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}

@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/billetterie')]
 class TicketController extends AbstractController
@@ -37,8 +38,7 @@ class TicketController extends AbstractController
             $selectedCategory = $categoryRepository->findOneBy(['slug' => $slug]);
         }
 
-        $isMember = $this->getUser() !== null;
-        $items = $ticketRepository->findPublicTickets($selectedCategory, $isMember);
+        $items = $ticketRepository->findPublicTickets($selectedCategory);
 
         return $this->render('ticket/list.html.twig', [
             'items' => $items,
@@ -51,12 +51,14 @@ class TicketController extends AbstractController
     public function show(Ticket $item, TicketRepository $ticketRepository, SessionInterface $session): Response
     {
         $isMember = $this->getUser() !== null;
-        if (!$ticketRepository->isVisibleForUser($item, $isMember)) {
+        if ($item->isArchived()) {
             throw $this->createNotFoundException();
         }
 
         return $this->render('ticket/show.html.twig', [
             'item' => $item,
+            'salesOpen' => $ticketRepository->isVisibleForUser($item, $isMember),
+            'viewerIsMember' => $isMember,
             'billetwebReady' => $item->usesBilletweb() && $session->get($this->billetwebSessionKey($item), false),
         ]);
     }
@@ -323,7 +325,13 @@ class TicketController extends AbstractController
         $em->flush();
 
         $description = sprintf('Billetterie - %d billet(s)', count($lines));
-        $response = $sumupService->createHostedCheckout($total, 'EUR', $reference, $description);
+        $response = $sumupService->createHostedCheckout(
+            $total,
+            'EUR',
+            $reference,
+            $description,
+            $this->generateUrl('checkout_thankyou', [], UrlGeneratorInterface::ABSOLUTE_URL)
+        );
 
         if (!empty($response['_error'])) {
             $this->addFlash('danger', sprintf(
@@ -430,7 +438,13 @@ class TicketController extends AbstractController
         $em->flush();
 
         $description = sprintf('Billetterie - %d billet(s)', count($lines));
-        $response = $sumupService->createHostedCheckout($total, 'EUR', $reference, $description);
+        $response = $sumupService->createHostedCheckout(
+            $total,
+            'EUR',
+            $reference,
+            $description,
+            $this->generateUrl('checkout_thankyou', [], UrlGeneratorInterface::ABSOLUTE_URL)
+        );
 
         if (!empty($response['_error'])) {
             $checkout->setStatus('failed');

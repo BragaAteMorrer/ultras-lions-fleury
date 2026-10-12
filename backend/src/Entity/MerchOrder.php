@@ -46,11 +46,21 @@ class MerchOrder
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $note = null;
 
+    #[ORM\Column(length: 128, nullable: true)]
+    private ?string $sumupReference = null;
+
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(length: 20)]
     private string $paymentMethod = 'sumup';
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $confirmedAt = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'confirmed_by_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    private ?User $confirmedBy = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $executed = false;
@@ -137,6 +147,17 @@ class MerchOrder
         return $this;
     }
 
+    public function getSumupReference(): ?string
+    {
+        return $this->sumupReference;
+    }
+
+    public function setSumupReference(?string $sumupReference): self
+    {
+        $this->sumupReference = $sumupReference;
+        return $this;
+    }
+
     public function getCreatedAt(): ?\DateTimeInterface { return $this->createdAt; }
 
     public function setCreatedAt(\DateTimeInterface $createdAt): self
@@ -153,11 +174,65 @@ class MerchOrder
         return $this;
     }
 
+    public function getConfirmedAt(): ?\DateTimeInterface
+    {
+        return $this->confirmedAt;
+    }
+
+    public function setConfirmedAt(?\DateTimeInterface $confirmedAt): self
+    {
+        $this->confirmedAt = $confirmedAt;
+        return $this;
+    }
+
+    public function getConfirmedBy(): ?User
+    {
+        return $this->confirmedBy;
+    }
+
+    public function setConfirmedBy(?User $confirmedBy): self
+    {
+        $this->confirmedBy = $confirmedBy;
+        return $this;
+    }
+
     public function isExecuted(): bool { return $this->executed; }
 
     public function setExecuted(bool $executed): self
     {
         $this->executed = $executed;
         return $this;
+    }
+
+    public function isConfirmed(): bool
+    {
+        return $this->confirmedAt !== null;
+    }
+
+    public function canBeConfirmed(): bool
+    {
+        return !$this->isConfirmed() && !$this->isExecuted();
+    }
+
+    public function getWorkflowState(): string
+    {
+        if ($this->isExecuted()) {
+            return 'executed';
+        }
+
+        if ($this->isConfirmed()) {
+            return 'confirmed';
+        }
+
+        return 'pending';
+    }
+
+    public function getWorkflowStateLabel(): string
+    {
+        return match ($this->getWorkflowState()) {
+            'executed' => 'Exécutée',
+            'confirmed' => 'Confirmée',
+            default => 'À confirmer',
+        };
     }
 }

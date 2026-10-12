@@ -1,0 +1,26 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %}{{ 'email_donation_recap.html.title'|trans }}{% endblock %}
+{% block header_subtitle %}{{ 'email_donation_recap.html.header_subtitle'|trans }}{% endblock %}
+{% block header_title %}{{ 'email_donation_recap.html.header_title'|trans }}{% endblock %}
+
+{% block content %}
+    <p>{{ 'email_donation_recap.html.greeting'|trans }}</p>
+
+    <p>{{ 'email_donation_recap.html.thanks'|trans }}</p>
+
+    <div class="card">
+        <ul>
+            <li>{{ 'email_donation_recap.html.reference'|trans }} {{ checkout.checkoutReference }}</li>
+            <li>{{ 'email_donation_recap.html.date'|trans }} {{ donation.paidAt ? donation.paidAt|date('d/m/Y H:i') : donation.createdAt|date('d/m/Y H:i') }}</li>
+            <li>{{ 'email_donation_recap.html.amount'|trans }} {{ donation.amount|number_format(2, ',', ' ') }} {{ donation.currency }}</li>
+            <li>{{ 'email_donation_recap.html.status'|trans }} {{ donation.statusTranslationKey|trans }}</li>
+        </ul>
+    </div>
+
+    {% if donation.message %}
+        <p><strong>{{ 'email_donation_recap.html.message'|trans }}</strong> {{ donation.message }}</p>
+    {% endif %}
+
+    <p class="note">{{ 'email_donation_recap.html.note'|trans }}</p>
+{% endblock %}

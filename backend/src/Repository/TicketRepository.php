@@ -20,16 +20,16 @@ class TicketRepository extends ServiceEntityRepository
     /**
      * @return Ticket[]
      */
-    public function findPublicTickets(?TicketCategory $category, bool $isMember): array
+    public function findPublicTickets(?TicketCategory $category): array
     {
         $now = new \DateTimeImmutable();
-        $availabilityField = $isMember ? 't.memberAvailabilityDate' : 't.guestAvailabilityDate';
 
         $qb = $this->createQueryBuilder('t')
             ->leftJoin('t.category', 'cat')
+            ->leftJoin('t.image', 'image')
             ->addSelect('cat')
+            ->addSelect('image')
             ->andWhere('t.matchDate > :now')
-            ->andWhere(sprintf('(%s IS NULL OR %s <= :now)', $availabilityField, $availabilityField))
             ->setParameter('now', $now)
             ->orderBy('t.matchDate', 'ASC');
 

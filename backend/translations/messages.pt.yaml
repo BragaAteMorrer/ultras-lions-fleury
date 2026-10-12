@@ -217,6 +217,7 @@ profile_show:
     t_shirt: 'Camiseta:'
     telephone: 'Telefone :'
     veste: 'Jaqueta :'
+    changer_mon_mot_de_passe: 'Alterar minha senha'
 registration_confirmation_email:
   html:
     cheers: Saúde!
@@ -256,6 +257,8 @@ security_register:
 security_reset_password:
   html:
     nouveau_mot_de_passe: Nova Senha
+    confirm_new_password: Confirmar nova senha
+    submit: Atualizar
 staff_index:
   html:
     staff: FUNCIONÁRIOS
@@ -354,6 +357,177 @@ cart_index:
     total: Total
     vider_le_panier: 'Esvaziar carrinho'
     reserver_et_payer_en_liquide: 'Reservar e pagar em dinheiro'
+
+profile_order:
+  html:
+    match: Jogo
+    product: Produto
+
+profile_change_password:
+  html:
+    heading: 'Alterar minha senha'
+    submit: Atualizar
+    title: 'Alterar minha senha'
+
+profile:
+  email:
+    request_subject: 'Solicitação de gestão de conta Ultras Lions'
+  flash:
+    access_denied_show: 'Você só pode ver seu próprio perfil ou uma conta vinculada.'
+    access_denied_orders: 'Você só pode ver seus próprios pedidos.'
+    access_denied_manage_links: 'Você só pode gerenciar suas próprias associações de conta.'
+    access_denied_unlink: 'Você só pode desvincular suas próprias associações.'
+    access_denied_edit: 'Você só pode editar seu próprio perfil ou uma conta vinculada.'
+    access_denied_password: 'Você só pode alterar sua própria senha.'
+    invalid_form: 'Formulário inválido, tente novamente.'
+    no_account_found: 'Nenhuma conta encontrada com esse email.'
+    cannot_associate_own_account: 'Você não pode associar sua própria conta.'
+    already_linked: 'Esta conta já está associada.'
+    pending_request_exists: 'Já existe uma solicitação pendente para esta conta.'
+    request_sent: 'Solicitação enviada. A conta deverá validar por email.'
+    request_created_email_failed: 'Solicitação criada, mas o email não pôde ser enviado.'
+    link_not_found_or_expired: 'Solicitação não encontrada ou expirada.'
+    association_validated: 'Associação de conta validada.'
+    association_deleted: 'Associação removida.'
+    updated: 'Perfil atualizado!'
+    current_password_incorrect: 'A senha atual está incorreta.'
+    password_updated: 'Senha atualizada.'
+
+reset_password:
+  email:
+    subject: 'Redefina sua senha'
+  flash:
+    invalid_csrf: 'Token CSRF inválido.'
+    link_sent_if_exists: 'Se este endereço existir, um link de redefinição foi enviado.'
+    link_invalid_or_expired: 'Este link de redefinição é inválido ou expirou.'
+    password_min_length: 'A senha deve conter pelo menos 8 caracteres.'
+    password_uppercase: 'A senha deve conter pelo menos uma letra maiúscula.'
+    password_lowercase: 'A senha deve conter pelo menos uma letra minúscula.'
+    password_number: 'A senha deve conter pelo menos um número.'
+    password_special: 'A senha deve conter pelo menos um caractere especial.'
+    passwords_mismatch: 'As senhas não coincidem.'
+    updated: 'Sua senha foi atualizada. Você já pode entrar.'
+
+email_admin_custom:
+  html:
+    bonjour: Olá
+    header_subtitle: 'Mensagem administrativa'
+
+admin:
+  navigation:
+    mailing: 'Enviar um email'
+  mailing:
+    html:
+      title: 'Admin - Mailing'
+      heading: 'Enviar um email'
+      send: Enviar
+      communication: Comunicação
+      subject: Assunto
+      body: 'Corpo do email'
+      message_hint: 'A mensagem usa automaticamente o estilo de email da Ultras Lions.'
+      recipients: Destinatários
+      users_count_suffix: 'usuário(s)'
+      select_all: 'Selecionar tudo'
+      deselect_all: 'Desmarcar tudo'
+      no_user: 'Nenhum usuário disponível.'
+      preview_default_subject: 'Pré-visualização do email'
+      preview_default_header_subtitle: 'Pré-visualização antes do envio'
+      preview_recipient_name: 'Pré-visualização admin'
+    flash:
+      invalid_form: 'Formulário inválido, tente novamente.'
+      select_one_user: 'Selecione pelo menos um usuário.'
+      enter_subject: 'Informe um assunto.'
+      enter_header_title: 'Informe um título de cabeçalho.'
+      enter_header_subtitle: 'Informe um subtítulo de cabeçalho.'
+      enter_body: 'Escreva o corpo do email.'
+      sent_count: '%count% email(s) enviados.'
+      preview_csrf_invalid: 'Token CSRF inválido.'
+  crud:
+    preview_admin: 'Pré-visualização admin'
+
+form:
+  user:
+    roles:
+      user: Usuário
+      admin: Administrador
+    password: 'Senha'
+    verified: 'Verificado?'
+  registration:
+    invite_code: 'Código de convite'
+    first_name: Nome
+    last_name: Sobrenome
+    email: Email
+    password: 'Senha'
+    confirm_password: 'Confirmar senha'
+    phone: Telefone
+    address: Endereço
+    city: Cidade
+    postal_code: 'Código postal'
+    tshirt_size: Camiseta
+    sweatshirt_size: Moletom
+    jacket_size: Jaqueta
+    short_size: Bermuda
+    profile_photo: 'Foto de perfil'
+    placeholder:
+      phone: '+33612345678 / +32460123456…'
+      choose: 'Escolher…'
+    validation:
+      invite_code_required: 'O código é obrigatório.'
+      email_required: 'O endereço de email é obrigatório.'
+      password_required: 'A senha é obrigatória.'
+      password_min_length: 'Mínimo de 8 caracteres.'
+      password_uppercase: 'Deve conter pelo menos uma letra maiúscula.'
+      password_lowercase: 'Deve conter pelo menos uma letra minúscula.'
+      password_number: 'Deve conter pelo menos um número.'
+      password_special: 'Deve conter pelo menos um caractere especial.'
+      confirm_password_required: 'Você deve confirmar a senha.'
+      phone_invalid: 'Número de telefone inválido.'
+      phone_format: 'Formato de telefone inválido.'
+      postal_code_invalid: 'Código postal inválido.'
+      passwords_mismatch: 'As senhas não coincidem.'
+  profile:
+    email: 'Endereço de email'
+    first_name: Nome
+    last_name: Sobrenome
+    birth_date: 'Data de nascimento'
+    phone: Telefone
+    address: Endereço
+    city: Cidade
+    postal_code: 'Código postal'
+    profile_photo: 'Foto de perfil'
+    tshirt_size: 'Tamanho da camiseta'
+    polo_size: 'Tamanho do polo'
+    pullover_size: 'Tamanho do pulôver'
+    sweatshirt_size: 'Tamanho do moletom'
+    jacket_size: 'Tamanho da jaqueta'
+    short_size: 'Tamanho da bermuda'
+    placeholder:
+      phone: '+33612345678 ou +32460123456 (internacional)'
+      address: 'Ex.: 45 rue de la République'
+      city: 'Ex.: Montreal, Bruxelas, Paris'
+      postal_code: 'Ex.: 75001, H2Y 1C6…'
+      choose: 'Escolher...'
+    validation:
+      minimum_age: 'Você deve ter pelo menos 12 anos.'
+      phone_invalid: 'Número de telefone inválido.'
+      phone_format: 'Formato de telefone inválido.'
+      address_invalid: 'Endereço inválido (caracteres não autorizados).'
+      city_invalid: 'Cidade inválida.'
+      postal_code_invalid: 'Código postal inválido.'
+  profile_password:
+    current: 'Senha atual'
+    new: 'Nova senha'
+    confirm: 'Confirmação'
+    validation:
+      current_required: 'Digite sua senha atual.'
+      new_required: 'Digite uma nova senha.'
+      min_length: 'A senha deve conter pelo menos 8 caracteres.'
+      uppercase: 'A senha deve conter pelo menos uma letra maiúscula.'
+      lowercase: 'A senha deve conter pelo menos uma letra minúscula.'
+      number: 'A senha deve conter pelo menos um número.'
+      special: 'A senha deve conter pelo menos um caractere especial.'
+      confirm_required: 'Confirme a nova senha.'
+      passwords_mismatch: 'As senhas não coincidem.'
 
 
 

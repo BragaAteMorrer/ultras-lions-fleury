@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: MerchStockRepository::class)]
 #[ORM\Table(name: 'merch_stock')]
 #[ORM\UniqueConstraint(name: 'uniq_merch_stock_merch_size', columns: ['merch_id', 'size'])]
+#[ORM\UniqueConstraint(name: 'uniq_merch_stock_sumup_sku', columns: ['sumup_sku'])]
 class MerchStock
 {
     #[ORM\Id]
@@ -20,14 +21,19 @@ class MerchStock
     private ?Merch $merch = null;
 
     #[ORM\Column(length: 30)]
-    private string $size = 'TU';
+    private string $size = '';
+
+    #[ORM\Column(length: 128, nullable: true)]
+    private ?string $sumupSku = null;
 
     #[ORM\Column]
     private int $quantity = 0;
 
     public function __toString(): string
     {
-        return sprintf('%s (%d)', $this->size, $this->quantity);
+        $suffix = $this->sumupSku ? ' - ' . $this->sumupSku : '';
+
+        return sprintf('%s (%d)%s', $this->size, $this->quantity, $suffix);
     }
 
     public function getId(): ?int
@@ -54,6 +60,21 @@ class MerchStock
     public function setSize(string $size): self
     {
         $this->size = $size;
+        return $this;
+    }
+
+    public function getSumupSku(): ?string
+    {
+        return $this->sumupSku;
+    }
+
+    public function setSumupSku(?string $sumupSku): self
+    {
+        $this->sumupSku = $sumupSku !== null ? trim($sumupSku) : null;
+        if ($this->sumupSku === '') {
+            $this->sumupSku = null;
+        }
+
         return $this;
     }
 

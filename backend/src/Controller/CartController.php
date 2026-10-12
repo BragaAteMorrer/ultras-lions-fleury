@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CartController extends AbstractController
 {
@@ -38,10 +39,13 @@ class CartController extends AbstractController
             $merchTotal = 0.0;
             $ticketTotal = 0.0;
 
-            $validMerchCart = array_values(array_filter(
-                $merchCart,
-                static fn ($row) => is_array($row) && isset($row['id'], $row['quantity'], $row['size'])
-            ));
+            $validMerchCart = [];
+            foreach ($merchCart as $key => $row) {
+                if (!is_array($row) || !isset($row['id'], $row['quantity'], $row['size'])) {
+                    continue;
+                }
+                $validMerchCart[$key] = $row;
+            }
             $merchIds = array_values(array_unique(array_map(static fn ($i) => (int) $i['id'], $validMerchCart)));
             $merchProducts = $merchIds ? $merchRepository->findBy(['id' => $merchIds]) : [];
             $merchById = [];
@@ -67,10 +71,13 @@ class CartController extends AbstractController
                 ];
             }
 
-            $validTicketCart = array_values(array_filter(
-                $ticketCart,
-                static fn ($row) => is_array($row) && isset($row['id'], $row['quantity'])
-            ));
+            $validTicketCart = [];
+            foreach ($ticketCart as $key => $row) {
+                if (!is_array($row) || !isset($row['id'], $row['quantity'])) {
+                    continue;
+                }
+                $validTicketCart[$key] = $row;
+            }
             $ticketIds = array_values(array_unique(array_map(static fn ($i) => (int) $i['id'], $validTicketCart)));
             $tickets = $ticketIds ? $ticketRepository->findBy(['id' => $ticketIds]) : [];
             $ticketById = [];
@@ -287,7 +294,13 @@ class CartController extends AbstractController
         $em->flush();
 
         $description = sprintf('Panier - %d article(s)', count($lines));
-        $response = $sumupService->createHostedCheckout($total, 'EUR', $reference, $description);
+        $response = $sumupService->createHostedCheckout(
+            $total,
+            'EUR',
+            $reference,
+            $description,
+            $this->generateUrl('checkout_thankyou', [], UrlGeneratorInterface::ABSOLUTE_URL)
+        );
 
         if (!empty($response['_error'])) {
             $this->addFlash('danger', sprintf(

@@ -26,7 +26,7 @@ class MerchSizingService
             'short' => ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'],
             'chaussure' => array_map(static fn (int $s) => (string) $s, range(36, 46)),
             'echarpe' => ['TU'],
-            default => ['TU'],
+            default => $this->getAllAdminSizes(),
         };
     }
 

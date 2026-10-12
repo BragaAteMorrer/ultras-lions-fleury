@@ -8,9 +8,15 @@
         <h1 class="hero-title">{{ 'group_show.html.le_groupe'|trans }}</h1>
         <p class="hero-subtitle">{{ 'group_show.html.identite_valeurs_histoire_tribune'|trans }}</p>
 
+        {% if groupPreview|default(false) %}
+            <div class="alert alert-warning mt-4">
+                Apercu interne. Cette version n'est visible que pour les administrateurs.
+            </div>
+        {% endif %}
+
         {% if group %}
             <div class="group-content rich-content">
-                {{ group.description|raw }}
+                {{ group.description|sanitize_page_html|raw }}
             </div>
             {% else %}
             <div class="group-content rich-content">
@@ -46,7 +52,7 @@
                     {% set histoireText = (group and group.histoireText) ? group.histoireText : 'group_show.html.section_histoire_text'|trans %}
                     <div class="rich-content">
                         {% if group and group.histoireText %}
-                            {{ histoireText|raw }}
+                            {{ histoireText|sanitize_page_html|raw }}
                         {% else %}
                             {{ histoireText|nl2br }}
                         {% endif %}
@@ -58,7 +64,7 @@
                     {% set mentaliteText = (group and group.mentaliteText) ? group.mentaliteText : 'group_show.html.section_mentalite_text'|trans %}
                     <div class="rich-content">
                         {% if group and group.mentaliteText %}
-                            {{ mentaliteText|raw }}
+                            {{ mentaliteText|sanitize_page_html|raw }}
                         {% else %}
                             {{ mentaliteText|nl2br }}
                         {% endif %}
@@ -70,7 +76,7 @@
                     {% set fonctionnementText = (group and group.fonctionnementText) ? group.fonctionnementText : 'group_show.html.section_fonctionnement_text'|trans %}
                     <div class="rich-content">
                         {% if group and group.fonctionnementText %}
-                            {{ fonctionnementText|raw }}
+                            {{ fonctionnementText|sanitize_page_html|raw }}
                         {% else %}
                             {{ fonctionnementText|nl2br }}
                         {% endif %}
@@ -82,7 +88,7 @@
                     {% set rejoindreText = (group and group.rejoindreText) ? group.rejoindreText : 'group_show.html.section_rejoindre_text'|trans %}
                     <div class="rich-content">
                         {% if group and group.rejoindreText %}
-                            {{ rejoindreText|raw }}
+                            {{ rejoindreText|sanitize_page_html|raw }}
                         {% else %}
                             {{ rejoindreText|nl2br }}
                         {% endif %}
@@ -94,7 +100,7 @@
                     {% set seCarterText = (group and group.seCarterText) ? group.seCarterText : 'group_show.html.section_se_carter_text'|trans %}
                     <div class="rich-content">
                         {% if group and group.seCarterText %}
-                            {{ seCarterText|raw }}
+                            {{ seCarterText|sanitize_page_html|raw }}
                         {% else %}
                             {{ seCarterText|nl2br }}
                         {% endif %}

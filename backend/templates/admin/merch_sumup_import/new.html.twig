@@ -1,0 +1,98 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Rapprochement SumUp merch{% endblock %}
+{% block admin_kicker %}Boutique{% endblock %}
+{% block admin_title %}Rapprochement SumUp merch{% endblock %}
+{% block admin_actions %}
+    <a class="btn btn-outline-light btn-sm" href="{{ path('app_admin_merch_physical_sale_new') }}">Vente physique</a>
+    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', {resource: 'stocks-merch'}) }}">Stocks merch</a>
+{% endblock %}
+
+{% block body %}
+    <div class="row g-4">
+        <div class="col-12 col-xl-7">
+            <section class="admin-panel p-4">
+                <div class="mb-4">
+                    <h2 class="h4 mb-2">Importer un CSV SumUp</h2>
+                    <p class="text-white-50 mb-0">
+                        Le fichier doit contenir un SKU par ligne. Le script retrouve le stock local associe, decremente la quantite et cree une commande merch executee.
+                    </p>
+                </div>
+
+                {{ form_start(form, {attr: {enctype: 'multipart/form-data'}}) }}
+                <div class="row g-3">
+                    <div class="col-12">
+                        {{ form_row(form.csvFile) }}
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button class="btn btn-danger" type="submit">
+                        <i class="bi bi-filetype-csv me-1" aria-hidden="true"></i>
+                        Importer le CSV
+                    </button>
+                    <a class="btn btn-outline-light" href="{{ path('custom_admin_crud_index', {resource: 'commandes-merch'}) }}">Retour</a>
+                </div>
+                {{ form_end(form) }}
+            </section>
+        </div>
+
+        <div class="col-12 col-xl-5">
+            <section class="admin-panel p-4 h-100">
+                <h2 class="h5 mb-3">Format attendu</h2>
+                <p class="text-white-50">Colonnes reconnues:</p>
+                <pre class="small text-white-50 mb-3">sku,quantity,reference,date,unit_price,total</pre>
+                <p class="text-white-50 mb-0">
+                    Utilise <code>sku</code> pour faire correspondre le stock local. Si le fichier SumUp utilise d'autres noms de colonnes, le parser essaie aussi <code>sumup_sku</code>, <code>qty</code>, <code>transaction_id</code>, <code>total_price</code> et variantes proches.
+                </p>
+            </section>
+        </div>
+    </div>
+
+    {% if report is not null %}
+        <section class="admin-panel p-4 mt-4">
+            <h2 class="h5 mb-3">Resultat</h2>
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <div class="admin-kpi-card p-3">
+                        <span class="text-white-50">Lignes importees</span>
+                        <strong class="d-block fs-4">{{ report.processed }}</strong>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="admin-kpi-card p-3">
+                        <span class="text-white-50">Lignes ignorees</span>
+                        <strong class="d-block fs-4">{{ report.skipped }}</strong>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="admin-kpi-card p-3">
+                        <span class="text-white-50">Erreurs</span>
+                        <strong class="d-block fs-4">{{ report.errors|length }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            {% if report.errors %}
+                <div class="table-responsive mt-4">
+                    <table class="table table-dark table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Ligne</th>
+                                <th>Erreur</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for error in report.errors %}
+                                <tr>
+                                    <td>#{{ error.row }}</td>
+                                    <td>{{ error.message }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </section>
+    {% endif %}
+{% endblock %}

@@ -19,7 +19,7 @@ class SumupService
         private readonly ?LoggerInterface $logger = null,
     ) {}
 
-    public function createHostedCheckout(float $amount, string $currency, string $reference, string $description): array
+    public function createHostedCheckout(float $amount, string $currency, string $reference, string $description, ?string $returnUrl = null): array
     {
         if (!$this->apiKey) {
             return [
@@ -44,7 +44,7 @@ class SumupService
             'reference' => $reference,
             'merchant_code' => $this->merchantCode,
             'key_mode' => $keyMode,
-            'has_return_url' => trim((string) $this->returnUrl) !== '',
+            'has_return_url' => trim((string) ($returnUrl ?? $this->returnUrl)) !== '',
             'has_webhook_url' => trim((string) $this->webhookUrl) !== '',
         ]);
 
@@ -55,7 +55,7 @@ class SumupService
             ]);
         }
 
-        $redirectUrl = trim((string) $this->returnUrl);
+        $redirectUrl = trim((string) ($returnUrl ?? $this->returnUrl));
         if ($redirectUrl !== '') {
             $sep = str_contains($redirectUrl, '?') ? '&' : '?';
             $redirectUrl .= $sep . 'ref=' . rawurlencode($reference);

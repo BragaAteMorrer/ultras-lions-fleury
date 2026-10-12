@@ -32,7 +32,7 @@
                         {% endif %}
 
                         {% if chant.lyrics %}
-                            <p>{{ chant.lyrics|e|nl2br }}</p>
+                            <div class="rich-content">{{ chant.lyrics|raw }}</div>
                         {% endif %}
                     </div>
                 </div>

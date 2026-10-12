@@ -22,6 +22,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
+    #[ORM\Column(name: 'is_verified', options: ['default' => false])]
+    private bool $verified = false;
+
     /**
      * Champ non persisté, utilisé pour saisir un nouveau mot de passe
      */
@@ -130,6 +133,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function isVerified(): bool
+    {
+        return $this->verified;
+    }
+
+    public function setVerified(bool $verified): self
+    {
+        $this->verified = $verified;
+
+        return $this;
+    }
+
     public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
@@ -182,10 +197,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isResetPasswordTokenValid(string $token): bool
     {
-        return $this->resetPasswordToken !== null
-            && hash_equals($this->resetPasswordToken, $token)
-            && $this->resetPasswordTokenExpiresAt !== null
-            && $this->resetPasswordTokenExpiresAt > new \DateTimeImmutable();
+        if ($this->resetPasswordToken === null || $this->resetPasswordTokenExpiresAt === null) {
+            return false;
+        }
+
+        $hashedToken = hash('sha256', $token);
+
+        return $this->resetPasswordTokenExpiresAt > new \DateTimeImmutable()
+            && (
+                hash_equals($this->resetPasswordToken, $token)
+                || hash_equals($this->resetPasswordToken, $hashedToken)
+            );
     }
 
 

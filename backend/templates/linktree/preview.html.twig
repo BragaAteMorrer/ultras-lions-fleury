@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Apercu Linktree{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Apercu Linktree</h1>
+        {% if linktreePreview|default(false) %}
+            <p class="hero-subtitle">Mode previsualisation admin</p>
+        {% endif %}
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+        <article class="linktree-preview-card">
+            <div class="linktree-preview-card__head">
+                {% if link.icon %}
+                    <i class="bi bi-{{ link.icon }}" aria-hidden="true"></i>
+                {% endif %}
+                <div>
+                    <h2>{{ link.title }}</h2>
+                    {% if link.description %}
+                        <p>{{ link.description }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="linktree-preview-card__body">
+                <span>URL</span>
+                <strong>{{ link.url }}</strong>
+                <small>
+                    {{ link.enabled ? 'Actif' : 'Inactif' }}
+                    {% if link.featured %} - Lien principal{% endif %}
+                    {% if link.openInNewTab %} - Nouvel onglet{% endif %}
+                </small>
+            </div>
+        </article>
+    </div>
+</div>
+{% endblock %}

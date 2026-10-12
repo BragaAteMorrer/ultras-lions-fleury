@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Gadget;
+use App\Repository\MerchRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +14,8 @@ class HomeController extends AbstractController
 {
     #[Route('/', name: 'home')]
     public function index(
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        MerchRepository $merchRepository
     ): Response {
 
         // 1. Dernieres actualites (posts + evenements + photos de match)
@@ -59,7 +61,7 @@ class HomeController extends AbstractController
         // 2. Billetterie (3 prochains matchs visibles)
         $ticketRepo = $em->getRepository('App\\Entity\\Ticket');
         $isMember = $this->getUser() !== null;
-        $tickets = $ticketRepo->findPublicTickets(null, $isMember);
+        $tickets = $ticketRepo->findPublicTickets(null);
         $tickets = array_slice($tickets, 0, 3);
 
         // 3. Galeries
@@ -73,14 +75,7 @@ class HomeController extends AbstractController
             ->getResult();
 
         // 4. Merch
-        $merch = $em->createQueryBuilder()
-            ->select('m', 'img')
-            ->from('App\\Entity\\Merch', 'm')
-            ->leftJoin('m.image', 'img')
-            ->orderBy('m.id', 'DESC')
-            ->setMaxResults(3)
-            ->getQuery()
-            ->getResult();
+        $merch = array_slice($merchRepository->findVisibleForUser(null, $isMember), 0, 3);
 
         // 5. Groupe
         $group = $em->createQueryBuilder()
