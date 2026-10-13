@@ -17,3 +17,6 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+# Runtime media are persisted/backed up outside Git.
+/public/uploads/
