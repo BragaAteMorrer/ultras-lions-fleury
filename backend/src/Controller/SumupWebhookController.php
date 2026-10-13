@@ -17,6 +17,7 @@ use App\Service\DonationPaymentService;
 use App\Service\MailService;
 use App\Service\SumupService;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\LockMode;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -85,7 +86,20 @@ class SumupWebhookController extends AbstractController
             'status' => $status,
         ]);
 
-        if ($checkout->getType() === 'donation') {
+        // Serialize notifications for this checkout to avoid duplicate order writes.
+        return $em->wrapInTransaction(function () use (
+            $em, $checkout, $donationRepository, $donationPaymentService,
+            $cartageRegistrationRepository, $cartageProfileCreator,
+            $merchRepository, $ticketRepository, $userRepository,
+            $mailService, $logger, $details, $status
+        ): Response {
+            $em->lock($checkout, LockMode::PESSIMISTIC_WRITE);
+            $em->refresh($checkout);
+            if ($checkout->getType() !== 'donation' && $checkout->getProcessedAt() !== null) {
+                return new Response('ok', 200);
+            }
+
+            if ($checkout->getType() === 'donation') {
             $donation = $donationRepository->findOneBy(['paymentCheckout' => $checkout]);
             if (!$donation instanceof Donation) {
                 return new Response('ok', 200);
@@ -250,5 +264,6 @@ class SumupWebhookController extends AbstractController
         }
 
         return new Response('ok', 200);
+        });
     }
 }
