@@ -1,0 +1,40 @@
+name: Refresh vulnerable Composer lockfile
+on:
+  push:
+    branches:
+      - hardening/p1-p2-after-merge-20261013
+    paths:
+      - backend/composer.json
+      - .github/workflows/refresh-security-lock.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  refresh-lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: dom, gd, intl, mbstring, pdo_mysql, zip
+          coverage: none
+      - name: Upgrade dependencies and regenerate lock
+        working-directory: backend
+        run: composer update --with-all-dependencies --no-scripts --no-interaction --no-progress
+      - name: Confirm patched dependencies
+        working-directory: backend
+        run: |
+          composer validate --no-check-publish
+          composer audit --no-dev
+      - name: Commit resolved lockfile to security branch
+        run: |
+          if ! git diff --quiet -- backend/composer.lock; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add backend/composer.lock
+            git commit -m "security: refresh Composer lockfile to patched dependencies"
+            git push origin HEAD:hardening/p1-p2-after-merge-20261013
+          fi
