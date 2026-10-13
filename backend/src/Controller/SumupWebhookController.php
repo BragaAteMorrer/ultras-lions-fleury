@@ -68,7 +68,7 @@ class SumupWebhookController extends AbstractController
             $logger->error('SumUp checkout API rejected verification', ['checkout_id' => $checkoutId, 'status' => $details['_status'] ?? null]);
             return new Response('verification unavailable', 503);
         }
-        if ( (string) ($details['id'] ?? '') !== $checkoutId
+        if ((string) ($details['id'] ?? '') !== $checkoutId
             || (string) ($details['checkout_reference'] ?? '') !== (string) $checkout->getCheckoutReference()
             || !$sumupService->matchesMerchantCode((string) ($details['merchant_code'] ?? ''))
             || strtoupper((string) ($details['currency'] ?? '')) !== strtoupper($checkout->getCurrency())
@@ -91,15 +91,16 @@ class SumupWebhookController extends AbstractController
                 return new Response('ok', 200);
             }
 
+            $wasProcessed = $checkout->getProcessedAt() !== null;
             $result = $donationPaymentService->synchronizeFromGateway($donation, $checkout, $details);
-            if (($result['confirmed'] ?? false) === true) {
+            if (!$wasProcessed && ($result['confirmed'] ?? false) === true) {
                 $donationPaymentService->sendConfirmationMail($donation, $checkout);
             }
 
             return new Response('ok', 200);
         }
 
-        if ($status === 'PAID' || $status === 'SUCCESSFUL' || $status === 'COMPLETED') {
+        if ($status === 'PAID') {
             if ($checkout->getProcessedAt()) {
                 return new Response('ok', 200);
             }
@@ -244,7 +245,7 @@ class SumupWebhookController extends AbstractController
                     ]);
                 }
             }
-        } elseif ($status === 'FAILED' || $status === 'CANCELLED' || $status === 'EXPIRED') {
+        } elseif (in_array($status, ['FAILED', 'EXPIRED'], true)) {
             $checkout->setStatus('failed');
             $em->flush();
         }
