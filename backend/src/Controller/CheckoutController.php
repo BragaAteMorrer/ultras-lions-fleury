@@ -39,6 +39,9 @@ class CheckoutController extends AbstractController
 
         if ($ref !== '') {
             $checkout = $checkoutRepository->findOneBy(['checkoutReference' => $ref]);
+            if ($checkout && !$this->canReadReceipt($checkout, $request)) {
+                $checkout = null;
+            }
             if ($checkout) {
                 if ($checkout->getStatus() !== 'paid' && $checkout->getSumupCheckoutId()) {
                     $details = $sumupService->retrieveCheckout($checkout->getSumupCheckoutId());
