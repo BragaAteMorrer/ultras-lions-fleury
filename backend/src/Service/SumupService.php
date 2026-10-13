@@ -14,7 +14,6 @@ class SumupService
         private readonly ?string $apiKey,
         private readonly ?string $returnUrl,
         private readonly ?string $merchantCode = null,
-        private readonly ?string $webhookSecret = null,
         private readonly ?string $webhookUrl = null,
         private readonly ?LoggerInterface $logger = null,
     ) {}
@@ -233,18 +232,4 @@ class SumupService
         return is_array($data) ? $data : [];
     }
 
-    public function verifyWebhookSignature(string $payload, ?string $signature): bool
-    {
-        if (!$this->webhookSecret) {
-            return true;
-        }
-
-        if ($signature === null || $signature === '') {
-            return false;
-        }
-
-        $expected = hash_hmac('sha256', $payload, $this->webhookSecret);
-
-        return hash_equals($expected, $signature);
-    }
 }
