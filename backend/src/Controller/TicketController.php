@@ -310,6 +310,7 @@ class TicketController extends AbstractController
         }
 
         $reference = strtoupper(bin2hex(random_bytes(6)));
+        $session->set('checkout_receipt_reference', $reference);
 
         $checkout = new PaymentCheckout();
         $checkout->setType('ticket')
@@ -423,6 +424,7 @@ class TicketController extends AbstractController
         }
 
         $reference = strtoupper(bin2hex(random_bytes(6)));
+        $session->set('checkout_receipt_reference', $reference);
 
         $checkout = new PaymentCheckout();
         $checkout->setType('ticket')
