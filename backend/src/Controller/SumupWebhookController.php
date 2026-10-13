@@ -64,8 +64,13 @@ class SumupWebhookController extends AbstractController
             $logger->error('SumUp checkout verification unavailable', ['checkout_id' => $checkoutId, 'exception' => $exception->getMessage()]);
             return new Response('verification unavailable', 503);
         }
-        if (isset($details['_error']) || (string) ($details['id'] ?? '') !== $checkoutId
+        if (isset($details['_error'])) {
+            $logger->error('SumUp checkout API rejected verification', ['checkout_id' => $checkoutId, 'status' => $details['_status'] ?? null]);
+            return new Response('verification unavailable', 503);
+        }
+        if ( (string) ($details['id'] ?? '') !== $checkoutId
             || (string) ($details['checkout_reference'] ?? '') !== (string) $checkout->getCheckoutReference()
+            || !$sumupService->matchesMerchantCode((string) ($details['merchant_code'] ?? ''))
             || strtoupper((string) ($details['currency'] ?? '')) !== strtoupper($checkout->getCurrency())
             || !isset($details['amount'])
             || !is_numeric($details['amount'])
