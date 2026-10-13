@@ -18,6 +18,11 @@ class SumupService
         private readonly ?LoggerInterface $logger = null,
     ) {}
 
+    public function matchesMerchantCode(string $merchantCode): bool
+    {
+        return $this->merchantCode !== null && $this->merchantCode !== '' && hash_equals($this->merchantCode, $merchantCode);
+    }
+
     public function createHostedCheckout(float $amount, string $currency, string $reference, string $description, ?string $returnUrl = null): array
     {
         if (!$this->apiKey) {
