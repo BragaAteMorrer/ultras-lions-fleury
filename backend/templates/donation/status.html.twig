@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ statusTitle|default('donation.status.title'|trans) }}{% endblock %}
+
+{% block body %}
+    <section class="hero donation-hero donation-hero--status">
+        <div class="hero-content donation-hero-content">
+            <span class="hero-kicker">{{ 'donation.status.kicker'|trans }}</span>
+            <h1 class="hero-title">{{ statusTitle|default('donation.status.title'|trans) }}</h1>
+            <p class="hero-subtitle">{{ statusMessage|default('donation.status.message'|trans) }}</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container content-shell-lg">
+            <div class="donation-result-card">
+                {% if donation %}
+                    <dl class="donation-result-grid">
+                        <div>
+                            <dt>{{ 'donation.thankyou.reference'|trans }}</dt>
+                            <dd>{{ checkout.checkoutReference ?? donation.paymentReference }}</dd>
+                        </div>
+                        <div>
+                            <dt>{{ 'donation.thankyou.amount'|trans }}</dt>
+                            <dd>{{ donation.amount|number_format(2, ',', ' ') }} {{ donation.currency }}</dd>
+                        </div>
+                        <div>
+                            <dt>{{ 'donation.thankyou.status'|trans }}</dt>
+                            <dd>{{ donation.statusTranslationKey|trans }}</dd>
+                        </div>
+                    </dl>
+                {% endif %}
+
+                <div class="donation-result-actions">
+                    <a href="{{ retryUrl|default(path('donation_index')) }}" class="btn btn-danger">{{ 'donation.status.retry'|trans }}</a>
+                    <a href="{{ homeUrl|default(path('home')) }}" class="btn btn-outline-light">{{ 'donation.status.back_home'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

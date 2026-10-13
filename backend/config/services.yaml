@@ -1,3 +1,8 @@
+parameters:
+    app.donation_preset_amounts: [5, 10, 20, 50, 100]
+    app.donation_min_amount: 5
+    app.donation_max_amount: 5000
+
 services:
     _defaults:
         autowire: true
@@ -9,8 +14,28 @@ services:
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
+            - '../src/Security/EmailVerifier.php'
             - '../src/Kernel.php'
 
     App\Controller\:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
+
+    App\Service\SumupService:
+        arguments:
+            $apiKey: '%env(default::SUMUP_API_KEY)%'
+            $returnUrl: '%env(default::SUMUP_RETURN_URL)%'
+            $merchantCode: '%env(default::SUMUP_MERCHANT_CODE)%'
+            $webhookSecret: '%env(default::SUMUP_WEBHOOK_SECRET)%'
+            $webhookUrl: '%env(default::SUMUP_WEBHOOK_URL)%'
+
+    App\Service\MailService:
+        arguments:
+            $fromEmail: '%env(MAILER_FROM)%'
+
+    App\Service\DonationConfig:
+        arguments:
+            $presetAmounts: '%app.donation_preset_amounts%'
+            $minimumAmount: '%app.donation_min_amount%'
+            $maximumAmount: '%app.donation_max_amount%'
+            $currency: 'EUR'

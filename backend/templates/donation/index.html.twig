@@ -1,0 +1,157 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'donation.page.title'|trans }}{% endblock %}
+
+{% block body %}
+    {% set selectedAmountChoice = form.amountChoice.vars.value|default('') %}
+    {% set customAmountSelected = selectedAmountChoice == 'custom' %}
+
+    <section class="hero merch-hero donation-hero">
+        <div class="hero-content merch-hero-content donation-hero-content">
+            <div class="merch-hero-copy donation-hero-copy">
+                <span class="merch-hero-kicker">{{ 'donation.page.kicker'|trans }}</span>
+                <h1 class="hero-title">{{ 'donation.page.title'|trans }}</h1>
+                <p class="hero-subtitle">{{ 'donation.page.subtitle'|trans }}</p>
+
+                <div class="merch-hero-actions donation-hero-actions">
+                    <a href="#donation-form" class="btn-ul donation-hero-cta">Faire un don</a>
+                </div>
+            </div>
+
+            <div class="merch-hero-stats donation-hero-stats">
+                <div class="merch-stat">
+                    <strong>{{ minimumAmount|number_format(2, ',', ' ') }} {{ currency }}</strong>
+                    <span>{{ 'donation.page.minimum_note'|trans }}</span>
+                </div>
+                <div class="merch-stat">
+                    <strong>{{ presetAmounts|length }}</strong>
+                    <span>{{ 'donation.page.preset_count'|trans }}</span>
+                </div>
+                <div class="merch-stat">
+                    <strong>{{ currency }}</strong>
+                    <span>{{ 'donation.page.currency_note'|trans }}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section donation-section">
+        <div class="container donation-layout">
+            <aside class="donation-info-panel">
+                <div class="donation-copy-header">
+                    <h2 class="section-title donation-panel-title">{{ 'donation.page.support_title'|trans }}</h2>
+                    <p class="donation-panel-text">{{ 'donation.page.support_text'|trans }}</p>
+                </div>
+
+
+                <div class="donation-benefits-list">
+                    <article class="donation-benefit-card">
+                        <span class="donation-benefit-icon" aria-hidden="true"><i class="bi bi-truck"></i></span>
+                        <p>{{ 'donation.page.benefit_1'|trans }}</p>
+                    </article>
+                    <article class="donation-benefit-card">
+                        <span class="donation-benefit-icon" aria-hidden="true"><i class="bi bi-people-fill"></i></span>
+                        <p>{{ 'donation.page.benefit_2'|trans }}</p>
+                    </article>
+                </div>
+
+                <div class="donation-note">
+                    <span class="donation-note-icon" aria-hidden="true"><i class="bi bi-shield-check"></i></span>
+                    <div class="donation-note-copy">
+                        <strong>{{ 'cart_index.html.paiement_securise_sumup'|trans }}</strong>
+                        <span>{{ 'donation.page.security_note'|trans }}</span>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="donation-form-shell" id="donation-form">
+                <div class="donation-form-head">
+                    <p class="donation-copy-kicker">{{ resumeDonation ? 'donation.page.resume_title'|trans }}</p>
+                    <h2>{{ resumeDonation ? 'donation.page.resume_heading'|trans : 'donation.page.form_heading'|trans }}</h2>
+                    <p class="donation-form-intro">Le paiement passe par SumUp. Le formulaire peut être repris si tu as interrompu ta demande.</p>
+                </div>
+
+                {{ form_start(form, { attr: { class: 'donation-form', id: 'donation-form-form', novalidate: 'novalidate' } }) }}
+                    {{ form_errors(form) }}
+
+                    <fieldset class="donation-amount-fieldset">
+                        <legend class="donation-field-label">{{ 'donation.form.amount_choice'|trans }}</legend>
+
+                        <div class="donation-amount-grid" role="radiogroup" aria-label="{{ 'donation.form.amount_choice'|trans }}">
+                            {% for choice in form.amountChoice %}
+                                {% set choiceSelected = choice.vars.checked %}
+                                <label class="donation-amount-option {{ choiceSelected ? 'is-selected' : '' }}" data-donation-amount-option>
+                                    {{ form_widget(choice, { attr: { class: 'donation-amount-input', 'data-donation-choice-input': '1' } }) }}
+                                    <span class="donation-amount-card">
+                                        <span class="donation-amount-value">{{ choice.vars.label }}</span>
+                                    </span>
+                                </label>
+                            {% endfor %}
+                        </div>
+
+                        {{ form_errors(form.amountChoice) }}
+                    </fieldset>
+
+                    <div class="donation-custom-amount {{ customAmountSelected ? 'is-selected' : '' }}" data-donation-custom-amount>
+                        <div class="donation-field-head">
+                            <label class="donation-field-label" for="{{ form.customAmount.vars.id }}">{{ 'donation.form.custom_amount'|trans }}</label>
+                        </div>
+
+                        <div class="input-group input-group-lg donation-custom-amount__field">
+                            {{ form_widget(form.customAmount, { attr: { class: 'form-control donation-custom-amount-input', 'data-donation-custom-input': '1', 'aria-describedby': form.customAmount.vars.id ~ '-help' } }) }}
+                            <span class="input-group-text donation-custom-amount-suffix">{{ currency }}</span>
+                        </div>
+
+                        <p class="form-text donation-helper" id="{{ form.customAmount.vars.id }}-help">
+                            {{ 'donation.form.custom_amount_hint'|trans({ '%min%': minimumAmount|number_format(2, ',', ' '), '%max%': maximumAmount is not null ? maximumAmount|number_format(2, ',', ' ') : 'sans limite' }) }}
+                        </p>
+                        {{ form_errors(form.customAmount) }}
+                    </div>
+
+                    <div class="donation-grid donation-grid--two">
+                        <div class="donation-field">
+                            {{ form_label(form.firstName) }}
+                            {{ form_widget(form.firstName, { attr: { class: 'form-control donation-control' } }) }}
+                            {{ form_errors(form.firstName) }}
+                        </div>
+                        <div class="donation-field">
+                            {{ form_label(form.lastName) }}
+                            {{ form_widget(form.lastName, { attr: { class: 'form-control donation-control' } }) }}
+                            {{ form_errors(form.lastName) }}
+                        </div>
+                    </div>
+
+                    <div class="donation-grid donation-grid--two donation-grid--email">
+                        <div class="donation-field">
+                            {{ form_label(form.email) }}
+                            {{ form_widget(form.email, { attr: { class: 'form-control donation-control' } }) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+                        <div class="donation-field donation-field--checkbox">
+                            <div class="donation-anonymous-card {{ form.anonymous.vars.checked ? 'is-selected' : '' }}">
+                                {{ form_widget(form.anonymous, { attr: { class: 'form-check-input donation-anonymous-input' } }) }}
+                                <div class="donation-anonymous-copy">
+                                    {{ form_label(form.anonymous, null, { label_attr: { class: 'donation-anonymous-label' } }) }}
+                                </div>
+                            </div>
+                            {{ form_errors(form.anonymous) }}
+                        </div>
+                    </div>
+
+                    <div class="donation-field donation-field--full">
+                        {{ form_label(form.message) }}
+                        {{ form_widget(form.message, { attr: { class: 'form-control donation-control donation-message-input' } }) }}
+                        {{ form_errors(form.message) }}
+                    </div>
+
+                    {{ form_widget(form.submissionToken) }}
+                    {{ form_rest(form) }}
+
+                    <button class="btn btn-danger btn-lg w-100 donation-submit" type="submit">
+                        {{ 'donation.form.submit'|trans }}
+                    </button>
+                {{ form_end(form, { render_rest: false }) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,68 +1,367 @@
-{% extends '@EasyAdmin/page/content.html.twig' %}
+﻿{% extends 'admin/layout.html.twig' %}
 
-{% block title %}{{ 'admin_dashboard.html.ultras_lions_fc_fleury_91_page_admin'|trans }}{% endblock %}
+{% block title %}Admin - Tableau de bord{% endblock %}
+{% block admin_title %}Tableau de bord{% endblock %}
 
-{% block content %}
-
-<h1 class="admin-title">🔥 {{ 'admin_dashboard.html.ultras_lions_dashboard'|trans }}</h1>
-
-<div class="stats-grid">
-    <div class="stat-card">
-        <h3>{{ 'admin_dashboard.html.articles'|trans }}</h3>
-        <p class="stat-number">{{ stats.posts }}</p>
+{% block admin_actions %}
+    <div class="admin-period-switch" role="toolbar" aria-label="Période de statistiques">
+        {% for key, label in {
+            '7d': '7 jours',
+            '30d': '30 jours',
+            'month': 'Ce mois',
+            'year': 'Cette année'
+        } %}
+            <a class="btn btn-sm {{ dashboard.period.key == key ? 'btn-danger' : 'btn-outline-light' }}" href="{{ path('app_admin_dashboard_index', { period: key }) }}">
+                {{ label }}
+            </a>
+        {% endfor %}
     </div>
-
-    <div class="stat-card">
-        <h3>{{ 'admin_dashboard.html.evenements'|trans }}</h3>
-        <p class="stat-number">{{ stats.events }}</p>
-    </div>
-
-    <div class="stat-card">
-        <h3>{{ 'admin_dashboard.html.galeries'|trans }}</h3>
-        <p class="stat-number">{{ stats.galleries }}</p>
-    </div>
-
-    <div class="stat-card">
-        <h3>{{ 'admin_dashboard.html.medias'|trans }}</h3>
-        <p class="stat-number">{{ stats.media }}</p>
-    </div>
-
-    <div class="stat-card">
-        <h3>{{ 'admin_dashboard.html.visites'|trans }}</h3>
-        <p class="stat-number">{{ stats.visits }}</p>
-    </div>
-</div>
-
-<hr class="divider">
-
-<h2 class="section-title">📈 {{ 'admin_dashboard.html.evolution_des_articles'|trans }}</h2>
-
-<canvas id="postsChart"
-        height="80"
-        data-labels='{{ chartData|map(d => d.month)|json_encode }}'
-        data-values='{{ chartData|map(d => d.total)|json_encode }}'>
-</canvas>
-
-<hr class="divider">
-
-<h2 class="section-title">📰 {{ 'admin_dashboard.html.derniers_articles_publies'|trans }}</h2>
-
-<div class="latest-posts">
-    {% for post in lastPosts %}
-        <div class="latest-post-card">
-            <h4>{{ post.title }}</h4>
-            <p class="small">{{ post.createdAt|date('d/m/Y') }}</p>
-        </div>
-    {% else %}
-        <p>{{ 'admin_dashboard.html.aucun_article_pour_le_moment'|trans }}</p>
-    {% endfor %}
-</div>
-
 {% endblock %}
 
-{% block body_javascript %}
-    {{ parent() }}
+{% block body %}
+    {% set summary = dashboard.summary|default({}) %}
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ asset('js/dashboard.js') }}" defer></script>
+    <div class="admin-dashboard">
+        <section class="admin-hero admin-dashboard-hero">
+            <div class="admin-hero-copy">
+                <p class="admin-kicker">Synthèse d'administration</p>
+                <h2>Lecture de l'activité</h2>
+                <p>
+                    Vision consolidée des visites, du chiffre d'affaires et des actions à traiter. Les tuiles ci-dessous sont calculées à partir des vraies données du projet.
+                </p>
+
+                <div class="admin-dashboard-hero__meta">
+                    <span class="admin-page-pill">{{ dashboard.period.label }}</span>
+                    <span class="admin-page-pill">Comparaison {{ dashboard.period.comparison }}</span>
+                    <span class="admin-page-pill">Mise à jour serveur</span>
+                </div>
+            </div>
+
+            <div class="admin-dashboard-hero__aside">
+                <article class="admin-dashboard-hero-card">
+                    <span>à confirmer aujourd'hui</span>
+                    <strong>{{ summary.merchToConfirm|default(0) }}</strong>
+                    <small>commandes merch</small>
+                </article>
+                <article class="admin-dashboard-hero-card">
+                    <span>Paiements en attente</span>
+                    <strong>{{ summary.pendingCheckouts|default(0) }}</strong>
+                    <small>transactions à vérifier</small>
+                </article>
+                <article class="admin-dashboard-hero-card">
+                    <span>CA du jour</span>
+                    <strong>{{ summary.revenueToday|default(0)|number_format(2, ',', ' ') }} EUR</strong>
+                    <small>commande(s) réelles</small>
+                </article>
+                <article class="admin-dashboard-hero-card">
+                    <span>Dons du jour</span>
+                    <strong>{{ summary.donationRevenueToday|default(0)|number_format(2, ',', ' ') }} EUR</strong>
+                    <small>{{ summary.donationsToday|default(0) }} don(s)</small>
+                </article>
+            </div>
+        </section>
+
+        <section class="admin-kpi-grid">
+            {% for kpi in dashboard.kpis|default([]) %}
+                <article class="admin-stat-card admin-stat-card--kpi">
+                    <span class="admin-stat-label">{{ kpi.label }}</span>
+                    <strong class="admin-stat-value">
+                        {% if kpi.formatted is defined %}
+                            {{ kpi.formatted }}
+                        {% else %}
+                            {{ kpi.value|default(0) }}
+                        {% endif %}
+                    </strong>
+                    {% if kpi.trend is defined %}
+                        <span class="admin-stat-meta admin-stat-meta--{{ kpi.trend.tone }}">
+                            <i class="bi bi-arrow-{{ kpi.trend.direction == 'down' ? 'down' : 'up' }}" aria-hidden="true"></i>
+                            {{ kpi.trend.label }} {{ dashboard.period.comparison }}
+                        </span>
+                    {% else %}
+                        <span class="admin-stat-meta">{{ kpi.help|default('') }}</span>
+                    {% endif %}
+                </article>
+            {% endfor %}
+        </section>
+
+        <section class="admin-dashboard-grid">
+            <div class="admin-panel">
+                <div class="admin-panel-head">
+                    <div>
+                        <p class="admin-kicker">à traiter</p>
+                        <h2>Actions immédiates</h2>
+                    </div>
+                    <span class="admin-count">{{ dashboard.queues|length }} alerte(s)</span>
+                </div>
+
+                <div class="admin-queue-grid">
+                    {% for queue in dashboard.queues|default([]) %}
+                        {% if queue.state is defined %}
+                            {% set queueUrl = path('custom_admin_crud_index', { resource: 'commandes-merch', state: queue.state }) %}
+                        {% elseif queue.resource is defined %}
+                            {% set queueUrl = path('custom_admin_crud_index', { resource: queue.resource }) %}
+                        {% else %}
+                            {% set queueUrl = path('app_admin_dashboard_index') %}
+                        {% endif %}
+
+                        <a class="admin-queue-card admin-queue-card--{{ queue.tone|default('neutral') }}" href="{{ queueUrl }}">
+                            <span>{{ queue.label }}</span>
+                            <strong>{{ queue.value|default(0) }}</strong>
+                            <small>{{ queue.summary|default('') }}</small>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="admin-panel">
+                <div class="admin-panel-head">
+                    <div>
+                        <p class="admin-kicker">Activité</p>
+                        <h2>Visites et commandes</h2>
+                    </div>
+                    <span class="admin-count">{{ dashboard.charts.visits.series|length }} point(s)</span>
+                </div>
+
+                <div class="admin-chart-stack">
+                    {% for chart in [dashboard.charts.visits, dashboard.charts.revenue, dashboard.charts.fundraising, dashboard.charts.orders, dashboard.charts.donations] %}
+                        <article class="admin-chart-card">
+                            <div class="admin-chart-card__head">
+                                <div>
+                                    <h3>{{ chart.label }}</h3>
+                                    <p>{{ dashboard.period.label }}</p>
+                                </div>
+                                <strong>{{ chart.max|default(1)|number_format(0, ',', ' ') }}</strong>
+                            </div>
+
+                            <div class="admin-chart-bars">
+                                {% for point in chart.series|default([]) %}
+                                    {% set height = chart.max > 0 ? ((point.value / chart.max) * 100) : 0 %}
+                                    {% set isMoneyChart = chart.label == "Chiffre d'affaires" or chart.label starts with 'CA' %}
+                                    {% set valueLabel = isMoneyChart ? (point.value|number_format(2, ',', ' ') ~ ' EUR') : (point.value|number_format(0, ',', ' ')) %}
+                                    {% set labelEvery = chart.series|length > 21 ? 4 : (chart.series|length > 14 ? 3 : 1) %}
+                                    {% set showLabel = loop.first or loop.last or (loop.index0 % labelEvery == 0) %}
+                                    <div class="admin-chart-bar" title="{{ point.label }} - {{ point.value|number_format(0, ',', ' ') }}">
+                                        <span class="admin-chart-bar__value">{{ valueLabel }}</span>
+                                        <span style="height: {{ height|round(0, 'floor') }}%;"></span>
+                                        <small class="admin-chart-bar__label {{ showLabel ? '' : 'is-muted' }}">{{ point.label }}</small>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section class="admin-dashboard-grid admin-dashboard-grid--secondary">
+            <div class="admin-panel">
+                <div class="admin-panel-head">
+                    <div>
+                        <p class="admin-kicker">Top ventes</p>
+                        <h2>Produits et matchs</h2>
+                    </div>
+                </div>
+
+                <div class="admin-top-list">
+                    <div class="admin-top-list__section">
+                        <h3>Merch</h3>
+                        {% for item in dashboard.topMerch|default([]) %}
+                            <article class="admin-top-item">
+                                <div>
+                                    <strong>{{ item.label }}</strong>
+                                    <small>{{ item.quantity }} article(s)</small>
+                                </div>
+                                <span>{{ item.revenue|number_format(2, ',', ' ') }} EUR</span>
+                            </article>
+                        {% else %}
+                            <p class="admin-empty-state">Aucune vente merch sur la période.</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="admin-top-list__section">
+                        <h3>Billetterie</h3>
+                        {% for item in dashboard.topTickets|default([]) %}
+                            <article class="admin-top-item">
+                                <div>
+                                    <strong>{{ item.label }}</strong>
+                                    <small>{{ item.quantity }} billet(s)</small>
+                                </div>
+                                <span>{{ item.revenue|number_format(2, ',', ' ') }} EUR</span>
+                            </article>
+                        {% else %}
+                            <p class="admin-empty-state">Aucune vente billet sur la période.</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="admin-top-list__section">
+                        <h3>Dons</h3>
+                        {% for item in dashboard.topDonations|default([]) %}
+                            <article class="admin-top-item">
+                                <div>
+                                    <strong>{{ item.label }}</strong>
+                                    <small>
+                                        {% if item.date %}
+                                            {{ item.date|date('d/m/Y H:i') }}
+                                        {% else %}
+                                            Don validé
+                                        {% endif %}
+                                        {% if item.status is defined %}
+                                            • {{ item.status|trans }}
+                                        {% endif %}
+                                    </small>
+                                </div>
+                                <span>{{ item.formatted }}</span>
+                            </article>
+                        {% else %}
+                            <p class="admin-empty-state">Aucun don sur la période.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="admin-match-breakdown">
+                <div class="admin-panel-head">
+                        <div>
+                            <p class="admin-kicker">Billetterie</p>
+                            <h2>Détail par match</h2>
+                        </div>
+                        <span class="admin-count">{{ dashboard.ticketMatches|length }} match(s)</span>
+                    </div>
+
+                    <div class="admin-match-breakdown__list">
+                        {% for match in dashboard.ticketMatches|default([]) %}
+                            <article class="admin-match-breakdown-card">
+                                <div class="admin-match-breakdown-card__meta">
+                                    <strong>{{ match.label }}</strong>
+                                    <small>
+                                        {{ match.opponent }}
+                                        {% if match.matchDate %}
+                                            â€¢ {{ match.matchDate }}
+                                        {% endif %}
+                                    </small>
+                                </div>
+
+                                <div class="admin-match-breakdown-card__stats">
+                                    <span>
+                                        <strong>{{ match.quantity }}</strong>
+                                        <small>billet(s)</small>
+                                    </span>
+                                    <span>
+                                        <strong>{{ match.orders }}</strong>
+                                        <small>commande(s)</small>
+                                    </span>
+                                    <span>
+                                        <strong>{{ match.revenue|number_format(2, ',', ' ') }} EUR</strong>
+                                        <small>CA</small>
+                                    </span>
+                                </div>
+                            </article>
+                        {% else %}
+                            <p class="admin-empty-state">Aucun détail match sur la période.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-panel">
+                <div class="admin-panel-head">
+                    <div>
+                        <p class="admin-kicker">Stocks</p>
+                        <h2>Alertes faibles</h2>
+                    </div>
+                </div>
+
+                <div class="admin-low-stock-list">
+                    {% for stock in dashboard.lowStock|default([]) %}
+                        <article class="admin-low-stock-item">
+                            <div>
+                                <strong>{{ stock.title }}</strong>
+                                <small>Taille {{ stock.size }}</small>
+                            </div>
+                            <span class="admin-badge admin-badge-warning">{{ stock.quantity }} restant(s)</span>
+                        </article>
+                    {% else %}
+                        <p class="admin-empty-state">Aucun stock faible détecté.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section class="admin-dashboard-grid admin-dashboard-grid--secondary">
+            <div class="admin-panel">
+                <div class="admin-panel-head">
+                    <div>
+                        <p class="admin-kicker">Activité récente</p>
+                        <h2>Chronologie</h2>
+                    </div>
+                </div>
+
+                <div class="admin-timeline">
+                    {% for item in dashboard.activity|default([]) %}
+                        <article class="admin-timeline-item">
+                            <span class="admin-timeline-item__dot admin-timeline-item__dot--{{ item.tone|default('neutral') }}"></span>
+                            <div>
+                                <strong>{{ item.label }}</strong>
+                                <p>{{ item.title }}</p>
+                                <small>
+                                    {% if item.date %}
+                                        {{ item.date|date('d/m/Y H:i') }}
+                                    {% endif %}
+                                    {% if item.meta is defined %}
+                                        â€¢ {{ item.meta }}
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </article>
+                    {% else %}
+                        <p class="admin-empty-state">Aucune activité récente détectée.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="admin-panel">
+                <div class="admin-panel-head">
+                    <div>
+                        <p class="admin-kicker">Contenu et événements</p>
+                        <h2>Dernières mises à jour</h2>
+                    </div>
+                </div>
+
+                <div class="admin-dual-list">
+                    <section>
+                        <h3>Articles récents</h3>
+                        <div class="admin-post-list">
+                            {% for post in lastPosts|default([]) %}
+                                <a class="admin-post-card admin-post-card--link" href="{{ path('post_show', { slug: post.slug }) }}">
+                                    <div>
+                                        <h3>{{ post.title }}</h3>
+                                        <p>{{ post.createdAt ? post.createdAt|date('d/m/Y H:i') : '' }}</p>
+                                    </div>
+                                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                </a>
+                            {% else %}
+                                <p class="admin-empty-state">Aucun article récent.</p>
+                            {% endfor %}
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3>Événements à venir</h3>
+                        <div class="admin-event-list">
+                            {% for event in upcomingEvents|default([]) %}
+                                <a class="admin-event-card" href="{{ path('event_show', { id: event.id }) }}">
+                                    <div>
+                                        <strong>{{ event.title }}</strong>
+                                        <p>{{ event.date ? event.date|date('d/m/Y H:i') : 'Date non renseignée' }}</p>
+                                    </div>
+                                    <span class="admin-badge">{{ event.matchLocation ?: 'événement' }}</span>
+                                </a>
+                            {% else %}
+                                <p class="admin-empty-state">Aucun événement à venir.</p>
+                            {% endfor %}
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </section>
+    </div>
 {% endblock %}

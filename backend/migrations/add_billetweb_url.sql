@@ -1,0 +1,2 @@
+ALTER TABLE ticket
+ADD billetweb_url VARCHAR(2048) DEFAULT NULL;

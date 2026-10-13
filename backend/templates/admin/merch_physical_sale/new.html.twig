@@ -1,0 +1,70 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Vente physique merch{% endblock %}
+{% block admin_kicker %}Boutique{% endblock %}
+{% block admin_title %}Vente physique merch{% endblock %}
+{% block admin_actions %}
+    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', {resource: 'commandes-merch'}) }}">Commandes merch</a>
+    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', {resource: 'stocks-merch'}) }}">Stocks merch</a>
+{% endblock %}
+
+{% block body %}
+    <div class="row g-4">
+        <div class="col-12 col-xl-7">
+            <section class="admin-panel p-4">
+                <div class="mb-4">
+                    <h2 class="h4 mb-2">Enregistrer une vente physique</h2>
+                    <p class="text-white-50 mb-0">
+                        Le site reste la source de verite pour le stock. Cette action decremente le stock local et cree une commande merch executee.
+                    </p>
+                </div>
+
+                {{ form_start(form) }}
+                <div class="row g-3">
+                    <div class="col-12">
+                        {{ form_row(form.merch) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_row(form.size) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_row(form.quantity) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_row(form.paymentMethod) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.useMemberPrice) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.sumupReference) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.note) }}
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button class="btn btn-danger" type="submit">
+                        <i class="bi bi-cash-coin me-1" aria-hidden="true"></i>
+                        Enregistrer la vente
+                    </button>
+                    <a class="btn btn-outline-light" href="{{ path('custom_admin_crud_index', {resource: 'commandes-merch'}) }}">Annuler</a>
+                </div>
+                {{ form_end(form) }}
+            </section>
+        </div>
+
+        <div class="col-12 col-xl-5">
+            <section class="admin-panel p-4 h-100">
+                <h2 class="h5 mb-3">Mode d'emploi</h2>
+                <ul class="text-white-50 mb-0 ps-3">
+                    <li>Selectionne le produit, la taille et la quantite vendue.</li>
+                    <li>Indique SumUp comme moyen de paiement pour les ventes encaissees au stand.</li>
+                    <li>Renseigne la reference SumUp si tu veux conserver un audit plus precis.</li>
+                    <li>La commande est creee comme executee, sans passer par le checkout en ligne.</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+{% endblock %}

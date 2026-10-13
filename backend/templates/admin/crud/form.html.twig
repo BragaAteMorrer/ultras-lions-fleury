@@ -1,0 +1,2679 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Admin - {{ mode == 'new' ? 'Nouveau' : 'Modifier' }} {{ config.singular }}{% endblock %}
+{% block admin_title %}{{ mode == 'new' ? 'Nouveau' : 'Modifier' }} {{ config.singular }}{% endblock %}
+
+{% block admin_actions %}
+    {% if resource in ['pages', 'articles', 'chants', 'groupe', 'evenements', 'linktree', 'medias'] %}
+        <button class="btn btn-outline-light btn-sm" type="button" data-page-preview-trigger>
+            Previsualiser
+        </button>
+    {% else %}
+        <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+            Retour
+        </a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {% if resource in ['pages', 'articles'] %}
+        {% set isPageResource = resource == 'pages' %}
+        {% if isPageResource %}
+            {% set pageUrlTemplate = url('page_show', { slug: '__slug__' }) %}
+            {% set previewUrl = path('custom_admin_page_preview') %}
+            {% set previewToken = csrf_token('page_preview') %}
+            {% set resourcePlural = 'pages' %}
+            {% set resourceSingular = 'page' %}
+            {% set createLabel = 'Creer une page' %}
+            {% set editLabel = 'Modifier la page' %}
+            {% set contentTitle = 'Editeur visuel' %}
+            {% set submitLabel = 'Enregistrer la page' %}
+            {% set defaultSlug = 'reglement-interieur' %}
+        {% else %}
+            {% set pageUrlTemplate = url('post_show', { slug: '__slug__' }) %}
+            {% set previewUrl = path('custom_admin_post_preview') %}
+            {% set previewToken = csrf_token('post_preview') %}
+            {% set resourcePlural = 'articles' %}
+            {% set resourceSingular = 'article' %}
+            {% set createLabel = 'Creer un article' %}
+            {% set editLabel = 'Modifier un article' %}
+            {% set contentTitle = 'Editeur visuel' %}
+            {% set submitLabel = 'Enregistrer un article' %}
+            {% set defaultSlug = 'actualite' %}
+        {% endif %}
+        {% set selectedMediaValue = form.image.vars.value|default('') %}
+        {% set selectedMediaLabel = item.image ? (item.image.alt ?: item.image.path) : 'Aucune image principale' %}
+
+        <section
+            class="admin-page-editor"
+            data-page-editor="1"
+            data-page-url-template="{{ pageUrlTemplate|e('html_attr') }}"
+            data-page-slug-default="{{ defaultSlug|e('html_attr') }}"
+            data-page-title-default="{{ isPageResource ? 'Titre de la page' : 'Titre article' }}"
+            data-preview-url="{{ previewUrl }}"
+            data-preview-token="{{ previewToken }}"
+        >
+            <div class="admin-page-editor__banner">
+                <div class="admin-page-editor__banner-copy">
+                    <p class="admin-kicker">Gestion des {{ resourcePlural }}</p>
+                    <h2>{{ mode == 'new' ? createLabel : editLabel }}</h2>
+                    <div class="admin-page-editor__banner-meta">
+                        <span class="admin-page-pill">Slug auto</span>
+                        <span class="admin-page-pill">Mediatheque</span>
+                        <span class="admin-page-pill">{{ 'admin.crud.preview_admin'|trans }}</span>
+                    </div>
+                </div>
+
+                <div class="admin-page-editor__banner-actions">
+                    <button class="btn btn-outline-light btn-sm" type="button" data-page-preview-trigger>
+                        Previsualiser
+                    </button>
+                    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                        Retour a la liste
+                    </a>
+                </div>
+            </div>
+
+            {{ form_start(form, { attr: { class: 'admin-page-form', 'data-page-form': '1', novalidate: 'novalidate' } }) }}
+                {{ form_errors(form) }}
+
+                <div class="admin-page-editor__summary-grid{% if not isPageResource %} admin-page-summary-grid--article{% endif %}">
+                    <article class="admin-page-summary">
+                        <span>Adresse</span>
+                        <strong data-page-url-preview>{{ isPageResource ? url('page_show', { slug: item.slug ?: defaultSlug }) : url('post_show', { slug: item.slug ?: defaultSlug }) }}</strong>
+                        <small>La zone de saisie du slug pilote cette adresse.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Contenu</span>
+                        <strong data-page-content-stats>0 mot</strong>
+                        <small data-page-content-chars>0 caractere</small>
+                    </article>
+
+                    {% if not isPageResource %}
+                        <article class="admin-page-summary">
+                            <span>Categorie</span>
+                            <strong data-page-category-label>{{ item.category ? item.category.name : 'Aucune categorie' }}</strong>
+                            <small>La categorie publique de l'article.</small>
+                        </article>
+                    {% endif %}
+
+                    <article class="admin-page-summary">
+                        <span>Mediatheque</span>
+                        <strong data-page-media-label>{{ selectedMediaLabel }}</strong>
+                        <small data-page-media-path>{{ item.image ? item.image.path : 'Aucun fichier associe' }}</small>
+                    </article>
+                </div>
+
+                <div class="admin-page-editor__layout">
+                    <div class="admin-page-editor__main">
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Informations generales</p>
+                                    <h2>{{ isPageResource ? 'Titre et adresse' : 'Titre et lien' }}</h2>
+                                </div>
+                                <span class="admin-page-field-counter" data-page-title-counter>0 caracteres</span>
+                            </div>
+
+                            <div class="admin-page-stack">
+                                <div class="admin-page-field">
+                                    {{ form_label(form.title) }}
+                                    <div class="admin-page-input-shell admin-page-input-shell--title">
+                                        <span class="admin-page-input-shell__prefix">Titre principal</span>
+                                        {{ form_widget(form.title) }}
+                                    </div>
+
+                                    <div class="admin-page-field-hero">
+                                        <div class="admin-page-field-hero__copy">
+                                            <span class="admin-page-field-hero__label">Apercu du titre</span>
+                                            <strong data-page-title-preview>{{ item.title ?: (isPageResource ? 'Titre de la page' : 'Titre article') }}</strong>
+                                            <small data-page-title-feedback>Titre pret</small>
+                                        </div>
+                                        <div class="admin-page-field-hero__meta">
+                                            <span class="admin-page-field-counter" data-page-title-counter>0 caracteres</span>
+                                            <span class="admin-page-field-chip">Visible publiquement</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin-page-field-hint">
+                                        <span class="form-text">{{ form_help(form.title) }}</span>
+                                    </div>
+                                    {{ form_errors(form.title) }}
+                                </div>
+
+                                <div class="admin-page-slug-block">
+                                    <div class="admin-page-slug-shell">
+                                        <div class="admin-page-slug-shell__copy">
+                                            <span class="admin-page-field-hero__label">Slug</span>
+                                            <strong data-page-url-full data-page-url-preview>
+                                                {{ isPageResource ? url('page_show', { slug: item.slug ?: defaultSlug }) : url('post_show', { slug: item.slug ?: defaultSlug }) }}
+                                            </strong>
+                                            <div class="admin-page-slug-path">
+                                                <span class="admin-page-slug-path__label">Adresse</span>
+                                                <code class="admin-page-slug-path__value">{{ item.slug ?: defaultSlug }}</code>
+                                            </div>
+                                            <small>Le slug correspond a l'adresse publique de la page.</small>
+                                        </div>
+                                        <div class="admin-page-slug-shell__meta">
+                                            <span class="admin-page-field-counter" data-page-slug-state>Mode auto</span>
+                                            <span class="admin-page-field-chip admin-page-field-chip--soft">URL propre</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin-page-field admin-page-field--slug">
+                                        {{ form_label(form.slug) }}
+                                        <div class="admin-page-input-shell admin-page-input-shell--slug">
+                                            <span class="admin-page-input-shell__prefix">/</span>
+                                            {{ form_widget(form.slug) }}
+                                        </div>
+                                        <div class="admin-page-field-hint">
+                                            <span class="form-text">{{ form_help(form.slug) }}</span>
+                                        </div>
+                                        {{ form_errors(form.slug) }}
+                                    </div>
+
+                                    <div class="admin-page-slug-actions">
+                                        <button class="btn btn-secondary btn-sm" type="button" data-page-slug-reset>
+                                            Regenerer depuis le titre
+                                        </button>
+                                        <button class="btn btn-outline-light btn-sm" type="button" data-page-url-copy>
+                                            Copier l'URL
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {% if not isPageResource %}
+                                    <div class="admin-page-field admin-page-field--category">
+                                        {{ form_label(form.category) }}
+                                        <div class="admin-page-input-shell admin-page-input-shell--category">
+                                            <span class="admin-page-input-shell__prefix">Categorie</span>
+                                            {{ form_widget(form.category) }}
+                                        </div>
+                                        <div class="admin-page-field-hint">
+                                            <span class="form-text">{{ form_help(form.category) }}</span>
+                                            <span class="admin-page-field-counter" data-page-category-label>
+                                                {{ item.category ? item.category.name : 'Aucune categorie' }}
+                                            </span>
+                                        </div>
+                                        {{ form_errors(form.category) }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card admin-page-content-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Contenu</p>
+                                    <h2>{{ contentTitle }}</h2>
+                                </div>
+                                <span class="admin-page-field-counter" data-page-content-reading>0 min</span>
+                            </div>
+
+                            <div class="admin-page-editor-toolbar">
+                                <p class="form-text mb-0">
+                                    La mise en page est prevue pour le rendu public de la page. Tu peux mixer titres, listes, citations, tableaux et liens.
+                                </p>
+                                <div class="admin-page-editor-toolbar__stats">
+                                    <span data-page-content-stats>0 mot</span>
+                                    <span data-page-content-chars>0 caractere</span>
+                                </div>
+                            </div>
+
+                            <div class="admin-page-editor-wrapper">
+                                {{ form_label(form.content) }}
+                                <div class="admin-page-editor-frame">
+                                    {{ form_widget(form.content) }}
+                                </div>
+                                {{ form_errors(form.content) }}
+                                <div class="admin-page-field-hint">
+                                    {{ form_help(form.content) }}
+                                    <span class="admin-page-field-counter">HTML nettoye automatiquement</span>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <aside class="admin-page-editor__side">
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Publication</p>
+                                    <h2>Image principale</h2>
+                                </div>
+                                <div class="admin-page-editor__banner-actions">
+                                    <button class="btn btn-secondary btn-sm" type="button" data-page-import-trigger>
+                                        Importer une image
+                                    </button>
+                                    <button class="btn btn-outline-light btn-sm" type="button" data-page-preview-trigger>
+                                        Previsualiser
+                                    </button>
+                                </div>
+                            </div>
+
+                            <p class="form-text">
+                                Les sections peuvent rester repliees. Le visuel selectionne sera affiche dans l'apercu et la page publique.
+                            </p>
+
+                            <input
+                                type="file"
+                                class="d-none"
+                                accept="image/*"
+                                data-page-import-input
+                            >
+
+                            <div class="admin-media-accordion-stack">
+                                <details class="admin-media-accordion" data-media-picker>
+                                    <summary>
+                                        <span class="admin-media-accordion__title">Image principale</span>
+                                        <span class="admin-media-accordion__summary" data-page-media-label>{{ selectedMediaLabel }}</span>
+                                    </summary>
+
+                                    <div class="admin-media-accordion__body">
+                                        <label class="form-label" for="{{ form.image.vars.id }}">
+                                            Selectionner une image
+                                        </label>
+                                        <input
+                                            type="search"
+                                            class="form-control admin-media-picker__search"
+                                            placeholder="Rechercher dans la mediatheque"
+                                            data-media-search
+                                        >
+                                        {{ form_widget(form.image, { attr: { 'data-media-select': '1', 'class': 'd-none' } }) }}
+                                        {% if form.image_id is defined %}
+                                            {{ form_widget(form.image_id, { attr: { 'data-page-image-id': '1' } }) }}
+                                        {% endif %}
+
+                                        <div class="admin-media-library" data-media-library>
+                                            <button
+                                                class="admin-media-card{% if selectedMediaValue == '' %} is-selected{% endif %}"
+                                                type="button"
+                                                data-media-card
+                                                data-media-value=""
+                                                data-media-label="Aucune image principale"
+                                                data-media-path=""
+                                                data-media-alt=""
+                                                data-media-kind="image"
+                                                aria-pressed="{{ selectedMediaValue == '' ? 'true' : 'false' }}"
+                                            >
+                                                <span class="admin-media-card__thumb admin-media-card__thumb--empty">
+                                                    <span>Aucun visuel</span>
+                                                </span>
+                                                <strong class="admin-media-card__label">Aucune image principale</strong>
+                                                <small class="admin-media-card__meta">Laisse vide pour une page sans visuel.</small>
+                                            </button>
+
+                                            {% for choice in form.image.vars.choices %}
+                                                {% set choiceAttr = choice.attr|default({}) %}
+                                                {% set choicePath = choiceAttr['data-media-path']|default('') %}
+                                                {% set choiceAlt = choiceAttr['data-media-alt']|default('') %}
+                                                {% set choiceKind = choiceAttr['data-media-kind']|default('image') %}
+                                                {% set choiceSelected = selectedMediaValue == choice.value %}
+                                                <button
+                                                    class="admin-media-card{% if choiceSelected %} is-selected{% endif %}"
+                                                    type="button"
+                                                    data-media-card
+                                                    data-media-value="{{ choice.value }}"
+                                                    data-media-label="{{ choice.label }}"
+                                                    data-media-path="{{ choicePath }}"
+                                                    data-media-alt="{{ choiceAlt }}"
+                                                    data-media-kind="{{ choiceKind }}"
+                                                    aria-pressed="{{ choiceSelected ? 'true' : 'false' }}"
+                                                >
+                                                    <span class="admin-media-card__thumb">
+                                                        {% if choicePath %}
+                                                            {% if choiceKind == 'video' %}
+                                                                <video muted playsinline preload="metadata">
+                                                                    <source src="{{ asset('uploads/media/' ~ choicePath) }}">
+                                                                </video>
+                                                            {% else %}
+                                                                <img src="{{ asset('uploads/media/' ~ choicePath) }}" alt="{{ choiceAlt ?: choice.label }}" loading="lazy">
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <span>Apercu indisponible</span>
+                                                        {% endif %}
+                                                    </span>
+                                                    <strong class="admin-media-card__label">{{ choice.label }}</strong>
+                                                    <small class="admin-media-card__meta">{{ choicePath ?: 'Aucun fichier' }}</small>
+                                                </button>
+                                            {% endfor %}
+                                        </div>
+
+                                        {{ form_errors(form.image) }}
+                                        <p class="form-text">{{ form_help(form.image) }}</p>
+
+                                        <div class="admin-media-preview" data-media-preview>
+                                            {% if item.image %}
+                                                <img src="{{ asset('uploads/media/' ~ item.image.path) }}" alt="{{ item.image.alt ?: item.title }}" loading="lazy">
+                                                <div>
+                                                    <strong>{{ item.image.alt ?: item.image.path }}</strong>
+                                                    <small>{{ item.image.path }}</small>
+                                                </div>
+                                            {% else %}
+                                                <div class="admin-media-preview__empty">
+                                                    Aucune image principale selectionnee
+                                                </div>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="admin-media-picker__actions">
+                                            <a
+                                                class="btn btn-secondary btn-sm"
+                                                href="{{ path('custom_admin_crud_index', { resource: 'medias' }) }}"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
+                                                Ouvrir la mediatheque
+                                            </a>
+                                            <button class="btn btn-outline-light btn-sm" type="button" data-media-clear>
+                                                Retirer l'image
+                                            </button>
+                                        </div>
+                                    </div>
+                                </details>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Actions</p>
+                                    <h2>Enregistrement</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Sauvegarde manuelle</span>
+                            </div>
+
+                            <div class="admin-page-actions">
+                                <button class="btn btn-danger btn-lg" type="submit">
+                                    {{ mode == 'new' ? submitLabel : 'Enregistrer les modifications' }}
+                                </button>
+                                <button class="btn btn-outline-light" type="button" data-page-preview-trigger>
+                                    Previsualiser
+                                </button>
+                                <a class="btn btn-secondary" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                                    Annuler
+                                </a>
+                            </div>
+
+                            <p class="form-text mt-3">
+                                Une confirmation apparaitra si tu quittes la page avec des modifications non enregistrees.
+                            </p>
+                        </section>
+                    </aside>
+                </div>
+
+                {{ form_rest(form) }}
+            {{ form_end(form, { render_rest: false }) }}
+
+            <form
+                class="d-none"
+                data-page-preview-form
+                method="post"
+                action="{{ previewUrl }}"
+                target="_blank"
+            >
+                <input type="hidden" name="_token" value="{{ previewToken }}">
+                <input type="hidden" name="title" data-preview-title>
+                <input type="hidden" name="slug" data-preview-slug>
+                <input type="hidden" name="content" data-preview-content>
+                <input type="hidden" name="image_id" data-preview-image>
+                {% if not isPageResource %}
+                    <input type="hidden" name="category_id" data-preview-category>
+                {% endif %}
+            </form>
+        </section>
+    {% elseif resource == 'chants' %}
+        {% set selectedAudioPath = item.audioPath|default('') %}
+        {% set selectedAudioName = selectedAudioPath ? (selectedAudioPath|split('/'))|last : '' %}
+        {% set selectedAudioLabel = selectedAudioName ?: 'Aucun fichier audio' %}
+        {% set selectedLyricsValue = item.lyrics ?: '' %}
+
+        <section
+            class="admin-page-editor"
+            data-chant-editor="1"
+            data-chant-current-audio-path="{{ selectedAudioPath }}"
+            data-preview-url="{{ path('custom_admin_chant_preview') }}"
+            data-preview-token="{{ csrf_token('chant_preview') }}"
+        >
+            <div class="admin-page-editor__banner">
+                <div class="admin-page-editor__banner-copy">
+                    <p class="admin-kicker">Gestion des chants</p>
+                    <h2>{{ mode == 'new' ? 'Creer un chant' : 'Modifier le chant' }}</h2>
+                    <div class="admin-page-editor__banner-meta">
+                        <span class="admin-page-pill">Paroles riches</span>
+                        <span class="admin-page-pill">Audio</span>
+                        <span class="admin-page-pill">{{ 'admin.crud.preview_admin'|trans }}</span>
+                    </div>
+                </div>
+
+                <div class="admin-page-editor__banner-actions">
+                    <button class="btn btn-outline-light btn-sm" type="button" data-page-preview-trigger>
+                        Previsualiser
+                    </button>
+                    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                        Retour a la liste
+                    </a>
+                </div>
+            </div>
+
+            {{ form_start(form, { attr: { class: 'admin-page-form', 'data-chant-form': '1', novalidate: 'novalidate' } }) }}
+                {{ form_errors(form) }}
+
+                <div class="admin-page-editor__summary-grid">
+                    <article class="admin-page-summary">
+                        <span>Titre</span>
+                        <strong data-chant-title-preview>{{ item.title ?: 'Chant' }}</strong>
+                        <small>Nom affiche dans la liste publique.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Audio</span>
+                        <strong data-chant-audio-preview>{{ selectedAudioLabel }}</strong>
+                        <small data-chant-audio-status>{{ selectedAudioPath ? 'Fichier actuellement publié' : 'Aucun fichier audio enregistre' }}</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Paroles</span>
+                        <strong data-chant-lyrics-stats>0 mot</strong>
+                        <small data-chant-lyrics-chars>0 caractere</small>
+                    </article>
+                </div>
+
+                <div class="admin-page-editor__layout">
+                    <div class="admin-page-editor__main">
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Informations generales</p>
+                                    <h2>Titre du chant</h2>
+                                </div>
+                                <span class="admin-page-field-counter" data-chant-title-counter>0 caracteres</span>
+                            </div>
+
+                            <div class="admin-page-stack">
+                                <div class="admin-page-field">
+                                    {{ form_label(form.title) }}
+                                    {{ form_widget(form.title) }}
+                                    <div class="admin-page-field-hero">
+                                        <div>
+                                            <span class="admin-page-field-hero__label">Titre</span>
+                                            <strong data-chant-title-preview>{{ item.title ?: 'Titre du chant' }}</strong>
+                                            <small data-chant-title-feedback>Titre pret</small>
+                                        </div>
+                                        <span class="admin-page-field-counter" data-chant-title-counter>0 caracteres</span>
+                                    </div>
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.title) }}
+                                    </div>
+                                    {{ form_errors(form.title) }}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card admin-page-content-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Paroles</p>
+                                    <h2>Editeur visuel</h2>
+                                </div>
+                                <span class="admin-page-field-counter" data-chant-lyrics-reading>0 min</span>
+                            </div>
+
+                            <div class="admin-page-editor-toolbar">
+                                <p class="form-text mb-0">
+                                    Tu peux structurer les paroles avec titres, retours a la ligne et liens, puis les relire dans l'aperçu admin.
+                                </p>
+                                <div class="admin-page-editor-toolbar__stats">
+                                    <span data-chant-lyrics-stats>0 mot</span>
+                                    <span data-chant-lyrics-chars>0 caractere</span>
+                                </div>
+                            </div>
+
+                            <div class="admin-page-editor-wrapper">
+                                {{ form_label(form.lyrics) }}
+                                <div class="admin-page-editor-frame">
+                                    {{ form_widget(form.lyrics) }}
+                                </div>
+                                {{ form_errors(form.lyrics) }}
+                                <div class="admin-page-field-hint">
+                                    {{ form_help(form.lyrics) }}
+                                    <span class="admin-page-field-counter">HTML nettoye automatiquement</span>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <aside class="admin-page-editor__side">
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Publication</p>
+                                    <h2>Importer un audio</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Fichier source</span>
+                            </div>
+
+                            <p class="form-text">
+                                Importe un fichier audio pour le chant. Les formats MP3, WAV, OGG, M4A, AAC et FLAC sont acceptes.
+                            </p>
+
+                            <div class="admin-audio-upload">
+                                <div class="admin-audio-upload__summary">
+                                    <span class="admin-page-field-hero__label">Fichier selectionne</span>
+                                    <strong data-chant-audio-preview>{{ selectedAudioLabel }}</strong>
+                                    <small data-chant-audio-status>
+                                        {{ selectedAudioPath ? 'Fichier actuellement enregistre' : 'Aucun fichier audio enregistre' }}
+                                    </small>
+                                </div>
+
+                                <div class="admin-audio-upload__control">
+                                    {{ form_label(form.audioFile) }}
+                                    {{ form_widget(form.audioFile) }}
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.audioFile) }}
+                                    </div>
+                                    {{ form_errors(form.audioFile) }}
+                                </div>
+
+                                <div class="admin-audio-upload__current">
+                                    {% if selectedAudioPath %}
+                                        <span>Fichier actuel</span>
+                                        <code>{{ selectedAudioPath }}</code>
+                                    {% else %}
+                                        <span>Aucun fichier enregistre</span>
+                                        <small>Choisis un fichier audio avant de sauvegarder le chant.</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Actions</p>
+                                    <h2>Enregistrement</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Sauvegarde manuelle</span>
+                            </div>
+
+                            <div class="admin-page-actions">
+                                <button class="btn btn-danger btn-lg" type="submit">
+                                    {{ mode == 'new' ? 'Enregistrer le chant' : 'Enregistrer les modifications' }}
+                                </button>
+                                <button class="btn btn-outline-light" type="button" data-page-preview-trigger>
+                                    Previsualiser
+                                </button>
+                                <a class="btn btn-secondary" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                                    Annuler
+                                </a>
+                            </div>
+
+                            <p class="form-text mt-3">
+                                Une confirmation apparaitra si tu quittes la page avec des modifications non enregistrees.
+                            </p>
+                        </section>
+                    </aside>
+                </div>
+
+                {{ form_rest(form) }}
+            {{ form_end(form, { render_rest: false }) }}
+
+            <form
+                class="d-none"
+                data-chant-preview-form
+                method="post"
+                action="{{ path('custom_admin_chant_preview') }}"
+                target="_blank"
+            >
+                <input type="hidden" name="_token" value="{{ csrf_token('chant_preview') }}">
+                <input type="hidden" name="title" data-preview-title>
+                <input type="hidden" name="lyrics" data-preview-lyrics>
+                <input type="hidden" name="audioPath" data-preview-audio-path>
+                <input type="hidden" name="audioLabel" data-preview-audio-label>
+            </form>
+        </section>
+    {% elseif resource == 'groupe' %}
+        {% set selectedLogoValue = form.logo.vars.value|default('') %}
+        {% set selectedBannerValue = form.banner.vars.value|default('') %}
+        {% set selectedLogoLabel = item.logo ? (item.logo.alt ?: item.logo.path) : 'Aucun logo' %}
+        {% set selectedBannerLabel = item.banner ? (item.banner.alt ?: item.banner.path) : 'Aucune banniere' %}
+
+        <section
+            class="admin-page-editor"
+            data-group-editor="1"
+            data-preview-url="{{ path('custom_admin_group_preview') }}"
+            data-preview-token="{{ csrf_token('group_preview') }}"
+        >
+            <div class="admin-page-editor__banner">
+                <div class="admin-page-editor__banner-copy">
+                    <p class="admin-kicker">Gestion du groupe</p>
+                    <h2>{{ mode == 'new' ? 'Creer la page groupe' : 'Modifier la page groupe' }}</h2>
+                    <div class="admin-page-editor__banner-meta">
+                        <span class="admin-page-pill">Logo</span>
+                        <span class="admin-page-pill">Banniere</span>
+                        <span class="admin-page-pill">Sections riches</span>
+                    </div>
+                </div>
+
+                <div class="admin-page-editor__banner-actions">
+                    <button class="btn btn-outline-light btn-sm" type="button" data-page-preview-trigger>
+                        Previsualiser
+                    </button>
+                    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                        Retour a la liste
+                    </a>
+                </div>
+            </div>
+
+            {{ form_start(form, { attr: { class: 'admin-page-form', 'data-group-form': '1', novalidate: 'novalidate' } }) }}
+                {{ form_errors(form) }}
+
+                <div class="admin-page-editor__summary-grid">
+                    <article class="admin-page-summary">
+                        <span>Nom</span>
+                        <strong data-group-name-preview>{{ item.name ?: 'Page groupe' }}</strong>
+                        <small>Identite publique du groupe.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Logo</span>
+                        <strong data-group-logo-label>{{ selectedLogoLabel }}</strong>
+                        <small data-group-logo-path>{{ item.logo ? item.logo.path : 'Aucun fichier associe' }}</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Banniere</span>
+                        <strong data-group-banner-label>{{ selectedBannerLabel }}</strong>
+                        <small data-group-banner-path>{{ item.banner ? item.banner.path : 'Aucun fichier associe' }}</small>
+                    </article>
+                </div>
+
+                <div class="admin-page-editor__layout">
+                    <div class="admin-page-editor__main">
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Informations generales</p>
+                                    <h2>Nom et description</h2>
+                                </div>
+                                <span class="admin-page-field-counter" data-group-name-counter>0 caracteres</span>
+                            </div>
+
+                            <div class="admin-page-stack">
+                                <div class="admin-page-field admin-page-field--hero">
+                                    {{ form_label(form.name) }}
+                                    <div class="admin-page-input-shell admin-page-input-shell--brand">
+                                        <span class="admin-page-input-shell__prefix">Nom du groupe</span>
+                                        {{ form_widget(form.name) }}
+                                    </div>
+                                    <div class="admin-page-field-hero admin-page-field-hero--compact">
+                                        <div class="admin-page-field-hero__copy">
+                                            <span class="admin-page-field-hero__label">Apercu public</span>
+                                            <strong data-group-name-preview>{{ item.name ?: 'Page groupe' }}</strong>
+                                            <small>Le slug et les references publiques suivent ce nom.</small>
+                                        </div>
+                                        <div class="admin-page-field-hero__meta">
+                                            <span class="admin-page-field-counter" data-group-name-counter>0 caracteres</span>
+                                            <span class="admin-page-field-chip admin-page-field-chip--soft" data-group-name-feedback>Slug auto</span>
+                                        </div>
+                                    </div>
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.name) }}
+                                    </div>
+                                    {{ form_errors(form.name) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_label(form.description) }}
+                                    <div class="admin-page-editor-frame">
+                                        {{ form_widget(form.description) }}
+                                    </div>
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.description) }}
+                                        <span class="admin-page-field-counter" data-group-content-stats>0 mot</span>
+                                    </div>
+                                    {{ form_errors(form.description) }}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card admin-page-content-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Sections</p>
+                                    <h2>Contenus riches</h2>
+                                </div>
+                                <span class="admin-page-field-counter" data-group-content-reading>0 min</span>
+                            </div>
+
+                            <div class="admin-page-editor-toolbar">
+                                <p class="form-text mb-0">
+                                    Chaque bloc peut etre mis en forme avec l'editeur visuel pour garder un rendu homogène sur la page publique.
+                                </p>
+                                <div class="admin-page-editor-toolbar__stats">
+                                    <span data-group-content-stats>0 mot</span>
+                                    <span data-group-content-chars>0 caractere</span>
+                                </div>
+                            </div>
+
+                            <div class="admin-page-stack">
+                                {% for field in ['histoireText', 'mentaliteText', 'fonctionnementText', 'rejoindreText', 'seCarterText'] %}
+                                    <div class="admin-page-field">
+                                        {{ form_label(attribute(form, field)) }}
+                                        <div class="admin-page-editor-frame">
+                                            {{ form_widget(attribute(form, field)) }}
+                                        </div>
+                                        <div class="admin-page-field-hint">
+                                            {{ form_help(attribute(form, field)) }}
+                                            <span class="admin-page-field-counter">Bloc de contenu</span>
+                                        </div>
+                                        {{ form_errors(attribute(form, field)) }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    </div>
+
+                    <aside class="admin-page-editor__side">
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Visuels</p>
+                                    <h2>Logo et banniere</h2>
+                                </div>
+                                <div class="admin-page-editor__banner-actions">
+                                    <button class="btn btn-secondary btn-sm" type="button" data-group-import-trigger="logo">
+                                        Importer une image
+                                    </button>
+                                    <button class="btn btn-outline-light btn-sm" type="button" data-page-preview-trigger>
+                                        Previsualiser
+                                    </button>
+                                </div>
+                            </div>
+
+                            <input
+                                type="file"
+                                class="d-none"
+                                accept="image/*"
+                                data-group-import-input
+                            >
+                            <p class="form-text">
+                                Les sections peuvent rester repliees. L'image importee sera ajoutee aux choix de logo et de banniere.
+                            </p>
+
+                            <div class="admin-media-accordion-stack">
+                                <details class="admin-media-accordion" data-media-picker data-media-role="logo">
+                                    <summary>
+                                        <span class="admin-media-accordion__title">Logo</span>
+                                        <span class="admin-media-accordion__summary" data-group-logo-label>{{ selectedLogoLabel }}</span>
+                                        <button class="btn btn-outline-light btn-sm admin-media-accordion__action" type="button" data-group-import-trigger="logo">
+                                            Importer
+                                        </button>
+                                    </summary>
+
+                                    <div class="admin-media-accordion__body">
+                                        <label class="form-label" for="{{ form.logo.vars.id }}">
+                                            Selectionner un logo
+                                        </label>
+                                        <input
+                                            type="search"
+                                            class="form-control admin-media-picker__search"
+                                            placeholder="Rechercher dans la mediatheque"
+                                            data-media-search
+                                        >
+                                        {{ form_widget(form.logo, { attr: { 'data-media-select': '1', 'class': 'd-none' } }) }}
+
+                                        <div class="admin-media-library admin-media-library--scrollable" data-media-library>
+                                            <button
+                                                class="admin-media-card{% if selectedLogoValue == '' %} is-selected{% endif %}"
+                                                type="button"
+                                                data-media-card
+                                                data-media-value=""
+                                                data-media-label="Aucun logo"
+                                                data-media-path=""
+                                                data-media-alt=""
+                                                data-media-kind="image"
+                                                aria-pressed="{{ selectedLogoValue == '' ? 'true' : 'false' }}"
+                                            >
+                                                <span class="admin-media-card__thumb admin-media-card__thumb--empty">
+                                                    <span>Aucun visuel</span>
+                                                </span>
+                                                <strong class="admin-media-card__label">Aucun logo</strong>
+                                                <small class="admin-media-card__meta">Laisse vide pour afficher le groupe sans logo.</small>
+                                            </button>
+
+                                            {% for choice in form.logo.vars.choices %}
+                                                {% set choiceAttr = choice.attr|default({}) %}
+                                                {% set choicePath = choiceAttr['data-media-path']|default('') %}
+                                                {% set choiceAlt = choiceAttr['data-media-alt']|default('') %}
+                                                {% set choiceKind = choiceAttr['data-media-kind']|default('image') %}
+                                                {% set choiceSelected = selectedLogoValue == choice.value %}
+                                                <button
+                                                    class="admin-media-card{% if choiceSelected %} is-selected{% endif %}"
+                                                    type="button"
+                                                    data-media-card
+                                                    data-media-value="{{ choice.value }}"
+                                                    data-media-label="{{ choice.label }}"
+                                                    data-media-path="{{ choicePath }}"
+                                                    data-media-alt="{{ choiceAlt }}"
+                                                    data-media-kind="{{ choiceKind }}"
+                                                    aria-pressed="{{ choiceSelected ? 'true' : 'false' }}"
+                                                >
+                                                    <span class="admin-media-card__thumb">
+                                                        {% if choicePath %}
+                                                            {% if choiceKind == 'video' %}
+                                                                <video muted playsinline preload="metadata">
+                                                                    <source src="{{ asset('uploads/media/' ~ choicePath) }}">
+                                                                </video>
+                                                            {% else %}
+                                                                <img src="{{ asset('uploads/media/' ~ choicePath) }}" alt="{{ choiceAlt ?: choice.label }}" loading="lazy">
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <span>Apercu indisponible</span>
+                                                        {% endif %}
+                                                    </span>
+                                                    <strong class="admin-media-card__label">{{ choice.label }}</strong>
+                                                    <small class="admin-media-card__meta">{{ choicePath ?: 'Aucun fichier' }}</small>
+                                                </button>
+                                            {% endfor %}
+                                        </div>
+
+                                        {{ form_errors(form.logo) }}
+                                        <p class="form-text">{{ form_help(form.logo) }}</p>
+
+                                        <div class="admin-media-preview" data-media-preview>
+                                            {% if item.logo %}
+                                                <img src="{{ asset('uploads/media/' ~ item.logo.path) }}" alt="{{ item.logo.alt ?: item.name }}" loading="lazy">
+                                                <div>
+                                                    <strong>{{ item.logo.alt ?: item.logo.path }}</strong>
+                                                    <small>{{ item.logo.path }}</small>
+                                                </div>
+                                            {% else %}
+                                                <div class="admin-media-preview__empty">
+                                                    Aucun logo selectionne
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </details>
+
+                                <details class="admin-media-accordion" data-media-picker data-media-role="banner">
+                                    <summary>
+                                        <span class="admin-media-accordion__title">Banniere</span>
+                                        <span class="admin-media-accordion__summary" data-group-banner-label>{{ selectedBannerLabel }}</span>
+                                        <button class="btn btn-outline-light btn-sm admin-media-accordion__action" type="button" data-group-import-trigger="banner">
+                                            Importer
+                                        </button>
+                                    </summary>
+
+                                    <div class="admin-media-accordion__body">
+                                        <label class="form-label" for="{{ form.banner.vars.id }}">
+                                            Selectionner une banniere
+                                        </label>
+                                        <input
+                                            type="search"
+                                            class="form-control admin-media-picker__search"
+                                            placeholder="Rechercher dans la mediatheque"
+                                            data-media-search
+                                        >
+                                        {{ form_widget(form.banner, { attr: { 'data-media-select': '1', 'class': 'd-none' } }) }}
+
+                                        <div class="admin-media-library admin-media-library--scrollable" data-media-library>
+                                            <button
+                                                class="admin-media-card{% if selectedBannerValue == '' %} is-selected{% endif %}"
+                                                type="button"
+                                                data-media-card
+                                                data-media-value=""
+                                                data-media-label="Aucune banniere"
+                                                data-media-path=""
+                                                data-media-alt=""
+                                                data-media-kind="image"
+                                                aria-pressed="{{ selectedBannerValue == '' ? 'true' : 'false' }}"
+                                            >
+                                                <span class="admin-media-card__thumb admin-media-card__thumb--empty">
+                                                    <span>Aucun visuel</span>
+                                                </span>
+                                                <strong class="admin-media-card__label">Aucune banniere</strong>
+                                                <small class="admin-media-card__meta">Laisse vide pour une page de groupe sans banniere.</small>
+                                            </button>
+
+                                            {% for choice in form.banner.vars.choices %}
+                                                {% set choiceAttr = choice.attr|default({}) %}
+                                                {% set choicePath = choiceAttr['data-media-path']|default('') %}
+                                                {% set choiceAlt = choiceAttr['data-media-alt']|default('') %}
+                                                {% set choiceKind = choiceAttr['data-media-kind']|default('image') %}
+                                                {% set choiceSelected = selectedBannerValue == choice.value %}
+                                                <button
+                                                    class="admin-media-card{% if choiceSelected %} is-selected{% endif %}"
+                                                    type="button"
+                                                    data-media-card
+                                                    data-media-value="{{ choice.value }}"
+                                                    data-media-label="{{ choice.label }}"
+                                                    data-media-path="{{ choicePath }}"
+                                                    data-media-alt="{{ choiceAlt }}"
+                                                    data-media-kind="{{ choiceKind }}"
+                                                    aria-pressed="{{ choiceSelected ? 'true' : 'false' }}"
+                                                >
+                                                    <span class="admin-media-card__thumb">
+                                                        {% if choicePath %}
+                                                            {% if choiceKind == 'video' %}
+                                                                <video muted playsinline preload="metadata">
+                                                                    <source src="{{ asset('uploads/media/' ~ choicePath) }}">
+                                                                </video>
+                                                            {% else %}
+                                                                <img src="{{ asset('uploads/media/' ~ choicePath) }}" alt="{{ choiceAlt ?: choice.label }}" loading="lazy">
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <span>Apercu indisponible</span>
+                                                        {% endif %}
+                                                    </span>
+                                                    <strong class="admin-media-card__label">{{ choice.label }}</strong>
+                                                    <small class="admin-media-card__meta">{{ choicePath ?: 'Aucun fichier' }}</small>
+                                                </button>
+                                            {% endfor %}
+                                        </div>
+
+                                        {{ form_errors(form.banner) }}
+                                        <p class="form-text">{{ form_help(form.banner) }}</p>
+
+                                        <div class="admin-media-preview" data-media-preview>
+                                            {% if item.banner %}
+                                                <img src="{{ asset('uploads/media/' ~ item.banner.path) }}" alt="{{ item.banner.alt ?: item.name }}" loading="lazy">
+                                                <div>
+                                                    <strong>{{ item.banner.alt ?: item.banner.path }}</strong>
+                                                    <small>{{ item.banner.path }}</small>
+                                                </div>
+                                            {% else %}
+                                                <div class="admin-media-preview__empty">
+                                                    Aucune banniere selectionnee
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </details>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Actions</p>
+                                    <h2>Enregistrement</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Sauvegarde manuelle</span>
+                            </div>
+
+                            <div class="admin-page-actions">
+                                <button class="btn btn-danger btn-lg" type="submit">
+                                    {{ mode == 'new' ? 'Enregistrer la page groupe' : 'Enregistrer les modifications' }}
+                                </button>
+                                <button class="btn btn-outline-light" type="button" data-page-preview-trigger>
+                                    Previsualiser
+                                </button>
+                                <a class="btn btn-secondary" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                                    Annuler
+                                </a>
+                            </div>
+
+                            <p class="form-text mt-3">
+                                Une confirmation apparaitra si tu quittes la page avec des modifications non enregistrees.
+                            </p>
+                        </section>
+                    </aside>
+                </div>
+
+                {{ form_rest(form) }}
+            {{ form_end(form, { render_rest: false }) }}
+
+            <form
+                class="d-none"
+                data-group-preview-form
+                method="post"
+                action="{{ path('custom_admin_group_preview') }}"
+                target="_blank"
+            >
+                <input type="hidden" name="_token" value="{{ csrf_token('group_preview') }}">
+                <input type="hidden" name="name" data-preview-name>
+                <input type="hidden" name="description" data-preview-description>
+                <input type="hidden" name="histoireText" data-preview-histoire-text>
+                <input type="hidden" name="mentaliteText" data-preview-mentalite-text>
+                <input type="hidden" name="fonctionnementText" data-preview-fonctionnement-text>
+                <input type="hidden" name="rejoindreText" data-preview-rejoindre-text>
+                <input type="hidden" name="seCarterText" data-preview-se-carter-text>
+                <input type="hidden" name="logo_id" data-preview-logo>
+                <input type="hidden" name="banner_id" data-preview-banner>
+            </form>
+    {% elseif resource == 'evenements' %}
+        {% set selectedEventImageValue = form.image.vars.value|default('') %}
+        {% set selectedEventMediaValues = form.media.vars.value|default([]) %}
+        {% set selectedEventImageLabel = item.image ? (item.image.alt ?: item.image.path) : 'Aucune image principale' %}
+        {% set selectedEventGalleryCount = item.media|length %}
+
+        <section
+            class="admin-page-editor admin-event-editor"
+            data-event-editor="1"
+            data-preview-url="{{ path('custom_admin_event_preview') }}"
+            data-preview-token="{{ csrf_token('event_preview') }}"
+        >
+            <div class="admin-page-editor__banner">
+                <div class="admin-page-editor__banner-copy">
+                    <p class="admin-kicker">Gestion des evenements</p>
+                    <h2>{{ mode == 'new' ? 'Creer un evenement' : 'Modifier un evenement' }}</h2>
+                    <div class="admin-page-editor__banner-meta">
+                        <span class="admin-page-pill">Galerie multiple</span>
+                        <span class="admin-page-pill">Apercu avant enregistrement</span>
+                        <span class="admin-page-pill">Photos de match</span>
+                    </div>
+                </div>
+
+                <div class="admin-page-editor__banner-actions">
+                    <button class="btn btn-outline-light btn-sm" type="button" data-page-preview-trigger>
+                        Previsualiser
+                    </button>
+                    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                        Retour a la liste
+                    </a>
+                </div>
+            </div>
+
+            {{ form_start(form, { attr: { class: 'admin-page-form', 'data-event-form': '1', novalidate: 'novalidate' } }) }}
+                {{ form_errors(form) }}
+
+                <div class="admin-page-editor__summary-grid">
+                    <article class="admin-page-summary">
+                        <span>Date</span>
+                        <strong data-event-date-preview>{{ item.date ? item.date|date('d/m/Y H:i') : 'Aucune date' }}</strong>
+                        <small>La date sert aussi au rendu photo de match.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Couverture</span>
+                        <strong data-event-image-label>{{ selectedEventImageLabel }}</strong>
+                        <small data-event-image-path>{{ item.image ? item.image.path : 'Aucun fichier associe' }}</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Galerie</span>
+                        <strong data-event-media-count>{{ selectedEventGalleryCount }}</strong>
+                        <small data-event-media-summary>Photos liees a cet evenement.</small>
+                    </article>
+                </div>
+
+                <div class="admin-page-editor__layout">
+                    <div class="admin-page-editor__main">
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Informations generales</p>
+                                    <h2>Titre et description</h2>
+                                </div>
+                                <span class="admin-page-field-counter" data-event-title-counter>0 caracteres</span>
+                            </div>
+
+                            <div class="admin-page-stack">
+                                <div class="admin-page-field">
+                                    {{ form_label(form.title) }}
+                                    {{ form_widget(form.title, { attr: { 'data-event-title': '1' } }) }}
+                                    <div class="admin-page-field-hero">
+                                        <div>
+                                            <span class="admin-page-field-hero__label">Titre</span>
+                                            <strong data-event-title-preview>{{ item.title ?: 'Titre de l evenement' }}</strong>
+                                            <small data-event-title-feedback>Titre pret</small>
+                                        </div>
+                                        <span class="admin-page-field-counter">Visuel principal</span>
+                                    </div>
+                                    <div class="admin-page-field-hint">{{ form_help(form.title) }}</div>
+                                    {{ form_errors(form.title) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_label(form.description) }}
+                                    <div class="admin-page-editor-frame">
+                                        {{ form_widget(form.description, { attr: { 'data-event-description': '1' } }) }}
+                                    </div>
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.description) }}
+                                        <span class="admin-page-field-counter" data-event-description-stats>0 mot</span>
+                                    </div>
+                                    {{ form_errors(form.description) }}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card admin-page-content-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Contexte</p>
+                                    <h2>Match et saison</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Informations associees</span>
+                            </div>
+
+                            <div class="admin-page-grid-two">
+                                <div class="admin-page-field">
+                                    {{ form_label(form.date) }}
+                                    {{ form_widget(form.date) }}
+                                    {{ form_errors(form.date) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.category) }}
+                                    {{ form_widget(form.category) }}
+                                    {{ form_errors(form.category) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.opponent) }}
+                                    {{ form_widget(form.opponent) }}
+                                    {{ form_errors(form.opponent) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.matchLocation) }}
+                                    {{ form_widget(form.matchLocation) }}
+                                    {{ form_errors(form.matchLocation) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.season) }}
+                                    {{ form_widget(form.season) }}
+                                    {{ form_errors(form.season) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.journee) }}
+                                    {{ form_widget(form.journee) }}
+                                    {{ form_errors(form.journee) }}
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <aside class="admin-page-editor__side">
+                        <section class="admin-panel admin-page-card admin-page-card--sticky">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Visuels</p>
+                                    <h2>Image et galerie</h2>
+                                </div>
+                                <div class="admin-page-editor__banner-actions">
+                                    <button class="btn btn-secondary btn-sm" type="button" data-event-import-trigger>
+                                        Importer une image
+                                    </button>
+                                    <button class="btn btn-outline-light btn-sm" type="button" data-event-gallery-import-trigger>
+                                        Ajouter a la galerie
+                                    </button>
+                                    <span class="admin-page-field-counter" data-event-media-summary>0 media</span>
+                                </div>
+                            </div>
+
+                            <div class="admin-page-stack">
+                                <input
+                                    type="file"
+                                    class="d-none"
+                                    accept="image/*"
+                                    data-event-import-input
+                                >
+
+                                <div class="admin-media-picker" data-media-picker data-event-media-role="image">
+                                    <label class="form-label" for="{{ form.image.vars.id }}">Image principale</label>
+                                    <input type="search" class="form-control admin-media-picker__search" placeholder="Rechercher dans la mediatheque" data-media-search>
+                                    {{ form_widget(form.image, { attr: { 'data-media-select': '1', 'class': 'd-none' } }) }}
+
+                                    <div class="admin-media-library admin-media-library--scrollable" data-media-library>
+                                        <button class="admin-media-card{% if selectedEventImageValue == '' %} is-selected{% endif %}" type="button" data-media-card data-media-value="" data-media-label="Aucune image principale" data-media-path="" data-media-alt="" data-media-kind="image" aria-pressed="{{ selectedEventImageValue == '' ? 'true' : 'false' }}">
+                                            <span class="admin-media-card__thumb admin-media-card__thumb--empty"><span>Aucun visuel</span></span>
+                                            <strong class="admin-media-card__label">Aucune image principale</strong>
+                                            <small class="admin-media-card__meta">Laisse vide si l'evenement se suffit de sa galerie.</small>
+                                        </button>
+
+                                        {% for choice in form.image.vars.choices %}
+                                            {% set choiceAttr = choice.attr|default({}) %}
+                                            {% set choicePath = choiceAttr['data-media-path']|default('') %}
+                                            {% set choiceAlt = choiceAttr['data-media-alt']|default('') %}
+                                            {% set choiceKind = choiceAttr['data-media-kind']|default('image') %}
+                                            {% set choiceSelected = selectedEventImageValue == choice.value %}
+                                            <button class="admin-media-card{% if choiceSelected %} is-selected{% endif %}" type="button" data-media-card data-media-value="{{ choice.value }}" data-media-label="{{ choice.label }}" data-media-path="{{ choicePath }}" data-media-alt="{{ choiceAlt }}" data-media-kind="{{ choiceKind }}" aria-pressed="{{ choiceSelected ? 'true' : 'false' }}">
+                                                <span class="admin-media-card__thumb">
+                                                    {% if choicePath %}
+                                                        {% if choiceKind == 'video' %}
+                                                            <video muted playsinline preload="metadata"><source src="{{ asset('uploads/media/' ~ choicePath) }}"></video>
+                                                        {% else %}
+                                                            <img src="{{ asset('uploads/media/' ~ choicePath) }}" alt="{{ choiceAlt ?: choice.label }}" loading="lazy">
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <span>Apercu indisponible</span>
+                                                    {% endif %}
+                                                </span>
+                                                <strong class="admin-media-card__label">{{ choice.label }}</strong>
+                                                <small class="admin-media-card__meta">{{ choicePath ?: 'Aucun fichier' }}</small>
+                                            </button>
+                                        {% endfor %}
+                                    </div>
+
+                                    {{ form_errors(form.image) }}
+                                </div>
+
+                                <div class="admin-media-picker" data-media-picker data-event-media-role="gallery">
+                                    <label class="form-label" for="{{ form.media.vars.id }}">Galerie d'images</label>
+                                    <input type="search" class="form-control admin-media-picker__search" placeholder="Rechercher dans la galerie" data-media-search>
+                                    {{ form_widget(form.media, { attr: { 'data-event-media-select': '1', 'class': 'd-none' } }) }}
+
+                                    <div class="admin-media-library admin-media-library--scrollable" data-media-library>
+                                        {% for choice in form.media.vars.choices %}
+                                            {% set choiceAttr = choice.attr|default({}) %}
+                                            {% set choicePath = choiceAttr['data-media-path']|default('') %}
+                                            {% set choiceAlt = choiceAttr['data-media-alt']|default('') %}
+                                            {% set choiceKind = choiceAttr['data-media-kind']|default('image') %}
+                                            {% set choiceSelected = choice.value in selectedEventMediaValues %}
+                                            <button class="admin-media-card{% if choiceSelected %} is-selected{% endif %}" type="button" data-media-card data-media-value="{{ choice.value }}" data-media-label="{{ choice.label }}" data-media-path="{{ choicePath }}" data-media-alt="{{ choiceAlt }}" data-media-kind="{{ choiceKind }}" aria-pressed="{{ choiceSelected ? 'true' : 'false' }}">
+                                                <span class="admin-media-card__thumb">
+                                                    {% if choicePath %}
+                                                        {% if choiceKind == 'video' %}
+                                                            <video muted playsinline preload="metadata"><source src="{{ asset('uploads/media/' ~ choicePath) }}"></video>
+                                                        {% else %}
+                                                            <img src="{{ asset('uploads/media/' ~ choicePath) }}" alt="{{ choiceAlt ?: choice.label }}" loading="lazy">
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <span>Apercu indisponible</span>
+                                                    {% endif %}
+                                                </span>
+                                                <strong class="admin-media-card__label">{{ choice.label }}</strong>
+                                                <small class="admin-media-card__meta">{{ choicePath ?: 'Aucun fichier' }}</small>
+                                            </button>
+                                        {% endfor %}
+                                    </div>
+
+                                    {{ form_errors(form.media) }}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card admin-page-card--sticky">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Actions</p>
+                                    <h2>Enregistrement</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Sauvegarde manuelle</span>
+                            </div>
+
+                            <div class="admin-page-actions">
+                                <button class="btn btn-danger btn-lg" type="submit">
+                                    {{ mode == 'new' ? 'Enregistrer l evenement' : 'Enregistrer les modifications' }}
+                                </button>
+                                <button class="btn btn-outline-light" type="button" data-page-preview-trigger>
+                                    Previsualiser
+                                </button>
+                                <a class="btn btn-secondary" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                                    Annuler
+                                </a>
+                            </div>
+                        </section>
+                    </aside>
+                </div>
+
+                {{ form_rest(form) }}
+            {{ form_end(form, { render_rest: false }) }}
+
+            <form class="d-none" data-event-preview-form method="post" action="{{ path('custom_admin_event_preview') }}" target="_blank">
+                <input type="hidden" name="_token" value="{{ csrf_token('event_preview') }}">
+                <input type="hidden" name="title" data-preview-title>
+                <input type="hidden" name="date" data-preview-date>
+                <input type="hidden" name="category_id" data-preview-category>
+                <input type="hidden" name="opponent" data-preview-opponent>
+                <input type="hidden" name="matchLocation" data-preview-match-location>
+                <input type="hidden" name="season" data-preview-season>
+                <input type="hidden" name="journee" data-preview-journee>
+                <input type="hidden" name="description" data-preview-description>
+                <input type="hidden" name="image_id" data-preview-image>
+                <input type="hidden" name="media_ids" data-preview-media-ids>
+            </form>
+    {% elseif resource == 'linktree' %}
+        {% set selectedLinktreeEnabled = item.enabled ? 'Actif' : 'Inactif' %}
+        {% set selectedLinktreeFeatured = item.featured ? 'Lien principal' : 'Lien secondaire' %}
+        {% set selectedLinktreeState = selectedLinktreeEnabled ~ ' · ' ~ selectedLinktreeFeatured %}
+        {% set selectedLinktreeIcon = item.icon ?: 'link-45deg' %}
+
+        <section
+            class="admin-page-editor admin-linktree-editor"
+            data-linktree-editor="1"
+            data-preview-url="{{ path('custom_admin_linktree_preview') }}"
+            data-preview-token="{{ csrf_token('linktree_preview') }}"
+        >
+            <div class="admin-page-editor__banner">
+                <div class="admin-page-editor__banner-copy">
+                    <p class="admin-kicker">Gestion du Linktree</p>
+                    <h2>{{ mode == 'new' ? 'Creer un lien' : 'Modifier le lien' }}</h2>
+                    <div class="admin-page-editor__banner-meta">
+                        <span class="admin-page-pill">Ordre d'affichage</span>
+                        <span class="admin-page-pill">Lien principal</span>
+                        <span class="admin-page-pill">{{ 'admin.crud.preview_admin'|trans }}</span>
+                    </div>
+                </div>
+
+                <div class="admin-page-editor__banner-actions">
+                    <button class="btn btn-outline-light btn-sm" type="button" data-page-preview-trigger>
+                        Previsualiser
+                    </button>
+                    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                        Retour a la liste
+                    </a>
+                </div>
+            </div>
+
+            {{ form_start(form, { attr: { class: 'admin-page-form', 'data-linktree-form': '1', novalidate: 'novalidate' } }) }}
+                {{ form_errors(form) }}
+
+                <div class="admin-page-editor__summary-grid">
+                    <article class="admin-page-summary">
+                        <span>Titre</span>
+                        <strong data-linktree-title-preview>{{ item.title ?: 'Lien' }}</strong>
+                        <small>Icone: <span data-linktree-icon-preview>{{ selectedLinktreeIcon }}</span></small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>URL</span>
+                        <strong data-linktree-url-preview>{{ item.url ?: '#' }}</strong>
+                        <small>Adresse cible du bouton.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Etat</span>
+                        <strong data-linktree-state-preview>{{ selectedLinktreeState }}</strong>
+                        <small>Position et visibilite du lien.</small>
+                    </article>
+                </div>
+
+                <div class="admin-page-editor__layout">
+                    <div class="admin-page-editor__main">
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Informations generales</p>
+                                    <h2>Titre, contenu et icone</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Carte principale</span>
+                            </div>
+
+                            <div class="admin-page-stack">
+                                <div class="admin-page-field">
+                                    {{ form_label(form.title) }}
+                                    <div class="admin-page-input-shell admin-page-input-shell--title">
+                                        <span class="admin-page-input-shell__prefix">Titre</span>
+                                        {{ form_widget(form.title) }}
+                                    </div>
+                                    <div class="admin-page-field-hero">
+                                        <div class="admin-page-field-hero__copy">
+                                            <span class="admin-page-field-hero__label">Apercu du bouton</span>
+                                            <strong data-linktree-title-preview>{{ item.title ?: 'Lien' }}</strong>
+                                            <small>Le texte principal affiche sur le bouton.</small>
+                                        </div>
+                                        <div class="admin-page-field-hero__meta">
+                                            <span class="admin-page-field-counter">Visible publiquement</span>
+                                            <span class="admin-page-field-chip">Lien du linktree</span>
+                                        </div>
+                                    </div>
+                                    <div class="admin-page-field-hint">
+                                        <span class="form-text">{{ form_help(form.title) }}</span>
+                                    </div>
+                                    {{ form_errors(form.title) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_label(form.description) }}
+                                    {{ form_widget(form.description) }}
+                                    <div class="admin-page-field-hint">
+                                        <span class="form-text">{{ form_help(form.description) }}</span>
+                                        <span class="admin-page-field-counter">Sous-titre du bouton</span>
+                                    </div>
+                                    {{ form_errors(form.description) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_label(form.url) }}
+                                    <div class="admin-page-input-shell admin-page-input-shell--slug">
+                                        <span class="admin-page-input-shell__prefix">Cible</span>
+                                        {{ form_widget(form.url) }}
+                                    </div>
+                                    <div class="admin-page-slug-shell">
+                                        <div class="admin-page-slug-shell__copy">
+                                            <span class="admin-page-field-hero__label">Destination</span>
+                                            <strong data-linktree-url-preview>{{ item.url ?: '#' }}</strong>
+                                            <small>L'adresse ouverte par le bouton.</small>
+                                        </div>
+                                        <div class="admin-page-slug-shell__meta">
+                                            <span class="admin-page-field-counter" data-linktree-state-preview>{{ selectedLinktreeState }}</span>
+                                            <span class="admin-page-field-chip admin-page-field-chip--soft">Nouvel onglet possible</span>
+                                        </div>
+                                    </div>
+                                    <div class="admin-page-field-hint">
+                                        <span class="form-text">{{ form_help(form.url) }}</span>
+                                    </div>
+                                    {{ form_errors(form.url) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_label(form.icon) }}
+                                    {{ form_widget(form.icon) }}
+                                    <div class="admin-page-field-hint">
+                                        <span class="form-text">{{ form_help(form.icon) }}</span>
+                                        <span class="admin-page-field-counter" data-linktree-icon-preview>{{ selectedLinktreeIcon }}</span>
+                                    </div>
+                                    {{ form_errors(form.icon) }}
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <aside class="admin-page-editor__side">
+                        <section class="admin-panel admin-page-card admin-page-card--sticky">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Publication</p>
+                                    <h2>Position et affichage</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Activation</span>
+                            </div>
+
+                            <div class="admin-page-stack">
+                                <div class="admin-page-field">
+                                    {{ form_label(form.position) }}
+                                    {{ form_widget(form.position) }}
+                                    {{ form_errors(form.position) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_label(form.enabled) }}
+                                    {{ form_widget(form.enabled) }}
+                                    {{ form_errors(form.enabled) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_label(form.featured) }}
+                                    {{ form_widget(form.featured) }}
+                                    {{ form_errors(form.featured) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_label(form.openInNewTab) }}
+                                    {{ form_widget(form.openInNewTab) }}
+                                    {{ form_errors(form.openInNewTab) }}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card admin-page-card--sticky">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Apercu</p>
+                                    <h2>Rendu final</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Avant sauvegarde</span>
+                            </div>
+
+                            <article class="linktree-preview-card linktree-preview-card--embedded">
+                                <div class="linktree-preview-card__head">
+                                    <i class="bi bi-link-45deg" aria-hidden="true" data-linktree-preview-icon></i>
+                                    <div>
+                                        <h2 data-linktree-preview-title>{{ item.title ?: 'Lien' }}</h2>
+                                        <p data-linktree-preview-description>{{ item.description ?: 'Sous-titre du lien' }}</p>
+                                    </div>
+                                </div>
+                                <div class="linktree-preview-card__body">
+                                    <span>URL</span>
+                                    <strong data-linktree-preview-url>{{ item.url ?: '#' }}</strong>
+                                    <small data-linktree-preview-meta>{{ selectedLinktreeState }}</small>
+                                </div>
+                            </article>
+
+                            <div class="admin-page-actions mt-3">
+                                <button class="btn btn-danger btn-lg" type="submit">
+                                    {{ mode == 'new' ? 'Enregistrer le lien' : 'Enregistrer les modifications' }}
+                                </button>
+                                <button class="btn btn-outline-light" type="button" data-page-preview-trigger>
+                                    Previsualiser
+                                </button>
+                                <a class="btn btn-secondary" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                                    Annuler
+                                </a>
+                            </div>
+                        </section>
+                    </aside>
+                </div>
+
+                {{ form_rest(form) }}
+            {{ form_end(form, { render_rest: false }) }}
+
+            <form class="d-none" data-linktree-preview-form method="post" action="{{ path('custom_admin_linktree_preview') }}" target="_blank">
+                <input type="hidden" name="_token" value="{{ csrf_token('linktree_preview') }}">
+                <input type="hidden" name="title" data-preview-title>
+                <input type="hidden" name="description" data-preview-description>
+                <input type="hidden" name="url" data-preview-url-value>
+                <input type="hidden" name="icon" data-preview-icon>
+                <input type="hidden" name="position" data-preview-position>
+                <input type="hidden" name="enabled" data-preview-enabled>
+                <input type="hidden" name="featured" data-preview-featured>
+                <input type="hidden" name="openInNewTab" data-preview-open-in-new-tab>
+            </form>
+    {% elseif resource == 'medias' %}
+        {% set selectedMediaPath = form.path.vars.value|default('') %}
+        {% set selectedMediaAlt = form.alt.vars.value|default('') %}
+
+        <section
+            class="admin-page-editor admin-media-editor"
+            data-media-editor="1"
+            data-preview-url="{{ path('custom_admin_media_preview') }}"
+            data-preview-token="{{ csrf_token('media_preview') }}"
+        >
+            <div class="admin-page-editor__banner">
+                <div class="admin-page-editor__banner-copy">
+                    <p class="admin-kicker">Gestion des medias</p>
+                    <h2>{{ mode == 'new' ? 'Creer un media' : 'Modifier le media' }}</h2>
+                    <div class="admin-page-editor__banner-meta">
+                        <span class="admin-page-pill">Image / video</span>
+                        <span class="admin-page-pill">Relations</span>
+                        <span class="admin-page-pill">Preview</span>
+                    </div>
+                </div>
+
+                <div class="admin-page-editor__banner-actions">
+                    <button class="btn btn-outline-light btn-sm" type="button" data-page-preview-trigger>
+                        Previsualiser
+                    </button>
+                    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                        Retour a la liste
+                    </a>
+                </div>
+            </div>
+
+            {{ form_start(form, { attr: { class: 'admin-page-form', 'data-media-form': '1', novalidate: 'novalidate' } }) }}
+                {{ form_errors(form) }}
+
+                <div class="admin-page-editor__summary-grid">
+                    <article class="admin-page-summary">
+                        <span>Fichier</span>
+                        <strong data-media-path-preview>{{ item.path ?: 'Aucun fichier' }}</strong>
+                        <small>Chemin utilise pour l'affichage public.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Alt</span>
+                        <strong data-media-alt-preview>{{ item.alt ?: 'Aucun texte alternatif' }}</strong>
+                        <small>Texte de substitution et SEO.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Type</span>
+                        <strong data-media-kind-preview>{{ item.isVideo ? 'Video' : 'Image ou autre' }}</strong>
+                        <small>Detection automatique selon l'extension.</small>
+                    </article>
+                </div>
+
+                <div class="admin-page-editor__layout">
+                    <section class="admin-panel admin-page-card">
+                        <div class="admin-panel-head">
+                            <div>
+                                <p class="admin-kicker">Informations generales</p>
+                                <h2>Nom et texte alternatif</h2>
+                            </div>
+                            <span class="admin-page-field-counter">Infos du media</span>
+                        </div>
+
+                        <div class="admin-form-grid">
+                            <div class="admin-page-field">
+                                {{ form_label(form.path) }}
+                                {{ form_widget(form.path) }}
+                                {{ form_errors(form.path) }}
+                            </div>
+                            <div class="admin-page-field">
+                                {{ form_label(form.alt) }}
+                                {{ form_widget(form.alt) }}
+                                {{ form_errors(form.alt) }}
+                            </div>
+                        </div>
+                    </section>
+
+                    <aside class="admin-page-editor__side">
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Relations</p>
+                                    <h2>Rattachements</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Collections associees</span>
+                            </div>
+
+                            <div class="admin-form-grid">
+                                <div class="admin-page-field">
+                                    {{ form_label(form.gallery) }}
+                                    {{ form_widget(form.gallery) }}
+                                    {{ form_errors(form.gallery) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.event) }}
+                                    {{ form_widget(form.event) }}
+                                    {{ form_errors(form.event) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.post) }}
+                                    {{ form_widget(form.post) }}
+                                    {{ form_errors(form.post) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.merch) }}
+                                    {{ form_widget(form.merch) }}
+                                    {{ form_errors(form.merch) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.groupPage) }}
+                                    {{ form_widget(form.groupPage) }}
+                                    {{ form_errors(form.groupPage) }}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card admin-page-card--sticky">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Apercu</p>
+                                    <h2>Fichier final</h2>
+                                </div>
+                                <div class="admin-page-editor__banner-actions">
+                                    <label class="btn btn-secondary btn-sm" for="{{ form.imageFile.vars.id }}" data-media-import-trigger>
+                                        Importer une image
+                                    </label>
+                                    <span class="admin-page-field-counter">Avant validation</span>
+                                </div>
+                            </div>
+
+                            {{ form_widget(form.imageFile, { attr: { class: 'visually-hidden', 'data-media-import-input': '1' } }) }}
+
+                            <article class="media-preview-card media-preview-card--embedded">
+                                <div class="media-preview-card__visual" data-media-preview-visual>
+                                    {% if item.path %}
+                                        {% if item.isVideo %}
+                                            <video controls preload="metadata">
+                                                <source src="{{ asset('uploads/media/' ~ item.path) }}">
+                                            </video>
+                                        {% else %}
+                                            <img src="{{ asset('uploads/media/' ~ item.path) }}" alt="{{ item.alt ?: item.path }}">
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="media-preview-card__empty">Aucun fichier renseigne</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="media-preview-card__body">
+                                    <h2 data-media-preview-title>{{ item.alt ?: 'Media sans titre' }}</h2>
+                                    <p data-media-preview-path>{{ item.path ?: 'Aucun chemin defini' }}</p>
+                                </div>
+                            </article>
+
+                            <div class="admin-page-actions mt-3">
+                                <button class="btn btn-danger btn-lg" type="submit">
+                                    {{ mode == 'new' ? 'Enregistrer le media' : 'Enregistrer les modifications' }}
+                                </button>
+                                <button class="btn btn-outline-light" type="button" data-page-preview-trigger>
+                                    Previsualiser
+                                </button>
+                                <a class="btn btn-secondary" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                                    Annuler
+                                </a>
+                            </div>
+                        </section>
+                    </aside>
+                </div>
+
+                {{ form_rest(form) }}
+            {{ form_end(form, { render_rest: false }) }}
+
+            <form class="d-none" data-media-preview-form method="post" action="{{ path('custom_admin_media_preview') }}" target="_blank">
+                <input type="hidden" name="_token" value="{{ csrf_token('media_preview') }}">
+                <input type="hidden" name="path" data-preview-path>
+                <input type="hidden" name="alt" data-preview-alt>
+                <input type="hidden" name="gallery_id" data-preview-gallery>
+                <input type="hidden" name="event_id" data-preview-event>
+                <input type="hidden" name="post_id" data-preview-post>
+                <input type="hidden" name="merch_id" data-preview-merch>
+                <input type="hidden" name="groupPage_id" data-preview-group-page>
+            </form>
+    {% elseif resource == 'merch' %}
+        {% set selectedMerchImageValue = form.image.vars.value|default('') %}
+        {% set selectedMerchImageLabel = item.image ? (item.image.alt ?: item.image.path) : 'Aucune image principale' %}
+        {% set merchPriceLabel = item.price is not null ? (item.price|number_format(2, ',', ' ') ~ ' €') : 'Prix non renseigne' %}
+        {% set merchMemberPriceLabel = item.memberPrice is not null ? (item.memberPrice|number_format(2, ',', ' ') ~ ' €') : 'Non defini' %}
+        {% set merchAudienceLabel = item.audience == 'members' ? 'Membres uniquement' : 'Tous les visiteurs' %}
+        {% set merchPublicUntilLabel = item.publicUntil ? item.publicUntil|date('d/m/Y H:i') : 'Aucune limite' %}
+        {% set merchStockCountLabel = item.stocks is not empty ? item.stocks|length ~ ' taille(s)' : 'Taille unique' %}
+        {% set merchCategoryLabel = item.category ? item.category.name : 'Aucune categorie' %}
+        {% set merchGadgetLabel = item.displayInGadgetHistory ? 'Oui' : 'Non' %}
+
+        <section
+            class="admin-merch-editor"
+            data-merch-editor="1"
+        >
+            <div class="admin-page-editor__banner">
+                <div class="admin-page-editor__banner-copy">
+                    <p class="admin-kicker">Gestion du merch</p>
+                    <h2>{{ mode == 'new' ? 'Creer un produit' : 'Modifier le produit' }}</h2>
+                    <div class="admin-page-editor__banner-meta">
+                        <span class="admin-page-pill">Image produit</span>
+                        <span class="admin-page-pill">Prix public / membre</span>
+                        <span class="admin-page-pill">Audience</span>
+                    </div>
+                </div>
+
+                <div class="admin-page-editor__banner-actions">
+                    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                        Retour a la liste
+                    </a>
+                </div>
+            </div>
+
+            {{ form_start(form, { attr: { class: 'admin-page-form', 'data-merch-form': '1', novalidate: 'novalidate' } }) }}
+                {{ form_errors(form) }}
+
+                <div class="admin-page-editor__summary-grid admin-merch-summary-grid">
+                    <article class="admin-page-summary">
+                        <span>Prix public</span>
+                        <strong data-merch-price-preview>{{ merchPriceLabel }}</strong>
+                        <small>Valeur affichee pour le public.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Prix membre</span>
+                        <strong data-merch-member-price-preview>{{ merchMemberPriceLabel }}</strong>
+                        <small>Tarif preferentiel si renseigne.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Audience</span>
+                        <strong data-merch-audience-preview>{{ merchAudienceLabel }}</strong>
+                        <small>Qui voit le produit sur le site.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Visibilite publique</span>
+                        <strong data-merch-public-until-preview>{{ merchPublicUntilLabel }}</strong>
+                        <small>Apres cette date, le produit n'apparait plus aux visiteurs.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Visuel</span>
+                        <strong data-merch-image-preview>{{ selectedMerchImageLabel }}</strong>
+                        <small data-merch-image-path-preview>{{ item.image ? item.image.path : 'Aucun fichier associe' }}</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Tailles</span>
+                        <strong>{{ merchStockCountLabel }}</strong>
+                        <small>Collection de stocks modifiable directement ici.</small>
+                    </article>
+                </div>
+
+                <div class="admin-page-editor__layout">
+                    <div class="admin-page-editor__main">
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Informations generales</p>
+                                    <h2>Produit et description</h2>
+                                </div>
+                                <span class="admin-page-field-counter" data-merch-title-counter>0 caracteres</span>
+                            </div>
+
+                            <div class="admin-page-stack">
+                                <div class="admin-page-field">
+                                    {{ form_label(form.title) }}
+                                    {{ form_widget(form.title) }}
+                                    <div class="admin-page-field-hero">
+                                        <div class="admin-page-field-hero__copy">
+                                            <span class="admin-page-field-hero__label">Titre</span>
+                                            <strong data-merch-title-preview>{{ item.title ?: 'Titre du produit' }}</strong>
+                                            <small data-merch-title-feedback>Titre pret</small>
+                                        </div>
+                                        <div class="admin-page-field-hero__meta">
+                                            <span class="admin-page-field-counter" data-merch-title-counter>0 caracteres</span>
+                                            <span class="admin-page-field-chip">Visible en boutique</span>
+                                        </div>
+                                    </div>
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.title) }}
+                                    </div>
+                                    {{ form_errors(form.title) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_label(form.category) }}
+                                    {{ form_widget(form.category) }}
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.category) }}
+                                        <span class="admin-page-field-counter" data-merch-category-preview>{{ merchCategoryLabel }}</span>
+                                    </div>
+                                    {{ form_errors(form.category) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_label(form.description) }}
+                                    <div class="admin-page-editor-frame">
+                                        {{ form_widget(form.description) }}
+                                    </div>
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.description) }}
+                                        <span class="admin-page-field-counter" data-merch-description-stats>0 mot</span>
+                                    </div>
+                                    {{ form_errors(form.description) }}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card admin-page-content-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Tarification</p>
+                                    <h2>Prix et audience</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Lecture rapide</span>
+                            </div>
+
+                            <div class="admin-page-grid-two">
+                                <div class="admin-page-field">
+                                    {{ form_label(form.price) }}
+                                    {{ form_widget(form.price) }}
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.price) }}
+                                        <span class="admin-page-field-counter" data-merch-price-preview>{{ merchPriceLabel }}</span>
+                                    </div>
+                                    {{ form_errors(form.price) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_label(form.memberPrice) }}
+                                    {{ form_widget(form.memberPrice) }}
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.memberPrice) }}
+                                        <span class="admin-page-field-counter" data-merch-member-price-preview>{{ merchMemberPriceLabel }}</span>
+                                    </div>
+                                    {{ form_errors(form.memberPrice) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_label(form.audience) }}
+                                    {{ form_widget(form.audience) }}
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.audience) }}
+                                        <span class="admin-page-field-counter" data-merch-audience-preview>{{ merchAudienceLabel }}</span>
+                                    </div>
+                                    {{ form_errors(form.audience) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_widget(form.displayInGadgetHistory) }}
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.displayInGadgetHistory) }}
+                                        <span class="admin-page-field-counter" data-merch-gadget-preview>{{ merchGadgetLabel }}</span>
+                                    </div>
+                                    {{ form_errors(form.displayInGadgetHistory) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_label(form.publicUntil) }}
+                                    {{ form_widget(form.publicUntil) }}
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.publicUntil) }}
+                                        <span class="admin-page-field-counter" data-merch-public-until-preview>{{ merchPublicUntilLabel }}</span>
+                                    </div>
+                                    {{ form_errors(form.publicUntil) }}
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <section class="admin-panel admin-page-card">
+                        <div class="admin-panel-head">
+                            <div>
+                                <p class="admin-kicker">Stock</p>
+                                <h2>Tailles et quantites</h2>
+                            </div>
+                            <span class="admin-page-field-counter" data-merch-stock-count>{{ merchStockCountLabel }}</span>
+                        </div>
+
+                        <div
+                            class="admin-stock-collection"
+                            data-merch-stock-collection
+                            data-prototype="{{ (
+                                '<article class=\"admin-stock-card\" data-merch-stock-item>'
+                                ~ '<div class=\"admin-stock-card__head\">'
+                                ~ '<div><span class=\"admin-page-field-hero__label\">Nouvelle taille</span><strong>Taille</strong></div>'
+                                ~ '<button class=\"btn btn-outline-light btn-sm\" type=\"button\" data-merch-stock-remove>Supprimer</button>'
+                                ~ '</div>'
+                                ~ '<div class=\"admin-page-grid-two\">'
+                                ~ form_row(form.stocks.vars.prototype.size)
+                                ~ form_row(form.stocks.vars.prototype.quantity)
+                                ~ '</div>'
+                                ~ '</article>'
+                            )|e('html_attr') }}"
+                            data-prototype-name="__size__"
+                        >
+                            {% for stockForm in form.stocks %}
+                                <article class="admin-stock-card" data-merch-stock-item>
+                                    <div class="admin-stock-card__head">
+                                        <div>
+                                            <span class="admin-page-field-hero__label">Ligne {{ loop.index }}</span>
+                                            <strong>{{ stockForm.vars.data.size|default('Taille') }}</strong>
+                                        </div>
+                                        <button class="btn btn-outline-light btn-sm" type="button" data-merch-stock-remove>
+                                            Supprimer
+                                        </button>
+                                    </div>
+
+                                    <div class="admin-page-grid-two">
+                                        {{ form_row(stockForm.size) }}
+                                        {{ form_row(stockForm.quantity) }}
+                                    </div>
+                                </article>
+                            {% else %}
+                                <div class="admin-empty-state" data-merch-stock-empty>
+                                    Aucune taille n'est encore definie.
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="admin-page-actions mt-3">
+                            <button class="btn btn-secondary" type="button" data-merch-stock-add>
+                                Ajouter une taille
+                            </button>
+                        </div>
+                    </section>
+                    {% do form.stocks.setRendered() %}
+
+                    <aside class="admin-page-editor__side">
+                        <section class="admin-panel admin-page-card admin-page-card--sticky">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Visuel</p>
+                                    <h2>Image du produit</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Selection visuelle</span>
+                            </div>
+
+                            <div class="admin-page-stack">
+                                <div class="admin-media-picker" data-media-picker>
+                                    <label class="form-label" for="{{ form.image.vars.id }}">Image principale</label>
+                                    <input type="search" class="form-control admin-media-picker__search" placeholder="Rechercher dans la mediatheque" data-media-search>
+                                    {{ form_widget(form.image, { attr: { 'data-media-select': '1', 'class': 'd-none' } }) }}
+
+                                    <div class="admin-media-library admin-media-library--scrollable" data-media-library>
+                                        <button class="admin-media-card{% if selectedMerchImageValue == '' %} is-selected{% endif %}" type="button" data-media-card data-media-value="" data-media-label="Aucune image" data-media-path="" data-media-alt="" data-media-kind="image" aria-pressed="{{ selectedMerchImageValue == '' ? 'true' : 'false' }}">
+                                            <span class="admin-media-card__thumb admin-media-card__thumb--empty"><span>Aucun visuel</span></span>
+                                            <strong class="admin-media-card__label">Aucune image</strong>
+                                            <small class="admin-media-card__meta">Laisse vide si le produit n'a pas de visuel.</small>
+                                        </button>
+
+                                        {% for choice in form.image.vars.choices %}
+                                            {% set choiceAttr = choice.attr|default({}) %}
+                                            {% set choicePath = choiceAttr['data-media-path']|default('') %}
+                                            {% set choiceAlt = choiceAttr['data-media-alt']|default('') %}
+                                            {% set choiceKind = choiceAttr['data-media-kind']|default('image') %}
+                                            {% set choiceSelected = selectedMerchImageValue == choice.value %}
+                                            <button class="admin-media-card{% if choiceSelected %} is-selected{% endif %}" type="button" data-media-card data-media-value="{{ choice.value }}" data-media-label="{{ choice.label }}" data-media-path="{{ choicePath }}" data-media-alt="{{ choiceAlt }}" data-media-kind="{{ choiceKind }}" aria-pressed="{{ choiceSelected ? 'true' : 'false' }}">
+                                                <span class="admin-media-card__thumb">
+                                                    {% if choicePath %}
+                                                        {% if choiceKind == 'video' %}
+                                                            <video muted playsinline preload="metadata"><source src="{{ asset('uploads/media/' ~ choicePath) }}"></video>
+                                                        {% else %}
+                                                            <img src="{{ asset('uploads/media/' ~ choicePath) }}" alt="{{ choiceAlt ?: choice.label }}" loading="lazy">
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <span>Apercu indisponible</span>
+                                                    {% endif %}
+                                                </span>
+                                                <strong class="admin-media-card__label">{{ choice.label }}</strong>
+                                                <small class="admin-media-card__meta">{{ choicePath ?: 'Aucun fichier' }}</small>
+                                            </button>
+                                        {% endfor %}
+                                    </div>
+
+                                    {{ form_errors(form.image) }}
+
+                                    <div class="merch-preview-card media-preview-card">
+                                        <div class="media-preview-card__visual" data-merch-preview-visual>
+                                            {% if item.image %}
+                                                {% if item.image.isVideo %}
+                                                    <video controls preload="metadata">
+                                                        <source src="{{ asset('uploads/media/' ~ item.image.path) }}">
+                                                    </video>
+                                                {% else %}
+                                                    <img src="{{ asset('uploads/media/' ~ item.image.path) }}" alt="{{ item.image.alt ?: item.image.path }}">
+                                                {% endif %}
+                                            {% else %}
+                                                <div class="media-preview-card__empty">Aucune image selectionnee</div>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="media-preview-card__body">
+                                            <h2 data-merch-preview-title>{{ item.title ?: 'Produit sans titre' }}</h2>
+                                            <p data-merch-preview-meta>{{ merchPriceLabel }} · {{ merchAudienceLabel }}</p>
+                                            <p data-merch-preview-description>{{ item.description ?: 'Description du produit' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Publication</p>
+                                    <h2>Statut boutique</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Gadget et visibilite</span>
+                            </div>
+
+                            <div class="admin-page-stack">
+                                <article class="admin-page-summary">
+                                    <span>Gadget</span>
+                                    <strong data-merch-gadget-preview>{{ merchGadgetLabel }}</strong>
+                                    <small>Affichage dans l'historique des gadgets.</small>
+                                </article>
+
+                                <article class="admin-page-summary">
+                                    <span>Categorie</span>
+                                    <strong data-merch-category-preview>{{ merchCategoryLabel }}</strong>
+                                    <small>Classement du produit dans la boutique.</small>
+                                </article>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card admin-page-card--sticky">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Actions</p>
+                                    <h2>Enregistrement</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Sauvegarde manuelle</span>
+                            </div>
+
+                            <div class="admin-page-actions">
+                                <button class="btn btn-danger btn-lg" type="submit">
+                                    {{ mode == 'new' ? 'Enregistrer le produit' : 'Enregistrer les modifications' }}
+                                </button>
+                                <a class="btn btn-secondary" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                                    Annuler
+                                </a>
+                            </div>
+
+                            <p class="form-text mt-3">
+                                Verifie le visuel, les prix et la categorie avant de valider.
+                            </p>
+                        </section>
+                    </aside>
+                </div>
+
+                {{ form_rest(form) }}
+            {{ form_end(form, { render_rest: false }) }}
+    {% elseif resource == 'billets' %}
+        {% set selectedTicketImageValue = form.image.vars.value|default('') %}
+        {% set selectedTicketImageLabel = item.image ? (item.image.alt ?: item.image.path) : 'Aucune image principale' %}
+        {% set ticketPriceLabel = item.price is not null ? (item.price|number_format(2, ',', ' ') ~ ' €') : 'Prix non renseigne' %}
+        {% set ticketStockLabel = item.stock > 0 ? (item.stock ~ ' place(s)') : 'Complet' %}
+        {% set ticketAccessLabel = item.accessLabel %}
+        {% set ticketMatchLabel = (item.matchLocation|default('')|lower|trim == 'exterieur'
+            or (item.matchLocation is empty and item.category and item.category.slug == 'ext'))
+            ? (item.opponent ? item.opponent ~ ' vs FC Fleury' : 'Match exterieur')
+            : (item.opponent ? 'FC Fleury vs ' ~ item.opponent : 'Match a domicile') %}
+
+        <section
+            class="admin-page-editor"
+            data-ticket-editor="1"
+        >
+            <div class="admin-page-editor__banner">
+                <div class="admin-page-editor__banner-copy">
+                    <p class="admin-kicker">Gestion des billets</p>
+                    <h2>{{ mode == 'new' ? 'Creer un billet' : 'Modifier le billet' }}</h2>
+                    <div class="admin-page-editor__banner-meta">
+                        <span class="admin-page-pill">Image principale</span>
+                        <span class="admin-page-pill">Selection mediatheque</span>
+                        <span class="admin-page-pill">Billetterie</span>
+                    </div>
+                </div>
+
+                <div class="admin-page-editor__banner-actions">
+                    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                        Retour a la liste
+                    </a>
+                </div>
+            </div>
+
+            {{ form_start(form, { attr: { class: 'admin-page-form', 'data-ticket-form': '1', novalidate: 'novalidate' } }) }}
+                {{ form_errors(form) }}
+
+                <div class="admin-page-editor__summary-grid">
+                    <article class="admin-page-summary">
+                        <span>Match</span>
+                        <strong data-ticket-match-preview>{{ ticketMatchLabel }}</strong>
+                        <small>Le visuel public reprend ce match en priorite.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Date</span>
+                        <strong data-ticket-date-preview>{{ item.matchDate ? item.matchDate|date('d/m/Y H:i') : 'Aucune date' }}</strong>
+                        <small>La date du match structure la fiche billetterie.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Prix</span>
+                        <strong data-ticket-price-preview>{{ ticketPriceLabel }}</strong>
+                        <small>Tarif applique aux acheteurs.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Acces</span>
+                        <strong data-ticket-access-preview>{{ ticketAccessLabel }}</strong>
+                        <small>Indique si les non-membres peuvent acheter.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Image</span>
+                        <strong data-ticket-image-label>{{ selectedTicketImageLabel }}</strong>
+                        <small data-ticket-image-path>{{ item.image ? item.image.path : 'Aucun fichier associe' }}</small>
+                    </article>
+                </div>
+
+                <div class="admin-page-editor__layout">
+                    <div class="admin-page-editor__main">
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Informations generales</p>
+                                    <h2>Titre et contexte</h2>
+                                </div>
+                                <span class="admin-page-field-counter" data-ticket-title-counter>0 caracteres</span>
+                            </div>
+
+                            <div class="admin-page-stack">
+                                <div class="admin-page-field">
+                                    {{ form_label(form.title) }}
+                                    {{ form_widget(form.title) }}
+                                    <div class="admin-page-field-hero">
+                                        <div class="admin-page-field-hero__copy">
+                                            <span class="admin-page-field-hero__label">Titre</span>
+                                            <strong data-ticket-title-preview>{{ item.title ?: 'Titre du billet' }}</strong>
+                                            <small data-ticket-title-feedback>Titre pret</small>
+                                        </div>
+                                        <div class="admin-page-field-hero__meta">
+                                            <span class="admin-page-field-counter" data-ticket-title-counter>0 caracteres</span>
+                                            <span class="admin-page-field-chip">Visible publiquement</span>
+                                        </div>
+                                    </div>
+                                    <div class="admin-page-field-hint">{{ form_help(form.title) }}</div>
+                                    {{ form_errors(form.title) }}
+                                </div>
+
+                                <div class="admin-page-field">
+                                    {{ form_label(form.opponent) }}
+                                    {{ form_widget(form.opponent) }}
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.opponent) }}
+                                        <span class="admin-page-field-counter" data-ticket-match-label>{{ ticketMatchLabel }}</span>
+                                    </div>
+                                    {{ form_errors(form.opponent) }}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card admin-page-content-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Date et acces</p>
+                                    <h2>Planning et billetterie</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Parametres de vente</span>
+                            </div>
+
+                            <div class="admin-page-grid-two">
+                                <div class="admin-page-field">
+                                    {{ form_label(form.matchDate) }}
+                                    {{ form_widget(form.matchDate) }}
+                                    {{ form_errors(form.matchDate) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.category) }}
+                                    {{ form_widget(form.category) }}
+                                    {{ form_errors(form.category) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.matchLocation) }}
+                                    {{ form_widget(form.matchLocation) }}
+                                    {{ form_errors(form.matchLocation) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.venue) }}
+                                    {{ form_widget(form.venue) }}
+                                    {{ form_errors(form.venue) }}
+                                </div>
+                                <div class="admin-page-field" data-ticket-guest-availability-field>
+                                    {{ form_label(form.guestAvailabilityDate) }}
+                                    {{ form_widget(form.guestAvailabilityDate) }}
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.guestAvailabilityDate) }}
+                                        <span class="admin-page-field-counter" data-ticket-guest-availability-note>
+                                            Réservé aux non-membres
+                                        </span>
+                                    </div>
+                                    {{ form_errors(form.guestAvailabilityDate) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.memberAvailabilityDate) }}
+                                    {{ form_widget(form.memberAvailabilityDate) }}
+                                    {{ form_errors(form.memberAvailabilityDate) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_widget(form.openToGuests) }}
+                                    <div class="admin-page-field-hint">
+                                        {{ form_label(form.openToGuests) }}
+                                        <span class="admin-page-field-counter" data-ticket-access-preview>{{ ticketAccessLabel }}</span>
+                                    </div>
+                                    {{ form_errors(form.openToGuests) }}
+                                    <p class="form-text">{{ form_help(form.openToGuests) }}</p>
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.price) }}
+                                    {{ form_widget(form.price) }}
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.price) }}
+                                        <span class="admin-page-field-counter" data-ticket-price-preview>{{ ticketPriceLabel }}</span>
+                                    </div>
+                                    {{ form_errors(form.price) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.stock) }}
+                                    {{ form_widget(form.stock) }}
+                                    <div class="admin-page-field-hint">
+                                        {{ form_help(form.stock) }}
+                                        <span class="admin-page-field-counter" data-ticket-stock-preview>{{ ticketStockLabel }}</span>
+                                    </div>
+                                    {{ form_errors(form.stock) }}
+                                </div>
+                                <div class="admin-page-field">
+                                    {{ form_label(form.billetwebUrl) }}
+                                    {{ form_widget(form.billetwebUrl) }}
+                                    {{ form_errors(form.billetwebUrl) }}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card admin-page-content-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Description</p>
+                                    <h2>Texte public</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Informations complementaires</span>
+                            </div>
+
+                            <div class="admin-page-editor-wrapper">
+                                {{ form_label(form.description) }}
+                                <div class="admin-page-editor-frame">
+                                    {{ form_widget(form.description) }}
+                                </div>
+                                {{ form_errors(form.description) }}
+                                <div class="admin-page-field-hint">
+                                    {{ form_help(form.description) }}
+                                    <span class="admin-page-field-counter">Texte court pour la fiche de vente</span>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <aside class="admin-page-editor__side">
+                        <section class="admin-panel admin-page-card">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Visuel</p>
+                                    <h2>Image du billet</h2>
+                                </div>
+                                <div class="admin-page-editor__banner-actions">
+                                    <label class="btn btn-secondary btn-sm mb-0" for="ticket-import-input-{{ item.id ?: 'new' }}" data-ticket-import-trigger>
+                                        Importer une image
+                                    </label>
+                                    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', { resource: 'medias' }) }}" target="_blank" rel="noreferrer">
+                                        Ouvrir la mediatheque
+                                    </a>
+                                </div>
+                            </div>
+
+                            <p class="form-text">
+                                L'import ajoute un nouveau media puis le selectionne automatiquement dans la liste.
+                            </p>
+
+                            <input
+                                id="ticket-import-input-{{ item.id ?: 'new' }}"
+                                type="file"
+                                class="visually-hidden"
+                                accept="image/*"
+                                data-ticket-import-input
+                            >
+
+                            <div class="admin-media-picker" data-media-picker>
+                                <label class="form-label" for="{{ form.image.vars.id }}">Image principale</label>
+                                <input type="search" class="form-control admin-media-picker__search" placeholder="Rechercher dans la mediatheque" data-media-search>
+                                {{ form_widget(form.image, { attr: { 'data-media-select': '1', 'class': 'd-none' } }) }}
+                                {% if form.image_id is defined %}
+                                    {{ form_widget(form.image_id, { attr: { 'data-ticket-image-id': '1' } }) }}
+                                {% endif %}
+
+                                <div class="admin-media-library admin-media-library--scrollable" data-media-library>
+                                    <button class="admin-media-card{% if selectedTicketImageValue == '' %} is-selected{% endif %}" type="button" data-media-card data-media-value="" data-media-label="Aucune image principale" data-media-path="" data-media-alt="" data-media-kind="image" aria-pressed="{{ selectedTicketImageValue == '' ? 'true' : 'false' }}">
+                                        <span class="admin-media-card__thumb admin-media-card__thumb--empty"><span>Aucun visuel</span></span>
+                                        <strong class="admin-media-card__label">Aucune image principale</strong>
+                                        <small class="admin-media-card__meta">Laisse vide si le billet n'a pas de visuel.</small>
+                                    </button>
+
+                                    {% for choice in form.image.vars.choices %}
+                                        {% set choiceAttr = choice.attr|default({}) %}
+                                        {% set choicePath = choiceAttr['data-media-path']|default('') %}
+                                        {% set choiceAlt = choiceAttr['data-media-alt']|default('') %}
+                                        {% set choiceKind = choiceAttr['data-media-kind']|default('image') %}
+                                        {% set choiceSelected = selectedTicketImageValue == choice.value %}
+                                        <button class="admin-media-card{% if choiceSelected %} is-selected{% endif %}" type="button" data-media-card data-media-value="{{ choice.value }}" data-media-label="{{ choice.label }}" data-media-path="{{ choicePath }}" data-media-alt="{{ choiceAlt }}" data-media-kind="{{ choiceKind }}" aria-pressed="{{ choiceSelected ? 'true' : 'false' }}">
+                                            <span class="admin-media-card__thumb">
+                                                {% if choicePath %}
+                                                    {% if choiceKind == 'video' %}
+                                                        <video muted playsinline preload="metadata"><source src="{{ asset('uploads/media/' ~ choicePath) }}"></video>
+                                                    {% else %}
+                                                        <img src="{{ asset('uploads/media/' ~ choicePath) }}" alt="{{ choiceAlt ?: choice.label }}" loading="lazy">
+                                                    {% endif %}
+                                                {% else %}
+                                                    <span>Apercu indisponible</span>
+                                                {% endif %}
+                                            </span>
+                                            <strong class="admin-media-card__label">{{ choice.label }}</strong>
+                                            <small class="admin-media-card__meta">{{ choicePath ?: 'Aucun fichier' }}</small>
+                                        </button>
+                                    {% endfor %}
+                                </div>
+
+                                {{ form_errors(form.image) }}
+                                <p class="form-text">{{ form_help(form.image) }}</p>
+
+                                <div class="admin-media-preview" data-ticket-media-preview>
+                                    {% if item.image %}
+                                        {% if item.image.isVideo %}
+                                            <video controls preload="metadata">
+                                                <source src="{{ asset('uploads/media/' ~ item.image.path) }}">
+                                            </video>
+                                        {% else %}
+                                            <img src="{{ asset('uploads/media/' ~ item.image.path) }}" alt="{{ item.image.alt ?: item.title }}" loading="lazy">
+                                        {% endif %}
+                                        <div>
+                                            <strong>{{ item.image.alt ?: item.image.path }}</strong>
+                                            <small>{{ item.image.path }}</small>
+                                        </div>
+                                    {% else %}
+                                        <div class="admin-media-preview__empty">
+                                            Aucune image principale selectionnee
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="admin-media-picker__actions">
+                                    <button class="btn btn-outline-light btn-sm" type="button" data-ticket-media-clear>
+                                        Retirer l'image
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-panel admin-page-card admin-page-card--sticky">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Actions</p>
+                                    <h2>Enregistrement</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Sauvegarde manuelle</span>
+                            </div>
+
+                            <div class="admin-page-actions">
+                                <button class="btn btn-danger btn-lg" type="submit">
+                                    {{ mode == 'new' ? 'Enregistrer le billet' : 'Enregistrer les modifications' }}
+                                </button>
+                                <a class="btn btn-secondary" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                                    Annuler
+                                </a>
+                            </div>
+
+                            <p class="form-text mt-3">
+                                Verifie l'image, le prix et la disponibilite avant de valider.
+                            </p>
+                        </section>
+                    </aside>
+                </div>
+
+                {{ form_rest(form) }}
+            {{ form_end(form, { render_rest: false }) }}
+    {% else %}
+        <section class="admin-form-shell">
+            <div class="admin-form-banner">
+                <div class="admin-form-banner-copy">
+                    <p class="admin-kicker">Gestion {{ resource }}</p>
+                    <h2>{{ mode == 'new' ? 'Creer' : 'Modifier' }} {{ config.singular }}</h2>
+                    <div class="admin-form-banner-meta">
+                        <span class="admin-form-pill">{{ form|length }} champs</span>
+                        <span class="admin-form-pill">{{ mode == 'new' ? 'Creation' : 'Edition' }}</span>
+                        <span class="admin-form-pill">Sauvegarde manuelle</span>
+                    </div>
+                </div>
+
+                <div class="admin-form-banner-actions">
+                    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                        Retour a la liste
+                    </a>
+                </div>
+            </div>
+
+            {{ form_start(form, { attr: { class: 'admin-form admin-form--workspace', novalidate: 'novalidate' } }) }}
+                {{ form_errors(form) }}
+
+                <div class="admin-form-summary-grid">
+                    <article class="admin-page-summary">
+                        <span>Ressource</span>
+                        <strong>{{ config.label }}</strong>
+                        <small>{{ config.singular }}</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Champs</span>
+                        <strong>{{ form|length }}</strong>
+                        <small>Inclus les champs visibles du formulaire.</small>
+                    </article>
+
+                    <article class="admin-page-summary">
+                        <span>Etat</span>
+                        <strong>{{ mode == 'new' ? 'Nouveau' : 'Modification' }}</strong>
+                        <small>Les changements seront appliques a l'enregistrement.</small>
+                    </article>
+                </div>
+
+                <div class="admin-form-layout">
+                    <section class="admin-panel admin-form-card">
+                        <div class="admin-panel-head">
+                            <div>
+                                <p class="admin-kicker">Champs</p>
+                                <h2>{{ config.singular }}</h2>
+                            </div>
+                            <span class="admin-page-field-counter">{{ form|length }} elements</span>
+                        </div>
+
+                        <div class="admin-form-grid">
+                            {% for child in form %}
+                                {{ form_row(child) }}
+                            {% endfor %}
+                        </div>
+                    </section>
+
+                    <aside class="admin-form-side">
+                        <section class="admin-panel admin-form-card admin-form-card--sticky">
+                            <div class="admin-panel-head">
+                                <div>
+                                    <p class="admin-kicker">Actions</p>
+                                    <h2>Enregistrement</h2>
+                                </div>
+                                <span class="admin-page-field-counter">Action principale</span>
+                            </div>
+
+                            <div class="admin-form-actions">
+                                <button class="btn btn-danger btn-lg" type="submit">
+                                    {{ mode == 'new' ? 'Creer' : 'Enregistrer' }}
+                                </button>
+                                <button class="btn btn-outline-light btn-lg" type="submit" name="save_and_continue" value="1">
+                                    Enregistrer et continuer
+                                </button>
+                                <a class="btn btn-outline-light" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">
+                                    Annuler
+                                </a>
+                            </div>
+
+                            <p class="form-text mt-3">
+                                Pense a verifier les champs obligatoires avant de valider le formulaire.
+                            </p>
+                        </section>
+                    </aside>
+                </div>
+
+                {{ form_rest(form) }}
+            {{ form_end(form, { render_rest: false }) }}
+        </section>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {% if resource in ['pages', 'articles', 'chants', 'groupe', 'evenements'] %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.5/tinymce.min.js" referrerpolicy="no-referrer"></script>
+    {% endif %}
+
+    {% if resource in ['pages', 'articles'] %}
+        <script src="{{ asset('js/page-editor.js') }}" defer></script>
+    {% elseif resource == 'chants' %}
+        <script src="{{ asset('js/chant-editor.js') }}" defer></script>
+    {% elseif resource == 'groupe' %}
+        <script src="{{ asset('js/group-editor.js') }}" defer></script>
+    {% elseif resource == 'evenements' %}
+        <script src="{{ asset('js/event-editor.js') }}" defer></script>
+    {% elseif resource == 'linktree' %}
+        <script src="{{ asset('js/linktree-editor.js') }}" defer></script>
+    {% elseif resource == 'billets' %}
+        <script src="{{ asset('js/ticket-editor.js') }}" defer></script>
+    {% elseif resource == 'medias' %}
+        <script src="{{ asset('js/media-editor.js') }}" defer></script>
+        <script>
+            (() => {
+                if (window.__mediaEditorInitialized) {
+                    return;
+                }
+
+                window.__mediaEditorInitialized = true;
+
+                const editorRoot = document.querySelector('[data-media-editor="1"]');
+                if (!editorRoot) {
+                    return;
+                }
+
+                const form = editorRoot.querySelector('[data-media-form="1"]');
+                const pathInput = form?.querySelector('[name$="[path]"]');
+                const altInput = form?.querySelector('[name$="[alt]"]');
+                const previewVisualNode = editorRoot.querySelector('[data-media-preview-visual]');
+                const previewTitleNode = editorRoot.querySelector('[data-media-preview-title]');
+                const previewPathNode = editorRoot.querySelector('[data-media-preview-path]');
+                const importTrigger = editorRoot.querySelector('[data-media-import-trigger]');
+                const importInput = editorRoot.querySelector('[data-media-import-input]');
+
+                if (!form || !pathInput || !altInput || !previewVisualNode) {
+                    return;
+                }
+
+                let previewObjectUrl = null;
+
+                function setText(node, value) {
+                    if (node) {
+                        node.textContent = value;
+                    }
+                }
+
+                function escapeHtml(value) {
+                    return String(value)
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;');
+                }
+
+                function getSelectedFile() {
+                    return importInput?.files?.[0] || null;
+                }
+
+                function resolveKind(path, file) {
+                    if (file?.type?.startsWith('video/')) {
+                        return 'video';
+                    }
+
+                    const lower = String(path || '').toLowerCase();
+                    return /\.(mp4|webm|mov|m4v|avi)$/i.test(lower) ? 'video' : 'image';
+                }
+
+                function clearPreviewObjectUrl() {
+                    if (previewObjectUrl) {
+                        URL.revokeObjectURL(previewObjectUrl);
+                        previewObjectUrl = null;
+                    }
+                }
+
+                function updatePreviewCard() {
+                    const file = getSelectedFile();
+                    const path = file ? file.name : pathInput.value.trim();
+                    const alt = altInput.value.trim() || (file ? file.name : 'Media sans titre');
+                    const kind = resolveKind(path, file);
+
+                    setText(previewTitleNode, alt);
+                    setText(previewPathNode, path || 'Aucun chemin defini');
+
+                    if (!path) {
+                        clearPreviewObjectUrl();
+                        previewVisualNode.innerHTML = '<div class="media-preview-card__empty">Aucun fichier renseigne</div>';
+                        return;
+                    }
+
+                    clearPreviewObjectUrl();
+
+                    const fileUrl = file ? (previewObjectUrl = URL.createObjectURL(file)) : new URL(`/uploads/media/${path}`, window.location.origin).toString();
+                    if (kind === 'video') {
+                        previewVisualNode.innerHTML = `
+                            <video controls preload="metadata">
+                                <source src="${escapeHtml(fileUrl)}">
+                            </video>
+                        `;
+                    } else {
+                        previewVisualNode.innerHTML = `<img src="${escapeHtml(fileUrl)}" alt="${escapeHtml(alt)}">`;
+                    }
+                }
+
+                importTrigger?.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    importInput?.click();
+                });
+
+                importInput?.addEventListener('change', updatePreviewCard);
+                importInput?.addEventListener('input', updatePreviewCard);
+
+                [pathInput, altInput].forEach((field) => {
+                    field?.addEventListener('input', updatePreviewCard);
+                    field?.addEventListener('change', updatePreviewCard);
+                });
+
+                window.addEventListener('pagehide', clearPreviewObjectUrl);
+
+                updatePreviewCard();
+            })();
+        </script>
+    {% elseif resource == 'merch' %}
+        <script src="{{ asset('js/merch-editor.js') }}" defer></script>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,18 @@
+{% set locale = locale|default('fr') %}
+{% set flagLabels = {
+    fr: 'France',
+    en: 'English',
+    es: 'Espagne',
+    de: 'Allemagne',
+    pt: 'Portugal',
+    ar: 'Arabe'
+} %}
+{% set safeLocale = flagLabels[locale] is defined ? locale : 'fr' %}
+
+<img
+    src="{{ asset('img/flags/' ~ safeLocale ~ '.svg') }}"
+    class="flag-icon"
+    alt="{{ flagLabels[safeLocale] }}"
+    loading="eager"
+    decoding="async"
+>

@@ -10,9 +10,11 @@ admin_dashboard:
     ultras_lions_dashboard: Ultras Lions – Painel
     ultras_lions_fc_fleury_91_page_admin: Ultras Lions – FC Fleury 91 - Página Admin
     visites: Visitas
+    page_d_accueil: Página inicial
 base:
   html:
     ultras_lions_fc_fleury_91: Ultras Lions – FC Fleury 91
+    ultras_lions_fc_fleury_91_title: Ultras Lions
 components_footer:
   html:
     copyright: © %year% Ultras Lions — Site do Ultras FC Fleury 91.
@@ -31,11 +33,16 @@ components_navbar:
     connexion: Conexão
     deconnexion: Desconectar
     le_groupe: O Grupo
-    modifier_mon_compte: ️ Editar minha conta
+    modifier_mon_compte:  Editar minha conta
     mon_profil: Meu perfil
+    notre_histoire: "Nossa historia"
+    notre_mentalite: "Nossa mentalidade"
+    notre_fonctionnement: "Nosso funcionamento"
+    pourquoi_nous_rejoindre: "Por que se juntar a nós?"
     photos_de_match: Combine fotos
     saisir_un_code: Insira um código
     saison: Temporada %year_start%/%year_end%
+    se_carter: "Se Carter"
     se_connecter: Conecte-se
     sinscrire: Cadastre-se
     table_de_vente: Tabela de Vendas
@@ -43,6 +50,7 @@ components_navbar:
     videos: Vídeos
     communiques: Comunicados de imprensa
     streetart: Street Art
+    chants: "Chants"
     
 email_base:
   html:
@@ -87,6 +95,7 @@ events_list:
     filtrer: Filtro
     prochains_matchs_rassemblements_actions: Próximos jogos, encontros, ações
     saison: Temporada
+    photos_de_match: Fotos de jogos
 events_show:
   html:
     title: '%title% – Viagens – Ultras Lions'
@@ -105,6 +114,16 @@ group_show:
     identite_valeurs_histoire_tribune: Identidade, valores, história, plataforma
     le_groupe: O grupo
     le_groupe_ultras_lions: O grupo – Ultras Lions
+    section_histoire_title: "Nossa historia"
+    section_histoire_text: "Nascidos na arquibancada de Fleury, construimos nossa identidade jogo a jogo. Vermelho e preto, fieis, presentes em todo lugar."
+    section_mentalite_title: "Nossa mentalidade"
+    section_mentalite_text: "Lealdade, respeito, uniao. Cantamos, empurramos, nao largamos nunca, em casa e fora."
+    section_fonctionnement_title: "Nosso funcionamento"
+    section_fonctionnement_text: "O grupo funciona com voluntarios, reunioes e decisoes coletivas. Cada um tem seu lugar, cada um contribui."
+    section_rejoindre_title: "Por que se juntar a nós?"
+    section_rejoindre_text: "Para viver o jogo de outro jeito, participar de tifos e viagens e fazer parte de uma familia rubro-negra."
+    section_se_carter_title: "Se Carter"
+    section_se_carter_text: "Passe na mesa de vendas em dia de jogo, pegue seu codigo e depois se registre para acessar a area de membros."
 home_index:
   html:
     aucun_evenement_prevu: Nenhum evento planejado.
@@ -137,6 +156,20 @@ merch_list:
     textiles_accessoires_stickers_supports_du_groupe: Têxteis, acessórios, adesivos, suportes de grupo
     toutes: Todos
     trier: Organizar
+    stock_non_defini: Estoque não definido
+    vitrine_officielle: Vitrine oficial
+    decouvrir_la_selection: Descobrir a seleção
+    voir_le_panier: Ver carrinho
+    pieces: Peças
+    categories: Categorias
+    stock_disponible: Stock disponível
+    affinage: Filtragem
+    selectionnez_une_categorie: Selecione uma categoria
+    choisir: Escolher
+
+    moyens_de_paiement: "Métodos de pagamento"
+    paiement_par_carte_via_sumup: "Pagamento com cartão via SumUp"
+    paiement_en_liquide_a_la_table_de_vente: "Pagamento em dinheiro na mesa de vendas"
 merch_show:
   html:
     acheter: Comprar
@@ -170,11 +203,11 @@ profile_edit:
     modifier_mon_compte: Editar minha conta
 profile_show:
   html:
-    admin_role: Escritório - Ultras Lions
+    admin_role: Escritório
     adresse: 'Endereço :'
     date_de_naissance: 'Data de nascimento:'
     email: 'E-mail:'
-    member_role: Membro - Ultras Lions
+    member_role: Membro
     modifier_mon_profil: Editar meu perfil
     nom: 'Nome :'
     polo: 'Pólo:'
@@ -184,6 +217,7 @@ profile_show:
     t_shirt: 'Camiseta:'
     telephone: 'Telefone :'
     veste: 'Jaqueta :'
+    changer_mon_mot_de_passe: 'Alterar minha senha'
 registration_confirmation_email:
   html:
     cheers: Saúde!
@@ -223,6 +257,8 @@ security_register:
 security_reset_password:
   html:
     nouveau_mot_de_passe: Nova Senha
+    confirm_new_password: Confirmar nova senha
+    submit: Atualizar
 staff_index:
   html:
     staff: FUNCIONÁRIOS
@@ -237,12 +273,21 @@ ticket_buy:
     vs_opponent: versus %opponent%
 ticket_list:
   html:
-    aucun_match_pour_le_moment: Nenhuma correspondência ainda.
-    billetterie_ultras_lions: Ingressos - Ultras Lions
+    a_domicile: Casa
+    a_lexterieur: Fora
+    billetweb: Billetweb
+    billetweb_reservation: 'Reserva Billetweb'
+    reserver: Reservar
+    billetterie_billetweb_integree: 'Integração Billetweb'
+    billetterie_ultras_lions: Ingressos
+    decouvrir_les_matchs: 'Descobrir jogos'
     matchs_a_domicile_et_a_lexterieur: Jogos em casa e fora
     matchs_disponibles: Partidas disponíveis
+    selectionnez_une_categorie: 'Selecione uma categoria'
     stock: 'Estoque: %stock%'
     vs_opponent: versus %opponent%
+    vitrine_officielle: 'Vitrine oficial'
+    aucun_match_pour_le_moment: 'Nenhum jogo no momento.'
 ticket_show:
   html:
     adversaire: 'Adversário:'
@@ -270,7 +315,7 @@ user_index:
     password: Senha
     roles: Funções
     show: mostrar
-    user_index: Índice de usuário
+    user_index: índice de usuário
 user_new:
   html:
     create_new_user: Criar novo usuário
@@ -278,3 +323,218 @@ user_new:
 user_show:
   html:
     user: Usuário
+cart_index:
+  html:
+    billets: Bilhetes
+    billets_et_table_de_vente: 'Bilhetes + banca de venda'
+    date: Data
+    matos: Material
+    match: Jogo
+    nom: Apelido
+    panier: Carrinho
+    panier_vide: 'O teu carrinho está vazio.'
+    payer_avec_sumup: 'Pagar com SumUp'
+    moyens_de_paiement_sumup: 'Métodos de pagamento SumUp'
+    paiement_securise_sumup: 'Pagamento seguro pela SumUp, com validação final na página de pagamento.'
+    sumup_method_cards: 'Cartão bancário'
+    sumup_method_cards_detail: 'Visa, Mastercard e cartões compatíveis.'
+    sumup_method_wallets: 'Apple Pay / Google Pay'
+    sumup_method_wallets_detail: 'Consoante o dispositivo, navegador e conta do comerciante.'
+    sumup_method_paypal: 'PayPal via SumUp'
+    sumup_method_paypal_detail: 'Disponível se o PayPal estiver ativado na conta SumUp.'
+    sumup_method_local: 'Outros métodos locais'
+    sumup_method_local_detail: 'Consoante o país, montante e moeda.'
+    sumup_availability_note: 'A lista exata dos métodos disponíveis é confirmada pela SumUp no momento do pagamento.'
+    prenom: Nome
+    produit: Produto
+    quantite: Quantidade
+    retour_billetterie: 'Voltar à bilheteira'
+    retour_table_de_vente: 'Voltar à banca de venda'
+    sous_total_billets: 'Subtotal bilhetes'
+    sous_total_matos: 'Subtotal material'
+    supprimer: Remover
+    taille: Tamanho
+    total: Total
+    vider_le_panier: 'Esvaziar carrinho'
+    reserver_et_payer_en_liquide: 'Reservar e pagar em dinheiro'
+
+profile_order:
+  html:
+    match: Jogo
+    product: Produto
+
+profile_change_password:
+  html:
+    heading: 'Alterar minha senha'
+    submit: Atualizar
+    title: 'Alterar minha senha'
+
+profile:
+  email:
+    request_subject: 'Solicitação de gestão de conta Ultras Lions'
+  flash:
+    access_denied_show: 'Você só pode ver seu próprio perfil ou uma conta vinculada.'
+    access_denied_orders: 'Você só pode ver seus próprios pedidos.'
+    access_denied_manage_links: 'Você só pode gerenciar suas próprias associações de conta.'
+    access_denied_unlink: 'Você só pode desvincular suas próprias associações.'
+    access_denied_edit: 'Você só pode editar seu próprio perfil ou uma conta vinculada.'
+    access_denied_password: 'Você só pode alterar sua própria senha.'
+    invalid_form: 'Formulário inválido, tente novamente.'
+    no_account_found: 'Nenhuma conta encontrada com esse email.'
+    cannot_associate_own_account: 'Você não pode associar sua própria conta.'
+    already_linked: 'Esta conta já está associada.'
+    pending_request_exists: 'Já existe uma solicitação pendente para esta conta.'
+    request_sent: 'Solicitação enviada. A conta deverá validar por email.'
+    request_created_email_failed: 'Solicitação criada, mas o email não pôde ser enviado.'
+    link_not_found_or_expired: 'Solicitação não encontrada ou expirada.'
+    association_validated: 'Associação de conta validada.'
+    association_deleted: 'Associação removida.'
+    updated: 'Perfil atualizado!'
+    current_password_incorrect: 'A senha atual está incorreta.'
+    password_updated: 'Senha atualizada.'
+
+reset_password:
+  email:
+    subject: 'Redefina sua senha'
+  flash:
+    invalid_csrf: 'Token CSRF inválido.'
+    link_sent_if_exists: 'Se este endereço existir, um link de redefinição foi enviado.'
+    link_invalid_or_expired: 'Este link de redefinição é inválido ou expirou.'
+    password_min_length: 'A senha deve conter pelo menos 8 caracteres.'
+    password_uppercase: 'A senha deve conter pelo menos uma letra maiúscula.'
+    password_lowercase: 'A senha deve conter pelo menos uma letra minúscula.'
+    password_number: 'A senha deve conter pelo menos um número.'
+    password_special: 'A senha deve conter pelo menos um caractere especial.'
+    passwords_mismatch: 'As senhas não coincidem.'
+    updated: 'Sua senha foi atualizada. Você já pode entrar.'
+
+email_admin_custom:
+  html:
+    bonjour: Olá
+    header_subtitle: 'Mensagem administrativa'
+
+admin:
+  navigation:
+    mailing: 'Enviar um email'
+  mailing:
+    html:
+      title: 'Admin - Mailing'
+      heading: 'Enviar um email'
+      send: Enviar
+      communication: Comunicação
+      subject: Assunto
+      body: 'Corpo do email'
+      message_hint: 'A mensagem usa automaticamente o estilo de email da Ultras Lions.'
+      recipients: Destinatários
+      users_count_suffix: 'usuário(s)'
+      select_all: 'Selecionar tudo'
+      deselect_all: 'Desmarcar tudo'
+      no_user: 'Nenhum usuário disponível.'
+      preview_default_subject: 'Pré-visualização do email'
+      preview_default_header_subtitle: 'Pré-visualização antes do envio'
+      preview_recipient_name: 'Pré-visualização admin'
+    flash:
+      invalid_form: 'Formulário inválido, tente novamente.'
+      select_one_user: 'Selecione pelo menos um usuário.'
+      enter_subject: 'Informe um assunto.'
+      enter_header_title: 'Informe um título de cabeçalho.'
+      enter_header_subtitle: 'Informe um subtítulo de cabeçalho.'
+      enter_body: 'Escreva o corpo do email.'
+      sent_count: '%count% email(s) enviados.'
+      preview_csrf_invalid: 'Token CSRF inválido.'
+  crud:
+    preview_admin: 'Pré-visualização admin'
+
+form:
+  user:
+    roles:
+      user: Usuário
+      admin: Administrador
+    password: 'Senha'
+    verified: 'Verificado?'
+  registration:
+    invite_code: 'Código de convite'
+    first_name: Nome
+    last_name: Sobrenome
+    email: Email
+    password: 'Senha'
+    confirm_password: 'Confirmar senha'
+    phone: Telefone
+    address: Endereço
+    city: Cidade
+    postal_code: 'Código postal'
+    tshirt_size: Camiseta
+    sweatshirt_size: Moletom
+    jacket_size: Jaqueta
+    short_size: Bermuda
+    profile_photo: 'Foto de perfil'
+    placeholder:
+      phone: '+33612345678 / +32460123456…'
+      choose: 'Escolher…'
+    validation:
+      invite_code_required: 'O código é obrigatório.'
+      email_required: 'O endereço de email é obrigatório.'
+      password_required: 'A senha é obrigatória.'
+      password_min_length: 'Mínimo de 8 caracteres.'
+      password_uppercase: 'Deve conter pelo menos uma letra maiúscula.'
+      password_lowercase: 'Deve conter pelo menos uma letra minúscula.'
+      password_number: 'Deve conter pelo menos um número.'
+      password_special: 'Deve conter pelo menos um caractere especial.'
+      confirm_password_required: 'Você deve confirmar a senha.'
+      phone_invalid: 'Número de telefone inválido.'
+      phone_format: 'Formato de telefone inválido.'
+      postal_code_invalid: 'Código postal inválido.'
+      passwords_mismatch: 'As senhas não coincidem.'
+  profile:
+    email: 'Endereço de email'
+    first_name: Nome
+    last_name: Sobrenome
+    birth_date: 'Data de nascimento'
+    phone: Telefone
+    address: Endereço
+    city: Cidade
+    postal_code: 'Código postal'
+    profile_photo: 'Foto de perfil'
+    tshirt_size: 'Tamanho da camiseta'
+    polo_size: 'Tamanho do polo'
+    pullover_size: 'Tamanho do pulôver'
+    sweatshirt_size: 'Tamanho do moletom'
+    jacket_size: 'Tamanho da jaqueta'
+    short_size: 'Tamanho da bermuda'
+    placeholder:
+      phone: '+33612345678 ou +32460123456 (internacional)'
+      address: 'Ex.: 45 rue de la République'
+      city: 'Ex.: Montreal, Bruxelas, Paris'
+      postal_code: 'Ex.: 75001, H2Y 1C6…'
+      choose: 'Escolher...'
+    validation:
+      minimum_age: 'Você deve ter pelo menos 12 anos.'
+      phone_invalid: 'Número de telefone inválido.'
+      phone_format: 'Formato de telefone inválido.'
+      address_invalid: 'Endereço inválido (caracteres não autorizados).'
+      city_invalid: 'Cidade inválida.'
+      postal_code_invalid: 'Código postal inválido.'
+  profile_password:
+    current: 'Senha atual'
+    new: 'Nova senha'
+    confirm: 'Confirmação'
+    validation:
+      current_required: 'Digite sua senha atual.'
+      new_required: 'Digite uma nova senha.'
+      min_length: 'A senha deve conter pelo menos 8 caracteres.'
+      uppercase: 'A senha deve conter pelo menos uma letra maiúscula.'
+      lowercase: 'A senha deve conter pelo menos uma letra minúscula.'
+      number: 'A senha deve conter pelo menos um número.'
+      special: 'A senha deve conter pelo menos um caractere especial.'
+      confirm_required: 'Confirme a nova senha.'
+      passwords_mismatch: 'As senhas não coincidem.'
+
+
+
+
+
+
+
+
+
+

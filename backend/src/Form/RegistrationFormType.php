@@ -18,9 +18,15 @@ use Symfony\Component\Form\Extension\Core\Type\{
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationFormType extends AbstractType
 {
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+    ) {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $sizes = [
@@ -37,77 +43,69 @@ class RegistrationFormType extends AbstractType
             /* -------------------- CODE INVITATION -------------------- */
             ->add('inviteCode', TextType::class, [
                 'mapped' => false,
-                'label' => 'Code d’invitation',
+                'label' => 'form.registration.invite_code',
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le code est obligatoire.']),
+                    new Assert\NotBlank(['message' => 'form.registration.validation.invite_code_required']),
                 ],
             ])
 
             /* -------------------- IDENTITÉ -------------------- */
             ->add('prenom', TextType::class, [
-                'label' => 'Prénom',
+                'label' => 'form.registration.first_name',
                 'required' => true,
             ])
             ->add('nom', TextType::class, [
-                'label' => 'Nom',
+                'label' => 'form.registration.last_name',
                 'required' => true,
             ])
 
             /* -------------------- LOGIN -------------------- */
             ->add('email', EmailType::class, [
-                'label' => 'Email',
+                'label' => 'form.registration.email',
                 'constraints' => [
-                    new Assert\NotBlank(),
+                    new Assert\NotBlank(['message' => 'form.registration.validation.email_required']),
                     new Assert\Email(),
                 ],
             ])
-            ->add('pseudo', TextType::class, [
-                'label' => 'Pseudo',
-                'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Length(min: 3, max: 50),
-                ],
-            ])
-
             /* -------------------- PASSWORD + CONFIRM -------------------- */
             ->add('plainPassword', PasswordType::class, [
-                'label' => 'Mot de passe',
+                'label' => 'form.registration.password',
                 'mapped' => false,
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'Mot de passe requis']),
-                    new Assert\Length(['min' => 8, 'minMessage' => 'Minimum 8 caractères']),
+                    new Assert\NotBlank(['message' => 'form.registration.validation.password_required']),
+                    new Assert\Length(['min' => 8, 'minMessage' => 'form.registration.validation.password_min_length']),
                     new Assert\Regex([
                         'pattern' => '/[A-Z]/',
-                        'message' => 'Il doit contenir au moins une MAJUSCULE.',
+                        'message' => 'form.registration.validation.password_uppercase',
                     ]),
                     new Assert\Regex([
                         'pattern' => '/[a-z]/',
-                        'message' => 'Il doit contenir au moins une minuscule.',
+                        'message' => 'form.registration.validation.password_lowercase',
                     ]),
                     new Assert\Regex([
                         'pattern' => '/[0-9]/',
-                        'message' => 'Il doit contenir au moins un chiffre.',
+                        'message' => 'form.registration.validation.password_number',
                     ]),
                     new Assert\Regex([
                         'pattern' => '/[\W]/',
-                        'message' => 'Il doit contenir au moins un caractère spécial.',
+                        'message' => 'form.registration.validation.password_special',
                     ]),
                 ],
             ])
             ->add('confirmPassword', PasswordType::class, [
-                'label' => 'Confirmer le mot de passe',
+                'label' => 'form.registration.confirm_password',
                 'mapped' => false,
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'Tu dois confirmer le mot de passe']),
+                    new Assert\NotBlank(['message' => 'form.registration.validation.confirm_password_required']),
                 ],
             ])
 
             /* -------------------- COORDONNÉES -------------------- */
             ->add('telephone', TelType::class, [
-                'label' => 'Téléphone',
+                'label' => 'form.registration.phone',
                 'required' => false,
                 'attr' => [
-                    'placeholder' => '+33612345678 / +32460123456…',
+                    'placeholder' => $this->translator->trans('form.registration.placeholder.phone'),
                 ],
                 'constraints' => [
                     new Assert\Length(min: 5, max: 20),
@@ -118,68 +116,68 @@ class RegistrationFormType extends AbstractType
                         try {
                             $parsed = $lib->parse($value, null);
                             if (!$lib->isValidNumber($parsed)) {
-                                $context->buildViolation('Numéro de téléphone invalide.')->addViolation();
+                                $context->buildViolation('form.registration.validation.phone_invalid')->addViolation();
                             }
                         } catch (\Exception) {
-                            $context->buildViolation('Format téléphonique incorrect.')->addViolation();
+                            $context->buildViolation('form.registration.validation.phone_format')->addViolation();
                         }
                     }),
                 ],
             ])
             ->add('adresse', TextType::class, [
-                'label' => 'Adresse',
+                'label' => 'form.registration.address',
                 'required' => false,
                 'constraints' => [
                     new Assert\Length(max: 255),
                 ],
             ])
             ->add('ville', TextType::class, [
-                'label' => 'Ville',
+                'label' => 'form.registration.city',
                 'required' => false,
                 'constraints' => [
                     new Assert\Length(max: 100),
                 ],
             ])
             ->add('codePostal', TextType::class, [
-                'label' => 'Code postal',
+                'label' => 'form.registration.postal_code',
                 'required' => false,
                 'constraints' => [
                     new Assert\Regex([
                         'pattern' => '/^[A-Za-z0-9\- ]{3,12}$/',
-                        'message' => 'Code postal invalide.',
+                        'message' => 'form.registration.validation.postal_code_invalid',
                     ]),
                 ],
             ])
 
             /* -------------------- TAILLES -------------------- */
             ->add('tailleTshirt', ChoiceType::class, [
-                'label' => 'T-shirt',
+                'label' => 'form.registration.tshirt_size',
                 'choices' => $sizes,
-                'placeholder' => 'Choisir…',
+                'placeholder' => $this->translator->trans('form.registration.placeholder.choose'),
                 'required' => false
             ])
             ->add('tailleSweat', ChoiceType::class, [
-                'label' => 'Sweat',
+                'label' => 'form.registration.sweatshirt_size',
                 'choices' => $sizes,
-                'placeholder' => 'Choisir…',
+                'placeholder' => $this->translator->trans('form.registration.placeholder.choose'),
                 'required' => false
             ])
             ->add('tailleVeste', ChoiceType::class, [
-                'label' => 'Veste',
+                'label' => 'form.registration.jacket_size',
                 'choices' => $sizes,
-                'placeholder' => 'Choisir…',
+                'placeholder' => $this->translator->trans('form.registration.placeholder.choose'),
                 'required' => false
             ])
             ->add('tailleShort', ChoiceType::class, [
-                'label' => 'Short',
+                'label' => 'form.registration.short_size',
                 'choices' => $sizes,
-                'placeholder' => 'Choisir…',
+                'placeholder' => $this->translator->trans('form.registration.placeholder.choose'),
                 'required' => false
             ])
 
             /* -------------------- PHOTO -------------------- */
             ->add('photoProfil', FileType::class, [
-                'label' => 'Photo de profil',
+                'label' => 'form.registration.profile_photo',
                 'mapped' => false,
                 'required' => false,
             ]);
@@ -194,7 +192,7 @@ class RegistrationFormType extends AbstractType
 
             if ($pwd !== $confirm) {
                 $form->get('confirmPassword')->addError(
-                    new \Symfony\Component\Form\FormError("Les mots de passe ne correspondent pas.")
+                    new \Symfony\Component\Form\FormError($this->translator->trans('form.registration.validation.passwords_mismatch'))
                 );
             }
         });

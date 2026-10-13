@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'cartage_thankyou.html.cartage'|trans }}{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ 'cartage_thankyou.html.cartage'|trans }}</h1>
+        <p class="hero-subtitle">{{ paymentStatusLabel|default('cartage_thankyou.html.paiement_en_attente'|trans) }}</p>
+
+        <div class="card card-form mt-4" style="max-width: 42rem; margin-inline: auto;">
+            <p class="mb-2">{{ paymentStatusMessage|default('cartage_thankyou.html.nous_verifions_ton_paiement_avec_sumup'|trans) }}</p>
+
+            {% if checkoutId|default('') %}
+                <p class="form-section-hint mb-2"><strong>{{ 'cartage_thankyou.html.checkout_id'|trans }}</strong> {{ checkoutId }}</p>
+            {% endif %}
+
+            {% if reference|default('') %}
+                <p class="form-section-hint mb-2"><strong>{{ 'cartage_thankyou.html.reference'|trans }}</strong> {{ reference }}</p>
+            {% endif %}
+
+            <p class="form-section-hint mb-0">
+                <strong>{{ 'cartage_thankyou.html.statut_brut'|trans }}</strong> {{ paymentStatus|default('UNKNOWN') }}
+            </p>
+        </div>
+
+        {% if paymentConfirmed|default(false) %}
+            <p class="hero-subtitle mt-4">{{ 'cartage_thankyou.html.paiement_valide_cartage_confirme'|trans }}</p>
+            {% if profileUrl|default(null) %}
+                <a href="{{ profileUrl }}" class="btn-ul mt-3">{{ 'cartage_thankyou.html.voir_mon_profil'|trans }}</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn-ul mt-3">{{ 'cartage_thankyou.html.me_connecter'|trans }}</a>
+            {% endif %}
+        {% elseif registrationFound|default(false) %}
+            <p class="hero-subtitle mt-4">{{ 'cartage_thankyou.html.statut_echec_reessaie_ou_contacte_le_groupe'|trans }}</p>
+        {% else %}
+            <p class="hero-subtitle mt-4">{{ 'cartage_thankyou.html.impossible_de_retrouver_la_demande'|trans }}</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

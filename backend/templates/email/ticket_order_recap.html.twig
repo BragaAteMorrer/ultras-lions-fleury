@@ -1,57 +1,63 @@
 {% extends 'email/base.html.twig' %}
 
-{% block title %}{{ 'email_ticket_order_recap.html.recapitulatif_de_reservation'|trans }}{% endblock %}
+{% block title %}Recapitulatif de reservation{% endblock %}
+{% block header_subtitle %}Billetterie{% endblock %}
+{% block header_title %}Recapitulatif de reservation{% endblock %}
 
 {% block content %}
-    <h1>{{ 'email_ticket_order_recap.html.recapitulatif_de_reservation'|trans }}</h1>
+    {% set fullName = ((user.prenom ?? '') ~ ' ' ~ (user.nom ?? ''))|trim %}
 
-    <p>
-        {{ 'email_ticket_order_recap.html.thanks_for_booking'|trans }}{% if user and (user.prenom or user.nom) %}, {{ user.prenom }} {{ user.nom }}{% endif %}.
-        {{ 'email_ticket_order_recap.html.here_is_summary'|trans }}
-    </p>
+    <p>Merci pour ta reservation{% if fullName %}, {{ fullName }}{% endif %}. Voici le recapitulatif.</p>
 
-    <p>
-        <strong>{{ 'email_ticket_order_recap.html.n_reservation'|trans }}</strong> {{ order.number }}<br>
-        <strong>{{ 'email_merch_order_recap.html.date'|trans }}</strong> {{ order.orderedAt|date('d/m/Y H:i') }}
-    </p>
+    <div class="card">
+        <ul>
+            <li>Numero : {{ order.number }}</li>
+            <li>Date : {{ order.orderedAt|date('d/m/Y H:i') }}</li>
+        </ul>
+    </div>
 
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; margin: 1rem 0;">
         <thead>
-        <tr>
-            <th align="left" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_ticket_order_recap.html.match'|trans }}</th>
-            <th align="center" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_merch_order_recap.html.qte'|trans }}</th>
-            <th align="right" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_merch_order_recap.html.prix'|trans }}</th>
-        </tr>
+            <tr>
+                <th align="left" style="padding: 0.5rem; border-bottom: 1px solid #e0e0e0;">Match</th>
+                <th align="center" style="padding: 0.5rem; border-bottom: 1px solid #e0e0e0;">Qte</th>
+                <th align="right" style="padding: 0.5rem; border-bottom: 1px solid #e0e0e0;">Prix</th>
+            </tr>
         </thead>
         <tbody>
-        {% for line in order.lines %}
-            <tr>
-                <td style="padding: 0.5rem; border-bottom: 1px solid #222;">
-                    {{ line.title }}<br>
-                    <span style="color:#999;">{{ 'email_ticket_order_recap.html.match_line'|trans({'%date%': line.matchDate|date('d/m/Y H:i'), '%opponent%': line.opponent}) }}</span>
-                </td>
-                <td align="center" style="padding: 0.5rem; border-bottom: 1px solid #222;">{{ line.quantity }}</td>
-                <td align="right" style="padding: 0.5rem; border-bottom: 1px solid #222;">
-                    {{ line.totalPrice|number_format(2, ',', ' ') }} €
-                </td>
-            </tr>
-        {% endfor %}
+            {% for line in order.lines %}
+                <tr>
+                    <td style="padding: 0.5rem; border-bottom: 1px solid #f0f0f0;">
+                        {{ line.title }}<br>
+                        <span class="muted">
+                            {% if line.matchDate %}
+                                {{ line.matchDate|date('d/m/Y H:i') }}
+                            {% else %}
+                                Date a confirmer
+                            {% endif %}
+                            {% if line.opponent %} - {{ line.opponent }}{% endif %}
+                        </span>
+                    </td>
+                    <td align="center" style="padding: 0.5rem; border-bottom: 1px solid #f0f0f0;">{{ line.quantity }}</td>
+                    <td align="right" style="padding: 0.5rem; border-bottom: 1px solid #f0f0f0;">{{ line.totalPrice|number_format(2, ',', ' ') }} EUR</td>
+                </tr>
+            {% endfor %}
         </tbody>
         <tfoot>
-        <tr>
-            <td colspan="2" align="right" style="padding: 0.75rem 0.5rem; font-weight: bold;">{{ 'email_merch_order_recap.html.total'|trans }}</td>
-            <td align="right" style="padding: 0.75rem 0.5rem; font-weight: bold; color: #D40000;">
-                {{ order.total|number_format(2, ',', ' ') }} €
-            </td>
-        </tr>
+            <tr>
+                <td colspan="2" align="right" style="padding: 0.75rem 0.5rem; font-weight: bold;">Total</td>
+                <td align="right" style="padding: 0.75rem 0.5rem; font-weight: bold; color: #c40018;">{{ order.total|number_format(2, ',', ' ') }} EUR</td>
+            </tr>
         </tfoot>
     </table>
 
     {% if order.note %}
-        <p><strong>{{ 'email_merch_order_recap.html.note'|trans }}</strong> {{ order.note }}</p>
+        <p><strong>Note :</strong> {{ order.note }}</p>
     {% endif %}
 
-    <p>{{ 'email_ticket_order_recap.html.le_paiement_et_les_infos_de_remise_retrait_se_font_selon_les_consignes'|trans }}</p>
+    <p>Le paiement et les modalites de remise suivent les consignes communiquees par le club.</p>
 
-    <a href="{{ url('ticket_index') }}" class="btn">{{ 'email_ticket_order_recap.html.voir_la_billetterie'|trans }}</a>
+    <p>
+        <a href="{{ url('ticket_index') }}" class="button">Voir la billetterie</a>
+    </p>
 {% endblock %}

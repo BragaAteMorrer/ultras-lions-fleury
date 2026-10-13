@@ -22,6 +22,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
+    #[ORM\Column(name: 'is_verified', options: ['default' => false])]
+    private bool $verified = false;
+
     /**
      * Champ non persisté, utilisé pour saisir un nouveau mot de passe
      */
@@ -30,8 +33,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $pseudo = null;
+    #[ORM\Column(length: 128, nullable: true)]
+    private ?string $resetPasswordToken = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $resetPasswordTokenExpiresAt = null;
+
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photoProfil = null;
@@ -102,6 +109,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email ?? '';
     }
 
+    public function __toString(): string
+    {
+        $name = trim(($this->prenom ?? '') . ' ' . ($this->nom ?? ''));
+
+        return $name !== '' ? $name : $this->getUserIdentifier();
+    }
+
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -116,6 +130,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->verified;
+    }
+
+    public function setVerified(bool $verified): self
+    {
+        $this->verified = $verified;
+
         return $this;
     }
 
@@ -147,16 +173,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->plainPassword = null;
     }
 
-    public function getPseudo(): ?string
+    public function getResetPasswordToken(): ?string
     {
-        return $this->pseudo;
+        return $this->resetPasswordToken;
     }
 
-    public function setPseudo(string $pseudo): self
+    public function setResetPasswordToken(?string $resetPasswordToken): self
     {
-        $this->pseudo = $pseudo;
+        $this->resetPasswordToken = $resetPasswordToken;
         return $this;
     }
+
+    public function getResetPasswordTokenExpiresAt(): ?\DateTimeImmutable
+    {
+        return $this->resetPasswordTokenExpiresAt;
+    }
+
+    public function setResetPasswordTokenExpiresAt(?\DateTimeImmutable $resetPasswordTokenExpiresAt): self
+    {
+        $this->resetPasswordTokenExpiresAt = $resetPasswordTokenExpiresAt;
+        return $this;
+    }
+
+    public function isResetPasswordTokenValid(string $token): bool
+    {
+        if ($this->resetPasswordToken === null || $this->resetPasswordTokenExpiresAt === null) {
+            return false;
+        }
+
+        $hashedToken = hash('sha256', $token);
+
+        return $this->resetPasswordTokenExpiresAt > new \DateTimeImmutable()
+            && (
+                hash_equals($this->resetPasswordToken, $token)
+                || hash_equals($this->resetPasswordToken, $hashedToken)
+            );
+    }
+
 
     public function getPhotoProfil(): ?string
     {
@@ -310,5 +363,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->tailleShort = $tailleShort;
         return $this;
+    }
+
+    public function getCartageStatus(): string
+    {
+        return '';
     }
 }

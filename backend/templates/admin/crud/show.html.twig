@@ -1,0 +1,179 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Admin - {{ config.singular }}{% endblock %}
+{% block admin_title %}{{ config.singular }}{% endblock %}
+
+{% block admin_actions %}
+    {% set currentQuery = app.request.query.all %}
+    {% set routeQuery = currentQuery|merge({ resource: resource, id: item.id }) %}
+    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', { resource: resource }|merge(currentQuery)) }}">Retour a la liste</a>
+    <a class="btn btn-danger btn-sm" href="{{ path('custom_admin_crud_edit', routeQuery) }}">Modifier</a>
+{% endblock %}
+
+{% block body %}
+    {% set currentQuery = app.request.query.all %}
+    {% set routeQuery = currentQuery|merge({ resource: resource, id: item.id }) %}
+
+    <section class="admin-panel admin-detail-panel">
+        <div class="admin-detail-head">
+            <div>
+                <p class="admin-kicker">Detail</p>
+                <h2>{{ itemLabel|default(config.singular) }}</h2>
+                <p class="admin-list-subtitle">
+                    Navigation standardisee pour consulter un element sans perdre le contexte de la liste.
+                </p>
+            </div>
+
+            <div class="admin-detail-actions">
+                <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', { resource: resource }|merge(currentQuery)) }}">Retour a la liste</a>
+                <a class="btn btn-danger btn-sm" href="{{ path('custom_admin_crud_edit', routeQuery) }}">Modifier</a>
+                {% if config.deletable|default(true) %}
+                    <form method="post" action="{{ path('custom_admin_crud_delete', routeQuery) }}" data-admin-confirm="{{ ('Supprimer ' ~ (itemLabel|default(config.singular)) ~ ' ?')|e('html_attr') }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('admin_delete_' ~ resource ~ '_' ~ item.id) }}">
+                        <button class="btn btn-outline-danger btn-sm" type="submit">Supprimer</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if resource == 'commandes-merch' %}
+            <div class="admin-detail-summary-grid">
+                <article class="admin-page-summary">
+                    <span>Statut</span>
+                    <strong>
+                        <span class="admin-badge {{ item.workflowState == 'executed' ? 'admin-badge-success' : (item.workflowState == 'confirmed' ? 'admin-badge-info' : 'admin-badge-warning') }}">
+                            {{ item.workflowStateLabel }}
+                        </span>
+                    </strong>
+                    <small>Workflow merch réel</small>
+                </article>
+                <article class="admin-page-summary">
+                    <span>Client</span>
+                    <strong>{{ item.customerFirstName ?: '' }} {{ item.customerLastName ?: '' }}</strong>
+                    <small>{{ item.email ?: 'Email non renseigné' }}</small>
+                </article>
+                <article class="admin-page-summary">
+                    <span>Produit</span>
+                    <strong>{{ item.merch ? item.merch.title : 'Produit' }}</strong>
+                    <small>Taille {{ item.size ?: 'TU' }} · {{ item.quantity }} exemplaire(s)</small>
+                </article>
+                <article class="admin-page-summary">
+                    <span>Paiement</span>
+                    <strong>{{ item.paymentMethod|upper }}</strong>
+                    <small>{{ item.totalPrice|number_format(2, ',', ' ') }} EUR</small>
+                </article>
+            </div>
+
+            <div class="admin-detail-workflow">
+                <div class="admin-panel-head">
+                    <div>
+                        <p class="admin-kicker">Workflow</p>
+                        <h2>Progression de la commande</h2>
+                    </div>
+                    {% if item.canBeConfirmed %}
+                        <form method="post" action="{{ path('custom_admin_crud_confirm', routeQuery) }}" data-admin-confirm="{{ ('Confirmer la commande #' ~ item.id ~ ' ?')|e('html_attr') }}" data-admin-confirm-title="Confirmer la commande ?">
+                            <input type="hidden" name="_token" value="{{ csrf_token('admin_confirm_' ~ resource ~ '_' ~ item.id) }}">
+                            <button class="btn btn-danger btn-sm" type="submit">Confirmer la commande</button>
+                        </form>
+                    {% endif %}
+                </div>
+
+                <div class="admin-timeline admin-timeline--compact">
+                    <article class="admin-timeline-item">
+                        <span class="admin-timeline-item__dot admin-timeline-item__dot--success"></span>
+                        <div>
+                            <strong>Commande créée</strong>
+                            <p>{{ item.createdAt ? item.createdAt|date('d/m/Y H:i') : 'Date inconnue' }}</p>
+                            <small>Enregistrement initial de la commande.</small>
+                        </div>
+                    </article>
+                    <article class="admin-timeline-item">
+                        <span class="admin-timeline-item__dot {{ item.confirmedAt ? 'admin-timeline-item__dot--info' : 'admin-timeline-item__dot--neutral' }}"></span>
+                        <div>
+                            <strong>Commande confirmée</strong>
+                            <p>
+                                {% if item.confirmedAt %}
+                                    {{ item.confirmedAt|date('d/m/Y H:i') }}
+                                    {% if item.confirmedBy %}
+                                        · par {{ item.confirmedBy }}
+                                    {% endif %}
+                                {% else %}
+                                    En attente de confirmation
+                                {% endif %}
+                            </p>
+                            <small>Validation métier avant préparation.</small>
+                        </div>
+                    </article>
+                    <article class="admin-timeline-item">
+                        <span class="admin-timeline-item__dot {{ item.executed ? 'admin-timeline-item__dot--success' : 'admin-timeline-item__dot--neutral' }}"></span>
+                        <div>
+                            <strong>Commande exécutée</strong>
+                            <p>{{ item.executed ? 'Commande préparée / remise au client' : 'Pas encore exécutée' }}</p>
+                            <small>Statut de réalisation final.</small>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        {% elseif resource == 'dons' %}
+            <div class="admin-detail-summary-grid">
+                <article class="admin-page-summary">
+                    <span>Montant</span>
+                    <strong>{{ item.amount|number_format(2, ',', ' ') }} {{ item.currency }}</strong>
+                    <small>{{ item.statusTranslationKey|trans }}</small>
+                </article>
+                <article class="admin-page-summary">
+                    <span>Donateur</span>
+                    <strong>{{ item.displayName }}</strong>
+                    <small>{{ item.anonymous ? 'Anonyme' : (item.donorEmail ?: 'Email non renseigné') }}</small>
+                </article>
+                <article class="admin-page-summary">
+                    <span>Paiement</span>
+                    <strong><span class="admin-badge admin-badge-{{ item.statusTone|default('secondary') }}">{{ item.statusTranslationKey|trans }}</span></strong>
+                    <small>{{ item.paymentReference ?: 'Aucune référence' }}</small>
+                </article>
+                <article class="admin-page-summary">
+                    <span>Compte</span>
+                    <strong>{{ item.user ?: 'Aucun' }}</strong>
+                    <small>{{ item.createdAt ? item.createdAt|date('d/m/Y H:i') : '' }}</small>
+                </article>
+            </div>
+        {% else %}
+            <div class="admin-detail-summary-grid">
+                <article class="admin-page-summary">
+                    <span>Identifiant</span>
+                    <strong>#{{ item.id }}</strong>
+                    <small>{{ config.label }}</small>
+                </article>
+                <article class="admin-page-summary">
+                    <span>Libelle</span>
+                    <strong>{{ itemLabel|default('') }}</strong>
+                    <small>{{ displayField }}</small>
+                </article>
+                <article class="admin-page-summary">
+                    <span>Contexte</span>
+                    <strong>{{ config.singular }}</strong>
+                    <small>{{ config.label }}</small>
+                </article>
+            </div>
+        {% endif %}
+
+        <div class="admin-detail-grid">
+            {% for row in detailRows|default([]) %}
+                <article class="admin-detail-card">
+                    <span class="admin-detail-card__label">{{ row.label }}</span>
+                    <strong class="admin-detail-card__value">
+                        {% if resource == 'dons' and row.name == 'status' %}
+                            <span class="admin-badge admin-badge-{{ item.statusTone|default('secondary') }}">{{ item.statusTranslationKey|trans }}</span>
+                        {% elseif resource == 'dons' and row.name == 'paymentStatus' %}
+                            <span class="admin-badge admin-badge-{{ item.statusTone|default('secondary') }}">{{ item.paymentStatusTranslationKey|trans }}</span>
+                        {% elseif row.value is same as('') %}
+                            <span class="admin-detail-empty">Non renseigne</span>
+                        {% else %}
+                            {{ row.value }}
+                        {% endif %}
+                    </strong>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

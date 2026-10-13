@@ -19,15 +19,18 @@ class UserType extends AbstractType
             ->add('email', EmailType::class)
             ->add('roles', ChoiceType::class, [
                 'choices' => [
-                    'User' => 'ROLE_USER',
-                    'Admin' => 'ROLE_ADMIN',
+                    'form.user.roles.user' => 'ROLE_USER',
+                    'form.user.roles.admin' => 'ROLE_ADMIN',
                 ],
                 'multiple' => true,
                 'expanded' => true,
             ])
-            ->add('password', PasswordType::class)
+            ->add('plainPassword', PasswordType::class, [
+                'label' => 'form.user.password',
+                'required' => false,
+            ])
             ->add('verified', CheckboxType::class, [
-                'label' => 'Is Verified?',
+                'label' => 'form.user.verified',
                 'required' => false,
             ])
         ;

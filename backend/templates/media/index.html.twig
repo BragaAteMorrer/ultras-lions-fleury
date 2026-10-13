@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Media{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Media</h1>
+        <p class="hero-subtitle">Photos de match, communiques et videos</p>
+    </div>
+</section>
+
+<div class="section media-feed-section">
+    <div class="container">
+        <div class="row g-4">
+            {% for item in items %}
+                {% set isVideoItem = item.type == 'Video' %}
+                <div class="col-md-6 col-lg-4">
+                    <a href="{{ item.url }}" class="card h-100 media-feed-card{{ isVideoItem ? ' media-video-card' : '' }}">
+                        <div class="media-card-thumb">
+                            {% if item.cover %}
+                                {% include 'components/media.html.twig' with { media: item.cover, class: 'event-card-img-top', alt: item.title } %}
+                            {% else %}
+                                <img src="/placeholder.jpg" class="event-card-img-top" alt="{{ item.title }}">
+                            {% endif %}
+
+                            {% if isVideoItem %}
+                                <span class="media-video-play" aria-hidden="true"></span>
+                                <span class="media-video-badge">Video</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-body">
+                            <p class="media-feed-type">{{ item.type }}</p>
+                            <h3 class="card-title">{{ item.title }}</h3>
+                            {% if item.date %}
+                                <p class="card-meta">{{ item.date|date('d/m/Y') }}</p>
+                            {% endif %}
+                            {% if item.description %}
+                                <p class="mb-0">{{ item.description|striptags|slice(0, 110) ~ '...' }}</p>
+                            {% endif %}
+                        </div>
+                    </a>
+                </div>
+            {% else %}
+                <p>Aucun media pour le moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

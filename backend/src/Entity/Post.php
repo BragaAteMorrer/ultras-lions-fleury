@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PostRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
@@ -33,9 +35,18 @@ class Post
     #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?Media $image = null;
 
-    #[ORM\ManyToOne(inversedBy: 'posts')]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
-    private ?Category $category = null;
+    private ?EventCategory $category = null;
+
+    /** @var Collection<int, Media> */
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Media::class, orphanRemoval: true, cascade: ['persist'])]
+    private Collection $media;
+
+    public function __construct()
+    {
+        $this->media = new ArrayCollection();
+    }
 
     public function __toString(): string
     {
@@ -92,11 +103,49 @@ class Post
         return $this;
     }
 
-    public function getCategory(): ?Category { return $this->category; }
+    public function getCategory(): ?EventCategory { return $this->category; }
 
-    public function setCategory(?Category $category): self
+    public function setCategory(?EventCategory $category): self
     {
         $this->category = $category;
+        return $this;
+    }
+
+    /** @return Collection<int, Media> */
+    public function getMedia(): Collection
+    {
+        return $this->media;
+    }
+
+    /**
+     * @param iterable<Media> $media
+     */
+    public function setMedia(iterable $media): self
+    {
+        $this->media = new ArrayCollection();
+        foreach ($media as $item) {
+            $this->addMedia($item);
+        }
+
+        return $this;
+    }
+
+    public function addMedia(Media $media): self
+    {
+        if (!$this->media->contains($media)) {
+            $this->media->add($media);
+            $media->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedia(Media $media): self
+    {
+        if ($this->media->removeElement($media) && $media->getPost() === $this) {
+            $media->setPost(null);
+        }
+
         return $this;
     }
 }

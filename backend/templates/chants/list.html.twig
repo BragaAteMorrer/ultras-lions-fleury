@@ -1,0 +1,70 @@
+﻿{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'components_navbar.html.chants'|trans }}{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ 'components_navbar.html.chants'|trans }}</h1>
+        <p class="hero-subtitle chants-hero-subtitle">
+            {{ chantsSubtitle ?: 'Tous nos chants, paroles et audio pour faire vibrer les tribunes.' }}
+        </p>
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+        <div class="cards">
+            {% for chant in chants %}
+                <div class="card">
+                    <div class="card-content">
+                        <h3>{{ chant.title }}</h3>
+
+                        {% if chant.audioPath %}
+                            <div class="chant-audio">
+                                <audio controls preload="none">
+                                    <source src="{{ asset('uploads/chants/' ~ chant.audioPath) }}">
+                                </audio>
+                                <div class="chant-audio-meta">
+                                    <span class="chant-audio-label">Chant officiel</span>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if chant.lyrics %}
+                            <div class="rich-content">{{ chant.lyrics|raw }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <p>Aucun chant pour le moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const updateBodyState = () => {
+                const anyPlaying = Array.from(document.querySelectorAll('.chant-audio audio'))
+                    .some((audio) => !audio.paused && !audio.ended);
+                document.body.classList.toggle('chant-playing', anyPlaying);
+            };
+
+            document.querySelectorAll('.chant-audio audio').forEach((audio) => {
+                const wrapper = audio.closest('.chant-audio');
+                if (!wrapper) return;
+                const setPlaying = (playing) => {
+                    wrapper.classList.toggle('is-playing', playing);
+                    updateBodyState();
+                };
+                audio.addEventListener('play', () => setPlaying(true));
+                audio.addEventListener('pause', () => setPlaying(false));
+                audio.addEventListener('ended', () => setPlaying(false));
+            });
+        });
+    </script>
+{% endblock %}

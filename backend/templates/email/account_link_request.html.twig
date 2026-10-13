@@ -1,0 +1,20 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %}Demande de gestion de compte{% endblock %}
+{% block header_subtitle %}Partage de compte Ultras Lions{% endblock %}
+{% block header_title %}Demande de gestion de compte{% endblock %}
+
+{% block content %}
+    <p><strong>{{ guardian }}</strong> souhaite pouvoir gerer ton compte Ultras Lions pour les commandes et le suivi des services associes.</p>
+
+    <div class="card">
+        <p>Si tu es d'accord, valide la demande avec le bouton ci-dessous.</p>
+        <p style="margin-bottom: 0;">
+            <a href="{{ acceptUrl }}" class="button">Valider l'association</a>
+        </p>
+    </div>
+
+    <p class="note">
+        Si tu n'es pas a l'origine de cette demande, tu peux ignorer cet email.
+    </p>
+{% endblock %}

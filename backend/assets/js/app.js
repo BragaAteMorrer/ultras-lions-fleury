@@ -1,4 +1,21 @@
 /* =============================
+   LOADING SCREEN
+============================= */
+(function () {
+    const hideLoader = () => {
+        document.body.classList.add('is-loaded');
+    };
+
+    if (document.readyState === 'complete') {
+        window.setTimeout(hideLoader, 250);
+        return;
+    }
+
+    window.addEventListener('load', () => window.setTimeout(hideLoader, 250));
+    window.setTimeout(hideLoader, 1800);
+})();
+
+/* =============================
    NAVBAR : Effet au scroll
 ============================= */
 (function () {
@@ -108,41 +125,6 @@
     });
 })();
 
-/* =============================
-   HERO SLIDER BACKGROUND
-============================= */
-(function () {
-    const hero = document.getElementById('heroSlider');
-    if (!hero) return;
-
-    let images;
-
-    try {
-        images = JSON.parse(hero.dataset.heroImages.replace(/&quot;/g, '"'));
-    } catch (e) {
-        console.warn("Hero images JSON invalide.");
-        images = [];
-    }
-
-    if (!images.length) return;
-
-    let index = 0;
-    const delay = 7000;
-
-    const updateBg = () => {
-        hero.style.backgroundImage = `
-            linear-gradient(120deg, rgba(0,0,0,0.8), rgba(0,0,0,0.3)),
-            url('${images[index]}')
-        `;
-    };
-
-    updateBg();
-    setInterval(() => {
-        index = (index + 1) % images.length;
-        updateBg();
-    }, delay);
-})();
-
 // Navbar Ultra toggle
 (function () {
     const btn = document.getElementById("ultraNavToggle");
@@ -160,7 +142,8 @@
     const nav = document.getElementById('ultraNavMobile');
     if (!btn || !nav) return;
     btn.addEventListener('click', () => {
-        nav.classList.toggle('open');
+        const isOpen = nav.classList.toggle('open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
 })();
 
@@ -178,33 +161,70 @@
     });
 })();
 
-// Slider de background sur le hero
-(function () {
-    const hero = document.getElementById('heroSlider');
-    if (!hero) return;
+(() => {
+    const form = document.querySelector('.donation-form');
+    if (!form) return;
 
-    const raw = hero.dataset.heroImages;
-    let images;
-    try {
-        images = JSON.parse(raw.replace(/&quot;/g, '"'));
-    } catch (e) {
-        images = [];
-    }
-    if (!images.length) return;
+    const amountOptions = Array.from(form.querySelectorAll('[data-donation-amount-option]'));
+    const customGroup = form.querySelector('[data-donation-custom-amount]');
+    const customInput = form.querySelector('[data-donation-custom-input]');
+    const customRadio = form.querySelector('input[type="radio"][value="custom"]');
+    const anonymousCard = form.querySelector('.donation-anonymous-card');
+    const anonymousInput = form.querySelector('.donation-anonymous-input');
 
-    let index = 0;
-    const delay = 7000; // 7s
+    const syncAmountState = (focusCustom = false) => {
+        amountOptions.forEach((option) => {
+            const input = option.querySelector('input[type="radio"]');
+            option.classList.toggle('is-selected', Boolean(input?.checked));
+        });
 
-    const setBg = () => {
-        hero.style.backgroundImage = `
-            linear-gradient(120deg, rgba(0,0,0,0.8), rgba(0,0,0,0.3)),
-            url('` + images[index] + `')
-        `;
+        const customSelected = Boolean(form.querySelector('input[type="radio"][value="custom"]')?.checked);
+        customGroup?.classList.toggle('is-selected', customSelected);
+
+        if (customInput instanceof HTMLInputElement && customInput.value.trim() !== '' && customRadio instanceof HTMLInputElement && !customRadio.checked) {
+            customRadio.checked = true;
+        }
+
+        if (customSelected && focusCustom && customInput instanceof HTMLElement && document.activeElement !== customInput) {
+            customInput.focus({ preventScroll: true });
+            if (typeof customInput.select === 'function' && 'value' in customInput && customInput.value !== '') {
+                customInput.select();
+            }
+        }
     };
 
-    setBg();
-    setInterval(() => {
-        index = (index + 1) % images.length;
-        setBg();
-    }, delay);
+    const syncCustomChoice = () => {
+        if (customRadio instanceof HTMLInputElement && !customRadio.checked) {
+            customRadio.checked = true;
+        }
+
+        syncAmountState(true);
+    };
+
+    const syncAnonymousState = () => {
+        anonymousCard?.classList.toggle('is-selected', Boolean(anonymousInput?.checked));
+    };
+
+    form.addEventListener('change', (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+
+        if (target.matches('input[type="radio"][name$="[amountChoice]"]')) {
+            syncAmountState(target.getAttribute('value') === 'custom');
+        }
+
+        if (target === customInput) {
+            syncCustomChoice();
+        }
+
+        if (target.matches('.donation-anonymous-input')) {
+            syncAnonymousState();
+        }
+    });
+
+    customInput?.addEventListener('input', syncCustomChoice);
+    customInput?.addEventListener('focus', syncCustomChoice);
+
+    syncAmountState();
+    syncAnonymousState();
 })();

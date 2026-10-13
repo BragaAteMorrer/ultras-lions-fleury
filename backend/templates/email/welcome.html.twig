@@ -1,20 +1,24 @@
 {% extends 'email/base.html.twig' %}
 
-{% block title %}{{ 'email_welcome.html.bienvenue_chez_les_ultras_lions'|trans }}{% endblock %}
+{% block title %}Bienvenue chez les Ultras Lions{% endblock %}
+{% block header_subtitle %}Nouveau compte cree{% endblock %}
+{% block header_title %}Bienvenue{% endblock %}
 
 {% block content %}
-    <h1>
-        Bienvenue
-        {% if user.prenom or user.nom %}
-            {{ user.prenom }} {{ user.nom }}
-        {% else %}
-            {{ user.pseudo }}
-        {% endif %}
-    </h1>
+    {% set displayName = (user.prenom|default('') ~ ' ' ~ user.nom|default(''))|trim %}
 
-    <p>{{ 'email_welcome.html.felicitations_tu_rejoins_officiellement_la'|trans }}<strong>{{ 'email_welcome.html.famille_ultras_lions'|trans }}</strong>{{ 'email_welcome.html.ton_compte_vient_detre_cree_avec_succes_et_tu_peux_maintenant_acceder_'|trans }}</p>
+    <p>Salut{% if displayName %} {{ displayName }}{% endif %},</p>
 
-    <p>{{ 'email_welcome.html.lequipe_est_ravie_de_taccueillir_parmi_les_notres_si_tu_as_la_moindre_'|trans }}</p>
+    <p>
+        Ton compte a bien ete cree. Tu peux maintenant te connecter et acceder aux services reserves aux membres.
+    </p>
 
-    <a href="{{ url('home') }}" class="btn">{{ 'email_welcome.html.acceder_au_site'|trans }}</a>
+    <div class="card">
+        <p class="muted" style="margin-bottom: 8px;">Nous sommes heureux de t'accueillir parmi nous.</p>
+        <p style="margin-bottom: 0;">Si tu as une question, reponds a cet email ou contacte le groupe.</p>
+    </div>
+
+    <p>
+        <a href="{{ url('home') }}" class="button">Acceder au site</a>
+    </p>
 {% endblock %}

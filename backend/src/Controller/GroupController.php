@@ -13,7 +13,7 @@ class GroupController extends AbstractController
     #[Route('/', name: 'group_index')]
     public function index(GroupPageRepository $groupPageRepository): Response
     {
-        $group = $groupPageRepository->findOneBy([]); // one group page
+        $group = $groupPageRepository->findOneBy([]);
 
         return $this->render('group/index.html.twig', [
             'group' => $group,

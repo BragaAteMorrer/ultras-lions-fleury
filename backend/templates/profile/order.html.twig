@@ -1,0 +1,173 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+        <div class="profile-info-card">
+            <h2 class="section-title">{{ 'profile_order.html.commande'|trans }}</h2>
+
+            <p><strong>{{ 'profile_order.html.type'|trans }}</strong>
+                {% if checkout.type == 'ticket' %}
+                    {{ 'profile_show.html.billetterie'|trans }}
+                {% elseif checkout.type == 'merch' %}
+                    {{ 'profile_show.html.table_de_vente'|trans }}
+                {% elseif checkout.type == 'cash' %}
+                    {{ 'profile_order.html.paiement_liquide'|trans }}
+                {% else %}
+                    {{ 'profile_show.html.panier'|trans }}
+                {% endif %}
+            </p>
+            <p><strong>{{ 'profile_order.html.statut'|trans }}</strong>
+                {% if checkout.status == 'paid' %}
+                    {{ 'profile_order.html.paye'|trans }}
+                {% elseif checkout.status == 'pending' %}
+                    {{ 'profile_order.html.attente'|trans }}
+                {% elseif checkout.status == 'failed' %}
+                    {{ 'profile_order.html.refuse'|trans }}
+                {% else %}
+                    {{ checkout.status }}
+                {% endif %}
+            </p>
+            <p><strong>{{ 'profile_order.html.total'|trans }}</strong> {{ checkout.amount|number_format(2, ',', ' ') }} {{ checkout.currency }}</p>
+            <p><strong>{{ 'profile_order.html.date'|trans }}</strong> {{ checkout.createdAt|date('d/m/Y H:i') }}</p>
+            <p><strong>{{ 'profile_order.html.paiement'|trans }}</strong>
+                {% if checkout.type == 'cash' %}
+                    {{ 'profile_order.html.liquide'|trans }}
+                {% else %}
+                    SumUp
+                {% endif %}
+            </p>
+            {% if checkout.type == 'cash' %}
+                <div class="alert alert-warning mt-2">
+                    {{ 'profile_order.html.paiement_a_regler_en_liquide_au_prochain_match'|trans }}
+                </div>
+            {% endif %}
+            <a href="{{ path('checkout_receipt_pdf', { ref: checkout.checkoutReference }) }}" class="btn btn-outline-light mt-2">{{ 'checkout_receipt.html.telecharger_le_pdf'|trans }}</a>
+
+            <hr>
+
+            {% if checkout.type == 'ticket' %}
+                <h3 class="form-section-title">{{ 'profile_show.html.billets'|trans }}</h3>
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>{{ 'profile_show.html.match'|trans }}</th>
+                                <th>{{ 'profile_order.html.date'|trans }}</th>
+                                <th>{{ 'cart_index.html.quantite'|trans }}</th>
+                                <th>{{ 'profile_order.html.prix'|trans }}</th>
+                                <th>{{ 'profile_show.html.total'|trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                                <tr>
+                                    <td>{{ item.opponent ?: item.title }}</td>
+                                    <td>
+                                        {% if item.match_date %}
+                                            {{ item.match_date|date('d/m/Y H:i') }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.unit_price|number_format(2, ',', ' ') }} EUR</td>
+                                    <td>{{ item.total|number_format(2, ',', ' ') }} EUR</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% elseif checkout.type == 'merch' %}
+                <h3 class="form-section-title">{{ 'profile_show.html.matos'|trans }}</h3>
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>{{ 'checkout_receipt.html.produit'|trans }}</th>
+                                <th>{{ 'checkout_receipt.html.taille'|trans }}</th>
+                                <th>{{ 'cart_index.html.quantite'|trans }}</th>
+                                <th>{{ 'profile_order.html.prix'|trans }}</th>
+                                <th>{{ 'profile_show.html.total'|trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                                <tr>
+                                    <td>{{ item.title }}</td>
+                                    <td>{{ item.size }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.unit_price|number_format(2, ',', ' ') }} EUR</td>
+                                    <td>{{ item.total|number_format(2, ',', ' ') }} EUR</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                {% if ticketItems is not empty %}
+                    <h3 class="form-section-title">{{ 'profile_show.html.billets'|trans }}</h3>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'profile_show.html.match'|trans }}</th>
+                                    <th>{{ 'profile_order.html.date'|trans }}</th>
+                                    <th>{{ 'cart_index.html.quantite'|trans }}</th>
+                                    <th>{{ 'profile_order.html.prix'|trans }}</th>
+                                    <th>{{ 'profile_show.html.total'|trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in ticketItems %}
+                                    <tr>
+                                        <td>{{ item.opponent ?: item.title }}</td>
+                                        <td>
+                                            {% if item.match_date %}
+                                                {{ item.match_date|date('d/m/Y H:i') }}
+                                            {% else %}
+                                                N/A
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>{{ item.unit_price|number_format(2, ',', ' ') }} EUR</td>
+                                        <td>{{ item.total|number_format(2, ',', ' ') }} EUR</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+                {% if merchItems is not empty %}
+                    <h3 class="form-section-title mt-4">{{ 'profile_show.html.matos'|trans }}</h3>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'checkout_receipt.html.produit'|trans }}</th>
+                                    <th>{{ 'checkout_receipt.html.taille'|trans }}</th>
+                                    <th>{{ 'cart_index.html.quantite'|trans }}</th>
+                                    <th>{{ 'profile_order.html.prix'|trans }}</th>
+                                    <th>{{ 'profile_show.html.total'|trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in merchItems %}
+                                    <tr>
+                                        <td>{{ item.title }}</td>
+                                        <td>{{ item.size }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>{{ item.unit_price|number_format(2, ',', ' ') }} EUR</td>
+                                        <td>{{ item.total|number_format(2, ',', ' ') }} EUR</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

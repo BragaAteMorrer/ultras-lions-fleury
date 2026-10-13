@@ -1,0 +1,22 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %}Commande prete{% endblock %}
+{% block header_subtitle %}Suivi de commande{% endblock %}
+{% block header_title %}Ta commande est prete{% endblock %}
+
+{% block content %}
+    <p>Bonjour {{ order.customerFirstName|default('') }},</p>
+
+    <p>Ta commande merch est marquee comme executee.</p>
+
+    <div class="card">
+        <ul>
+            <li>Produit : {{ order.merch ? order.merch.title : 'Produit' }}</li>
+            <li>Taille : {{ order.size ?? 'TU' }}</li>
+            <li>Quantite : {{ order.quantity }}</li>
+            <li>Total : {{ order.totalPrice|number_format(2, ',', ' ') }} EUR</li>
+        </ul>
+    </div>
+
+    <p class="note">Merci pour ton soutien.</p>
+{% endblock %}

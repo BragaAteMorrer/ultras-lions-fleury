@@ -10,9 +10,11 @@ admin_dashboard:
     ultras_lions_dashboard: Ultras Lions – Panel de control
     ultras_lions_fc_fleury_91_page_admin: Ultras Lions – FC Fleury 91 - Página de administración
     visites: Visitas
+    page_d_accueil: Página de inicio
 base:
   html:
     ultras_lions_fc_fleury_91: Ultras Lions – FC Fleury 91
+    ultras_lions_fc_fleury_91_title: Ultras Lions
 components_footer:
   html:
     copyright: © %year% Ultras Lions — Sitio web de Ultras FC Fleury 91.
@@ -23,6 +25,7 @@ components_footer:
     tribune_drapeaux_fumigenes_chants_la_ville_est_rouge_et_noire: 'Tribuna, banderas, bombas de humo, canciones: la ciudad es roja y negra.'
     twitter: Gorjeo
     ultras_lions: Ultras Lions
+    ten_as_vu_le_debut: "¡Las Lioness, t'en as vu le début, t'en verras pas la fin!"
 components_navbar:
   html:
     accueil: Bienvenido
@@ -31,11 +34,16 @@ components_navbar:
     connexion: Conexión
     deconnexion: Desconectar
     le_groupe: El grupo
-    modifier_mon_compte: ️ Editar mi cuenta
+    modifier_mon_compte:  Editar mi cuenta
     mon_profil: mi perfil
+    notre_histoire: "Nuestra historia"
+    notre_mentalite: "Nuestra mentalidad"
+    notre_fonctionnement: "Nuestro funcionamiento"
+    pourquoi_nous_rejoindre: "Por qué unirte a nosotros?"
     photos_de_match: Fotos del partido
     saisir_un_code: Introduce un código
     saison: Temporada %year_start%/%year_end%
+    se_carter: "Se Carter"
     se_connecter: Acceso
     sinscrire: Registro
     table_de_vente: Tabla de ventas
@@ -43,7 +51,11 @@ components_navbar:
     videos: Videos
     communiques: Comunicados de prensa
     streetart: Street Art
-    
+    chants: "Chants"
+    medias: "Medios de comunicación"
+    tout_les_medias: "Todos los medios de comunicación"
+    liens: "Enlaces"
+
 email_base:
   html:
     footer_brand: Ultras Lions – FC Fleury 91
@@ -87,6 +99,9 @@ events_list:
     filtrer: Filtrar
     prochains_matchs_rassemblements_actions: Próximos partidos, encuentros, acciones.
     saison: Estación
+    photos_de_match: Fotos de partidos
+    photos_de_match_saison: Fotos de partidos temporada %year_start%/%year_end%
+
 events_show:
   html:
     title: '%title% – Viajes – Ultras Lions'
@@ -105,6 +120,16 @@ group_show:
     identite_valeurs_histoire_tribune: Identidad, valores, historia, plataforma.
     le_groupe: el grupo
     le_groupe_ultras_lions: El grupo – Ultras Lions
+    section_histoire_title: "Nuestra historia"
+    section_histoire_text: "Nacidos en la grada de Fleury, construimos nuestra identidad partido a partido. Rojo y negro, fieles, presentes en todas partes."
+    section_mentalite_title: "Nuestra mentalidad"
+    section_mentalite_text: "Lealtad, respeto, solidaridad. Cantamos, empujamos, no soltamos nunca, en casa y fuera."
+    section_fonctionnement_title: "Nuestro funcionamiento"
+    section_fonctionnement_text: "El grupo funciona con voluntarios, reuniones y decisiones colectivas. Cada uno tiene su lugar, cada uno aporta."
+    section_rejoindre_title: "Por qué unirte a nosotros?"
+    section_rejoindre_text: "Para vivir el partido de otra manera, participar en tifos y desplazamientos y ser parte de una familia roja y negra."
+    section_se_carter_title: "Se Carter"
+    section_se_carter_text: "Pasa por la mesa de ventas en dia de partido, consigue tu codigo y luego registrate para acceder al area de miembros."
 home_index:
   html:
     aucun_evenement_prevu: No hay eventos planeados.
@@ -137,6 +162,20 @@ merch_list:
     textiles_accessoires_stickers_supports_du_groupe: Textiles, accesorios, pegatinas, soportes para grupos.
     toutes: Todo
     trier: Clasificar
+    stock_non_defini: Stock no definido
+    vitrine_officielle: Escaparate oficial
+    decouvrir_la_selection: Descubrir la selección
+    voir_le_panier: Ver carrito
+    pieces: Piezas
+    categories: Categorías
+    stock_disponible: Stock disponible
+    affinage: Filtrado
+    selectionnez_une_categorie: Seleccione una categoría
+    choisir: Elegir
+
+    moyens_de_paiement: "Métodos de pago"
+    paiement_par_carte_via_sumup: "Pago con tarjeta vía SumUp"
+    paiement_en_liquide_a_la_table_de_vente: "Pago en efectivo en la mesa de venta"
 merch_show:
   html:
     acheter: Comprar
@@ -170,11 +209,11 @@ profile_edit:
     modifier_mon_compte: Editar mi cuenta
 profile_show:
   html:
-    admin_role: Oficina - Ultras Lions
+    admin_role: Oficina
     adresse: 'DIRECCIÓN :'
     date_de_naissance: 'Fecha de nacimiento :'
     email: 'Correo electrónico:'
-    member_role: Miembro - Ultras Lions
+    member_role: Miembro
     modifier_mon_profil: Editar mi perfil
     nom: 'Nombre :'
     polo: 'Polo:'
@@ -184,6 +223,7 @@ profile_show:
     t_shirt: 'Camiseta:'
     telephone: 'Teléfono :'
     veste: 'Chaqueta :'
+    changer_mon_mot_de_passe: 'Cambiar mi contraseña'
 registration_confirmation_email:
   html:
     cheers: ¡Salud!
@@ -223,6 +263,8 @@ security_register:
 security_reset_password:
   html:
     nouveau_mot_de_passe: Nueva contraseña
+    confirm_new_password: Confirmar nueva contraseña
+    submit: Actualizar
 staff_index:
   html:
     staff: PERSONAL
@@ -237,12 +279,21 @@ ticket_buy:
     vs_opponent: frente a %opponent%
 ticket_list:
   html:
-    aucun_match_pour_le_moment: Aún no hay coincidencias.
-    billetterie_ultras_lions: Venta de entradas - Ultras Lions
+    a_domicile: Local
+    a_lexterieur: Visitante
+    billetweb: Billetweb
+    billetweb_reservation: 'Reserva Billetweb'
+    reserver: Reservar
+    billetterie_billetweb_integree: 'Integración de Billetweb'
+    billetterie_ultras_lions: Venta de entradas
+    decouvrir_les_matchs: 'Descubrir partidos'
     matchs_a_domicile_et_a_lexterieur: Partidos de ida y vuelta
     matchs_disponibles: Partidos disponibles
+    selectionnez_une_categorie: 'Seleccione una categoría'
     stock: 'Existencias: %stock%'
     vs_opponent: frente a %opponent%
+    vitrine_officielle: 'Escaparate oficial'
+    aucun_match_pour_le_moment: No hay partidos por el momento.
 ticket_show:
   html:
     adversaire: 'Adversario:'
@@ -278,3 +329,212 @@ user_new:
 user_show:
   html:
     user: Usuario
+cart_index:
+  html:
+    billets: Entradas
+    billets_et_table_de_vente: 'Entradas + mesa de venta'
+    date: Fecha
+    matos: Material
+    match: Partido
+    nom: Apellido
+    panier: Carrito
+    panier_vide: 'Tu carrito está vacío.'
+    payer_avec_sumup: 'Pagar con SumUp'
+    moyens_de_paiement_sumup: 'Métodos de pago SumUp'
+    paiement_securise_sumup: 'Pago seguro con SumUp, con validación final en su página de pago.'
+    sumup_method_cards: 'Tarjeta bancaria'
+    sumup_method_cards_detail: 'Visa, Mastercard y tarjetas compatibles.'
+    sumup_method_wallets: 'Apple Pay / Google Pay'
+    sumup_method_wallets_detail: 'Según dispositivo, navegador y cuenta del comercio.'
+    sumup_method_paypal: 'PayPal vía SumUp'
+    sumup_method_paypal_detail: 'Disponible si PayPal está activado en la cuenta SumUp.'
+    sumup_method_local: 'Otros métodos locales'
+    sumup_method_local_detail: 'Según país, importe y divisa.'
+    sumup_availability_note: 'SumUp confirma la lista exacta de métodos disponibles en el momento del pago.'
+    prenom: Nombre
+    produit: Producto
+    quantite: Cantidad
+    retour_billetterie: 'Volver a la taquilla'
+    retour_table_de_vente: 'Volver a la mesa de venta'
+    sous_total_billets: 'Subtotal entradas'
+    sous_total_matos: 'Subtotal material'
+    supprimer: Eliminar
+    taille: Talla
+    total: Total
+    vider_le_panier: 'Vaciar carrito'
+    reserver_et_payer_en_liquide: 'Reservar y pagar en efectivo'
+
+profile_order:
+  html:
+    match: Partido
+    product: Producto
+
+profile_change_password:
+  html:
+    heading: 'Cambiar mi contraseña'
+    submit: Actualizar
+    title: 'Cambiar mi contraseña'
+
+profile:
+  email:
+    request_subject: 'Solicitud de gestión de cuenta de Ultras Lions'
+  flash:
+    access_denied_show: 'Solo puedes ver tu perfil o una cuenta vinculada.'
+    access_denied_orders: 'Solo puedes ver tus propios pedidos.'
+    access_denied_manage_links: 'Solo puedes gestionar tus propias asociaciones de cuenta.'
+    access_denied_unlink: 'Solo puedes desvincular tus propias asociaciones.'
+    access_denied_edit: 'Solo puedes modificar tu perfil o una cuenta vinculada.'
+    access_denied_password: 'Solo puedes cambiar tu propia contraseña.'
+    invalid_form: 'Formulario inválido, inténtalo de nuevo.'
+    no_account_found: 'No se encontró ninguna cuenta con ese correo.'
+    cannot_associate_own_account: 'No puedes asociar tu propia cuenta.'
+    already_linked: 'Esta cuenta ya está asociada.'
+    pending_request_exists: 'Ya hay una solicitud pendiente para esta cuenta.'
+    request_sent: 'Solicitud enviada. La cuenta deberá validarla por correo.'
+    request_created_email_failed: 'Solicitud creada, pero no se pudo enviar el correo.'
+    link_not_found_or_expired: 'Solicitud no encontrada o caducada.'
+    association_validated: 'Asociación de cuenta validada.'
+    association_deleted: 'Asociación eliminada.'
+    updated: '¡Perfil actualizado!'
+    current_password_incorrect: 'La contraseña actual es incorrecta.'
+    password_updated: 'Contraseña actualizada.'
+
+reset_password:
+  email:
+    subject: 'Restablece tu contraseña'
+  flash:
+    invalid_csrf: 'Token CSRF inválido.'
+    link_sent_if_exists: 'Si esta dirección existe, se ha enviado un enlace de restablecimiento.'
+    link_invalid_or_expired: 'Este enlace de restablecimiento es inválido o ha caducado.'
+    password_min_length: 'La contraseña debe contener al menos 8 caracteres.'
+    password_uppercase: 'La contraseña debe contener al menos una letra mayúscula.'
+    password_lowercase: 'La contraseña debe contener al menos una letra minúscula.'
+    password_number: 'La contraseña debe contener al menos un número.'
+    password_special: 'La contraseña debe contener al menos un carácter especial.'
+    passwords_mismatch: 'Las contraseñas no coinciden.'
+    updated: 'Tu contraseña ha sido actualizada. Ya puedes iniciar sesión.'
+
+email_admin_custom:
+  html:
+    bonjour: Hola
+    header_subtitle: 'Mensaje administrativo'
+
+admin:
+  navigation:
+    mailing: 'Enviar un correo'
+  mailing:
+    html:
+      title: 'Admin - Mailing'
+      heading: 'Enviar un correo'
+      send: Enviar
+      communication: Comunicación
+      subject: Asunto
+      body: 'Cuerpo del correo'
+      message_hint: 'El mensaje usa automáticamente el estilo de correo de Ultras Lions.'
+      recipients: Destinatarios
+      users_count_suffix: 'usuario(s)'
+      select_all: 'Seleccionar todo'
+      deselect_all: 'Deseleccionar todo'
+      no_user: 'No hay usuarios disponibles.'
+      preview_default_subject: 'Vista previa del correo'
+      preview_default_header_subtitle: 'Vista previa antes del envío'
+      preview_recipient_name: 'Vista previa admin'
+    flash:
+      invalid_form: 'Formulario inválido, inténtalo de nuevo.'
+      select_one_user: 'Selecciona al menos un usuario.'
+      enter_subject: 'Introduce un asunto.'
+      enter_header_title: 'Introduce un título de encabezado.'
+      enter_header_subtitle: 'Introduce un subtítulo de encabezado.'
+      enter_body: 'Escribe el cuerpo del correo.'
+      sent_count: '%count% correo(s) enviado(s).'
+      preview_csrf_invalid: 'Token CSRF inválido.'
+  crud:
+    preview_admin: 'Vista previa admin'
+
+form:
+  user:
+    roles:
+      user: Usuario
+      admin: Administrador
+    password: Contraseña
+    verified: '¿Verificado?'
+  registration:
+    invite_code: 'Código de invitación'
+    first_name: Nombre
+    last_name: Apellido
+    email: Correo electrónico
+    password: Contraseña
+    confirm_password: 'Confirmar contraseña'
+    phone: Teléfono
+    address: Dirección
+    city: Ciudad
+    postal_code: 'Código postal'
+    tshirt_size: Camiseta
+    sweatshirt_size: Sudadera
+    jacket_size: Chaqueta
+    short_size: Pantalón corto
+    profile_photo: 'Foto de perfil'
+    placeholder:
+      phone: '+33612345678 / +32460123456…'
+      choose: 'Elegir…'
+    validation:
+      invite_code_required: 'El código es obligatorio.'
+      email_required: 'La dirección de correo es obligatoria.'
+      password_required: 'La contraseña es obligatoria.'
+      password_min_length: 'Mínimo 8 caracteres.'
+      password_uppercase: 'Debe contener al menos una mayúscula.'
+      password_lowercase: 'Debe contener al menos una minúscula.'
+      password_number: 'Debe contener al menos un número.'
+      password_special: 'Debe contener al menos un carácter especial.'
+      confirm_password_required: 'Debes confirmar la contraseña.'
+      phone_invalid: 'Número de teléfono inválido.'
+      phone_format: 'Formato telefónico inválido.'
+      postal_code_invalid: 'Código postal inválido.'
+      passwords_mismatch: 'Las contraseñas no coinciden.'
+  profile:
+    email: 'Dirección de correo'
+    first_name: Nombre
+    last_name: Apellido
+    birth_date: 'Fecha de nacimiento'
+    phone: Teléfono
+    address: Dirección
+    city: Ciudad
+    postal_code: 'Código postal'
+    profile_photo: 'Foto de perfil'
+    tshirt_size: 'Talla camiseta'
+    polo_size: 'Talla polo'
+    pullover_size: 'Talla jersey'
+    sweatshirt_size: 'Talla sudadera'
+    jacket_size: 'Talla chaqueta'
+    short_size: 'Talla pantalón corto'
+    placeholder:
+      phone: '+33612345678 o +32460123456 (internacional)'
+      address: 'Ej.: 45 rue de la République'
+      city: 'Ej.: Montreal, Bruselas, París'
+      postal_code: 'Ej.: 75001, H2Y 1C6…'
+      choose: 'Elegir...'
+    validation:
+      minimum_age: 'Debes tener al menos 12 años.'
+      phone_invalid: 'Número de teléfono inválido.'
+      phone_format: 'Formato telefónico inválido.'
+      address_invalid: 'Dirección inválida (caracteres no autorizados).'
+      city_invalid: 'Ciudad inválida.'
+      postal_code_invalid: 'Código postal inválido.'
+  profile_password:
+    current: 'Contraseña actual'
+    new: 'Nueva contraseña'
+    confirm: 'Confirmación'
+    validation:
+      current_required: 'Introduce tu contraseña actual.'
+      new_required: 'Introduce una nueva contraseña.'
+      min_length: 'La contraseña debe contener al menos 8 caracteres.'
+      uppercase: 'La contraseña debe contener al menos una mayúscula.'
+      lowercase: 'La contraseña debe contener al menos una minúscula.'
+      number: 'La contraseña debe contener al menos un número.'
+      special: 'La contraseña debe contener al menos un carácter especial.'
+      confirm_required: 'Confirma la nueva contraseña.'
+      passwords_mismatch: 'Las contraseñas no coinciden.'
+
+
+
+

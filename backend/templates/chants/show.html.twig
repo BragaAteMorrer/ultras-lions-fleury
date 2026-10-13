@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ chant.title }}{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">{{ chant.title }}</h1>
+        <p class="hero-subtitle">Apercu du chant</p>
+        {% if chantPreview|default(false) %}
+            <p class="hero-subtitle">Mode previsualisation admin</p>
+        {% endif %}
+    </div>
+</section>
+
+<div class="section">
+    <div class="container">
+        <article class="card">
+            <div class="card-content">
+                {% if chant.audioPath %}
+                    <div class="chant-audio mb-4">
+                        <audio controls preload="none">
+                            <source src="{{ asset('uploads/chants/' ~ chant.audioPath) }}">
+                        </audio>
+                        <div class="chant-audio-meta">
+                            <span class="chant-audio-label">Fichier audio</span>
+                        </div>
+                    </div>
+                {% elseif chantPreview|default(false) and chantPreviewAudioLabel|default('') %}
+                    <div class="chant-audio mb-4">
+                        <div class="chant-audio-meta">
+                            <span class="chant-audio-label">Fichier sélectionné</span>
+                            <strong>{{ chantPreviewAudioLabel }}</strong>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if chant.lyrics %}
+                    <div class="rich-content">
+                        {{ chant.lyrics|raw }}
+                    </div>
+                {% endif %}
+            </div>
+        </article>
+    </div>
+</div>
+{% endblock %}

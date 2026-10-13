@@ -1,0 +1,35 @@
+form:
+  registration:
+    validation:
+      invite_code_required: 'The code is required.'
+      email_required: 'Email address is required.'
+      password_required: 'Password is required.'
+      password_min_length: 'Minimum 8 characters.'
+      password_uppercase: 'It must contain at least one uppercase letter.'
+      password_lowercase: 'It must contain at least one lowercase letter.'
+      password_number: 'It must contain at least one number.'
+      password_special: 'It must contain at least one special character.'
+      confirm_password_required: 'You must confirm the password.'
+      phone_invalid: 'Invalid phone number.'
+      phone_format: 'Invalid phone format.'
+      postal_code_invalid: 'Invalid postal code.'
+      passwords_mismatch: 'Passwords do not match.'
+  profile:
+    validation:
+      minimum_age: 'You must be at least 12 years old.'
+      phone_invalid: 'Invalid phone number.'
+      phone_format: 'Invalid phone format.'
+      address_invalid: 'Invalid address (unauthorized characters).'
+      city_invalid: 'Invalid city.'
+      postal_code_invalid: 'Invalid postal code.'
+  profile_password:
+    validation:
+      current_required: 'Enter your current password.'
+      new_required: 'Enter a new password.'
+      min_length: 'The password must contain at least 8 characters.'
+      uppercase: 'The password must contain at least one uppercase letter.'
+      lowercase: 'The password must contain at least one lowercase letter.'
+      number: 'The password must contain at least one number.'
+      special: 'The password must contain at least one special character.'
+      confirm_required: 'Confirm the new password.'
+      passwords_mismatch: 'Passwords do not match.'

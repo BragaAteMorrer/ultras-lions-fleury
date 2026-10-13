@@ -1,59 +1,58 @@
 {% extends 'email/base.html.twig' %}
 
-{% block title %}{{ 'email_merch_order_recap.html.recapitulatif_de_commande'|trans }}{% endblock %}
+{% block title %}Recapitulatif de commande{% endblock %}
+{% block header_subtitle %}Table de vente{% endblock %}
+{% block header_title %}Recapitulatif de commande{% endblock %}
 
 {% block content %}
-    <h1>{{ 'email_merch_order_recap.html.recapitulatif_de_commande'|trans }}</h1>
+    {% set fullName = ((user.prenom ?? '') ~ ' ' ~ (user.nom ?? ''))|trim %}
 
-    <p>
-        Merci pour ta commande{% if user and (user.prenom or user.nom) %}, {{ user.prenom }} {{ user.nom }}{% endif %}.
-        Voici le récapitulatif :
-    </p>
+    <p>Merci pour ta commande{% if fullName %}, {{ fullName }}{% endif %}. Voici le recapitulatif.</p>
 
-    <p>
-        <strong>{{ 'email_merch_order_recap.html.n_commande'|trans }}</strong> {{ order.number }}<br>
-        <strong>{{ 'email_merch_order_recap.html.date'|trans }}</strong> {{ order.orderedAt|date('d/m/Y H:i') }}
-    </p>
+    <div class="card">
+        <ul>
+            <li>Numero : {{ order.number }}</li>
+            <li>Date : {{ order.orderedAt|date('d/m/Y H:i') }}</li>
+        </ul>
+    </div>
 
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; margin: 1rem 0;">
         <thead>
-        <tr>
-            <th align="left" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_merch_order_recap.html.produit'|trans }}</th>
-            <th align="center" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_merch_order_recap.html.qte'|trans }}</th>
-            <th align="right" style="padding: 0.5rem; border-bottom: 1px solid #333;">{{ 'email_merch_order_recap.html.prix'|trans }}</th>
-        </tr>
+            <tr>
+                <th align="left" style="padding: 0.5rem; border-bottom: 1px solid #e0e0e0;">Produit</th>
+                <th align="center" style="padding: 0.5rem; border-bottom: 1px solid #e0e0e0;">Qte</th>
+                <th align="right" style="padding: 0.5rem; border-bottom: 1px solid #e0e0e0;">Prix</th>
+            </tr>
         </thead>
         <tbody>
-        {% for line in order.lines %}
-            <tr>
-                <td style="padding: 0.5rem; border-bottom: 1px solid #222;">
-                    {{ line.title }}
-                    {% if line.size is defined and line.size %}
-                        <br><span style="color:#999;">Taille : {{ line.size }}</span>
-                    {% endif %}
-                </td>
-                <td align="center" style="padding: 0.5rem; border-bottom: 1px solid #222;">{{ line.quantity }}</td>
-                <td align="right" style="padding: 0.5rem; border-bottom: 1px solid #222;">
-                    {{ line.totalPrice|number_format(2, ',', ' ') }} €
-                </td>
-            </tr>
-        {% endfor %}
+            {% for line in order.lines %}
+                <tr>
+                    <td style="padding: 0.5rem; border-bottom: 1px solid #f0f0f0;">
+                        {{ line.title }}
+                        {% if line.size is defined and line.size %}
+                            <br><span class="muted">Taille : {{ line.size }}</span>
+                        {% endif %}
+                    </td>
+                    <td align="center" style="padding: 0.5rem; border-bottom: 1px solid #f0f0f0;">{{ line.quantity }}</td>
+                    <td align="right" style="padding: 0.5rem; border-bottom: 1px solid #f0f0f0;">{{ line.totalPrice|number_format(2, ',', ' ') }} EUR</td>
+                </tr>
+            {% endfor %}
         </tbody>
         <tfoot>
-        <tr>
-            <td colspan="2" align="right" style="padding: 0.75rem 0.5rem; font-weight: bold;">{{ 'email_merch_order_recap.html.total'|trans }}</td>
-            <td align="right" style="padding: 0.75rem 0.5rem; font-weight: bold; color: #D40000;">
-                {{ order.total|number_format(2, ',', ' ') }} €
-            </td>
-        </tr>
+            <tr>
+                <td colspan="2" align="right" style="padding: 0.75rem 0.5rem; font-weight: bold;">Total</td>
+                <td align="right" style="padding: 0.75rem 0.5rem; font-weight: bold; color: #c40018;">{{ order.total|number_format(2, ',', ' ') }} EUR</td>
+            </tr>
         </tfoot>
     </table>
 
     {% if order.note %}
-        <p><strong>{{ 'email_merch_order_recap.html.note'|trans }}</strong> {{ order.note }}</p>
+        <p><strong>Note :</strong> {{ order.note }}</p>
     {% endif %}
 
-    <p>{{ 'email_merch_order_recap.html.la_remise_et_le_paiement_se_font_a_la_table_de_vente_ou_selon_les_cons'|trans }}</p>
+    <p>La remise et le paiement suivent les consignes de la table de vente ou du bureau.</p>
 
-    <a href="{{ url('merch_index') }}" class="btn">{{ 'email_merch_order_recap.html.voir_la_table_de_vente'|trans }}</a>
+    <p>
+        <a href="{{ url('merch_index') }}" class="button">Voir la table de vente</a>
+    </p>
 {% endblock %}

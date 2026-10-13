@@ -1,0 +1,17 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %}{{ subject }}{% endblock %}
+{% block header_subtitle %}{{ 'email_admin_custom.html.header_subtitle'|trans }}{% endblock %}
+{% block header_title %}{{ subject }}{% endblock %}
+
+{% block content %}
+    {% if user is defined and user and (user.prenom or user.nom) %}
+        <p>{{ 'email_admin_custom.html.bonjour'|trans }} {{ ((user.prenom ?? '') ~ ' ' ~ (user.nom ?? ''))|trim }},</p>
+    {% else %}
+        <p>{{ 'email_admin_custom.html.bonjour'|trans }},</p>
+    {% endif %}
+
+    <div class="card">
+        {{ body|raw }}
+    </div>
+{% endblock %}

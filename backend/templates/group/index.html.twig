@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
 {% block title %}{{ 'group_show.html.le_groupe_ultras_lions'|trans }}{% endblock %}
 
@@ -7,24 +7,107 @@
     <div class="hero-content">
         <h1 class="hero-title">{{ 'group_show.html.le_groupe'|trans }}</h1>
         <p class="hero-subtitle">{{ 'group_show.html.identite_valeurs_histoire_tribune'|trans }}</p>
+
+        {% if groupPreview|default(false) %}
+            <div class="alert alert-warning mt-4">
+                Apercu interne. Cette version n'est visible que pour les administrateurs.
+            </div>
+        {% endif %}
+
+        {% if group %}
+            <div class="group-content rich-content">
+                {{ group.description|sanitize_page_html|raw }}
+            </div>
+            {% else %}
+            <div class="group-content rich-content">
+                {{ 'home_index.html.aucune_information_de_groupe_na_encore_ete_ajoutee'|trans }}
+            </div>
+        {% endif %}
     </div>
 </section>
 
 <div class="section">
     <div class="container">
+        <div class="group-layout">
+            <aside class="group-sidenav">
+                <div class="group-sidenav-title">{{ 'group_show.html.le_groupe'|trans }}</div>
+                <a href="#notre-histoire" class="group-sidenav-link">{{ 'components_navbar.html.notre_histoire'|trans }}</a>
+                <a href="#notre-mentalite" class="group-sidenav-link">{{ 'components_navbar.html.notre_mentalite'|trans }}</a>
+                <a href="#notre-fonctionnement" class="group-sidenav-link">{{ 'components_navbar.html.notre_fonctionnement'|trans }}</a>
+                <a href="#pourquoi-nous-rejoindre" class="group-sidenav-link">{{ 'components_navbar.html.pourquoi_nous_rejoindre'|trans }}</a>
+                <a href="#se-carter" class="group-sidenav-link">{{ 'components_navbar.html.se_carter'|trans }}</a>
+            </aside>
 
-        <div class="group-content">
-            {{ group.description|raw }}
-        </div>
+            <div class="group-main">
+                {% if group and group.banner %}
+                    <div style="margin-top:2rem;">
+                        <img class="group-banner"
+                             src="{{ asset('uploads/media/' ~ group.banner.path) }}"
+                             alt="">
+                    </div>
+                {% endif %}
 
-        {% if group.banner %}
-            <div style="margin-top:2rem;">
-                <img class="group-banner"
-                     src="{{ asset('uploads/media/' ~ group.banner.path) }}"
-                     alt="">
+                <div class="group-section" id="notre-histoire">
+                    <h2>{{ 'group_show.html.section_histoire_title'|trans }}</h2>
+                    {% set histoireText = (group and group.histoireText) ? group.histoireText : 'group_show.html.section_histoire_text'|trans %}
+                    <div class="rich-content">
+                        {% if group and group.histoireText %}
+                            {{ histoireText|sanitize_page_html|raw }}
+                        {% else %}
+                            {{ histoireText|nl2br }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="group-section" id="notre-mentalite">
+                    <h2>{{ 'group_show.html.section_mentalite_title'|trans }}</h2>
+                    {% set mentaliteText = (group and group.mentaliteText) ? group.mentaliteText : 'group_show.html.section_mentalite_text'|trans %}
+                    <div class="rich-content">
+                        {% if group and group.mentaliteText %}
+                            {{ mentaliteText|sanitize_page_html|raw }}
+                        {% else %}
+                            {{ mentaliteText|nl2br }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="group-section" id="notre-fonctionnement">
+                    <h2>{{ 'group_show.html.section_fonctionnement_title'|trans }}</h2>
+                    {% set fonctionnementText = (group and group.fonctionnementText) ? group.fonctionnementText : 'group_show.html.section_fonctionnement_text'|trans %}
+                    <div class="rich-content">
+                        {% if group and group.fonctionnementText %}
+                            {{ fonctionnementText|sanitize_page_html|raw }}
+                        {% else %}
+                            {{ fonctionnementText|nl2br }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="group-section" id="pourquoi-nous-rejoindre">
+                    <h2>{{ 'group_show.html.section_rejoindre_title'|trans }}</h2>
+                    {% set rejoindreText = (group and group.rejoindreText) ? group.rejoindreText : 'group_show.html.section_rejoindre_text'|trans %}
+                    <div class="rich-content">
+                        {% if group and group.rejoindreText %}
+                            {{ rejoindreText|sanitize_page_html|raw }}
+                        {% else %}
+                            {{ rejoindreText|nl2br }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="group-section" id="se-carter">
+                    <h2>{{ 'group_show.html.section_se_carter_title'|trans }}</h2>
+                    {% set seCarterText = (group and group.seCarterText) ? group.seCarterText : 'group_show.html.section_se_carter_text'|trans %}
+                    <div class="rich-content">
+                        {% if group and group.seCarterText %}
+                            {{ seCarterText|sanitize_page_html|raw }}
+                        {% else %}
+                            {{ seCarterText|nl2br }}
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-        {% endif %}
-
+        </div>
     </div>
 </div>
 {% endblock %}

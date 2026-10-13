@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Ticket;
+use App\Entity\TicketCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -15,5 +16,34 @@ class TicketRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Ticket::class);
     }
-}
 
+    /**
+     * @return Ticket[]
+     */
+    public function findPublicTickets(?TicketCategory $category): array
+    {
+        $now = new \DateTimeImmutable();
+
+        $qb = $this->createQueryBuilder('t')
+            ->leftJoin('t.category', 'cat')
+            ->leftJoin('t.image', 'image')
+            ->addSelect('cat')
+            ->addSelect('image')
+            ->andWhere('t.matchDate > :now')
+            ->setParameter('now', $now)
+            ->orderBy('t.matchDate', 'ASC');
+
+        if ($category) {
+            $qb->andWhere('t.category = :category')
+                ->setParameter('category', $category);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function isVisibleForUser(Ticket $ticket, bool $isMember): bool
+    {
+        return $ticket->isAvailableForUser($isMember);
+    }
+
+}

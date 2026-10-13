@@ -1,41 +1,45 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
 {% block title %}{{ 'user_index.html.user_index'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>{{ 'user_index.html.user_index'|trans }}</h1>
+    <section class="section">
+        <div class="container content-shell-xl">
+            <h1>{{ 'user_index.html.user_index'|trans }}</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>{{ 'user_index.html.id'|trans }}</th>
-                <th>{{ 'security_login.html.email'|trans }}</th>
-                <th>{{ 'user_index.html.roles'|trans }}</th>
-                <th>{{ 'user_index.html.password'|trans }}</th>
-                <th>{{ 'user_index.html.isverified'|trans }}</th>
-                <th>{{ 'user_index.html.actions'|trans }}</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>{{ user.password }}</td>
-                <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">{{ 'user_index.html.show'|trans }}</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">{{ 'user_index.html.edit'|trans }}</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">{{ 'user_index.html.no_records_found'|trans }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'user_index.html.id'|trans }}</th>
+                            <th>{{ 'security_login.html.email'|trans }}</th>
+                            <th>{{ 'user_index.html.roles'|trans }}</th>
+                            <th>{{ 'user_index.html.isverified'|trans }}</th>
+                            <th>{{ 'user_index.html.actions'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                            <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
+                            <td>
+                                <a href="{{ path('app_user_show', {'id': user.id}) }}">{{ 'user_index.html.show'|trans }}</a>
+                                <a href="{{ path('app_user_edit', {'id': user.id}) }}">{{ 'user_index.html.edit'|trans }}</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">{{ 'user_index.html.no_records_found'|trans }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
-    <a href="{{ path('app_user_new') }}">{{ 'user_index.html.create_new'|trans }}</a>
+            <a href="{{ path('app_user_new') }}">{{ 'user_index.html.create_new'|trans }}</a>
+        </div>
+    </section>
 {% endblock %}

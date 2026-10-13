@@ -1,0 +1,302 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Admin - {{ config.label }}{% endblock %}
+{% block admin_title %}{{ config.label }}{% endblock %}
+
+{% block admin_actions %}
+    <a class="btn btn-danger btn-sm" href="{{ path('custom_admin_crud_new', { resource: resource }|merge(app.request.query.all)) }}">
+        <i class="bi bi-plus-lg" aria-hidden="true"></i>
+        Ajouter
+    </a>
+{% endblock %}
+
+{% block body %}
+    {% set currentQuery = app.request.query.all %}
+    {% set currentSort = sort|default('') %}
+    {% set currentDirection = direction|default('asc') %}
+    {% set currentState = state|default('') %}
+
+    <section class="admin-panel admin-list-panel">
+        <div class="admin-table-head admin-list-head">
+            <div>
+                <p class="admin-kicker">Gestion uniforme</p>
+                <h2>{{ config.label }}</h2>
+            </div>
+            <div class="admin-list-head__meta">
+                <span class="admin-count">{{ pagination.totalItems|default(rows|length) }} element(s)</span>
+                <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_index', { resource: resource }) }}">Reinitialiser</a>
+            </div>
+        </div>
+
+        {% if resourceSummary|default([]) is not empty %}
+            <div class="admin-resource-metrics">
+                {% for metric in resourceSummary %}
+                    <a
+                        class="admin-resource-metric admin-resource-metric--{{ metric.tone|default('neutral') }} {{ currentState == metric.state|default('') ? 'is-active' : '' }}"
+                        href="{{ metric.state is defined ? path('custom_admin_crud_index', { resource: resource, state: metric.state }) : path('custom_admin_crud_index', { resource: resource }) }}"
+                    >
+                        <span>{{ metric.label }}</span>
+                        <strong>{{ metric.formatted is defined ? metric.formatted : metric.value }}</strong>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if resource == 'commandes-merch' %}
+            <div class="admin-state-tabs" aria-label="Filtres de commandes merch">
+                {% for filter in [
+                    { label: 'Toutes', state: '' },
+                    { label: 'À confirmer', state: 'pending_confirmation' },
+                    { label: 'À préparer', state: 'to_prepare' },
+                    { label: 'Confirmées', state: 'confirmed' },
+                    { label: 'Exécutées', state: 'executed' }
+                ] %}
+                    <a
+                        class="btn btn-sm {{ currentState == filter.state ? 'btn-danger' : 'btn-outline-light' }}"
+                        href="{{ filter.state ? path('custom_admin_crud_index', { resource: resource, state: filter.state }) : path('custom_admin_crud_index', { resource: resource }) }}"
+                    >
+                        {{ filter.label }}
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="get" class="admin-list-toolbar">
+            <input type="hidden" name="sort" value="{{ currentSort }}">
+            <input type="hidden" name="direction" value="{{ currentDirection }}">
+            <input type="hidden" name="page" value="1">
+            <input type="hidden" name="state" value="{{ currentState }}">
+
+            <div class="admin-list-toolbar__search">
+                <label class="form-label" for="admin-search">Recherche</label>
+                <div class="input-group">
+                    <input
+                        id="admin-search"
+                        type="search"
+                        name="q"
+                        class="form-control"
+                        placeholder="Rechercher dans {{ config.label|lower }}"
+                        value="{{ search|default('') }}"
+                    >
+                    <button class="btn btn-danger" type="submit">Rechercher</button>
+                </div>
+            </div>
+
+            <div class="admin-list-toolbar__filters">
+                <div class="admin-list-toolbar__field">
+                    <label class="form-label" for="admin-per-page">Par page</label>
+                    <select id="admin-per-page" name="perPage" class="form-select">
+                        {% for option in [10, 20, 50] %}
+                            <option value="{{ option }}" {{ pagination.perPage|default(20) == option ? 'selected' : '' }}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {% for filter in filters|default([]) %}
+                    <div class="admin-list-toolbar__field">
+                        <label class="form-label" for="admin-filter-{{ filter.name }}">{{ filter.label }}</label>
+                        {% if filter.type == 'date_range' %}
+                            <div class="admin-date-range">
+                                <input
+                                    id="admin-filter-{{ filter.name }}-from"
+                                    type="date"
+                                    name="{{ filter.name }}_from"
+                                    class="form-control"
+                                    value="{{ filter.from|default('') }}"
+                                >
+                                <input
+                                    id="admin-filter-{{ filter.name }}-to"
+                                    type="date"
+                                    name="{{ filter.name }}_to"
+                                    class="form-control"
+                                    value="{{ filter.to|default('') }}"
+                                >
+                            </div>
+                        {% elseif filter.type == 'number_range' %}
+                            <div class="admin-date-range">
+                                <input
+                                    id="admin-filter-{{ filter.name }}-from"
+                                    type="number"
+                                    step="0.01"
+                                    name="{{ filter.name }}_min"
+                                    class="form-control"
+                                    value="{{ filter.from|default('') }}"
+                                >
+                                <input
+                                    id="admin-filter-{{ filter.name }}-to"
+                                    type="number"
+                                    step="0.01"
+                                    name="{{ filter.name }}_max"
+                                    class="form-control"
+                                    value="{{ filter.to|default('') }}"
+                                >
+                            </div>
+                        {% else %}
+                            <select id="admin-filter-{{ filter.name }}" name="{{ filter.name }}" class="form-select">
+                                <option value="">Tous</option>
+                                {% if filter.type == 'boolean' %}
+                                    <option value="1" {{ filter.value|default('') == '1' ? 'selected' : '' }}>Oui</option>
+                                    <option value="0" {{ filter.value|default('') == '0' ? 'selected' : '' }}>Non</option>
+                                {% else %}
+                                    {% for choiceLabel, choiceValue in filter.choices|default({}) %}
+                                        <option value="{{ choiceValue }}" {{ filter.value|default('') == choiceValue ? 'selected' : '' }}>{{ choiceLabel }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </form>
+
+        {% if resource == 'medias' %}
+            <div class="admin-media-gallery-grid admin-list-gallery">
+                {% for row in rows %}
+                    {% set item = row.item %}
+                    {% set mediaPath = item.path %}
+                    {% set mediaAlt = item.alt ?: item.path ?: 'Media sans titre' %}
+                    {% set mediaKind = item.isVideo ? 'video' : 'image' %}
+                    {% set rowQuery = currentQuery|merge({ resource: resource, id: item.id }) %}
+
+                    <article class="admin-media-gallery-card">
+                        <div class="admin-media-gallery-card__visual">
+                            {% if mediaPath %}
+                                {% if mediaKind == 'video' %}
+                                    <video muted playsinline preload="metadata">
+                                        <source src="{{ asset('uploads/media/' ~ mediaPath) }}">
+                                    </video>
+                                {% else %}
+                                    <img src="{{ asset('uploads/media/' ~ mediaPath) }}" alt="{{ mediaAlt }}" loading="lazy">
+                                {% endif %}
+                            {% else %}
+                                <div class="admin-media-gallery-card__empty">Aucun fichier</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="admin-media-gallery-card__body">
+                            <div class="admin-media-gallery-card__head">
+                                <div>
+                                    <h3>{{ mediaAlt }}</h3>
+                                    <p>{{ mediaPath ?: 'Chemin non renseigne' }}</p>
+                                </div>
+                                <span class="admin-badge">{{ mediaKind == 'video' ? 'Video' : 'Image' }}</span>
+                            </div>
+
+                            <div class="admin-media-gallery-card__meta">
+                                <span><strong>Galerie</strong> {{ item.gallery ?: 'Aucune' }}</span>
+                                <span><strong>Evenement</strong> {{ item.event ?: 'Aucun' }}</span>
+                                <span><strong>Article</strong> {{ item.post ?: 'Aucun' }}</span>
+                                <span><strong>Merch</strong> {{ item.merch ?: 'Aucun' }}</span>
+                                <span><strong>Page groupe</strong> {{ item.groupPage ?: 'Aucune' }}</span>
+                            </div>
+
+                            <div class="admin-media-gallery-card__actions">
+                                <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_show', rowQuery) }}">Voir</a>
+                                <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_edit', rowQuery) }}">Modifier</a>
+                                {% if config.deletable|default(true) %}
+                                    <form method="post" action="{{ path('custom_admin_crud_delete', rowQuery) }}" data-admin-confirm="{{ ('Supprimer ' ~ (row.label ?: mediaAlt) ~ ' ?')|e('html_attr') }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('admin_delete_' ~ resource ~ '_' ~ item.id) }}">
+                                        <button class="btn btn-outline-danger btn-sm" type="submit">Supprimer</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </article>
+                {% else %}
+                    <div class="admin-empty-state admin-media-gallery-empty">
+                        Aucun element pour le moment.
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            {% for field, label in config.list %}
+                                {% set nextDirection = currentSort == field and currentDirection == 'asc' ? 'desc' : 'asc' %}
+                                <th>
+                                    <a
+                                        class="admin-table-sort {{ currentSort == field ? 'is-active' : '' }}"
+                                        href="{{ path('custom_admin_crud_index', currentQuery|merge({ resource: resource, sort: field, direction: nextDirection, page: 1 })) }}"
+                                    >
+                                        {{ label }}
+                                        {% if currentSort == field %}
+                                            <i class="bi bi-arrow-{{ currentDirection == 'asc' ? 'up' : 'down' }}" aria-hidden="true"></i>
+                                        {% endif %}
+                                    </a>
+                                </th>
+                            {% endfor %}
+                            <th class="admin-table-actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in rows %}
+                            {% set item = row.item %}
+                            {% set rowQuery = currentQuery|merge({ resource: resource, id: item.id }) %}
+                            {% set canConfirm = resource == 'commandes-merch' and item.canBeConfirmed %}
+                            <tr>
+                                {% for field, label in config.list %}
+                                    <td>
+                                        {% if resource == 'commandes-merch' and field == 'executed' %}
+                                            {% set statusTone = item.workflowState == 'executed' ? 'success' : (item.workflowState == 'confirmed' ? 'info' : 'warning') %}
+                                            <span class="admin-badge admin-badge-{{ statusTone }}">{{ item.workflowStateLabel }}</span>
+                                        {% elseif resource == 'commandes-billets' and field == 'paid' %}
+                                            <span class="admin-badge {{ item.paid ? 'admin-badge-success' : 'admin-badge-warning' }}">{{ item.paid ? 'Payée' : 'À vérifier' }}</span>
+                                        {% elseif resource == 'dons' and field == 'status' %}
+                                            <span class="admin-badge admin-badge-{{ item.statusTone|default('secondary') }}">{{ item.statusTranslationKey|trans }}</span>
+                                        {% elseif resource == 'dons' and field == 'paymentStatus' %}
+                                            <span class="admin-badge admin-badge-{{ item.statusTone|default('secondary') }}">{{ item.paymentStatusTranslationKey|trans }}</span>
+                                        {% else %}
+                                            {{ row.values[field] }}
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                                <td class="admin-table-actions">
+                                    {% if canConfirm %}
+                                        <form method="post" action="{{ path('custom_admin_crud_confirm', rowQuery) }}" data-admin-confirm="{{ ('Confirmer la commande #' ~ item.id ~ ' ?')|e('html_attr') }}" data-admin-confirm-title="Confirmer la commande ?">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('admin_confirm_' ~ resource ~ '_' ~ item.id) }}">
+                                            <button class="btn btn-danger btn-sm" type="submit">Confirmer</button>
+                                        </form>
+                                    {% endif %}
+                                    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_show', rowQuery) }}">Voir</a>
+                                    <a class="btn btn-outline-light btn-sm" href="{{ path('custom_admin_crud_edit', rowQuery) }}">Modifier</a>
+                                    {% if config.deletable|default(true) %}
+                                        <form method="post" action="{{ path('custom_admin_crud_delete', rowQuery) }}" data-admin-confirm="{{ ('Supprimer ' ~ (row.label ?: ('#' ~ item.id)) ~ ' ?')|e('html_attr') }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('admin_delete_' ~ resource ~ '_' ~ item.id) }}">
+                                            <button class="btn btn-outline-danger btn-sm" type="submit">Supprimer</button>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="{{ config.list|length + 1 }}">
+                                    <p class="admin-empty-state">
+                                        Aucun element pour le moment.
+                                        {% if search|default('') or filters|default([])|length %}
+                                            <a href="{{ path('custom_admin_crud_index', { resource: resource }) }}">Effacer la recherche</a>
+                                        {% endif %}
+                                    </p>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+        {% if pagination.totalPages|default(1) > 1 %}
+            <nav class="admin-pagination" aria-label="Pagination">
+                <span class="admin-pagination__summary">
+                    Page {{ pagination.page }} / {{ pagination.totalPages }} - {{ pagination.totalItems }} resultat(s)
+                </span>
+
+                <div class="admin-pagination__links">
+                    <a class="btn btn-outline-light btn-sm {{ pagination.hasPrevious ? '' : 'disabled' }}" href="{{ pagination.hasPrevious ? path('custom_admin_crud_index', currentQuery|merge({ resource: resource, page: pagination.page - 1 })) : '#' }}">Precedent</a>
+                    <a class="btn btn-outline-light btn-sm {{ pagination.hasNext ? '' : 'disabled' }}" href="{{ pagination.hasNext ? path('custom_admin_crud_index', currentQuery|merge({ resource: resource, page: pagination.page + 1 })) : '#' }}">Suivant</a>
+                </div>
+            </nav>
+        {% endif %}
+    </section>
+{% endblock %}

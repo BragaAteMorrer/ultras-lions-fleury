@@ -61,9 +61,11 @@
 }
 
 .footer-socials a {
-    display: inline-block;
+    display: inline-grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
     margin-right: 0.5rem;
-    padding: 0.4rem 0.8rem;
     background: #D40000;
     border-radius: 0.25rem;
     color: #fff;
@@ -71,8 +73,32 @@
     transition: 0.2s;
 }
 
+.footer-socials a i {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
 .footer-socials a:hover {
     background: #ff3d3d;
+}
+
+.footer-legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.8rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+}
+
+.footer-legal a {
+    color: #ccc;
+    text-decoration: none;
+}
+
+.footer-legal a:hover {
+    color: #fff;
+    text-decoration: underline;
 }
 
 /* Bas du footer */
@@ -97,5 +123,9 @@
 
     .footer-socials a {
         margin: 0.3rem;
+    }
+
+    .footer-legal {
+        justify-content: center;
     }
 }

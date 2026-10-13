@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'linktree_index.html.liens_ultras_lions'|trans }}{% endblock %}
+{% block body_class %}linktree-page{% endblock %}
+
+{% block body %}
+<section class="linktree-hero">
+    <div class="linktree-shell">
+        <header class="linktree-header">
+            <img
+                src="{{ asset('img/logo/Logo Final - Ultras Lions - Autre Présentation.png') }}"
+                class="linktree-logo"
+                alt="{{ 'components_footer.html.ultras_lions'|trans }}"
+            >
+            <p class="linktree-kicker">FC Fleury 91</p>
+            <h1>{{ 'components_footer.html.ultras_lions'|trans }}</h1>
+            <p class="linktree-intro">{{ 'linktree_index.html.tous_les_liens_utiles_du_groupe_au_meme_endroit'|trans }}</p>
+        </header>
+
+        <div class="linktree-highlights" aria-label="{{ 'linktree_index.html.liens_principaux'|trans }}">
+            <a href="{{ path('merch_index') }}" class="linktree-highlight">{{ 'merch_list.html.table_de_vente_ultras_lions'|trans }}</a>
+            <a href="{{ path('ticket_index') }}" class="linktree-highlight">{{ 'ticket_list.html.billetterie_ultras_lions'|trans }}</a>
+            <a href="{{ path('post_index') }}" class="linktree-highlight">{{ 'posts_list.html.actualites_ultras_lions'|trans }}</a>
+        </div>
+
+        <div class="linktree-list" aria-label="{{ 'linktree_index.html.liens_principaux'|trans }}">
+            {% for link in links %}
+                <a
+                    href="{{ link.url }}"
+                    class="linktree-link{{ link.featured ? ' linktree-link-primary' : '' }}{{ link.icon ? '' : ' linktree-link-no-icon' }}"
+                    {% if link.openInNewTab %}target="_blank" rel="noopener"{% endif %}
+                >
+                    {% if link.icon %}
+                        <i class="bi bi-{{ link.icon }}" aria-hidden="true"></i>
+                    {% endif %}
+                    <span class="linktree-link-text">
+                        <strong>{{ link.title }}</strong>
+                        {% if link.description %}
+                            <small>{{ link.description }}</small>
+                        {% endif %}
+                    </span>
+                    <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                </a>
+            {% else %}
+                <p class="linktree-empty">{{ 'linktree_index.html.aucun_lien_actif_pour_le_moment'|trans }}</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+

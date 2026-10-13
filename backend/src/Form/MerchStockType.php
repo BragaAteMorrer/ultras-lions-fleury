@@ -6,8 +6,8 @@ use App\Entity\MerchStock;
 use App\Service\MerchSizingService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
@@ -32,24 +32,31 @@ class MerchStockType extends AbstractType
             $sizes[] = $currentSize;
         }
 
-        // Taille
-        if ($sizes === ['TU']) {
-            $builder->add('size', HiddenType::class, [
-                'data' => 'TU',
-            ]);
-        } else {
-            $choices = array_combine($sizes, $sizes);
+        $choices = array_combine($sizes, $sizes);
 
-            $builder->add('size', ChoiceType::class, [
-                'label' => 'Taille',
-                'choices' => $choices,
-                'disabled' => $stock && $stock->getId() !== null, // 🔒 taille figée
-            ]);
-        }
+        $builder->add('size', ChoiceType::class, [
+            'label' => 'Taille',
+            'choices' => $choices,
+            'placeholder' => 'Choisir une taille',
+            'required' => true,
+            'disabled' => $stock && $stock->getId() !== null,
+            'constraints' => [
+                new NotBlank(),
+            ],
+        ]);
 
-        // Quantité
+        $builder->add('sumupSku', TextType::class, [
+            'label' => 'SKU SumUp',
+            'required' => false,
+            'help' => 'Identifiant unique de la variante dans SumUp. Laisse vide si tu ne relies pas ce stock a SumUp.',
+            'attr' => [
+                'placeholder' => 'Ex: TAAA4QCHFDK',
+            ],
+        ]);
+
         $builder->add('quantity', IntegerType::class, [
-            'label' => 'Quantité',
+            'label' => 'Quantite',
+            'empty_data' => '0',
             'constraints' => [
                 new NotBlank(),
                 new GreaterThanOrEqual(0),

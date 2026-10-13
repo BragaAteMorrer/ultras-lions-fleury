@@ -8,13 +8,13 @@
         <div class="profile-header">
             <div class="profile-avatar-wrapper">
                 {% if user.photoProfil %}
-                    <img src="/uploads/profils/{{ user.photoProfil }}" alt="{{ user.pseudo }}" class="profile-avatar">
+                    <img src="/uploads/profils/{{ user.photoProfil }}" alt="{{ user.prenom }} {{ user.nom }}" class="profile-avatar">
                 {% else %}
-                    <img src="/img/default-profile.png" alt="{{ user.pseudo }}" class="profile-avatar">
+                    <img src="{{ asset('img/logo/Logo CIrculaire - Final - Football Furies.png') }}" alt="{{ user.prenom }} {{ user.nom }}" class="profile-avatar">
                 {% endif %}
             </div>
 
-            <h1 class="profile-name">{{ user.pseudo }}</h1>
+            <h1 class="profile-name">{{ user.prenom }} {{ user.nom }}</h1>
             <p class="profile-role">
                 {% if 'ROLE_ADMIN' in user.roles %}
                     {{ 'profile_show.html.admin_role'|trans }}
@@ -54,8 +54,122 @@
 
             {% if app.user and app.user.id == user.id %}
                 <a href="{{ path('profile_edit', { id: user.id }) }}" class="btn-ul profile-edit-btn">{{ 'profile_show.html.modifier_mon_profil'|trans }}</a>
+                <a href="{{ path('profile_change_password', { id: user.id }) }}" class="btn-ul profile-edit-btn mt-2">{{ 'profile_show.html.changer_mon_mot_de_passe'|trans }}</a>
             {% endif %}
         </div>
+
+        {% if app.user and app.user.id == user.id %}
+            <div class="profile-info-card mt-4">
+                <h2 class="section-title">{{ 'profile_show.html.mes_achats'|trans }}</h2>
+
+                <h3 class="form-section-title">{{ 'profile_show.html.mes_commandes'|trans }}</h3>
+                {% if paymentCheckouts is empty %}
+                    <p class="text-muted">{{ 'profile_show.html.aucune_commande_pour_le_moment'|trans }}</p>
+                {% else %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'profile_show.html.type'|trans }}</th>
+                                    <th>{{ 'profile_show.html.statut'|trans }}</th>
+                                    <th>{{ 'profile_show.html.total'|trans }}</th>
+                                    <th>{{ 'profile_show.html.creation'|trans }}</th>
+                                    <th>{{ 'profile_show.html.action'|trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for p in paymentCheckouts %}
+                                    {% set status = p.status|lower %}
+                                    {% set badge = status == 'paid' ? 'bg-success' : (status == 'failed' ? 'bg-danger' : 'bg-warning') %}
+                                    <tr>
+                                        <td>
+                                            {% if p.type == 'ticket' %}
+                                                {{ 'profile_show.html.billetterie'|trans }}
+                                            {% elseif p.type == 'merch' %}
+                                                {{ 'profile_show.html.table_de_vente'|trans }}
+                                            {% else %}
+                                                {{ 'profile_show.html.panier'|trans }}
+                                            {% endif %}
+                                        </td>
+                                        <td><span class="badge {{ badge }}">{{ p.status }}</span></td>
+                                        <td>{{ p.amount|number_format(2, ',', ' ') }} {{ p.currency }}</td>
+                                        <td>{{ p.createdAt|date('d/m/Y H:i') }}</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-outline-light" href="{{ path('profile_order_show', { id: p.id }) }}">{{ 'profile_show.html.voir'|trans }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+                <h3 class="form-section-title">{{ 'profile_show.html.billets'|trans }}</h3>
+                {% if ticketOrders is empty %}
+                    <p class="text-muted">{{ 'profile_show.html.aucun_billet_pour_le_moment'|trans }}</p>
+                {% else %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'profile_show.html.match'|trans }}</th>
+                                    <th>{{ 'profile_show.html.date'|trans }}</th>
+                                    <th>{{ 'cart_index.html.quantite'|trans }}</th>
+                                    <th>{{ 'profile_show.html.total'|trans }}</th>
+                                    <th>{{ 'profile_show.html.statut'|trans }}</th>
+                                    <th>{{ 'profile_show.html.commande'|trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in ticketOrders %}
+                                    {% set t = order.ticket %}
+                                    <tr>
+                                        <td>{{ t.opponent }}</td>
+                                        <td>{{ t.matchDate|date('d/m/Y H:i') }}</td>
+                                        <td>{{ order.quantity }}</td>
+                                        <td>{{ order.totalPrice|number_format(2, ',', ' ') }} EUR</td>
+                                        <td><span class="badge bg-success">{{ 'profile_show.html.paye'|trans }}</span></td>
+                                        <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+                <h3 class="form-section-title mt-4">{{ 'profile_show.html.matos'|trans }}</h3>
+                {% if merchOrders is empty %}
+                    <p class="text-muted">{{ 'profile_show.html.aucun_achat_pour_le_moment'|trans }}</p>
+                {% else %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'checkout_receipt.html.produit'|trans }}</th>
+                                    <th>{{ 'checkout_receipt.html.taille'|trans }}</th>
+                                    <th>{{ 'cart_index.html.quantite'|trans }}</th>
+                                    <th>{{ 'profile_show.html.total'|trans }}</th>
+                                    <th>{{ 'profile_show.html.statut'|trans }}</th>
+                                    <th>{{ 'profile_show.html.commande'|trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in merchOrders %}
+                                    <tr>
+                                        <td>{{ order.merch.title }}</td>
+                                        <td>{{ order.size ?? 'TU' }}</td>
+                                        <td>{{ order.quantity }}</td>
+                                        <td>{{ order.totalPrice|number_format(2, ',', ' ') }} €</td>
+                                        <td><span class="badge bg-success">{{ 'profile_show.html.paye'|trans }}</span></td>
+                                        <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
 
     </div>
 </section>

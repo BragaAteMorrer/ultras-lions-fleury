@@ -2,143 +2,186 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{{ 'components_footer.html.ultras_lions'|trans }}{% endblock %}</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Ultras Lions Fleury{% endblock %}</title>
     <style>
-        /* ===============================
-           RESET & BASE
-        =============================== */
         body {
             margin: 0;
             padding: 0;
-            background: #000;
-            font-family: Arial, sans-serif;
-            color: #ffffff;
+            background: #f4f4f4;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #1c1c1c;
+        }
+
+        table {
+            border-collapse: collapse;
         }
 
         img {
             border: 0;
-            outline: none;
-            text-decoration: none;
             display: block;
-        }
-
-        /* ===============================
-           CONTAINER
-        =============================== */
-        .email-container {
-            max-width: 37.5rem; /* 600px */
-            margin: 0 auto;
-            background: #111;
-            border-radius: 0.625rem; /* 10px */
-            overflow: hidden;
-            border: 0.0625rem solid #222;
-        }
-
-        /* ===============================
-           HEADER ULTRAS
-        =============================== */
-        .header-ultras {
-            width: 100%;
-            background: linear-gradient(
-                to bottom,
-                #D40000 0%,
-                #D40000 33.33%,
-                #000000 33.33%,
-                #000000 66.66%,
-                #FFFFFF 66.66%,
-                #FFFFFF 100%
-            );
-            text-align: center;
-            padding: 2rem 0;
-        }
-
-        .header-ultras img {
-            margin: 0 auto;
-            width: 12.5rem; /* 200px */
+            max-width: 100%;
             height: auto;
-            filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.8));
         }
 
-        /* ===============================
-           CONTENT
-        =============================== */
-        .content {
-            padding: 2rem;
+        .wrapper {
+            width: 100%;
+            background: #f4f4f4;
+            padding: 24px 12px;
         }
 
-        h1 {
+        .container {
+            width: 100%;
+            max-width: 640px;
+            background: #ffffff;
+            border: 1px solid #e6e6e6;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #111111 0%, #1f1f1f 55%, #7f0000 100%);
+            padding: 28px 24px;
             text-align: center;
-            color: #D40000;
-            font-size: 1.75rem;
+        }
+
+        .logo {
+            width: 160px;
+            margin: 0 auto 14px;
+        }
+
+        .eyebrow {
+            margin: 0;
+            font-size: 12px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            margin-bottom: 1rem;
-            letter-spacing: 0.0625rem;
+            color: #f3d9d9;
         }
 
-        p {
-            font-size: 0.9375rem;
-            line-height: 1.6;
-            color: #dddddd;
-            margin-bottom: 1rem;
+        .title {
+            margin: 10px 0 6px;
+            color: #ffffff;
+            font-size: 26px;
+            line-height: 1.2;
+            font-weight: bold;
         }
 
-        /* ===============================
-           BUTTON
-        =============================== */
-        .btn {
-            display: block;
-            width: 65%;
-            margin: 2rem auto;
-            padding: 0.875rem;
-            background: #D40000;
+        .content {
+            padding: 32px 24px;
+            color: #1c1c1c;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .content h1,
+        .content h2,
+        .content h3 {
+            margin: 0 0 16px;
+            line-height: 1.25;
+            color: #111111;
+        }
+
+        .content p {
+            margin: 0 0 16px;
+        }
+
+        .content ul {
+            margin: 16px 0;
+            padding-left: 20px;
+        }
+
+        .content li {
+            margin-bottom: 8px;
+        }
+
+        .content a {
+            color: #c40018;
+        }
+
+        .button {
+            display: inline-block;
+            background: #c40018;
             color: #ffffff !important;
-            text-align: center;
             text-decoration: none;
             font-weight: bold;
-            font-size: 0.9375rem;
-            border-radius: 0.375rem;
-            box-shadow: 0 0 0.75rem rgba(212, 0, 0, 0.5);
+            padding: 14px 22px;
+            border-radius: 999px;
         }
 
-        /* ===============================
-           FOOTER
-        =============================== */
+        .note {
+            padding: 16px 18px;
+            background: #f8f8f8;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            color: #555555;
+        }
+
+        .card {
+            padding: 18px;
+            border: 1px solid #ececec;
+            border-radius: 12px;
+            background: #ffffff;
+            margin: 16px 0;
+        }
+
         .footer {
+            padding: 18px 24px 28px;
             text-align: center;
-            color: #777777;
-            font-size: 0.75rem;
-            padding: 0 2rem 1.5rem;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #6b6b6b;
+            background: #fafafa;
+            border-top: 1px solid #ececec;
+        }
+
+        .muted {
+            color: #6b6b6b;
+        }
+
+        @media only screen and (max-width: 640px) {
+            .wrapper {
+                padding: 12px 6px;
+            }
+
+            .content,
+            .header,
+            .footer {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
         }
     </style>
 </head>
-
 <body>
-
-<div class="email-container">
-
-    {# ===== HEADER ===== #}
-    <div class="header-ultras">
-        <img
-            src="https://i.imgur.com/sQgIMqg.png"
-            alt="{{ 'components_footer.html.ultras_lions'|trans }}"
-        >
-    </div>
-
-    {# ===== CONTENT ===== #}
-    <div class="content">
-        {% block content %}{% endblock %}
-    </div>
-
-    {# ===== FOOTER ===== #}
-    <div class="footer">
-        {% block footer %}
-            {{ 'email_base.html.footer_brand'|trans }}<br>
-            {{ 'email_base.html.footer_notice'|trans }}
-        {% endblock %}
-    </div>
-
-</div>
-
+<table class="wrapper" role="presentation" width="100%">
+    <tr>
+        <td align="center">
+            <table class="container" role="presentation" width="100%">
+                <tr>
+                    <td class="header">
+                        {% block header %}
+                            <img src="{{ email.image('@images/Logo Final - Ultras Lions - Autre Présentation.png', 'image/png', 'logo-ultras-lions.png') }}" alt="Ultras Lions Fleury" class="logo" width="160">
+                            <p class="eyebrow">{% block header_subtitle %}Ultras Lions Fleury{% endblock %}</p>
+                            <h1 class="title">{% block header_title %}{% endblock %}</h1>
+                        {% endblock %}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="content">
+                        {% block content %}{% endblock %}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="footer">
+                        {% block footer %}
+                            Tu recois cet email car ton compte est lie aux services Ultras Lions Fleury.<br>
+                            Merci de ne pas repondre directement a ce message.
+                        {% endblock %}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 </body>
 </html>

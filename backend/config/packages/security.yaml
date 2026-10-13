@@ -21,6 +21,8 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
+                enable_csrf: true
+                csrf_token_id: authenticate
 
             logout:
                 path: app_logout
@@ -35,11 +37,12 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
 
         # Accès réservé aux membres connectés
-        - { path: ^/table-de-vente, roles: ROLE_USER }
-        - { path: ^/billetterie, roles: ROLE_USER }
+        - { path: ^/table-de-vente, roles: PUBLIC_ACCESS }
+        - { path: ^/billetterie, roles: PUBLIC_ACCESS }
 
         # Pages utilisateur connectées
         - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/profil, roles: ROLE_USER }
 
         # Page d'inscription accessible si pas connecté
         - { path: ^/register, roles: PUBLIC_ACCESS }

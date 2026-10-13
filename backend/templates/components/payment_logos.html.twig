@@ -1,0 +1,20 @@
+<div class="payment-logos-grid">
+    {% for method in methods|default([]) %}
+        <div class="payment-logo-card payment-logo-card--{{ method.type|default('generic') }}">
+            <span class="payment-logo-mark">
+                {% if method.asset is defined and method.asset %}
+                    <img
+                        class="payment-logo-image"
+                        src="{{ method.asset }}"
+                        alt="{{ method.label|default('Paiement') }}"
+                        loading="eager"
+                        decoding="async"
+                    >
+                {% else %}
+                    <span class="payment-logo-fallback">{{ method.label|default('Paiement') }}</span>
+                {% endif %}
+            </span>
+            <span class="payment-logo-label">{{ method.label|default('Paiement') }}</span>
+        </div>
+    {% endfor %}
+</div>

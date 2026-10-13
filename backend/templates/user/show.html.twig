@@ -1,38 +1,41 @@
-{% extends 'base.html.twig' %}
+﻿{% extends 'base.html.twig' %}
 
 {% block title %}{{ 'user_show.html.user'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>{{ 'user_show.html.user'|trans }}</h1>
+    <section class="section">
+        <div class="container content-shell-lg">
+            <h1>{{ 'user_show.html.user'|trans }}</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>{{ 'user_index.html.id'|trans }}</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>{{ 'security_login.html.email'|trans }}</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>{{ 'user_index.html.roles'|trans }}</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>{{ 'user_index.html.password'|trans }}</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>{{ 'user_index.html.isverified'|trans }}</th>
-                <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
-            </tr>
-        </tbody>
-    </table>
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>{{ 'user_index.html.id'|trans }}</th>
+                            <td>{{ user.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>{{ 'security_login.html.email'|trans }}</th>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>{{ 'user_index.html.roles'|trans }}</th>
+                            <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th>{{ 'user_index.html.isverified'|trans }}</th>
+                            <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-    <a href="{{ path('app_user_index') }}">{{ 'user_edit.html.back_to_list'|trans }}</a>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="{{ path('app_user_index') }}">{{ 'user_edit.html.back_to_list'|trans }}</a>
+                <a href="{{ path('app_user_edit', {'id': user.id}) }}">{{ 'user_index.html.edit'|trans }}</a>
+            </div>
 
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">{{ 'user_index.html.edit'|trans }}</a>
-
-    {{ include('user/_delete_form.html.twig') }}
+            {{ include('user/_delete_form.html.twig') }}
+        </div>
+    </section>
 {% endblock %}

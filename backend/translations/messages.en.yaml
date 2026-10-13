@@ -13,6 +13,7 @@ admin_dashboard:
 base:
   html:
     ultras_lions_fc_fleury_91: Ultras Lions – FC Fleury 91
+    ultras_lions_fc_fleury_91_title: Ultras Lions
 components_footer:
   html:
     copyright: © %year% Ultras Lions — Ultras FC Fleury 91 website.
@@ -23,6 +24,7 @@ components_footer:
     tribune_drapeaux_fumigenes_chants_la_ville_est_rouge_et_noire: 'Tribune, flags, smoke bombs, songs: the city is red and black.'
     twitter: Twitter
     ultras_lions: Ultras Lions
+    ten_as_vu_le_debut: "Les Lioness, t'en as vu le début, t'en verras pas la fin !"
 components_navbar:
   html:
     accueil: Welcome
@@ -31,11 +33,16 @@ components_navbar:
     connexion: Connection
     deconnexion: Disconnect
     le_groupe: The Group
-    modifier_mon_compte: ️ Edit my account
+    modifier_mon_compte:  Edit my account
     mon_profil: My profile
+    notre_histoire: "Our history"
+    notre_mentalite: "Our mindset"
+    notre_fonctionnement: "How we operate"
+    pourquoi_nous_rejoindre: "Why join us?"
     photos_de_match: Match photos
     saisir_un_code: Enter a code
     saison: Season %year_start%/%year_end%
+    se_carter: "Se Carter"
     se_connecter: Log in
     sinscrire: Register
     table_de_vente: Sales Table
@@ -43,7 +50,10 @@ components_navbar:
     videos: Videos
     communiques: Press releases
     streetart: Street Art
-    
+    chants: "Chants"
+    medias: "Media"
+    tout_les_medias: "All Media"
+    liens: "Links"
 email_base:
   html:
     footer_brand: Ultras Lions – FC Fleury 91
@@ -87,6 +97,8 @@ events_list:
     filtrer: Filter
     prochains_matchs_rassemblements_actions: Upcoming matches, gatherings, actions
     saison: Season
+    photos_de_match: Match photos
+    photos_de_match_saison: Match photos season %year_start%/%year_end%
 events_show:
   html:
     title: '%title% – Travel – Ultras Lions'
@@ -105,6 +117,16 @@ group_show:
     identite_valeurs_histoire_tribune: Identity, values, history, platform
     le_groupe: The group
     le_groupe_ultras_lions: The group – Ultras Lions
+    section_histoire_title: "Our history"
+    section_histoire_text: "Born in the stands at Fleury, we built our identity match after match. Red and black, loyal, present everywhere."
+    section_mentalite_title: "Our mindset"
+    section_mentalite_text: "Loyalty, respect, solidarity. We sing, we push, we never let go, home or away."
+    section_fonctionnement_title: "How we operate"
+    section_fonctionnement_text: "The group runs on volunteers, meetings, and collective decisions. Everyone has a role, everyone contributes."
+    section_rejoindre_title: "Why join us?"
+    section_rejoindre_text: "To live the match differently, join tifos and trips, and be part of a real red-and-black family."
+    section_se_carter_title: "Se Carter"
+    section_se_carter_text: "Stop by the sales table on match days, get your code, then register to access the members area."
 home_index:
   html:
     aucun_evenement_prevu: No events planned.
@@ -137,6 +159,20 @@ merch_list:
     textiles_accessoires_stickers_supports_du_groupe: Textiles, accessories, stickers, group supports
     toutes: All
     trier: Sort
+    stock_non_defini: Stock not defined
+    vitrine_officielle: Official showcase
+    decouvrir_la_selection: Discover the selection
+    voir_le_panier: View cart
+    pieces: Pieces
+    categories: Categories
+    stock_disponible: Stock available
+    affinage: Filtering
+    selectionnez_une_categorie: Select a category
+    choisir: Choose
+
+    moyens_de_paiement: "Payment methods"
+    paiement_par_carte_via_sumup: "Card payment via SumUp"
+    paiement_en_liquide_a_la_table_de_vente: "Cash payment at the sales table"
 merch_show:
   html:
     acheter: Buy
@@ -170,11 +206,11 @@ profile_edit:
     modifier_mon_compte: Edit my account
 profile_show:
   html:
-    admin_role: Office - Ultras Lions
+    admin_role: Office
     adresse: 'Address :'
     date_de_naissance: 'Date of birth :'
     email: 'Email:'
-    member_role: Member - Ultras Lions
+    member_role: Member
     modifier_mon_profil: Edit my profile
     nom: 'Name :'
     polo: 'Polo:'
@@ -223,6 +259,8 @@ security_register:
 security_reset_password:
   html:
     nouveau_mot_de_passe: New Password
+    confirm_new_password: Confirm new password
+    submit: Update
 staff_index:
   html:
     staff: STAFF
@@ -237,12 +275,21 @@ ticket_buy:
     vs_opponent: vs %opponent%
 ticket_list:
   html:
-    aucun_match_pour_le_moment: No matches yet.
-    billetterie_ultras_lions: Ticketing - Ultras Lions
+    a_domicile: Home
+    a_lexterieur: Away
+    billetweb: Billetweb
+    billetweb_reservation: 'Billetweb reservation'
+    reserver: Reserve
+    billetterie_billetweb_integree: 'Billetweb integration'
+    billetterie_ultras_lions: Ticketing
+    decouvrir_les_matchs: 'Discover matches'
     matchs_a_domicile_et_a_lexterieur: Home and away matches
     matchs_disponibles: Matches available
+    selectionnez_une_categorie: 'Select a category'
     stock: 'Stock: %stock%'
     vs_opponent: vs %opponent%
+    vitrine_officielle: 'Official showcase'
+    aucun_match_pour_le_moment: No matches at the moment.
 ticket_show:
   html:
     adversaire: 'Opponent:'
@@ -278,3 +325,197 @@ user_new:
 user_show:
   html:
     user: User
+cart_index:
+  html:
+    billets: Tickets
+    billets_et_table_de_vente: 'Tickets + sales table'
+    date: Date
+    matos: Gear
+    match: Match
+    nom: Last name
+    panier: Cart
+    panier_vide: 'Your cart is empty.'
+    payer_avec_sumup: 'Pay with SumUp'
+    moyens_de_paiement_sumup: 'SumUp payment methods'
+    paiement_securise_sumup: 'Secure payment by SumUp, with final validation on their payment page.'
+    sumup_method_cards: 'Bank card'
+    sumup_method_cards_detail: 'Visa, Mastercard and compatible cards.'
+    sumup_method_wallets: 'Apple Pay / Google Pay'
+    sumup_method_wallets_detail: 'Depending on device, browser and merchant account.'
+    sumup_method_paypal: 'PayPal via SumUp'
+    sumup_method_paypal_detail: 'Available if PayPal is enabled on the SumUp account.'
+    sumup_method_local: 'Other local methods'
+    sumup_method_local_detail: 'Depending on country, amount and currency.'
+    sumup_availability_note: 'The exact list of available methods is confirmed by SumUp at payment time.'
+    prenom: First name
+    produit: Product
+    quantite: Quantity
+    retour_billetterie: 'Back to ticketing'
+    retour_table_de_vente: 'Back to sales table'
+    sous_total_billets: 'Tickets subtotal'
+    sous_total_matos: 'Gear subtotal'
+    supprimer: Remove
+    taille: Size
+    total: Total
+    vider_le_panier: 'Empty cart'
+    reserver_et_payer_en_liquide: 'Reserve and pay in cash'
+
+profile_order:
+  html:
+    match: Match
+    product: Product
+
+profile_change_password:
+  html:
+    heading: 'Change my password'
+    submit: 'Update'
+    title: 'Change my password'
+
+profile:
+  email:
+    request_subject: 'Ultras Lions account management request'
+  flash:
+    access_denied_show: 'You can only view your own profile or a linked account.'
+    access_denied_orders: 'You can only view your own orders.'
+    access_denied_manage_links: 'You can only manage your own account links.'
+    access_denied_unlink: 'You can only unlink your own associations.'
+    access_denied_edit: 'You can only edit your own profile or a linked account.'
+    access_denied_password: 'You can only change your own password.'
+    invalid_form: 'Invalid form, please try again.'
+    no_account_found: 'No account found with that email.'
+    cannot_associate_own_account: 'You cannot link your own account.'
+    already_linked: 'This account is already linked.'
+    pending_request_exists: 'There is already a pending request for this account.'
+    request_sent: 'Request sent. The account must confirm by email.'
+    request_created_email_failed: "Request created, but the email could not be sent."
+    link_not_found_or_expired: 'Request not found or expired.'
+    association_validated: 'Account association validated.'
+    association_deleted: 'Association deleted.'
+    updated: 'Profile updated!'
+    current_password_incorrect: 'The current password is incorrect.'
+    password_updated: 'Password updated.'
+
+email_admin_custom:
+  html:
+    bonjour: Hello
+    header_subtitle: 'Admin message'
+
+admin:
+  navigation:
+    mailing: 'Send an email'
+  mailing:
+    html:
+      title: 'Admin - Mailing'
+      heading: 'Send an email'
+      send: Send
+      communication: Communication
+      subject: Subject
+      body: 'Email body'
+      message_hint: 'The message automatically uses the Ultras Lions email styling.'
+      recipients: Recipients
+      users_count_suffix: 'user(s)'
+      select_all: 'Select all'
+      deselect_all: 'Deselect all'
+      no_user: 'No users available.'
+      preview_default_subject: 'Email preview'
+      preview_default_header_subtitle: 'Preview before sending'
+      preview_recipient_name: 'Admin preview'
+    flash:
+      invalid_form: 'Invalid form, please try again.'
+      select_one_user: 'Select at least one user.'
+      enter_subject: 'Enter a subject.'
+      enter_header_title: 'Enter a header title.'
+      enter_header_subtitle: 'Enter a header subtitle.'
+      enter_body: 'Write the email body.'
+      sent_count: '%count% email(s) sent.'
+      preview_csrf_invalid: 'Invalid CSRF token.'
+  crud:
+    preview_admin: 'Admin preview'
+
+form:
+  user:
+    roles:
+      user: User
+      admin: Admin
+    password: 'Password'
+    verified: 'Verified?'
+  registration:
+    invite_code: 'Invitation code'
+    first_name: 'First name'
+    last_name: 'Last name'
+    email: Email
+    password: 'Password'
+    confirm_password: 'Confirm password'
+    phone: Phone
+    address: Address
+    city: City
+    postal_code: 'Postal code'
+    tshirt_size: T-shirt
+    sweatshirt_size: Sweatshirt
+    jacket_size: Jacket
+    short_size: Shorts
+    profile_photo: 'Profile photo'
+    placeholder:
+      phone: '+33612345678 / +32460123456…'
+      choose: 'Choose…'
+    validation:
+      invite_code_required: 'The code is required.'
+      email_required: 'Email address is required.'
+      password_required: 'Password is required.'
+      password_min_length: 'Minimum 8 characters.'
+      password_uppercase: 'It must contain at least one uppercase letter.'
+      password_lowercase: 'It must contain at least one lowercase letter.'
+      password_number: 'It must contain at least one number.'
+      password_special: 'It must contain at least one special character.'
+      confirm_password_required: 'You must confirm the password.'
+      phone_invalid: 'Invalid phone number.'
+      phone_format: 'Invalid phone format.'
+      postal_code_invalid: 'Invalid postal code.'
+      passwords_mismatch: 'Passwords do not match.'
+  profile:
+    email: 'Email address'
+    first_name: 'First name'
+    last_name: 'Last name'
+    birth_date: 'Birth date'
+    phone: Phone
+    address: Address
+    city: City
+    postal_code: 'Postal code'
+    profile_photo: 'Profile photo'
+    tshirt_size: 'T-shirt size'
+    polo_size: 'Polo size'
+    pullover_size: 'Pullover size'
+    sweatshirt_size: 'Sweatshirt size'
+    jacket_size: 'Jacket size'
+    short_size: 'Short size'
+    placeholder:
+      phone: '+33612345678 or +32460123456 (international)'
+      address: 'Ex: 45 rue de la République'
+      city: 'Ex: Montreal, Brussels, Paris'
+      postal_code: 'Ex: 75001, H2Y 1C6…'
+      choose: 'Choose...'
+    validation:
+      minimum_age: 'You must be at least 12 years old.'
+      phone_invalid: 'Invalid phone number.'
+      phone_format: 'Invalid phone format.'
+      address_invalid: 'Invalid address (unauthorized characters).'
+      city_invalid: 'Invalid city.'
+      postal_code_invalid: 'Invalid postal code.'
+  profile_password:
+    current: 'Current password'
+    new: 'New password'
+    confirm: 'Confirmation'
+    validation:
+      current_required: 'Enter your current password.'
+      new_required: 'Enter a new password.'
+      min_length: 'The password must contain at least 8 characters.'
+      uppercase: 'The password must contain at least one uppercase letter.'
+      lowercase: 'The password must contain at least one lowercase letter.'
+      number: 'The password must contain at least one number.'
+      special: 'The password must contain at least one special character.'
+      confirm_required: 'Confirm the new password.'
+      passwords_mismatch: 'Passwords do not match.'
+
+
+
+

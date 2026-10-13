@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,11 +29,11 @@ class EventController extends AbstractController
         $deplacementsQb = $em->createQueryBuilder()
             ->select('e')
             ->from(Event::class, 'e')
-            ->where('e.category = :category')
-            ->setParameter('category', 'photo_match')
-            ->addOrderBy('e.season', 'DESC')
-            ->addOrderBy('e.journee', 'ASC')
-            ->addOrderBy('e.date', 'ASC');
+            ->join('e.category', 'cat')
+            ->where('cat.section = :section')
+            ->setParameter('section', 'photos_de_match')
+            ->orderBy('e.date', 'DESC')
+            ->addOrderBy('e.id', 'DESC');
 
         if ($selectedSeason !== '') {
             $deplacementsQb
@@ -47,8 +46,9 @@ class EventController extends AbstractController
         $eventsQb = $em->createQueryBuilder()
             ->select('e')
             ->from(Event::class, 'e')
-            ->where('e.category = :category')
-            ->setParameter('category', 'evenement')
+            ->join('e.category', 'cat')
+            ->where('cat.section = :section')
+            ->setParameter('section', 'evenements')
             ->orderBy('e.date', 'ASC');
 
         if ($selectedSeason !== '') {

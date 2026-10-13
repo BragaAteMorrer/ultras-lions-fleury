@@ -1,0 +1,35 @@
+form:
+  registration:
+    validation:
+      invite_code_required: 'O código é obrigatório.'
+      email_required: 'O endereço de e-mail é obrigatório.'
+      password_required: 'A senha é obrigatória.'
+      password_min_length: 'Mínimo de 8 caracteres.'
+      password_uppercase: 'Deve conter pelo menos uma letra maiúscula.'
+      password_lowercase: 'Deve conter pelo menos uma letra minúscula.'
+      password_number: 'Deve conter pelo menos um número.'
+      password_special: 'Deve conter pelo menos um caractere especial.'
+      confirm_password_required: 'Você deve confirmar a senha.'
+      phone_invalid: 'Número de telefone inválido.'
+      phone_format: 'Formato de telefone inválido.'
+      postal_code_invalid: 'Código postal inválido.'
+      passwords_mismatch: 'As senhas não coincidem.'
+  profile:
+    validation:
+      minimum_age: 'Você deve ter pelo menos 12 anos.'
+      phone_invalid: 'Número de telefone inválido.'
+      phone_format: 'Formato de telefone inválido.'
+      address_invalid: 'Endereço inválido (caracteres não autorizados).'
+      city_invalid: 'Cidade inválida.'
+      postal_code_invalid: 'Código postal inválido.'
+  profile_password:
+    validation:
+      current_required: 'Digite sua senha atual.'
+      new_required: 'Digite uma nova senha.'
+      min_length: 'A senha deve conter pelo menos 8 caracteres.'
+      uppercase: 'A senha deve conter pelo menos uma letra maiúscula.'
+      lowercase: 'A senha deve conter pelo menos uma letra minúscula.'
+      number: 'A senha deve conter pelo menos um número.'
+      special: 'A senha deve conter pelo menos um caractere especial.'
+      confirm_required: 'Confirme a nova senha.'
+      passwords_mismatch: 'As senhas não coincidem.'
