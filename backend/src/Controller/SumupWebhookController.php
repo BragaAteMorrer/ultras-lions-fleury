@@ -41,18 +41,16 @@ class SumupWebhookController extends AbstractController
         DonationPaymentService $donationPaymentService,
         EntityManagerInterface $em
     ): Response {
-        $payload = $request->getContent();
-        $signature = $request->headers->get('x-payload-signature');
-
-        if (!$sumupService->verifyWebhookSignature($payload, $signature)) {
-            return new Response('invalid signature', 401);
+        // SumUp checkout notifications are untrusted hints, not payment proof.
+        // Official checkout webhooks are verified by fetching the checkout from SumUp.
+        $data = json_decode($request->getContent(), true);
+        if (!is_array($data) || ($data['event_type'] ?? '') !== 'CHECKOUT_STATUS_CHANGED') {
+            return new Response('', 204);
         }
 
-        $data = json_decode($payload, true) ?: [];
-        $checkoutId = $data['checkout_id'] ?? $data['id'] ?? null;
-
-        if (!$checkoutId) {
-            return new Response('missing checkout_id', 400);
+        $checkoutId = $data['id'] ?? null;
+        if (!is_string($checkoutId) || $checkoutId === '' || strlen($checkoutId) > 128) {
+            return new Response('invalid checkout id', 400);
         }
 
         $checkout = $checkoutRepository->findOneBy(['sumupCheckoutId' => $checkoutId]);
@@ -60,13 +58,31 @@ class SumupWebhookController extends AbstractController
             return new Response('unknown checkout', 404);
         }
 
-        $details = $sumupService->retrieveCheckout($checkoutId);
+        try {
+            $details = $sumupService->retrieveCheckout($checkoutId);
+        } catch (\Throwable $exception) {
+            $logger->error('SumUp checkout verification unavailable', ['checkout_id' => $checkoutId, 'exception' => $exception->getMessage()]);
+            return new Response('verification unavailable', 503);
+        }
+        if (isset($details['_error'])) {
+            $logger->error('SumUp checkout API rejected verification', ['checkout_id' => $checkoutId, 'status' => $details['_status'] ?? null]);
+            return new Response('verification unavailable', 503);
+        }
+        if ( (string) ($details['id'] ?? '') !== $checkoutId
+            || (string) ($details['checkout_reference'] ?? '') !== (string) $checkout->getCheckoutReference()
+            || !$sumupService->matchesMerchantCode((string) ($details['merchant_code'] ?? ''))
+            || strtoupper((string) ($details['currency'] ?? '')) !== strtoupper($checkout->getCurrency())
+            || !isset($details['amount'])
+            || !is_numeric($details['amount'])
+            || abs((float) $details['amount'] - $checkout->getAmount()) > 0.009) {
+            $logger->warning('SumUp webhook checkout identity mismatch', ['checkout_id' => $checkoutId]);
+            return new Response('checkout verification failed', 422);
+        }
         $status = strtoupper((string) ($details['status'] ?? ''));
 
         $logger->info('SumUp webhook received.', [
             'checkout_id' => $checkoutId,
             'status' => $status,
-            'details' => $details,
         ]);
 
         if ($checkout->getType() === 'donation') {

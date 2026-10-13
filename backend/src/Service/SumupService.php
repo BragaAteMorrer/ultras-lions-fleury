@@ -14,10 +14,14 @@ class SumupService
         private readonly ?string $apiKey,
         private readonly ?string $returnUrl,
         private readonly ?string $merchantCode = null,
-        private readonly ?string $webhookSecret = null,
         private readonly ?string $webhookUrl = null,
         private readonly ?LoggerInterface $logger = null,
     ) {}
+
+    public function matchesMerchantCode(string $merchantCode): bool
+    {
+        return $this->merchantCode !== null && $this->merchantCode !== '' && hash_equals($this->merchantCode, $merchantCode);
+    }
 
     public function createHostedCheckout(float $amount, string $currency, string $reference, string $description, ?string $returnUrl = null): array
     {
@@ -233,18 +237,4 @@ class SumupService
         return is_array($data) ? $data : [];
     }
 
-    public function verifyWebhookSignature(string $payload, ?string $signature): bool
-    {
-        if (!$this->webhookSecret) {
-            return true;
-        }
-
-        if ($signature === null || $signature === '') {
-            return false;
-        }
-
-        $expected = hash_hmac('sha256', $payload, $this->webhookSecret);
-
-        return hash_equals($expected, $signature);
-    }
 }
