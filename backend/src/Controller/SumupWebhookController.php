@@ -60,13 +60,16 @@ class SumupWebhookController extends AbstractController
 
         try {
             $details = $sumupService->retrieveCheckout($checkoutId);
-        } catch (\\Throwable $exception) {
+        } catch (\Throwable $exception) {
             $logger->error('SumUp checkout verification unavailable', ['checkout_id' => $checkoutId, 'exception' => $exception->getMessage()]);
             return new Response('verification unavailable', 503);
         }
         if (isset($details['_error']) || (string) ($details['id'] ?? '') !== $checkoutId
             || (string) ($details['checkout_reference'] ?? '') !== (string) $checkout->getCheckoutReference()
-            || strtoupper((string) ($details['currency'] ?? '')) !== 'EUR') {
+            || strtoupper((string) ($details['currency'] ?? '')) !== strtoupper($checkout->getCurrency())
+            || !isset($details['amount'])
+            || !is_numeric($details['amount'])
+            || abs((float) $details['amount'] - $checkout->getAmount()) > 0.009) {
             $logger->warning('SumUp webhook checkout identity mismatch', ['checkout_id' => $checkoutId]);
             return new Response('checkout verification failed', 422);
         }
