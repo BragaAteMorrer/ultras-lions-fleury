@@ -156,13 +156,22 @@ class CheckoutController extends AbstractController
         return ['Paiement non verifie', 'Aucun statut SumUp definitif n a encore ete recu pour cette commande.'];
     }
 
+    private function canReadCheckout(\App\Entity\PaymentCheckout $checkout): bool
+    {
+        $user = $this->getUser();
+        return $user !== null && (
+            $this->isGranted('ROLE_ADMIN') ||
+            ($checkout->getUser() !== null && $checkout->getUser()->getId() === $user->getId())
+        );
+    }
+
     #[Route('/merci/pdf', name: 'checkout_receipt_pdf')]
     public function receiptPdf(Request $request, PaymentCheckoutRepository $checkoutRepository): Response
     {
         $ref = (string) $request->query->get('ref', '');
         $checkout = $ref !== '' ? $checkoutRepository->findOneBy(['checkoutReference' => $ref]) : null;
 
-        if (!$checkout) {
+        if (!$checkout || !$this->canReadCheckout($checkout)) {
             throw $this->createNotFoundException();
         }
 
