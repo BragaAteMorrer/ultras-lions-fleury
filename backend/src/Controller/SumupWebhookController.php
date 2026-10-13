@@ -105,8 +105,9 @@ class SumupWebhookController extends AbstractController
                 return new Response('ok', 200);
             }
 
+            $alreadyProcessed = $checkout->getProcessedAt() !== null;
             $result = $donationPaymentService->synchronizeFromGateway($donation, $checkout, $details);
-            if (($result['confirmed'] ?? false) === true) {
+            if (!$alreadyProcessed && ($result['confirmed'] ?? false) === true) {
                 $donationPaymentService->sendConfirmationMail($donation, $checkout);
             }
 
