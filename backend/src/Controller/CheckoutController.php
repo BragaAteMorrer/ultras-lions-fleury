@@ -164,16 +164,29 @@ class CheckoutController extends AbstractController
     private function canReadReceipt(\App\Entity\PaymentCheckout $checkout, Request $request): bool
     {
         $user = $this->getUser();
-        if ($user !== null && ($this->isGranted('ROLE_ADMIN')
-            || ($checkout->getUser() !== null && $checkout->getUser()->getId() === $user->getId()))) {
+        if ($this->isGranted('ROLE_ADMIN')) {
             return true;
         }
+        if ($checkout->getUser() !== null) {
+            return $user !== null && $checkout->getUser()->getId() === $user->getId();
+        }
 
-        // A checkout reference by itself is not an authorization token.
-        // Guest access requires a checkout reference saved in the current session.
-        $session = $request->getSession();
-        return $session->has('checkout_receipt_reference')
-            && hash_equals((string) $session->get('checkout_receipt_reference'), (string) $checkout->getCheckoutReference());
+        // Guest checkouts can be opened only from the original browser session.
+        // A public checkout reference alone must never grant access.
+        if (!$request->hasPreviousSession()) {
+            return false;
+        }
+        $references = $request->getSession()->get('checkout_receipt_references', []);
+        if (!is_array($references)) {
+            return false;
+        }
+        $reference = (string) $checkout->getCheckoutReference();
+        foreach ($references as $allowedReference) {
+            if (is_string($allowedReference) && hash_equals($allowedReference, $reference)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     #[Route('/merci/pdf', name: 'checkout_receipt_pdf')]
@@ -228,7 +241,7 @@ class CheckoutController extends AbstractController
         ]);
 
         $options = new \Dompdf\Options();
-        $options->set('isRemoteEnabled', true);
+        $options->set('isRemoteEnabled', false);
         $options->set('chroot', $projectDir);
 
         $dompdf = new \Dompdf\Dompdf($options);
@@ -238,6 +251,9 @@ class CheckoutController extends AbstractController
 
         return new Response($dompdf->output(), 200, [
             'Content-Type' => 'application/pdf',
+            'Cache-Control' => 'private, no-store, max-age=0',
+            'X-Content-Type-Options' => 'nosniff',
+            'Referrer-Policy' => 'no-referrer',
             'Content-Disposition' => 'attachment; filename=commande_' . $checkout->getCheckoutReference() . '.pdf',
         ]);
     }

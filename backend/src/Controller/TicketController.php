@@ -310,7 +310,10 @@ class TicketController extends AbstractController
         }
 
         $reference = strtoupper(bin2hex(random_bytes(6)));
-        $session->set('checkout_receipt_reference', $reference);
+        $receiptReferences = $session->get('checkout_receipt_references', []);
+        $receiptReferences = is_array($receiptReferences) ? $receiptReferences : [];
+        $receiptReferences[] = $reference;
+        $session->set('checkout_receipt_references', array_slice(array_values(array_unique($receiptReferences)), -20));
 
         $checkout = new PaymentCheckout();
         $checkout->setType('ticket')
@@ -424,7 +427,10 @@ class TicketController extends AbstractController
         }
 
         $reference = strtoupper(bin2hex(random_bytes(6)));
-        $session->set('checkout_receipt_reference', $reference);
+        $receiptReferences = $session->get('checkout_receipt_references', []);
+        $receiptReferences = is_array($receiptReferences) ? $receiptReferences : [];
+        $receiptReferences[] = $reference;
+        $session->set('checkout_receipt_references', array_slice(array_values(array_unique($receiptReferences)), -20));
 
         $checkout = new PaymentCheckout();
         $checkout->setType('ticket')
