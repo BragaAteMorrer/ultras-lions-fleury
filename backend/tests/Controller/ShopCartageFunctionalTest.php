@@ -141,4 +141,41 @@ final class ShopCartageFunctionalTest extends WebTestCase
         self::assertNull($checkout->getProcessedAt());
     }
 
+
+    public function testReceiptPdfWithMissingReferenceIsNotFound(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/merci/pdf');
+        self::assertResponseStatusCodeSame(404);
+    }
+
+    public function testReceiptPdfWithUnknownReferenceIsNotFound(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/merci/pdf?ref=nonexistent-reference');
+        self::assertResponseStatusCodeSame(404);
+    }
+
+    public function testCashConfirmationWithUnknownReferenceIsNotFound(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/merci-liquide?ref=nonexistent-reference');
+        self::assertResponseStatusCodeSame(404);
+    }
+
+    public function testWebhookIgnoresUnexpectedEventWithoutCreatingOrders(): void
+    {
+        $client = static::createClient();
+        $client->request('POST', '/sumup/webhook', server: ['CONTENT_TYPE' => 'application/json'], content: '{"event_type":"UNRELATED_EVENT","id":"unknown-checkout"}');
+        self::assertResponseStatusCodeSame(204);
+    }
+
+    public function testWebhookRejectsOversizedCheckoutIdentifier(): void
+    {
+        $client = static::createClient();
+        $payload = json_encode(['event_type' => 'CHECKOUT_STATUS_CHANGED', 'id' => str_repeat('x', 129)], JSON_THROW_ON_ERROR);
+        $client->request('POST', '/sumup/webhook', server: ['CONTENT_TYPE' => 'application/json'], content: $payload);
+        self::assertResponseStatusCodeSame(400);
+    }
+
 }
