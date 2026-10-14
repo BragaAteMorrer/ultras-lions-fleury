@@ -5,6 +5,7 @@ namespace App\Tests\Controller;
 use App\Entity\PaymentCheckout;
 use App\Entity\RefreshmentCategory;
 use App\Entity\RefreshmentOrder;
+use App\Entity\CheckoutEmailDelivery;
 use App\Entity\RefreshmentProduct;
 use App\Entity\Ticket;
 use App\Service\SumupService;
@@ -80,6 +81,9 @@ final class RefreshmentPaymentWebhookTest extends WebTestCase
         self::assertNotNull($checkout->getProcessedAt());
         $orders = $em->getRepository(RefreshmentOrder::class)->findBy(['paymentCheckout' => $checkout]);
         self::assertCount(1, $orders);
+        $deliveries = $em->getRepository(CheckoutEmailDelivery::class)->findBy(['checkout' => $checkout]);
+        self::assertCount(1, $deliveries, 'Replayed webhook must not enqueue a duplicate email.');
+        self::assertSame('pending', $deliveries[0]->getStatus());
         self::assertSame(2, $orders[0]->getQuantity());
         self::assertSame(250, $orders[0]->getUnitPriceCents());
         self::assertSame('confirmed', $orders[0]->getStatus());

@@ -81,7 +81,7 @@
                     <div class="value">
                         {% if checkout.type == 'cash' %}
                             {{ 'checkout_receipt.html.liquide'|trans }}
-                        {% elseif checkout.type == 'ticket' or checkout.type == 'merch' or checkout.type == 'mixed' %}
+                        {% elseif checkout.type == 'ticket' or checkout.type == 'merch' or checkout.type == 'mixed' or checkout.type == 'refreshment' %}
                             {{ 'checkout_receipt.html.sumup'|trans }}
                         {% else %}
                             —
@@ -132,6 +132,18 @@
                             <td>{{ item.quantity }}</td>
                             <td>{{ item.total|number_format(2, ',', ' ') }} EUR</td>
                         </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        {% if refreshmentItems|default([]) is not empty %}
+            <div class="section-title">Précommandes buvette</div>
+            <table>
+                <thead><tr><th>Produit</th><th>Quantité</th><th>Total</th></tr></thead>
+                <tbody>
+                    {% for item in refreshmentItems %}
+                        <tr><td>{{ item.title }}</td><td>{{ item.quantity }}</td><td>{{ item.total|number_format(2, ',', ' ') }} EUR</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
