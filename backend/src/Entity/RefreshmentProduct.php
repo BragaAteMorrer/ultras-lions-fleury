@@ -24,7 +24,7 @@ class RefreshmentProduct
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $stock = null;
 
-    #[ORM\Column(options: ['default' => true'])]
+    #[ORM\Column(options: ['default' => true])]
     private bool $active = true;
 
     public function getStock(): ?int { return $this->stock; }
