@@ -161,6 +161,20 @@
                                 <label class="form-label text-light" for="email">{{ 'security_login.html.email'|trans }}</label>
                                 <input id="email" name="email" type="email" required value="{{ emailMerch ?? emailTicket }}" class="form-control mb-3">
                             {% endif %}
+                            {% if app.user and refreshmentOptions is not empty %}
+                            <section class="cart-block mb-3">
+                                <h3>Ajouter la buvette à mes billets</h3>
+                                <p class="text-light">Boissons précommandées pour le match, réglées avec les billets en un seul paiement SumUp.</p>
+                                {% for option in refreshmentOptions %}
+                                    <div class="d-flex align-items-center justify-content-between gap-3 mb-2">
+                                        <label for="drink-{{ option.ticket.id }}-{{ option.product.id }}">{{ option.ticket.opponent }} — {{ option.product.name }} ({{ (option.product.priceCents / 100)|number_format(2, ',', ' ') }} €)</label>
+                                        <input id="drink-{{ option.ticket.id }}-{{ option.product.id }}" class="form-control" style="max-width:90px"
+                                            type="number" min="0" max="30" step="1" value="0"
+                                            name="refreshments[{{ option.ticket.id }}][{{ option.product.id }}]">
+                                    </div>
+                                {% endfor %}
+                            </section>
+                            {% endif %}
                             <button class="btn btn-danger w-100" type="submit">{{ 'cart_index.html.payer_avec_sumup'|trans }}</button>
                         </form>
 

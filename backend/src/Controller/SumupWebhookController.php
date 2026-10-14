@@ -248,7 +248,10 @@ class SumupWebhookController extends AbstractController
                     return new Response('ok', 200);
                 }
                 $kind = (string) ($line['type'] ?? $checkout->getType());
-                if ($kind === 'merch') {
+                if ($kind === 'refreshment') {
+                    $resource = $em->getRepository(RefreshmentProduct::class)->find((int) ($line['refreshment_product_id'] ?? 0));
+                    $key = $resource?->getId() ? 'R'.$resource->getId() : null;
+                } elseif ($kind === 'merch') {
                     $item = $merchRepository->find((int) ($line['merch_id'] ?? 0));
                     $stock = $item?->getStockForSize((string) ($line['size'] ?? 'TU'));
                     $key = $stock?->getId() ? 'M'.$stock->getId() : null;
@@ -272,7 +275,7 @@ class SumupWebhookController extends AbstractController
                 $em->lock($resource, LockMode::PESSIMISTIC_WRITE);
                 $em->refresh($resource);
                 $available = str_starts_with($key, 'M') ? $resource->getQuantity() : $resource->getStock();
-                if ($available < $required[$key]) {
+                if ($available !== null && $available < $required[$key]) {
                     $logger->critical('Paid checkout stock shortage: manual reconciliation required', [
                         'checkout' => $checkout->getCheckoutReference(),
                         'stock_key' => $key,
@@ -291,6 +294,26 @@ class SumupWebhookController extends AbstractController
 
             foreach ($cart as $line) {
                 $lineType = (string) ($line['type'] ?? $checkout->getType());
+
+                if ($lineType === 'refreshment') {
+                    $product = $em->getRepository(RefreshmentProduct::class)->find((int) ($line['refreshment_product_id'] ?? 0));
+                    $match = $ticketRepository->find((int) ($line['ticket_id'] ?? 0));
+                    $qty = (int) ($line['quantity'] ?? 0);
+                    if (!$product || !$match || $qty < 1) {
+                        throw new \RuntimeException('Invalid verified refreshment checkout line');
+                    }
+                    if ($product->getStock() !== null) {
+                        $product->setStock($product->getStock() - $qty);
+                    }
+                    $order = (new RefreshmentOrder())->setPaymentCheckout($checkout)->setTicket($match)
+                        ->setProduct($product)->setQuantity($qty)
+                        ->setUnitPriceCents((int) $line['unit_price_cents'])
+                        ->setCustomerEmail($checkout->getEmail())->setStatus('confirmed');
+                    $em->persist($order);
+                    $merchLines[] = ['title' => 'Buvette : '.$product->getName(), 'quantity' => $qty,
+                        'unitPrice' => (float) ($line['unit_price'] ?? 0), 'totalPrice' => (float) ($line['total'] ?? 0)];
+                    continue;
+                }
 
                 if ($lineType === 'merch') {
                     $merch = $merchRepository->find($line['merch_id'] ?? 0);

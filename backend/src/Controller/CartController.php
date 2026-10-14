@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\PaymentCheckout;
+use App\Entity\RefreshmentProduct;
+use App\Entity\RefreshmentReport;
 use App\Entity\User;
 use App\Repository\MerchRepository;
 use App\Repository\TicketRepository;
@@ -26,7 +28,8 @@ class CartController extends AbstractController
         MerchRepository $merchRepository,
         TicketRepository $ticketRepository,
         CartService $cartService,
-        PaymentLogoProvider $paymentLogoProvider
+        PaymentLogoProvider $paymentLogoProvider,
+        EntityManagerInterface $em
     ): Response {
         try {
             $isMember = null !== $this->getUser();
@@ -101,6 +104,20 @@ class CartController extends AbstractController
             }
 
             $total = $merchTotal + $ticketTotal;
+            $refreshmentOptions = [];
+            if ($isMember) {
+                $products = $em->getRepository(RefreshmentProduct::class)->findBy(['active' => true]);
+                foreach ($ticketItems as $row) {
+                    $ticket = $row['ticket'];
+                    $report = $em->getRepository(RefreshmentReport::class)->findOneBy(['ticket' => $ticket]);
+                    if (!$report?->getClosesAt() || new \DateTimeImmutable() >= $report->getClosesAt()) { continue; }
+                    foreach ($products as $product) {
+                        if ($product->getCategory()?->isActive() && $product->getPriceCents() > 0 && ($product->getStock() === null || $product->getStock() > 0)) {
+                            $refreshmentOptions[] = ['ticket' => $ticket, 'product' => $product];
+                        }
+                    }
+                }
+            }
 
             $sumupPaymentMethods = $paymentLogoProvider->sumupMethods();
 
@@ -113,6 +130,7 @@ class CartController extends AbstractController
                 'emailMerch' => $cartService->getMerchEmail($session),
                 'emailTicket' => $cartService->getTicketEmail($session),
                 'sumupPaymentMethods' => $sumupPaymentMethods,
+                'refreshmentOptions' => $refreshmentOptions,
             ]);
         } catch (\Throwable $e) {
             return $this->render('cart/index.html.twig', [
@@ -124,6 +142,7 @@ class CartController extends AbstractController
                 'emailMerch' => null,
                 'emailTicket' => null,
                 'sumupPaymentMethods' => [],
+                'refreshmentOptions' => [],
             ]);
         }
     }
@@ -264,6 +283,39 @@ class CartController extends AbstractController
                 'unit_price' => $unit,
                 'total' => $lineTotal,
             ];
+        }
+
+        $drinkSelections = $request->request->all('refreshments');
+        if ($drinkSelections !== []) {
+            if (!$isMember || !$ticketCart) {
+                $this->addFlash('danger', 'Precommande buvette reservee aux membres avec billet.');
+                return $this->redirectToRoute('cart_index');
+            }
+            foreach ($drinkSelections as $ticketId => $quantities) {
+                if (!ctype_digit((string) $ticketId) || !is_array($quantities)) { throw $this->createNotFoundException(); }
+                $ticket = $ticketById[(int) $ticketId] ?? null;
+                $report = $ticket ? $em->getRepository(RefreshmentReport::class)->findOneBy(['ticket' => $ticket]) : null;
+                foreach ($quantities as $productId => $value) {
+                    if (!ctype_digit((string) $productId) || !ctype_digit((string) $value)) { throw $this->createNotFoundException(); }
+                    $qty = (int) $value;
+                    if ($qty === 0) { continue; }
+                    if ($qty > 30 || !$ticket || !$report?->getClosesAt() || new \DateTimeImmutable() >= $report->getClosesAt()) {
+                        $this->addFlash('danger', 'La buvette est fermee ou la quantite est invalide.');
+                        return $this->redirectToRoute('cart_index');
+                    }
+                    $product = $em->getRepository(RefreshmentProduct::class)->find((int) $productId);
+                    if (!$product || !$product->isActive() || !$product->getCategory()?->isActive() || $product->getPriceCents() <= 0 || ($product->getStock() !== null && $product->getStock() < $qty)) {
+                        $this->addFlash('danger', 'Une boisson est indisponible.');
+                        return $this->redirectToRoute('cart_index');
+                    }
+                    $cents = $product->getPriceCents();
+                    $lineTotal = round($cents * $qty / 100, 2);
+                    $total += $lineTotal;
+                    $lines[] = ['type' => 'refreshment', 'ticket_id' => $ticket->getId(), 'refreshment_product_id' => $product->getId(),
+                        'title' => $product->getName(), 'quantity' => $qty, 'unit_price_cents' => $cents,
+                        'unit_price' => $cents / 100, 'total' => $lineTotal];
+                }
+            }
         }
 
         if (!$lines) {
