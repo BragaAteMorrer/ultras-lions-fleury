@@ -1,0 +1,39 @@
+name: Boutique and cartage functional tests
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  functional:
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:10.11
+        env:
+          MARIADB_ROOT_PASSWORD: root-test
+          MARIADB_DATABASE: ultras_functional_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=10s --health-timeout=5s --health-retries=10
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      APP_ENV: test
+      APP_SECRET: functional-tests-only-secret
+      DATABASE_URL: mysql://root:root-test@127.0.0.1:3306/ultras_functional?serverVersion=mariadb-10.11.0&charset=utf8mb4
+      MAILER_DSN: "null://null"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_mysql, intl, mbstring, gd, dom, zip
+          coverage: none
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress --no-scripts
+      - name: Build isolated schema
+        run: php bin/console doctrine:schema:create --env=test --no-interaction
+      - name: Run isolated HTTP functional suite
+        run: vendor/bin/phpunit tests/Controller/ShopCartageFunctionalTest.php --colors=never
