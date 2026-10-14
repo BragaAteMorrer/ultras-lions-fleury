@@ -19,7 +19,7 @@ final class PublicRefreshmentController extends AbstractController
     public function index(Ticket $match, EntityManagerInterface $entityManager): Response
     {
         $matchDate = $match->getMatchDate();
-        if (!$matchDate || $matchDate <= new \DateTimeImmutable()) {
+        if ($match->isAwayMatch() || !$matchDate || $matchDate <= new \DateTimeImmutable()) {
             throw $this->createNotFoundException();
         }
 
