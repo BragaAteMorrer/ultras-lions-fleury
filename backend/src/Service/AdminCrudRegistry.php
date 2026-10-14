@@ -26,6 +26,10 @@ use App\Entity\SiteConfig;
 use App\Entity\Ticket;
 use App\Entity\TicketCategory;
 use App\Entity\TicketOrder;
+use App\Entity\RefreshmentCategory;
+use App\Entity\RefreshmentProduct;
+use App\Entity\RefreshmentOrder;
+use App\Entity\RefreshmentReport;
 use App\Entity\User;
 use App\Entity\BilletwebLead;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -51,6 +55,45 @@ class AdminCrudRegistry
     public function all(): array
     {
         return [
+            'buvette-categories' => [
+                'label' => 'Categories buvette', 'singular' => 'Categorie', 'entity' => RefreshmentCategory::class,
+                'list' => ['id' => 'ID', 'name' => 'Nom', 'active' => 'Active'],
+                'fields' => [
+                    'name' => ['type' => TextType::class, 'label' => 'Nom'],
+                    'active' => ['type' => CheckboxType::class, 'label' => 'Active', 'required' => false],
+                ],
+            ],
+            'buvette-produits' => [
+                'label' => 'Produits buvette', 'singular' => 'Produit', 'entity' => RefreshmentProduct::class,
+                'list' => ['id' => 'ID', 'name' => 'Nom', 'category' => 'Categorie', 'priceCents' => 'Prix en centimes', 'active' => 'Actif'],
+                'fields' => [
+                    'name' => ['type' => TextType::class, 'label' => 'Nom'],
+                    'category' => ['type' => EntityType::class, 'label' => 'Categorie', 'class' => RefreshmentCategory::class],
+                    'priceCents' => ['type' => IntegerType::class, 'label' => 'Prix en centimes'],
+                    'active' => ['type' => CheckboxType::class, 'label' => 'Actif', 'required' => false],
+                ],
+            ],
+            'buvette-commandes' => [
+                'label' => 'Precommandes buvette', 'singular' => 'Precommande', 'entity' => RefreshmentOrder::class,
+                'order' => ['createdAt' => 'DESC'],
+                'list' => ['id' => 'ID', 'ticket' => 'Match', 'product' => 'Produit', 'quantity' => 'Quantite', 'status' => 'Statut'],
+                'fields' => [
+                    'ticket' => ['type' => EntityType::class, 'label' => 'Match', 'class' => Ticket::class],
+                    'product' => ['type' => EntityType::class, 'label' => 'Produit', 'class' => RefreshmentProduct::class],
+                    'quantity' => ['type' => IntegerType::class, 'label' => 'Quantite'],
+                    'status' => ['type' => ChoiceType::class, 'label' => 'Statut', 'choices' => ['Confirmee' => 'confirmed', 'Annulee' => 'cancelled']],
+                    'unitPriceCents' => ['type' => IntegerType::class, 'label' => 'Prix unitaire en centimes'],
+                    'customerEmail' => ['type' => EmailType::class, 'label' => 'Email', 'required' => false],
+                ],
+            ],
+            'buvette-rapports' => [
+                'label' => 'Envois buvette', 'singular' => 'Envoi', 'entity' => RefreshmentReport::class,
+                'list' => ['id' => 'ID', 'ticket' => 'Match', 'recipient' => 'Destinataire', 'sentAt' => 'Envoye'],
+                'fields' => [
+                    'ticket' => ['type' => EntityType::class, 'label' => 'Match', 'class' => Ticket::class],
+                    'recipient' => ['type' => EmailType::class, 'label' => 'Email du destinataire'],
+                ],
+            ],
             'articles' => [
                 'label' => 'Articles',
                 'singular' => 'Article',
