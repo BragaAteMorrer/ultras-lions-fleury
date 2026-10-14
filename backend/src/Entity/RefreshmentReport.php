@@ -22,6 +22,35 @@ class RefreshmentReport
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $sentAt = null;
 
+    #[ORM\Column(length: 24, options: ['default' => 'pending'])]
+    private string $deliveryStatus = 'pending';
+
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $attempts = 0;
+
+    #[ORM\Column(length: 64, nullable: true, unique: true)]
+    private ?string $deliveryKey = null;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $lastAttemptAt = null;
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $snapshot = null;
+
+    public function getDeliveryStatus(): string { return $this->deliveryStatus; }
+    public function setDeliveryStatus(string $status): self { $this->deliveryStatus = $status; return $this; }
+    public function getAttempts(): int { return $this->attempts; }
+    public function markAttempt(string $key, array $snapshot): void {
+        $this->attempts++;
+        $this->deliveryKey = $key;
+        $this->snapshot = $snapshot;
+        $this->lastAttemptAt = new \DateTimeImmutable();
+        $this->deliveryStatus = 'sending';
+    }
+    public function getDeliveryKey(): ?string { return $this->deliveryKey; }
+    public function getLastAttemptAt(): ?\DateTimeImmutable { return $this->lastAttemptAt; }
+    public function getSnapshot(): ?array { return $this->snapshot; }
+
     public function getId(): ?int { return $this->id; }
     public function getTicket(): ?Ticket { return $this->ticket; }
     public function setTicket(?Ticket $value): self { $this->ticket = $value; return $this; }
