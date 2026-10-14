@@ -39,6 +39,9 @@ class CheckoutController extends AbstractController
 
         if ($ref !== '') {
             $checkout = $checkoutRepository->findOneBy(['checkoutReference' => $ref]);
+            if ($checkout && !$this->canReadReceipt($checkout, $request)) {
+                $checkout = null;
+            }
             if ($checkout) {
                 if ($checkout->getStatus() !== 'paid' && $checkout->getSumupCheckoutId()) {
                     $details = $sumupService->retrieveCheckout($checkout->getSumupCheckoutId());
@@ -156,13 +159,28 @@ class CheckoutController extends AbstractController
         return ['Paiement non verifie', 'Aucun statut SumUp definitif n a encore ete recu pour cette commande.'];
     }
 
+    private function canReadReceipt(\App\Entity\PaymentCheckout $checkout, Request $request): bool
+    {
+        $user = $this->getUser();
+        if ($user !== null && ($this->isGranted('ROLE_ADMIN')
+            || ($checkout->getUser() !== null && $checkout->getUser()->getId() === $user->getId()))) {
+            return true;
+        }
+
+        // A checkout reference by itself is not an authorization token.
+        // Guest access requires a checkout reference saved in the current session.
+        $session = $request->getSession();
+        return $session->has('checkout_receipt_reference')
+            && hash_equals((string) $session->get('checkout_receipt_reference'), (string) $checkout->getCheckoutReference());
+    }
+
     #[Route('/merci/pdf', name: 'checkout_receipt_pdf')]
     public function receiptPdf(Request $request, PaymentCheckoutRepository $checkoutRepository): Response
     {
         $ref = (string) $request->query->get('ref', '');
         $checkout = $ref !== '' ? $checkoutRepository->findOneBy(['checkoutReference' => $ref]) : null;
 
-        if (!$checkout) {
+        if (!$checkout || !$this->canReadReceipt($checkout, $request)) {
             throw $this->createNotFoundException();
         }
 
@@ -228,7 +246,7 @@ class CheckoutController extends AbstractController
         $ref = (string) $request->query->get('ref', '');
         $checkout = $ref !== '' ? $checkoutRepository->findOneBy(['checkoutReference' => $ref]) : null;
 
-        if (!$checkout) {
+        if (!$checkout || !$this->canReadReceipt($checkout, $request)) {
             throw $this->createNotFoundException();
         }
 
