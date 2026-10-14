@@ -71,6 +71,7 @@ class PaymentCheckout
     {
         return match ($this->status) {
             'paid' => 'Payé',
+            'paid_stock_review' => 'Paiement reçu — stock à régulariser',
             'pending' => 'En attente',
             'failed' => 'Échoué',
             default => $this->status,
