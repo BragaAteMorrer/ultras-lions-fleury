@@ -21,9 +21,14 @@ class RefreshmentProduct
     #[ORM\Column(type: 'integer')]
     private int $priceCents = 0;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $stock = null;
+
     #[ORM\Column(options: ['default' => true])]
     private bool $active = true;
 
+    public function getStock(): ?int { return $this->stock; }
+    public function setStock(?int $stock): self { $this->stock = $stock === null ? null : max(0, $stock); return $this; }
     public function getId(): ?int { return $this->id; }
     public function getName(): string { return $this->name; }
     public function setName(string $value): self { $this->name = $value; return $this; }

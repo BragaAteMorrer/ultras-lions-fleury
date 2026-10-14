@@ -26,7 +26,7 @@ final class RefreshmentPaymentWebhookTest extends WebTestCase
             ->setPrice(10.0);
         $category = (new RefreshmentCategory())->setName('Boissons')->setActive(true);
         $product = (new RefreshmentProduct())
-            ->setName('Eau')->setCategory($category)->setPriceCents(250)->setActive(true);
+            ->setName('Eau')->setCategory($category)->setPriceCents(250)->setStock(2)->setActive(true);
         $em->persist($match);
         $em->persist($category);
         $em->persist($product);
@@ -83,5 +83,8 @@ final class RefreshmentPaymentWebhookTest extends WebTestCase
         self::assertSame(2, $orders[0]->getQuantity());
         self::assertSame(250, $orders[0]->getUnitPriceCents());
         self::assertSame('confirmed', $orders[0]->getStatus());
+        $managedProduct = $em->getRepository(RefreshmentProduct::class)->find($product->getId());
+        self::assertNotNull($managedProduct);
+        self::assertSame(0, $managedProduct->getStock(), 'Duplicated webhook must not consume drink stock twice.');
     }
 }

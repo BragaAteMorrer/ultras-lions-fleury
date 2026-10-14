@@ -51,6 +51,10 @@ final class RefreshmentCheckoutController extends AbstractController
             if (!$product || !$product->isActive() || !$product->getCategory()?->isActive() || $product->getPriceCents() <= 0) {
                 throw $this->createNotFoundException('Produit indisponible.');
             }
+            if ($product->getStock() !== null && $product->getStock() < $quantity) {
+                $this->addFlash('danger', 'Quantité indisponible pour '.$product->getName());
+                return $this->redirectToRoute('public_match_refreshments', ['id' => $match->getId()]);
+            }
             $subtotal = $quantity * $product->getPriceCents();
             $totalCents += $subtotal;
             $lines[] = [
