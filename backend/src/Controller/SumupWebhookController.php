@@ -154,6 +154,59 @@ class SumupWebhookController extends AbstractController
             }
 
             $cart = $checkout->getCart();
+
+            // Lock every stock record in deterministic order, including across
+            // separate paid checkouts competing for the same inventory.
+            $required = [];
+            $resources = [];
+            foreach ($cart as $line) {
+                $quantity = (int) ($line['quantity'] ?? 1);
+                if ($quantity < 1) {
+                    $logger->error('Invalid paid checkout quantity', ['checkout' => $checkout->getCheckoutReference()]);
+                    $checkout->setStatus('paid_stock_review');
+                    $checkout->setProcessedAt(new \DateTime());
+                    $em->flush();
+                    return new Response('ok', 200);
+                }
+                $kind = (string) ($line['type'] ?? $checkout->getType());
+                if ($kind === 'merch') {
+                    $item = $merchRepository->find((int) ($line['merch_id'] ?? 0));
+                    $stock = $item?->getStockForSize((string) ($line['size'] ?? 'TU'));
+                    $key = $stock?->getId() ? 'M'.$stock->getId() : null;
+                    $resource = $stock;
+                } else {
+                    $resource = $ticketRepository->find((int) ($line['ticket_id'] ?? 0));
+                    $key = $resource?->getId() ? 'T'.$resource->getId() : null;
+                }
+                if ($key === null) {
+                    $logger->critical('Paid checkout item missing', ['checkout' => $checkout->getCheckoutReference()]);
+                    $checkout->setStatus('paid_stock_review');
+                    $checkout->setProcessedAt(new \DateTime());
+                    $em->flush();
+                    return new Response('ok', 200);
+                }
+                $required[$key] = ($required[$key] ?? 0) + $quantity;
+                $resources[$key] = $resource;
+            }
+            ksort($resources, SORT_STRING);
+            foreach ($resources as $key => $resource) {
+                $em->lock($resource, LockMode::PESSIMISTIC_WRITE);
+                $em->refresh($resource);
+                $available = str_starts_with($key, 'M') ? $resource->getQuantity() : $resource->getStock();
+                if ($available < $required[$key]) {
+                    $logger->critical('Paid checkout stock shortage: manual reconciliation required', [
+                        'checkout' => $checkout->getCheckoutReference(),
+                        'stock_key' => $key,
+                        'required' => $required[$key],
+                        'available' => $available,
+                    ]);
+                    $checkout->setStatus('paid_stock_review');
+                    $checkout->setProcessedAt(new \DateTime());
+                    $em->flush();
+                    return new Response('ok', 200);
+                }
+            }
+
             $ticketLines = [];
             $merchLines = [];
 
@@ -174,7 +227,7 @@ class SumupWebhookController extends AbstractController
                     $qty = (int) ($line['quantity'] ?? 1);
                     $stock = $merch->getStockForSize($size);
                     if ($stock) {
-                        $stock->setQuantity(max(0, $stock->getQuantity() - $qty));
+                        $stock->setQuantity($stock->getQuantity() - $qty);
                         $em->persist($stock);
                     }
 
@@ -206,7 +259,7 @@ class SumupWebhookController extends AbstractController
                     continue;
                 }
                 $qty = (int) ($line['quantity'] ?? 1);
-                $ticket->setStock(max(0, $ticket->getStock() - $qty));
+                $ticket->setStock($ticket->getStock() - $qty);
                 $em->persist($ticket);
 
                 $order = new TicketOrder();
