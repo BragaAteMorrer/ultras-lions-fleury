@@ -39,3 +39,10 @@ jobs:
         run: php bin/console doctrine:schema:create --env=test --no-interaction
       - name: Run isolated HTTP functional suite
         run: vendor/bin/phpunit tests/Controller/ShopCartageFunctionalTest.php tests/Controller/PublicRefreshmentControllerTest.php tests/Controller/RefreshmentCheckoutSecurityTest.php tests/Controller/RefreshmentPaymentWebhookTest.php tests/Entity/PaymentReviewResolutionTest.php --colors=never
+      - name: Validate complete Doctrine migration chain on independent schema
+        env:
+          # With Doctrine's _test suffix, this creates ultras_migrations_test.
+          DATABASE_URL: mysql://root:root-test@127.0.0.1:3306/ultras_migrations?serverVersion=mariadb-10.11.0&charset=utf8mb4
+        run: |
+          php bin/console doctrine:database:create --env=test --no-interaction
+          php bin/console doctrine:migrations:migrate --env=test --no-interaction
