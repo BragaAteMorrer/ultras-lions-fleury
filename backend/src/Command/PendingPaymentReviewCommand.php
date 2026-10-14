@@ -20,7 +20,7 @@ final class PendingPaymentReviewCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $checkouts = $this->entityManager->getRepository(PaymentCheckout::class)
-            ->findBy(['status' => 'paid_stock_review'], ['createdAt' => 'ASC'], 500);
+            ->findBy(['status' => 'paid_stock_review', 'reviewResolvedAt' => null], ['createdAt' => 'ASC'], 500);
 
         foreach ($checkouts as $checkout) {
             $output->writeln(sprintf(
