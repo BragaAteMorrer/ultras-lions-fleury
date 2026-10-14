@@ -6,6 +6,9 @@ use App\Entity\CartageRegistration;
 use App\Entity\Donation;
 use App\Entity\MerchOrder;
 use App\Entity\TicketOrder;
+use App\Entity\RefreshmentOrder;
+use App\Entity\RefreshmentProduct;
+use App\Entity\Ticket;
 use App\Repository\CartageRegistrationRepository;
 use App\Repository\DonationRepository;
 use App\Repository\MerchRepository;
@@ -139,10 +142,28 @@ class SumupWebhookController extends AbstractController
 
             $cart = $checkout->getCart();
             $ticketLines = [];
+            $refreshmentLines = [];
             $merchLines = [];
 
             foreach ($cart as $line) {
                 $lineType = (string) ($line['type'] ?? $checkout->getType());
+
+                if ($lineType === 'refreshment') {
+                    $match = $em->getRepository(Ticket::class)->find((int) ($line['ticket_id'] ?? 0));
+                    $product = $em->getRepository(RefreshmentProduct::class)->find((int) ($line['product_id'] ?? 0));
+                    $qty = (int) ($line['quantity'] ?? 0);
+                    if (!$match || !$product || $qty < 1) {
+                        $logger->error('Paid refreshment checkout missing referenced product or match', ['checkout_id' => $checkoutId]);
+                        return new Response('invalid refreshment line', 503);
+                    }
+                    $order = new RefreshmentOrder();
+                    $order->setTicket($match)->setProduct($product)->setQuantity($qty)
+                        ->setUnitPriceCents((int) ($line['unit_price_cents'] ?? 0))
+                        ->setCustomerEmail($checkout->getEmail())->setStatus('confirmed');
+                    $em->persist($order);
+                    $refreshmentLines[] = ['title' => $product->getName(), 'quantity' => $qty];
+                    continue;
+                }
 
                 if ($lineType === 'merch') {
                     $merch = $merchRepository->find($line['merch_id'] ?? 0);
@@ -233,6 +254,7 @@ class SumupWebhookController extends AbstractController
                             'checkout' => $checkout,
                             'ticketLines' => $ticketLines,
                             'merchLines' => $merchLines,
+                        'refreshmentLines' => $refreshmentLines,
                         ]
                     );
                     $checkout->setEmailSentAt(new \DateTime());
