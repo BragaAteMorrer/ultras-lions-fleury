@@ -16,7 +16,10 @@ final class Version20260408120000 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE gallery ADD description LONGTEXT DEFAULT NULL');
+        $columns = array_change_key_case($this->connection->createSchemaManager()->listTableColumns('gallery'), CASE_LOWER);
+        if (!isset($columns['description'])) {
+            $this->addSql('ALTER TABLE gallery ADD description LONGTEXT DEFAULT NULL');
+        }
     }
 
     public function down(Schema $schema): void
