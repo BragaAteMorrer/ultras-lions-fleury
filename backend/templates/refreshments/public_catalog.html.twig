@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block title %}Buvette — {{ match.matchLabel }}{% endblock %}
+{% block body %}
+<section class="container py-5">
+  <h1>Buvette du match</h1>
+  <p>{{ match.matchLabel }} — {{ match.matchDate|date('d/m/Y H:i') }}</p>
+  <p class="alert alert-info">Catalogue informatif : les précommandes en ligne ne sont pas encore ouvertes.</p>
+  <div class="row g-3">
+    {% for product in products %}
+      <div class="col-md-4">
+        <article class="card h-100"><div class="card-body">
+          <h2 class="h5">{{ product.name }}</h2>
+          {% if product.category %}<p>{{ product.category.name }}</p>{% endif %}
+          <p>{{ (product.priceCents / 100)|number_format(2, ',', ' ') }} €</p>
+        </div></article>
+      </div>
+    {% else %}
+      <p>Aucun produit disponible actuellement.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
