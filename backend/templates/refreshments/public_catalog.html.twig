@@ -4,7 +4,11 @@
 <section class="container py-5">
   <h1>Buvette du match</h1>
   <p>{{ match.matchLabel }} — {{ match.matchDate|date('d/m/Y H:i') }}</p>
-  <p class="alert alert-info">Catalogue informatif : les précommandes en ligne ne sont pas encore ouvertes.</p>
+  {% set orderingOpen = date() < match.matchDate|date_modify('-24 hours') %}
+  {% if not orderingOpen %}<p class="alert alert-warning">Précommandes closes.</p>{% endif %}
+  <form method="post" action="{{ path('public_refreshment_checkout', {id: match.id}) }}">
+  <input type="hidden" name="_token" value="{{ csrf_token('refreshment_checkout_' ~ match.id) }}">
+  {% if not app.user %}<label>Email <input type="email" name="email" required maxlength="180"></label>{% endif %}
   <div class="row g-3">
     {% for product in products %}
       <div class="col-md-4">
@@ -12,11 +16,17 @@
           <h2 class="h5">{{ product.name }}</h2>
           {% if product.category %}<p>{{ product.category.name }}</p>{% endif %}
           <p>{{ (product.priceCents / 100)|number_format(2, ',', ' ') }} €</p>
+          {% if orderingOpen and product.category and product.category.active and product.priceCents > 0 %}
+          <label for="qty-{{ product.id }}">Quantité</label>
+          <input type="number" id="qty-{{ product.id }}" name="quantities[{{ product.id }}]" min="0" max="30" value="0">
+          {% endif %}
         </div></article>
       </div>
     {% else %}
       <p>Aucun produit disponible actuellement.</p>
     {% endfor %}
   </div>
+  {% if orderingOpen %}<button type="submit" class="btn btn-primary mt-3">Payer avec SumUp</button>{% endif %}
+  </form>
 </section>
 {% endblock %}
