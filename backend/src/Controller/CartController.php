@@ -109,6 +109,7 @@ class CartController extends AbstractController
                 $products = $em->getRepository(RefreshmentProduct::class)->findBy(['active' => true]);
                 foreach ($ticketItems as $row) {
                     $ticket = $row['ticket'];
+                    if ($ticket->isAwayMatch() || $ticket->isArchived()) { continue; }
                     $report = $em->getRepository(RefreshmentReport::class)->findOneBy(['ticket' => $ticket]);
                     if (!$report?->getClosesAt() || new \DateTimeImmutable() >= $report->getClosesAt()) { continue; }
                     foreach ($products as $product) {
@@ -299,7 +300,7 @@ class CartController extends AbstractController
                     if (!ctype_digit((string) $productId) || !ctype_digit((string) $value)) { throw $this->createNotFoundException(); }
                     $qty = (int) $value;
                     if ($qty === 0) { continue; }
-                    if ($qty > 30 || !$ticket || !$report?->getClosesAt() || new \DateTimeImmutable() >= $report->getClosesAt()) {
+                    if ($qty > 30 || !$ticket || $ticket->isAwayMatch() || $ticket->isArchived() || !$report?->getClosesAt() || new \DateTimeImmutable() >= $report->getClosesAt()) {
                         $this->addFlash('danger', 'La buvette est fermee ou la quantite est invalide.');
                         return $this->redirectToRoute('cart_index');
                     }

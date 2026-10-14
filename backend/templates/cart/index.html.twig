@@ -161,6 +161,9 @@
                                 <label class="form-label text-light" for="email">{{ 'security_login.html.email'|trans }}</label>
                                 <input id="email" name="email" type="email" required value="{{ emailMerch ?? emailTicket }}" class="form-control mb-3">
                             {% endif %}
+                            {% if app.user and ticketItems is not empty %}
+                            <div class="alert alert-info"><strong>Buvette des matchs à domicile</strong><p class="mb-0">Choisis tes boissons ci-dessous pour les ajouter au même paiement que tes billets. Si aucune boisson n'apparaît, vérifie que le match est à domicile, que des produits sont actifs et que la date de clôture est configurée.</p></div>
+                            {% endif %}
                             {% if app.user and refreshmentOptions is not empty %}
                             <section class="cart-block mb-3">
                                 <h3>Ajouter la buvette à mes billets</h3>

@@ -47,6 +47,9 @@
 
                     <h2>{{ matchLabel }}</h2>
 
+                    {% if not item.awayMatch and app.user %}
+                        <div class="alert alert-info my-3"><strong>Buvette du match à domicile</strong><p class="mb-2">Ajoute ton billet au panier, puis sélectionne tes boissons avant de payer en une fois avec SumUp.</p><a href="{{ path('cart_index') }}" class="btn btn-danger">Billet + buvette dans mon panier</a></div>
+                    {% endif %}
                     <div class="ticket-show-facts">
                         <div>
                             <span>{{ 'email_merch_order_recap.html.date'|trans }}</span>
