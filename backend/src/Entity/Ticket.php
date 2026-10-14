@@ -184,7 +184,7 @@ class Ticket
 
     public function isHomeMatch(): bool
     {
-        return $this->matchLocation === null || $this->matchLocation === 'domicile';
+        return !$this->isAwayMatch();
     }
 
     public function isAwayMatch(): bool
