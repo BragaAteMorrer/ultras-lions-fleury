@@ -240,6 +240,15 @@ class CustomCrudController extends AbstractController
             throw $this->createNotFoundException();
         }
 
+        // Validate the original match too: changing the selected match must not
+        // allow edits to an already closed preorder.
+        if ($entity instanceof \App\Entity\RefreshmentOrder && $request->isMethod('POST')) {
+            $originalMatchDate = $entity->getTicket()?->getMatchDate();
+            if ($originalMatchDate !== null && new \DateTimeImmutable() >= \DateTimeImmutable::createFromInterface($originalMatchDate)->modify('-24 hours')) {
+                throw $this->createAccessDeniedException('Cette precommande est cloturee depuis H-24.');
+            }
+        }
+
         $form = $this->buildForm($resource, $entity, $config);
         $form->handleRequest($request);
         $this->syncRequestedImage($entity, $form);
@@ -299,6 +308,13 @@ class CustomCrudController extends AbstractController
         $entity = $this->entityManager->getRepository($config['entity'])->find($id);
         if (!$entity) {
             throw $this->createNotFoundException();
+        }
+
+        if ($entity instanceof \App\Entity\RefreshmentOrder) {
+            $matchDate = $entity->getTicket()?->getMatchDate();
+            if ($matchDate !== null && new \DateTimeImmutable() >= \DateTimeImmutable::createFromInterface($matchDate)->modify('-24 hours')) {
+                throw $this->createAccessDeniedException('Impossible de supprimer une precommande apres cloture.');
+            }
         }
 
         if (!$this->isCsrfTokenValid('admin_delete_'.$resource.'_'.$id, (string) $request->request->get('_token'))) {
