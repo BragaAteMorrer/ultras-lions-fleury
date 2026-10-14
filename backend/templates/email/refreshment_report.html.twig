@@ -1,11 +1,16 @@
-<h1>Precommandes - {{ match.matchLabel }}</h1>
+<h1>Cloture des commandes — {{ match.matchLabel }}</h1>
 <p>Match : {{ match.matchDate|date('d/m/Y H:i', 'Europe/Paris') }}</p>
-<h2>Billets</h2>
-<p>{{ ticketQuantity }} billet(s) confirmes dans la billetterie interne.</p>
-<h2>Buvette</h2>
-{% if refreshments is empty %}
-<p>Aucune precommande de buvette confirmee.</p>
-{% else %}
-<ul>{% for line in refreshments %}<li>{{ line.name }} : {{ line.quantity }}</li>{% endfor %}</ul>
-{% endif %}
-<p>Ce rapport est genere a partir des donnees saisies et confirmees dans le site.</p>
+<p>Fermeture configuree : {{ closesAt|date('d/m/Y H:i', 'Europe/Paris') }}</p>
+<h2>Billets internes payes : {{ ticketQuantity }}</h2>
+<table border="1" cellpadding="5"><thead><tr><th>Nom</th><th>Email</th><th>Billets</th></tr></thead><tbody>
+{% for attendee in attendees %}<tr><td>{{ attendee.name ?: 'Non renseigne' }}</td><td>{{ attendee.email ?: 'Non renseigne' }}</td><td>{{ attendee.quantity }}</td></tr>{% else %}
+<tr><td colspan="3">Aucun billet interne paye</td></tr>{% endfor %}
+</tbody></table>
+<h2>Boissons confirmees</h2>
+<ul>{% for line in refreshments %}<li>{{ line.name }} : {{ line.quantity }}</li>{% else %}<li>Aucune precommande</li>{% endfor %}</ul>
+<h3>Detail des commandes buvette</h3>
+<table border="1" cellpadding="5"><thead><tr><th>Email</th><th>Produit</th><th>Quantite</th></tr></thead><tbody>
+{% for order in drinkOrders %}<tr><td>{{ order.email ?: 'Non renseigne' }}</td><td>{{ order.product }}</td><td>{{ order.quantity }}</td></tr>{% else %}
+<tr><td colspan="3">Aucune commande</td></tr>{% endfor %}
+</tbody></table>
+<p>Les listes concernent exclusivement les billets internes payes et les precommandes confirmees. Les billets Billetweb ne sont pas synchronises.</p>
