@@ -183,6 +183,7 @@ class CustomCrudController extends AbstractController
         $form = $this->buildForm($resource, $entity, $config);
         $form->handleRequest($request);
         $this->syncRequestedImage($entity, $form);
+        $this->rejectClosedRefreshmentOrder($entity, $form);
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($entity instanceof Page) {
@@ -242,6 +243,7 @@ class CustomCrudController extends AbstractController
         $form = $this->buildForm($resource, $entity, $config);
         $form->handleRequest($request);
         $this->syncRequestedImage($entity, $form);
+        $this->rejectClosedRefreshmentOrder($entity, $form);
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($entity instanceof Page) {
@@ -626,6 +628,18 @@ class CustomCrudController extends AbstractController
     public function ticketEditorScript(): Response
     {
         return $this->serveEditorScript('assets/js/ticket-editor.js');
+    }
+
+    private function rejectClosedRefreshmentOrder(object $entity, \Symfony\Component\Form\FormInterface $form): void
+    {
+        if (!$form->isSubmitted() || !$entity instanceof \App\Entity\RefreshmentOrder) {
+            return;
+        }
+
+        $matchDate = $entity->getTicket()?->getMatchDate();
+        if ($matchDate !== null && new \DateTimeImmutable() >= \DateTimeImmutable::createFromInterface($matchDate)->modify('-24 hours')) {
+            $form->addError(new FormError('Les precommandes de ce match sont closes depuis H-24. Modification interdite.'));
+        }
     }
 
     private function buildForm(string $resource, object $entity, array $config): \Symfony\Component\Form\FormInterface
