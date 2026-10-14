@@ -49,5 +49,14 @@
         </div>
     {% endif %}
 
+    {% if refreshmentLines|default([]) is not empty %}
+        <h2>Précommandes buvette</h2>
+        <div class="card"><ul>
+            {% for line in refreshmentLines %}
+                <li>{{ line.title }} - {{ line.quantity }} - {{ line.totalPrice|number_format(2, ',', ' ') }} EUR</li>
+            {% endfor %}
+        </ul></div>
+    {% endif %}
+
     <p class="note">Merci pour ta commande. Si tu as une question, reponds a cet email.</p>
 {% endblock %}
