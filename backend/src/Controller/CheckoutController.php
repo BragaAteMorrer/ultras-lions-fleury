@@ -93,34 +93,8 @@ class CheckoutController extends AbstractController
                 }
                 $items = array_merge($ticketItems, $merchItems);
 
-                if ($checkout->getStatus() === 'paid' && $checkout->getEmailSentAt() === null) {
-                    $to = $checkout->getEmail();
-                    if (!$to && $checkout->getUser()) {
-                        $to = $checkout->getUser()->getUserIdentifier();
-                    }
-                    if ($to) {
-                        try {
-                            $mailService->send(
-                                to: $to,
-                                subject: 'Recapitulatif de ta commande',
-                                template: 'email/checkout_recap.html.twig',
-                                context: [
-                                    'checkout' => $checkout,
-                                    'ticketLines' => $ticketItems,
-                                    'merchLines' => $merchItems,
-                                    'refreshmentLines' => $refreshmentItems,
-                                ]
-                            );
-                            $checkout->setEmailSentAt(new \DateTime());
-                            $em->flush();
-                        } catch (\Throwable $e) {
-                            $logger->error('Mail checkout recap failed (thankyou)', [
-                                'error' => $e->getMessage(),
-                                'checkout' => $checkout->getCheckoutReference(),
-                            ]);
-                        }
-                    }
-                }
+                // Recap emails are sent by persistent server-side outbox only.
+
             }
         }
 
