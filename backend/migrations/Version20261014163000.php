@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+
+final class Version20261014163000 extends AbstractMigration
+{
+    public function getDescription(): string
+    {
+        return 'Persist buvette report delivery attempts, status, and frozen snapshot';
+    }
+
+    public function up(Schema $schema): void
+    {
+        $this->addSql("ALTER TABLE refreshment_report ADD delivery_status VARCHAR(24) DEFAULT 'pending' NOT NULL, ADD attempts INT DEFAULT 0 NOT NULL, ADD delivery_key VARCHAR(64) DEFAULT NULL, ADD last_attempt_at DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime_immutable)', ADD snapshot JSON DEFAULT NULL");
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_REFRESHMENT_DELIVERY_KEY ON refreshment_report (delivery_key)');
+        $this->addSql("UPDATE refreshment_report SET delivery_status = 'sent' WHERE sent_at IS NOT NULL");
+    }
+
+    public function down(Schema $schema): void
+    {
+        $this->addSql('DROP INDEX UNIQ_REFRESHMENT_DELIVERY_KEY ON refreshment_report');
+        $this->addSql('ALTER TABLE refreshment_report DROP delivery_status, DROP attempts, DROP delivery_key, DROP last_attempt_at, DROP snapshot');
+    }
+}

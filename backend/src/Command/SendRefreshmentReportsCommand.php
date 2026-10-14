@@ -35,7 +35,7 @@ final class SendRefreshmentReportsCommand extends Command
         $sent = 0;
         foreach ($this->entityManager->getRepository(RefreshmentReport::class)->findAll() as $report) {
             $match = $report->getTicket();
-            if (!$match || $report->getSentAt() !== null || !filter_var($report->getRecipient(), FILTER_VALIDATE_EMAIL)) {
+            if (!$match || ($report->getSentAt() !== null || $report->getDeliveryStatus() !== 'pending') || !filter_var($report->getRecipient(), FILTER_VALIDATE_EMAIL)) {
                 continue;
             }
             $matchDate = $match->getMatchDate();
@@ -55,14 +55,35 @@ final class SendRefreshmentReportsCommand extends Command
                 $summary[$id] ??= ['name' => $product->getName(), 'quantity' => 0];
                 $summary[$id]['quantity'] += $order->getQuantity();
             }
-            $this->mailService->send(
-                $report->getRecipient(),
-                'Recapitulatif billets et buvette - '.$match->getMatchLabel(),
-                'email/refreshment_report.html.twig',
-                ['match' => $match, 'ticketQuantity' => $ticketQuantity, 'refreshments' => array_values($summary)]
-            );
-            $report->setSentAt(new \DateTimeImmutable());
+            // Persist an immutable snapshot and the intent BEFORE contacting SMTP.
+            // An interrupted 'sending' remains pending manual reconciliation: never
+            // retry blindly because SMTP acknowledgement can be lost after delivery.
+            $snapshot = [
+                'ticketQuantity' => $ticketQuantity,
+                'refreshments' => array_values($summary),
+                'recipient' => $report->getRecipient(),
+                'matchId' => $match->getId(),
+            ];
+            $key = hash('sha256', 'buvette-report:'.$report->getId());
+            $report->markAttempt($key, $snapshot);
             $this->entityManager->flush();
+            try {
+                $this->mailService->send(
+                    $snapshot['recipient'],
+                    'Recapitulatif billets et buvette - '.$match->getMatchLabel(),
+                    'email/refreshment_report.html.twig',
+                    ['match' => $match, 'ticketQuantity' => $snapshot['ticketQuantity'], 'refreshments' => $snapshot['refreshments']]
+                );
+                $report->setSentAt(new \DateTimeImmutable());
+                $report->setDeliveryStatus('sent');
+                $this->entityManager->flush();
+            } catch (\Throwable $exception) {
+                // Unknown outcome: SMTP may already have accepted the message.
+                $report->setDeliveryStatus('uncertain');
+                $this->entityManager->flush();
+                $output->writeln(sprintf('<error>Envoi #%d incertain : verification manuelle requise.</error>', $report->getId()));
+                continue;
+            }
             ++$sent;
         }
         flock($lock, LOCK_UN);

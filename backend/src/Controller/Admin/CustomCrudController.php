@@ -183,6 +183,7 @@ class CustomCrudController extends AbstractController
         $form = $this->buildForm($resource, $entity, $config);
         $form->handleRequest($request);
         $this->syncRequestedImage($entity, $form);
+        $this->rejectClosedRefreshmentOrder($entity, $form);
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($entity instanceof Page) {
@@ -239,9 +240,19 @@ class CustomCrudController extends AbstractController
             throw $this->createNotFoundException();
         }
 
+        // Validate the original match too: changing the selected match must not
+        // allow edits to an already closed preorder.
+        if ($entity instanceof \App\Entity\RefreshmentOrder && $request->isMethod('POST')) {
+            $originalMatchDate = $entity->getTicket()?->getMatchDate();
+            if ($originalMatchDate !== null && new \DateTimeImmutable() >= \DateTimeImmutable::createFromInterface($originalMatchDate)->modify('-24 hours')) {
+                throw $this->createAccessDeniedException('Cette precommande est cloturee depuis H-24.');
+            }
+        }
+
         $form = $this->buildForm($resource, $entity, $config);
         $form->handleRequest($request);
         $this->syncRequestedImage($entity, $form);
+        $this->rejectClosedRefreshmentOrder($entity, $form);
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($entity instanceof Page) {
@@ -297,6 +308,13 @@ class CustomCrudController extends AbstractController
         $entity = $this->entityManager->getRepository($config['entity'])->find($id);
         if (!$entity) {
             throw $this->createNotFoundException();
+        }
+
+        if ($entity instanceof \App\Entity\RefreshmentOrder) {
+            $matchDate = $entity->getTicket()?->getMatchDate();
+            if ($matchDate !== null && new \DateTimeImmutable() >= \DateTimeImmutable::createFromInterface($matchDate)->modify('-24 hours')) {
+                throw $this->createAccessDeniedException('Impossible de supprimer une precommande apres cloture.');
+            }
         }
 
         if (!$this->isCsrfTokenValid('admin_delete_'.$resource.'_'.$id, (string) $request->request->get('_token'))) {
@@ -626,6 +644,18 @@ class CustomCrudController extends AbstractController
     public function ticketEditorScript(): Response
     {
         return $this->serveEditorScript('assets/js/ticket-editor.js');
+    }
+
+    private function rejectClosedRefreshmentOrder(object $entity, \Symfony\Component\Form\FormInterface $form): void
+    {
+        if (!$form->isSubmitted() || !$entity instanceof \App\Entity\RefreshmentOrder) {
+            return;
+        }
+
+        $matchDate = $entity->getTicket()?->getMatchDate();
+        if ($matchDate !== null && new \DateTimeImmutable() >= \DateTimeImmutable::createFromInterface($matchDate)->modify('-24 hours')) {
+            $form->addError(new FormError('Les precommandes de ce match sont closes depuis H-24. Modification interdite.'));
+        }
     }
 
     private function buildForm(string $resource, object $entity, array $config): \Symfony\Component\Form\FormInterface
