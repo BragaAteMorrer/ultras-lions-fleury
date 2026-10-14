@@ -21,10 +21,7 @@
                     <span>{{ item.venue }}</span>
                 {% endif %}
                 <span>{{ item.price|number_format(2, ',', ' ') }} €</span>
-                <span>{{ accessLabel }}</span>
-                {% if not item.usesBilletweb %}
-                    <span>{{ 'ticket_show.html.stock'|trans({'%stock%': item.stock}) }}</span>
-                {% endif %}
+                <span>{{ accessLabel }}</span>\n                <span>{{ 'ticket_show.html.stock'|trans({'%stock%': item.stock}) }}</span>
             </div>
         </div>
     </section>
@@ -75,27 +72,7 @@
                         </div>
                     {% endif %}
 
-                    {% if item.usesBilletweb and salesOpen %}
-                        <div class="ticket-billetweb-band">
-                            <div class="ticket-billetweb-heading">
-                                <p>{{ 'ticket_show.html.billetterie_billetweb_integree'|trans }}</p>
-                                <h2>{{ 'ticket_show.html.billetterie_billetweb_title'|trans({'%match%': matchLabel}) }}</h2>
-                            </div>
-                            <div class="ticket-billetweb-shell">
-                                <iframe
-                                    src="{{ item.billetwebUrl }}"
-                                    title="{{ 'ticket_show.html.billetterie_billetweb_title'|trans({'%match%': matchLabel}) }}"
-                                    loading="lazy"
-                                    referrerpolicy="strict-origin-when-cross-origin"
-                                    allowfullscreen
-                                ></iframe>
-                            </div>
-                            <a href="{{ item.billetwebUrl }}" class="btn btn-danger w-100" target="_blank" rel="noopener noreferrer">
-                                {{ 'ticket_show.html.ouvrir_la_billetterie_billetweb'|trans }}
-                            </a>
-                        </div>
-                    {% else %}
-                        {% if salesOpen and item.stock > 0 %}
+                    {% if salesOpen and item.stock > 0 %}
                             <form action="{{ path('ticket_cart_add', { id: item.id }) }}" method="post" class="ticket-show-inline-form">
                                 <div>
                                     <label class="form-label" for="quantity">{{ 'ticket_show.html.quantite'|trans }}</label>
