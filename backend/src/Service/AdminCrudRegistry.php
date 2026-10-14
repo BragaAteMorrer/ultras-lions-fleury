@@ -65,11 +65,12 @@ class AdminCrudRegistry
             ],
             'buvette-produits' => [
                 'label' => 'Produits buvette', 'singular' => 'Produit', 'entity' => RefreshmentProduct::class,
-                'list' => ['id' => 'ID', 'name' => 'Nom', 'category' => 'Categorie', 'priceCents' => 'Prix en centimes', 'active' => 'Actif'],
+                'list' => ['id' => 'ID', 'name' => 'Nom', 'category' => 'Categorie', 'priceCents' => 'Prix en centimes', 'stock' => 'Stock', 'active' => 'Actif'],
                 'fields' => [
                     'name' => ['type' => TextType::class, 'label' => 'Nom'],
                     'category' => ['type' => EntityType::class, 'label' => 'Categorie', 'class' => RefreshmentCategory::class],
                     'priceCents' => ['type' => IntegerType::class, 'label' => 'Prix en centimes'],
+                    'stock' => ['type' => IntegerType::class, 'label' => 'Stock (vide = sans limite)', 'required' => false],
                     'active' => ['type' => CheckboxType::class, 'label' => 'Actif', 'required' => false],
                 ],
             ],
