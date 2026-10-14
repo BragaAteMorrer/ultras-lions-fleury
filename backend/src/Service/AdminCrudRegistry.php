@@ -31,7 +31,6 @@ use App\Entity\RefreshmentProduct;
 use App\Entity\RefreshmentOrder;
 use App\Entity\RefreshmentReport;
 use App\Entity\User;
-use App\Entity\BilletwebLead;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -499,7 +498,6 @@ class AdminCrudRegistry
                     'openToGuests' => ['type' => CheckboxType::class, 'label' => 'Ouverte aux non-membres', 'required' => false, 'help' => 'Decoche pour reserver la vente aux membres connectes.'],
                     'matchLocation' => ['type' => ChoiceType::class, 'label' => 'Lieu', 'required' => false, 'choices' => ['Domicile' => 'domicile', 'Exterieur' => 'exterieur']],
                     'venue' => ['type' => TextType::class, 'label' => 'Stade / lieu', 'required' => false],
-                    'billetwebUrl' => ['type' => TextType::class, 'label' => 'URL Billetweb', 'required' => false],
                     'category' => [
                         'type' => EntityType::class,
                         'label' => 'Categorie',
@@ -856,21 +854,6 @@ class AdminCrudRegistry
                     'chantsTitle' => ['type' => TextType::class, 'label' => 'Titre chants', 'required' => false],
                     'chantsSubtitle' => ['type' => TextareaType::class, 'label' => 'Sous-titre chants', 'required' => false, 'attr' => ['rows' => 5]],
                     'backgroundImage' => ['type' => EntityType::class, 'label' => 'Image de fond', 'required' => false, 'class' => Media::class, 'choice_label' => 'path', 'placeholder' => 'Aucune image'],
-                ],
-            ],
-            'preinscriptions-billetweb' => [
-                'label' => 'Pre-inscriptions Billetweb',
-                'singular' => 'Pre-inscription',
-                'entity' => BilletwebLead::class,
-                'deletable' => false,
-                'order' => ['createdAt' => 'DESC'],
-                'list' => ['id' => 'ID', 'createdAt' => 'Date', 'ticket' => 'Match', 'firstName' => 'Prenom', 'lastName' => 'Nom', 'email' => 'Email'],
-                'fields' => [
-                    'ticket' => ['type' => EntityType::class, 'label' => 'Match', 'class' => Ticket::class],
-                    'user' => ['type' => EntityType::class, 'label' => 'Utilisateur', 'required' => false, 'class' => User::class, 'choice_label' => 'email', 'placeholder' => 'Invite'],
-                    'firstName' => ['type' => TextType::class, 'label' => 'Prenom'],
-                    'lastName' => ['type' => TextType::class, 'label' => 'Nom'],
-                    'email' => ['type' => EmailType::class, 'label' => 'Email'],
                 ],
             ],
         ];
