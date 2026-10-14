@@ -59,25 +59,8 @@ final class Version20251202215857 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE site_config');
-        $this->addSql('DROP TABLE visit');
-        $this->renameIndexIfPresent('category', 'uniq_64c19c1989d9b62', 'UNIQ_CATEGORY_SLUG');
-        $this->renameIndexIfPresent('event', 'idx_3bae0aa73da5256d', 'IDX_EVENT_IMAGE');
-        $this->renameIndexIfPresent('group_page', 'idx_3d50ed50684ec833', 'IDX_GROUPPAGE_BANNER');
-        $this->renameIndexIfPresent('group_page', 'idx_3d50ed50f98f144a', 'IDX_GROUPPAGE_LOGO');
-        $this->addSql('ALTER TABLE media CHANGE path path VARCHAR(255) DEFAULT \'NULL\', CHANGE alt alt VARCHAR(255) DEFAULT \'NULL\', CHANGE updated_at updated_at DATETIME DEFAULT \'NULL\'');
-        $this->renameIndexIfPresent('media', 'idx_6a2ca10c8a4637e8', 'IDX_MEDIA_GROUPPAGE');
-        $this->renameIndexIfPresent('media', 'idx_6a2ca10c4e7af8f', 'IDX_MEDIA_GALLERY');
-        $this->renameIndexIfPresent('merch', 'idx_f1b42ee03da5256d', 'IDX_MERCH_IMAGE');
-        $this->addSql('ALTER TABLE messenger_messages CHANGE delivered_at delivered_at DATETIME DEFAULT \'NULL\'');
-        $this->renameIndexIfPresent('messenger_messages', 'idx_75ea56e0fb7336f0', 'IDX_MESSENGER_QUEUE');
-        $this->renameIndexIfPresent('messenger_messages', 'idx_75ea56e0e3bd61ce', 'IDX_MESSENGER_AVAILABLE');
-        $this->renameIndexIfPresent('messenger_messages', 'idx_75ea56e016ba31db', 'IDX_MESSENGER_DELIVERED');
-        $this->renameIndexIfPresent('page', 'idx_140ab6203da5256d', 'IDX_PAGE_IMAGE');
-        $this->renameIndexIfPresent('page', 'uniq_140ab620989d9b62', 'UNIQ_PAGE_SLUG');
-        $this->renameIndexIfPresent('post', 'uniq_5a8a6c8d989d9b62', 'UNIQ_POST_SLUG');
-        $this->renameIndexIfPresent('post', 'idx_5a8a6c8d3da5256d', 'IDX_POST_IMAGE');
-        $this->renameIndexIfPresent('post', 'idx_5a8a6c8d12469de2', 'IDX_POST_CATEGORY');
+        // Some tables and indexes may predate this historical migration.
+        // Automated rollback could delete data owned by earlier migrations.
+        $this->abortIf(true, 'Rollback of this idempotent historical migration requires a manual schema review.');
     }
 }
