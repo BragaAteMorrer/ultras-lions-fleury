@@ -88,10 +88,11 @@ class AdminCrudRegistry
             ],
             'buvette-rapports' => [
                 'label' => 'Envois buvette', 'singular' => 'Envoi', 'entity' => RefreshmentReport::class,
-                'list' => ['id' => 'ID', 'ticket' => 'Match', 'recipient' => 'Destinataire', 'sentAt' => 'Envoye'],
+                'list' => ['id' => 'ID', 'ticket' => 'Match', 'recipient' => 'Destinataire', 'closesAt' => 'Fermeture', 'sentAt' => 'Envoye'],
                 'fields' => [
                     'ticket' => ['type' => EntityType::class, 'label' => 'Match', 'class' => Ticket::class],
                     'recipient' => ['type' => EmailType::class, 'label' => 'Email du destinataire'],
+                    'closesAt' => ['type' => DateTimeType::class, 'label' => 'Fermeture des commandes (heure de Paris)', 'widget' => 'single_text', 'required' => true, 'help' => 'Le mail partira une minute apres cette heure, sous reserve du cron LWS.'],
                 ],
             ],
             'articles' => [
