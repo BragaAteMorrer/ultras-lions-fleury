@@ -16,6 +16,8 @@ final class RefreshmentPaymentWebhookTest extends WebTestCase
     public function testVerifiedPaymentCreatesOrdersOnceOnRepeatedWebhook(): void
     {
         $client = static::createClient();
+        // Keep the mocked gateway service across repeated HTTP requests.
+        $client->disableReboot();
         $em = static::getContainer()->get(EntityManagerInterface::class);
         $match = (new Ticket())
             ->setTitle('Match integration')
