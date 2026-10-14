@@ -65,7 +65,6 @@ class AdminNavigationBuilder
                     $this->crud('Envois buvette 24h', 'bi bi-envelope-check', 'buvette-rapports'),
                     $this->crud('Categories billets', 'bi bi-list-ul', 'categories-billetterie'),
                     $this->crud('Commandes billets', 'bi bi-receipt', 'commandes-billets'),
-                    $this->crud('Pre-inscriptions', 'bi bi-card-checklist', 'preinscriptions-billetweb'),
                 ],
             ],
             [
