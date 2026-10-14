@@ -72,7 +72,10 @@ final class RefreshmentPaymentWebhookTest extends WebTestCase
             self::assertResponseStatusCodeSame(200);
         }
 
-        $em->refresh($checkout);
+        // BrowserKit requests can reset the Doctrine EntityManager. Fetch a managed entity.
+        $em = static::getContainer()->get(EntityManagerInterface::class);
+        $checkout = $em->getRepository(PaymentCheckout::class)->find($checkout->getId());
+        self::assertNotNull($checkout);
         self::assertSame('paid', $checkout->getStatus());
         self::assertNotNull($checkout->getProcessedAt());
         $orders = $em->getRepository(RefreshmentOrder::class)->findBy(['paymentCheckout' => $checkout]);
