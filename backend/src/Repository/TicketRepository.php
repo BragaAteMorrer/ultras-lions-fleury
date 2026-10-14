@@ -43,7 +43,11 @@ class TicketRepository extends ServiceEntityRepository
 
     public function isVisibleForUser(Ticket $ticket, bool $isMember): bool
     {
-        return $ticket->isAvailableForUser($isMember);
+        if (!$ticket->isAvailableForUser($isMember)) { return false; }
+
+        $report = $this->getEntityManager()->getRepository(\App\Entity\RefreshmentReport::class)->findOneBy(['ticket' => $ticket]);
+        $closesAt = $report?->getClosesAt();
+        return $closesAt === null || new \DateTimeImmutable() < $closesAt;
     }
 
 }
