@@ -138,6 +138,10 @@ class CheckoutController extends AbstractController
      */
     private function getPaymentStatusView(string $checkoutStatus, string $sumupStatus): array
     {
+        if ($checkoutStatus === 'paid_stock_review') {
+            return ['Paiement reçu — vérification nécessaire', 'Le paiement a été reçu, mais un article ou billet doit être vérifié par notre équipe. Contacte-nous si tu n’as pas de nouvelles.'];
+        }
+
         if ($checkoutStatus === 'paid') {
             return ['Paiement confirme', 'Ton paiement a bien ete pris en compte.'];
         }
