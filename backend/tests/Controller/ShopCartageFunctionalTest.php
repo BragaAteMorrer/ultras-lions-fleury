@@ -4,6 +4,7 @@ namespace App\Tests\Controller;
 
 use App\Entity\PaymentCheckout;
 use App\Entity\User;
+use App\Service\SumupService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -84,4 +85,60 @@ final class ShopCartageFunctionalTest extends WebTestCase
         $client->request('GET', '/merci/pdf?ref='.$checkout->getCheckoutReference());
         self::assertResponseStatusCodeSame(404);
     }
+    public function testWebhookRejectsMalformedAndUnknownCheckout(): void
+    {
+        $client = static::createClient();
+        $client->request('POST', '/sumup/webhook', server: ['CONTENT_TYPE' => 'application/json'], content: '{}');
+        self::assertResponseStatusCodeSame(204);
+
+        $client->request('POST', '/sumup/webhook', server: ['CONTENT_TYPE' => 'application/json'], content: '{"event_type":"CHECKOUT_STATUS_CHANGED","id":42}');
+        self::assertResponseStatusCodeSame(400);
+
+        $client->request('POST', '/sumup/webhook', server: ['CONTENT_TYPE' => 'application/json'], content: '{"event_type":"CHECKOUT_STATUS_CHANGED","id":"missing-checkout"}');
+        self::assertResponseStatusCodeSame(404);
+    }
+
+    public function testWebhookFailsClosedWhenGatewayVerificationFails(): void
+    {
+        $client = static::createClient();
+        $checkout = $this->checkout();
+        $checkout->setSumupCheckoutId('checkout-test-error');
+        static::getContainer()->get(EntityManagerInterface::class)->flush();
+
+        $sumup = $this->createMock(SumupService::class);
+        $sumup->method('retrieveCheckout')->willReturn(['_error' => 'timeout', '_status' => 503]);
+        static::getContainer()->set(SumupService::class, $sumup);
+
+        $client->request('POST', '/sumup/webhook', server: ['CONTENT_TYPE' => 'application/json'], content: '{"event_type":"CHECKOUT_STATUS_CHANGED","id":"checkout-test-error"}');
+        self::assertResponseStatusCodeSame(503);
+        static::getContainer()->get(EntityManagerInterface::class)->refresh($checkout);
+        self::assertSame('paid', $checkout->getStatus());
+        self::assertNull($checkout->getProcessedAt());
+    }
+
+    public function testWebhookRejectsMismatchedMerchant(): void
+    {
+        $client = static::createClient();
+        $checkout = $this->checkout();
+        $checkout->setSumupCheckoutId('checkout-test-merchant');
+        static::getContainer()->get(EntityManagerInterface::class)->flush();
+
+        $sumup = $this->createMock(SumupService::class);
+        $sumup->method('retrieveCheckout')->willReturn([
+            'id' => 'checkout-test-merchant',
+            'checkout_reference' => $checkout->getCheckoutReference(),
+            'amount' => $checkout->getAmount(),
+            'currency' => 'EUR',
+            'merchant_code' => 'FOREIGN_MERCHANT',
+            'status' => 'PAID',
+        ]);
+        $sumup->method('matchesMerchantCode')->willReturn(false);
+        static::getContainer()->set(SumupService::class, $sumup);
+
+        $client->request('POST', '/sumup/webhook', server: ['CONTENT_TYPE' => 'application/json'], content: '{"event_type":"CHECKOUT_STATUS_CHANGED","id":"checkout-test-merchant"}');
+        self::assertResponseStatusCodeSame(422);
+        static::getContainer()->get(EntityManagerInterface::class)->refresh($checkout);
+        self::assertNull($checkout->getProcessedAt());
+    }
+
 }
