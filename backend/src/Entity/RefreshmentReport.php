@@ -22,11 +22,16 @@ class RefreshmentReport
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $sentAt = null;
 
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $closesAt = null;
+
     public function getId(): ?int { return $this->id; }
     public function getTicket(): ?Ticket { return $this->ticket; }
     public function setTicket(?Ticket $value): self { $this->ticket = $value; return $this; }
     public function getRecipient(): string { return $this->recipient; }
     public function setRecipient(string $value): self { $this->recipient = $value; return $this; }
+    public function getClosesAt(): ?\DateTimeImmutable { return $this->closesAt; }
+    public function setClosesAt(?\DateTimeImmutable $value): self { $this->closesAt = $value; return $this; }
     public function getSentAt(): ?\DateTimeImmutable { return $this->sentAt; }
     public function setSentAt(?\DateTimeImmutable $value): self { $this->sentAt = $value; return $this; }
 }
