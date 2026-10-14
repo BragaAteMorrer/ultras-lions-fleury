@@ -56,8 +56,12 @@ class CheckoutController extends AbstractController
                 [$paymentStatusLabel, $paymentStatusMessage] = $this->getPaymentStatusView($checkout->getStatus(), $sumupStatus);
 
                 if ($checkout->getStatus() === 'paid') {
-                    $cartService->clearMerch($session);
-                    $cartService->clearTicket($session);
+                    if (in_array($checkout->getType(), ['merch', 'mixed'], true)) {
+                        $cartService->clearMerch($session);
+                    }
+                    if (in_array($checkout->getType(), ['ticket', 'mixed'], true)) {
+                        $cartService->clearTicket($session);
+                    }
                     $session->save();
                 }
 
@@ -183,6 +187,7 @@ class CheckoutController extends AbstractController
         $lines = $checkout->getCart();
         $ticketItems = [];
         $merchItems = [];
+        $refreshmentItems = [];
         foreach ($lines as $row) {
             $lineType = (string) ($row['type'] ?? $checkout->getType());
             if ($lineType === 'ticket') {
@@ -192,6 +197,12 @@ class CheckoutController extends AbstractController
                     'match_date' => $row['match_date'] ?? null,
                     'quantity' => (int) ($row['quantity'] ?? 1),
                     'unit_price' => (float) ($row['unit_price'] ?? 0),
+                    'total' => (float) ($row['total'] ?? 0),
+                ];
+            } elseif ($lineType === 'refreshment') {
+                $refreshmentItems[] = [
+                    'title' => $row['title'] ?? 'Boisson',
+                    'quantity' => (int) ($row['quantity'] ?? 1),
                     'total' => (float) ($row['total'] ?? 0),
                 ];
             } else {
@@ -217,6 +228,7 @@ class CheckoutController extends AbstractController
             'checkout' => $checkout,
             'ticketItems' => $ticketItems,
             'merchItems' => $merchItems,
+            'refreshmentItems' => $refreshmentItems,
             'logoPath' => $logoPath ? 'file://' . $logoPath : null,
             'watermarkPath' => $watermarkPath ? 'file://' . $watermarkPath : null,
         ]);
