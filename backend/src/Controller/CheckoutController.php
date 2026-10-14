@@ -48,10 +48,8 @@ class CheckoutController extends AbstractController
                     $sumupStatus = strtoupper((string) ($details['status'] ?? ''));
                     // Payment settlement belongs to the validated SumUp webhook only.
                     // Never grant paid status from a browser-accessible return URL.
-                    if (in_array($sumupStatus, ['FAILED', 'EXPIRED'], true)) {
-                        $checkout->setStatus('failed');
-                        $em->flush();
-                    }
+                    // Read-only browser return: no payment state transition here.
+                    // Authoritative updates are handled by the verified webhook.
                 }
 
                 [$paymentStatusLabel, $paymentStatusMessage] = $this->getPaymentStatusView($checkout->getStatus(), $sumupStatus);
