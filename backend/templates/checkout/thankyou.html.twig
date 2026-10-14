@@ -50,6 +50,15 @@
                         </div>
                     {% endif %}
 
+                    {% if refreshmentItems|default([]) is not empty %}
+                        <h3 class="form-section-title mt-3">Buvette</h3>
+                        <ul>
+                        {% for item in refreshmentItems %}
+                            <li>{{ item.title }} — {{ item.quantity }} — {{ item.totalPrice|number_format(2, ',', ' ') }} EUR</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+
                     {% if merchItems is not empty %}
                         <h3 class="form-section-title mt-3">{{ 'checkout_receipt.html.matos'|trans }}</h3>
                         <div class="table-responsive">

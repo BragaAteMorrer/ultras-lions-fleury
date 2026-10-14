@@ -33,6 +33,7 @@ class CheckoutController extends AbstractController
         $items = [];
         $ticketItems = [];
         $merchItems = [];
+        $refreshmentItems = [];
         $sumupStatus = '';
         $paymentStatusLabel = 'Paiement en attente';
         $paymentStatusMessage = 'Nous verifions ton paiement avec SumUp.';
@@ -73,6 +74,12 @@ class CheckoutController extends AbstractController
                             'total' => (float) ($row['total'] ?? 0),
                             'totalPrice' => (float) ($row['total'] ?? 0),
                         ];
+                    } elseif ($lineType === 'refreshment') {
+                        $refreshmentItems[] = [
+                            'title' => $row['title'] ?? 'Boisson',
+                            'quantity' => (int) ($row['quantity'] ?? 1),
+                            'totalPrice' => (float) ($row['total'] ?? 0),
+                        ];
                     } else {
                         $merchItems[] = [
                             'title' => $row['title'] ?? 'Produit',
@@ -101,6 +108,7 @@ class CheckoutController extends AbstractController
                                     'checkout' => $checkout,
                                     'ticketLines' => $ticketItems,
                                     'merchLines' => $merchItems,
+                                    'refreshmentLines' => $refreshmentItems,
                                 ]
                             );
                             $checkout->setEmailSentAt(new \DateTime());
@@ -125,6 +133,7 @@ class CheckoutController extends AbstractController
             'checkout' => $checkout,
             'ticketItems' => $ticketItems,
             'merchItems' => $merchItems,
+            'refreshmentItems' => $refreshmentItems,
             'paymentStatusLabel' => $paymentStatusLabel,
             'paymentStatusMessage' => $paymentStatusMessage,
             'paymentStatus' => $sumupStatus !== '' ? $sumupStatus : ($checkout?->getStatus() ?? 'UNKNOWN'),
