@@ -19,6 +19,8 @@ jobs:
           extensions: mbstring, intl, pdo_mysql
           coverage: none
       - run: composer install --prefer-dist --no-interaction
-      - run: composer validate --no-check-publish
+      - name: Validate dependency integrity
+        run: composer validate --no-check-publish
       - run: find src tests -type f -name '*.php' -print0 | xargs -0 -n1 php -l
-      - run: composer audit --no-dev
+      - name: Security audit of runtime dependencies
+        run: composer audit --no-dev
