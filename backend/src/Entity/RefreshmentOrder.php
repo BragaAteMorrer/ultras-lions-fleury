@@ -19,6 +19,10 @@ class RefreshmentOrder
     #[ORM\JoinColumn(nullable: false, onDelete: 'RESTRICT')]
     private ?RefreshmentProduct $product = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?PaymentCheckout $paymentCheckout = null;
+
     #[ORM\Column(type: 'integer')]
     private int $quantity = 1;
 
@@ -35,6 +39,8 @@ class RefreshmentOrder
     private \DateTimeImmutable $createdAt;
 
     public function __construct() { $this->createdAt = new \DateTimeImmutable(); }
+    public function getPaymentCheckout(): ?PaymentCheckout { return $this->paymentCheckout; }
+    public function setPaymentCheckout(?PaymentCheckout $value): self { $this->paymentCheckout = $value; return $this; }
     public function getId(): ?int { return $this->id; }
     public function getTicket(): ?Ticket { return $this->ticket; }
     public function setTicket(?Ticket $ticket): self { $this->ticket = $ticket; return $this; }
