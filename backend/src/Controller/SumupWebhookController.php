@@ -17,6 +17,7 @@ use App\Service\DonationPaymentService;
 use App\Service\MailService;
 use App\Service\SumupService;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\LockMode;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -85,14 +86,29 @@ class SumupWebhookController extends AbstractController
             'status' => $status,
         ]);
 
-        if ($checkout->getType() === 'donation') {
+        // Serialize notifications for this checkout to avoid duplicate order writes.
+        $mailPayload = null;
+        $response = $em->wrapInTransaction(function () use (
+            $em, $checkout, $donationRepository, $donationPaymentService,
+            $cartageRegistrationRepository, $cartageProfileCreator,
+            $merchRepository, $ticketRepository, $userRepository,
+            $mailService, $logger, $details, $status, &$mailPayload
+        ): Response {
+            $em->lock($checkout, LockMode::PESSIMISTIC_WRITE);
+            $em->refresh($checkout);
+            if ($checkout->getType() !== 'donation' && $checkout->getProcessedAt() !== null) {
+                return new Response('ok', 200);
+            }
+
+            if ($checkout->getType() === 'donation') {
             $donation = $donationRepository->findOneBy(['paymentCheckout' => $checkout]);
             if (!$donation instanceof Donation) {
                 return new Response('ok', 200);
             }
 
+            $alreadyProcessed = $checkout->getProcessedAt() !== null;
             $result = $donationPaymentService->synchronizeFromGateway($donation, $checkout, $details);
-            if (($result['confirmed'] ?? false) === true) {
+            if (!$alreadyProcessed && ($result['confirmed'] ?? false) === true) {
                 $donationPaymentService->sendConfirmationMail($donation, $checkout);
             }
 
@@ -223,26 +239,8 @@ class SumupWebhookController extends AbstractController
             if (!$to && $checkout->getUser()) {
                 $to = $checkout->getUser()->getUserIdentifier();
             }
-            if ($to) {
-                try {
-                    $mailService->send(
-                        to: $to,
-                        subject: 'Recapitulatif de ta commande',
-                        template: 'email/checkout_recap.html.twig',
-                        context: [
-                            'checkout' => $checkout,
-                            'ticketLines' => $ticketLines,
-                            'merchLines' => $merchLines,
-                        ]
-                    );
-                    $checkout->setEmailSentAt(new \DateTime());
-                    $em->flush();
-                } catch (\Throwable $e) {
-                    $logger->error('Mail checkout recap failed', [
-                        'error' => $e->getMessage(),
-                        'checkout' => $checkout->getCheckoutReference(),
-                    ]);
-                }
+            if ($to && $checkout->getEmailSentAt() === null) {
+                $mailPayload = ['to' => $to, 'ticketLines' => $ticketLines, 'merchLines' => $merchLines];
             }
         } elseif ($status === 'FAILED' || $status === 'CANCELLED' || $status === 'EXPIRED') {
             $checkout->setStatus('failed');
@@ -250,5 +248,25 @@ class SumupWebhookController extends AbstractController
         }
 
         return new Response('ok', 200);
+        });
+        if ($mailPayload !== null) {
+            try {
+                $mailService->send(
+                    to: $mailPayload['to'],
+                    subject: 'Recapitulatif de ta commande',
+                    template: 'email/checkout_recap.html.twig',
+                    context: [
+                        'checkout' => $checkout,
+                        'ticketLines' => $mailPayload['ticketLines'],
+                        'merchLines' => $mailPayload['merchLines'],
+                    ]
+                );
+                $checkout->setEmailSentAt(new \DateTime());
+                $em->flush();
+            } catch (\Throwable $error) {
+                $logger->error('Checkout recap email failed', ['checkout' => $checkout->getCheckoutReference(), 'error' => $error->getMessage()]);
+            }
+        }
+        return $response;
     }
 }

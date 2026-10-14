@@ -1,0 +1,11 @@
+<h1>Precommandes - {{ match.matchLabel }}</h1>
+<p>Match : {{ match.matchDate|date('d/m/Y H:i', 'Europe/Paris') }}</p>
+<h2>Billets</h2>
+<p>{{ ticketQuantity }} billet(s) confirmes dans la billetterie interne.</p>
+<h2>Buvette</h2>
+{% if refreshments is empty %}
+<p>Aucune precommande de buvette confirmee.</p>
+{% else %}
+<ul>{% for line in refreshments %}<li>{{ line.name }} : {{ line.quantity }}</li>{% endfor %}</ul>
+{% endif %}
+<p>Ce rapport est genere a partir des donnees saisies et confirmees dans le site.</p>

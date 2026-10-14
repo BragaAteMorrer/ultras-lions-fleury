@@ -1,0 +1,36 @@
+name: Refresh Composer lock for buvette
+on:
+  push:
+    branches: [feature/match-refreshments-admin-20261013]
+    paths:
+      - .github/workflows/refresh-buvette-lock.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: intl, mbstring, pdo_mysql, dom, zip, gd
+          coverage: none
+      - name: Synchronize lockfile without dependency upgrades
+        working-directory: backend
+        run: composer update --lock --no-scripts --no-interaction --no-progress
+      - name: Validate security
+        working-directory: backend
+        run: |
+          composer validate --no-check-publish
+          composer audit --no-dev
+      - name: Commit synchronized lock
+        run: |
+          if ! git diff --quiet -- backend/composer.json backend/composer.lock; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add backend/composer.json backend/composer.lock
+            git commit -m "fix: synchronize Composer lockfile"
+            git push origin HEAD:feature/match-refreshments-admin-20261013
+          fi
