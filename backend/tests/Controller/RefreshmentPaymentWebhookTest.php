@@ -83,7 +83,8 @@ final class RefreshmentPaymentWebhookTest extends WebTestCase
         self::assertSame(2, $orders[0]->getQuantity());
         self::assertSame(250, $orders[0]->getUnitPriceCents());
         self::assertSame('confirmed', $orders[0]->getStatus());
-        $em->refresh($product);
-        self::assertSame(0, $product->getStock(), 'Duplicated webhook must not consume drink stock twice.');
+        $managedProduct = $em->getRepository(RefreshmentProduct::class)->find($product->getId());
+        self::assertNotNull($managedProduct);
+        self::assertSame(0, $managedProduct->getStock(), 'Duplicated webhook must not consume drink stock twice.');
     }
 }
