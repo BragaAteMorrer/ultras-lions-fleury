@@ -22,6 +22,15 @@ final class SendRefreshmentReportsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // LWS runs this on a single host: use an OS-level lock to prevent
+        // overlapping cron invocations from emailing the same report twice.
+        $lock = fopen(sys_get_temp_dir().'/ultras-lions-buvette-report.lock', 'c');
+        if ($lock === false || !flock($lock, LOCK_EX | LOCK_NB)) {
+            $output->writeln('Un autre envoi buvette est deja en cours.');
+            if (is_resource($lock)) { fclose($lock); }
+            return Command::SUCCESS;
+        }
+
         $now = new \DateTimeImmutable();
         $sent = 0;
         foreach ($this->entityManager->getRepository(RefreshmentReport::class)->findAll() as $report) {
@@ -56,6 +65,8 @@ final class SendRefreshmentReportsCommand extends Command
             $this->entityManager->flush();
             ++$sent;
         }
+        flock($lock, LOCK_UN);
+        fclose($lock);
         $output->writeln(sprintf('%d rapport(s) buvette envoye(s).', $sent));
         return Command::SUCCESS;
     }
