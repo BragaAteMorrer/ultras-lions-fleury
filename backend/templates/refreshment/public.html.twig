@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}Buvette — {{ ticket.matchLabel }}{% endblock %}
+{% block body %}
+<main class="container py-5">
+<h1>Buvette — {{ ticket.matchLabel }}</h1>
+<p>{{ ticket.matchDate|date('d/m/Y H:i', 'Europe/Paris') }}</p>
+{% if not open %}
+<div class="alert alert-warning">Les precommandes de ce match sont fermees ou non configurees.</div>
+{% else %}
+<p>Commandes ouvertes jusqu'au {{ closesAt|date('d/m/Y H:i', 'Europe/Paris') }}.</p>
+<form method="post" action="{{ path('public_refreshments_buy', {id: ticket.id}) }}">
+<input type="hidden" name="_token" value="{{ csrf_token('refreshment_' ~ ticket.id) }}">
+{% for product in products %}
+<div class="d-flex align-items-center gap-3 mb-3">
+<label for="qty-{{ product.id }}">{{ product.name }} — {{ (product.priceCents / 100)|number_format(2, ',', ' ') }} €</label>
+<input id="qty-{{ product.id }}" type="number" class="form-control" style="max-width:100px" name="quantities[{{ product.id }}]" min="0" max="50" value="0" step="1">
+</div>
+{% else %}<p>Aucun produit disponible.</p>{% endfor %}
+<label for="refreshment-email">Adresse email pour la commande</label>
+<input id="refreshment-email" name="email" type="email" class="form-control mb-3" required autocomplete="email">
+<button class="btn btn-primary" type="submit">Payer la precommande avec SumUp</button>
+</form>
+{% endif %}
+</main>
+{% endblock %}
