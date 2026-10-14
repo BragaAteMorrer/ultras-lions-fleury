@@ -6,6 +6,7 @@ use App\Entity\RefreshmentOrder;
 use App\Entity\RefreshmentReport;
 use App\Entity\TicketOrder;
 use App\Service\MailService;
+use Psr\Log\LoggerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -18,6 +19,7 @@ final class SendRefreshmentReportsCommand extends Command
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly MailService $mailService,
+        private readonly LoggerInterface $logger,
     ) { parent::__construct(); }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -68,7 +70,8 @@ final class SendRefreshmentReportsCommand extends Command
                     ];
                 }
 
-                $this->mailService->send(
+                try {
+                    $this->mailService->send(
                     $report->getRecipient(),
                     'Cloture billets et buvette - '.$match->getMatchLabel(),
                     'email/refreshment_report.html.twig',
@@ -78,9 +81,13 @@ final class SendRefreshmentReportsCommand extends Command
                         'refreshments' => array_values($summary), 'drinkOrders' => $drinkOrders,
                     ]
                 );
-                $report->setSentAt(new \DateTimeImmutable());
-                $this->entityManager->flush();
-                ++$sent;
+                    $report->setSentAt(new \DateTimeImmutable());
+                    $this->entityManager->flush();
+                    ++$sent;
+                } catch (\Throwable $exception) {
+                    $this->logger->error('Buvette report send failed; retry next cron', ['report_id' => $report->getId(), 'exception' => $exception::class]);
+                    $output->writeln('<error>Envoi echoue pour le rapport #'.$report->getId().'; nouvelle tentative au prochain passage.</error>');
+                }
             }
             $output->writeln(sprintf('%d rapport(s) envoye(s).', $sent));
             return Command::SUCCESS;
