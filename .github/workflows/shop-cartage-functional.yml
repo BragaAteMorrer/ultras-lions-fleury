@@ -22,7 +22,7 @@ jobs:
     env:
       APP_ENV: test
       APP_SECRET: functional-tests-only-secret
-      DATABASE_URL: mysql://root:root-test@127.0.0.1:3306/ultras_functional_test?serverVersion=mariadb-10.11.0&charset=utf8mb4
+      DATABASE_URL: mysql://root:root-test@127.0.0.1:3306/ultras_functional?serverVersion=mariadb-10.11.0&charset=utf8mb4
       MAILER_DSN: "null://null"
     steps:
       - uses: actions/checkout@v4
