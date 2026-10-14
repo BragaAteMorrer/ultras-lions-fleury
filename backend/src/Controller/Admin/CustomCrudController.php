@@ -72,10 +72,6 @@ class CustomCrudController extends AbstractController
     public function index(Request $request, string $resource): Response
     {
         $config = $this->crudRegistry->get($resource);
-        $items = $this->entityManager
-            ->getRepository($config['entity'])
-            ->findBy([], $config['order'] ?? ['id' => 'DESC']);
-
         $search = trim((string) $request->query->get('q', ''));
         $sort = trim((string) $request->query->get('sort', ''));
         $direction = strtolower(trim((string) $request->query->get('direction', 'asc'))) === 'desc' ? 'desc' : 'asc';
@@ -84,17 +80,55 @@ class CustomCrudController extends AbstractController
         $perPage = max(5, min(50, (int) $request->query->get('perPage', 20)));
 
         $filterDefinitions = $this->buildFilterDefinitions($config);
-        $items = $this->applyFilters($items, $config, $search, $request->query->all(), $filterDefinitions);
-        if ($resource === 'commandes-merch') {
-            $items = $this->applyMerchOrderStateFilter($items, $state);
-        }
-        $items = $this->applySorting($items, $config, $sort, $direction);
+        $queryParams = $request->query->all();
+        $repository = $this->entityManager->getRepository($config['entity']);
 
-        $totalItems = count($items);
-        $totalPages = max(1, (int) ceil($totalItems / $perPage));
-        $page = min($page, $totalPages);
-        $offset = ($page - 1) * $perPage;
-        $pageItems = array_slice($items, $offset, $perPage);
+        // Use SQL pagination for unfiltered lists rather than hydrating every entity.
+        // Keep the existing PHP filtering/sorting path for computed and related fields.
+        $hasActiveFilters = $search !== '' || ($resource === 'commandes-merch' && $state !== '');
+        foreach ($filterDefinitions as $definition) {
+            $name = $definition['name'];
+            $suffixes = match ($definition['type']) {
+                'date_range' => ['_from', '_to'],
+                'number_range' => ['_min', '_max'],
+                default => [''],
+            };
+            foreach ($suffixes as $suffix) {
+                if (trim((string) ($queryParams[$name.$suffix] ?? '')) !== '') {
+                    $hasActiveFilters = true;
+                    break 2;
+                }
+            }
+        }
+
+        $order = $config['order'] ?? ['id' => 'DESC'];
+        $metadata = $this->entityManager->getClassMetadata($config['entity']);
+        $sqlSort = $sort !== '' && array_key_exists($sort, $config['list']) && $metadata->hasField($sort);
+        if (!$hasActiveFilters && ($sort === '' || $sqlSort)) {
+            if ($sqlSort) {
+                $order = [$sort => strtoupper($direction)];
+                if ($sort !== 'id' && $metadata->hasField('id')) {
+                    $order['id'] = 'DESC';
+                }
+            }
+            $totalItems = $repository->count([]);
+            $totalPages = max(1, (int) ceil($totalItems / $perPage));
+            $page = min($page, $totalPages);
+            $offset = ($page - 1) * $perPage;
+            $pageItems = $repository->findBy([], $order, $perPage, $offset);
+        } else {
+            $items = $repository->findBy([], $order);
+            $items = $this->applyFilters($items, $config, $search, $queryParams, $filterDefinitions);
+            if ($resource === 'commandes-merch') {
+                $items = $this->applyMerchOrderStateFilter($items, $state);
+            }
+            $items = $this->applySorting($items, $config, $sort, $direction);
+            $totalItems = count($items);
+            $totalPages = max(1, (int) ceil($totalItems / $perPage));
+            $page = min($page, $totalPages);
+            $offset = ($page - 1) * $perPage;
+            $pageItems = array_slice($items, $offset, $perPage);
+        }
 
         return $this->render('admin/crud/index.html.twig', [
             'resource' => $resource,
@@ -115,7 +149,7 @@ class CustomCrudController extends AbstractController
             'filterDefinitions' => $filterDefinitions,
             'filters' => $this->extractFilters($request->query->all(), $filterDefinitions),
             'displayField' => $this->getDisplayField($config),
-            'resourceSummary' => $this->buildResourceSummary($resource, $items),
+            'resourceSummary' => $this->buildResourceSummary($resource, $hasActiveFilters ? $items : [], $totalItems),
             'adminNavigation' => $this->adminNavigationBuilder->navigation(),
         ]);
     }
@@ -861,7 +895,7 @@ class CustomCrudController extends AbstractController
     /**
      * @return array<int, array{label: string, value: int, tone: string, state?: string, resource?: string}>
      */
-    private function buildResourceSummary(string $resource, array $items): array
+    private function buildResourceSummary(string $resource, array $items, ?int $totalItems = null): array
     {
         if ($resource === 'commandes-merch') {
             /** @var MerchOrderRepository $repository */
@@ -906,7 +940,7 @@ class CustomCrudController extends AbstractController
                 ],
                 [
                     'label' => 'Commandes affichées',
-                    'value' => count($items),
+                    'value' => $totalItems ?? count($items),
                     'tone' => 'neutral',
                 ],
             ];
