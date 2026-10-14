@@ -60,6 +60,31 @@ class PaymentCheckout
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $emailSentAt = null;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $reviewResolvedAt = null;
+
+    #[ORM\Column(length: 24, nullable: true)]
+    private ?string $reviewResolution = null;
+
+    #[ORM\Column(length: 180, nullable: true)]
+    private ?string $reviewReference = null;
+
+    public function getReviewResolvedAt(): ?\DateTimeInterface { return $this->reviewResolvedAt; }
+    public function getReviewResolution(): ?string { return $this->reviewResolution; }
+    public function getReviewReference(): ?string { return $this->reviewReference; }
+    public function recordManualResolution(string $resolution, string $reference): void
+    {
+        if ($this->status !== 'paid_stock_review' || $this->reviewResolvedAt !== null) {
+            throw new \LogicException('Checkout is not awaiting resolution.');
+        }
+        if (!in_array($resolution, ['refunded', 'fulfilled'], true) || trim($reference) === '') {
+            throw new \InvalidArgumentException('Invalid resolution or missing proof reference.');
+        }
+        $this->reviewResolution = $resolution;
+        $this->reviewReference = trim($reference);
+        $this->reviewResolvedAt = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int { return $this->id; }
 
     public function getType(): ?string { return $this->type; }
