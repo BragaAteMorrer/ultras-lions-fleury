@@ -43,11 +43,9 @@ class CheckoutController extends AbstractController
                 if ($checkout->getStatus() !== 'paid' && $checkout->getSumupCheckoutId()) {
                     $details = $sumupService->retrieveCheckout($checkout->getSumupCheckoutId());
                     $sumupStatus = strtoupper((string) ($details['status'] ?? ''));
-                    if ($sumupStatus === 'PAID' || $sumupStatus === 'SUCCESSFUL' || $sumupStatus === 'COMPLETED') {
-                        $checkout->setStatus('paid');
-                        $checkout->setPaidAt(new \DateTime());
-                        $em->flush();
-                    } elseif (in_array($sumupStatus, ['FAILED', 'DECLINED', 'CANCELLED', 'CANCELED', 'EXPIRED'], true)) {
+                    // Do not mark a checkout as paid from a browser-accessible return page.
+                    // Only the verified server-side webhook may finalize the payment and stock.
+                    if (in_array($sumupStatus, ['FAILED', 'EXPIRED'], true)) {
                         $checkout->setStatus('failed');
                         $em->flush();
                     }
