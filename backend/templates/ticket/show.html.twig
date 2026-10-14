@@ -47,6 +47,7 @@
 
                     <h2>{{ matchLabel }}</h2>
 
+                    <p><a class="btn btn-primary" href="{{ path('public_refreshments', {id: item.id}) }}">Précommander à la buvette pour ce match</a></p>
                     <div class="ticket-show-facts">
                         <div>
                             <span>{{ 'email_merch_order_recap.html.date'|trans }}</span>
