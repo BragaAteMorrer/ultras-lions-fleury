@@ -22,6 +22,8 @@ jobs:
     env:
       APP_ENV: test
       APP_SECRET: functional-tests-only-secret
+      # Doctrine when@test appends _test to the database name.
+      # MariaDB creates ultras_functional_test in the service container.
       DATABASE_URL: mysql://root:root-test@127.0.0.1:3306/ultras_functional?serverVersion=mariadb-10.11.0&charset=utf8mb4
       MAILER_DSN: "null://null"
     steps:
