@@ -192,6 +192,35 @@ class SumupWebhookController extends AbstractController
                     $em->flush();
                     return new Response('ok', 200);
                 }
+                // Serialize stock adjustments on each product row. Payments beyond
+                // availability are flagged for an operator refund/reconciliation.
+                $requirements = [];
+                foreach ($rows as [$product, $quantity, $priceCents]) {
+                    $id = $product->getId();
+                    $requirements[$id] = ($requirements[$id] ?? 0) + $quantity;
+                }
+                ksort($requirements, SORT_NUMERIC);
+                foreach ($requirements as $id => $requiredQuantity) {
+                    $product = $em->getRepository(RefreshmentProduct::class)->find($id);
+                    $em->lock($product, LockMode::PESSIMISTIC_WRITE);
+                    $em->refresh($product);
+                    if ($product->getStock() !== null && $product->getStock() < $requiredQuantity) {
+                        $logger->critical('Paid refreshment order requires refund: insufficient inventory', [
+                            'checkout' => $checkout->getCheckoutReference(),
+                            'product_id' => $id,
+                        ]);
+                        $checkout->setStatus('paid_stock_review');
+                        $checkout->setProcessedAt(new \DateTime());
+                        $em->flush();
+                        return new Response('ok', 200);
+                    }
+                }
+                foreach ($requirements as $id => $requiredQuantity) {
+                    $product = $em->getRepository(RefreshmentProduct::class)->find($id);
+                    if ($product->getStock() !== null) {
+                        $product->setStock($product->getStock() - $requiredQuantity);
+                    }
+                }
                 foreach ($rows as [$product, $quantity, $priceCents]) {
                     $order = (new RefreshmentOrder())->setPaymentCheckout($checkout)->setTicket($match)
                         ->setProduct($product)->setQuantity($quantity)->setUnitPriceCents($priceCents)
