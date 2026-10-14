@@ -38,4 +38,4 @@ jobs:
       - name: Build isolated schema
         run: php bin/console doctrine:schema:create --env=test --no-interaction
       - name: Run isolated HTTP functional suite
-        run: vendor/bin/phpunit tests/Controller/ShopCartageFunctionalTest.php tests/Controller/PublicRefreshmentControllerTest.php --colors=never
+        run: vendor/bin/phpunit tests/Controller/ShopCartageFunctionalTest.php tests/Controller/PublicRefreshmentControllerTest.php tests/Controller/RefreshmentCheckoutSecurityTest.php tests/Controller/RefreshmentPaymentWebhookTest.php --colors=never

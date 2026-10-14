@@ -6,6 +6,8 @@ use App\Entity\CartageRegistration;
 use App\Entity\Donation;
 use App\Entity\MerchOrder;
 use App\Entity\TicketOrder;
+use App\Entity\RefreshmentOrder;
+use App\Entity\RefreshmentProduct;
 use App\Repository\CartageRegistrationRepository;
 use App\Repository\DonationRepository;
 use App\Repository\MerchRepository;
@@ -150,6 +152,54 @@ class SumupWebhookController extends AbstractController
                 $checkout->setProcessedAt(new \DateTime());
                 $em->flush();
 
+                return new Response('ok', 200);
+            }
+
+            if ($checkout->getType() === 'refreshment') {
+                $cart = $checkout->getCart();
+                $matchId = null;
+                $rows = [];
+                foreach ($cart as $line) {
+                    if (($line['type'] ?? '') !== 'refreshment' || !isset($line['ticket_id'], $line['refreshment_product_id'], $line['unit_price_cents'])) {
+                        $checkout->setStatus('paid_stock_review');
+                        $checkout->setProcessedAt(new \DateTime());
+                        $em->flush();
+                        return new Response('ok', 200);
+                    }
+                    $ticketId = (int) $line['ticket_id'];
+                    if ($matchId !== null && $ticketId !== $matchId) {
+                        $checkout->setStatus('paid_stock_review');
+                        $checkout->setProcessedAt(new \DateTime());
+                        $em->flush();
+                        return new Response('ok', 200);
+                    }
+                    $matchId = $ticketId;
+                    $quantity = (int) ($line['quantity'] ?? 0);
+                    $product = $em->getRepository(RefreshmentProduct::class)->find((int) $line['refreshment_product_id']);
+                    if (!$product || $quantity < 1 || $quantity > 30 || (int) $line['unit_price_cents'] < 1) {
+                        $checkout->setStatus('paid_stock_review');
+                        $checkout->setProcessedAt(new \DateTime());
+                        $em->flush();
+                        return new Response('ok', 200);
+                    }
+                    $rows[] = [$product, $quantity, (int) $line['unit_price_cents']];
+                }
+                $match = $matchId ? $ticketRepository->find($matchId) : null;
+                // Do not add prepaid quantities after the H-24 report cutoff.
+                if (!$match || !$match->getMatchDate() || new \DateTimeImmutable() >= \DateTimeImmutable::createFromInterface($match->getMatchDate())->modify('-24 hours')) {
+                    $checkout->setStatus('paid_stock_review');
+                    $checkout->setProcessedAt(new \DateTime());
+                    $em->flush();
+                    return new Response('ok', 200);
+                }
+                foreach ($rows as [$product, $quantity, $priceCents]) {
+                    $order = (new RefreshmentOrder())->setPaymentCheckout($checkout)->setTicket($match)
+                        ->setProduct($product)->setQuantity($quantity)->setUnitPriceCents($priceCents)
+                        ->setCustomerEmail($checkout->getEmail())->setStatus('confirmed');
+                    $em->persist($order);
+                }
+                $checkout->setProcessedAt(new \DateTime());
+                $em->flush();
                 return new Response('ok', 200);
             }
 
