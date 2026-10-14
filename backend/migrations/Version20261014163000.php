@@ -16,8 +16,23 @@ final class Version20261014163000 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql("ALTER TABLE refreshment_report ADD delivery_status VARCHAR(24) DEFAULT 'pending' NOT NULL, ADD attempts INT DEFAULT 0 NOT NULL, ADD delivery_key VARCHAR(64) DEFAULT NULL, ADD last_attempt_at DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime_immutable)', ADD snapshot JSON DEFAULT NULL");
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_REFRESHMENT_DELIVERY_KEY ON refreshment_report (delivery_key)');
+        $columns = array_change_key_case($this->connection->createSchemaManager()->listTableColumns('refreshment_report'), CASE_LOWER);
+        $fields = [
+            'delivery_status' => "VARCHAR(24) DEFAULT 'pending' NOT NULL",
+            'attempts' => 'INT DEFAULT 0 NOT NULL',
+            'delivery_key' => 'VARCHAR(64) DEFAULT NULL',
+            'last_attempt_at' => "DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime_immutable)'",
+            'snapshot' => 'JSON DEFAULT NULL',
+        ];
+        foreach ($fields as $field => $definition) {
+            if (!isset($columns[$field])) {
+                $this->addSql(sprintf('ALTER TABLE refreshment_report ADD %s %s', $field, $definition));
+            }
+        }
+        $indexes = array_change_key_case($this->connection->createSchemaManager()->listTableIndexes('refreshment_report'), CASE_LOWER);
+        if (!isset($indexes['uniq_refreshment_delivery_key'])) {
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_REFRESHMENT_DELIVERY_KEY ON refreshment_report (delivery_key)');
+        }
         $this->addSql("UPDATE refreshment_report SET delivery_status = 'sent' WHERE sent_at IS NOT NULL");
     }
 

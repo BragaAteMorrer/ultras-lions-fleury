@@ -16,7 +16,16 @@ final class Version20260505230000 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE cartage_registration ADD internal_rules_accepted_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime_immutable)\', ADD internal_rules_title VARCHAR(180) DEFAULT NULL, ADD internal_rules_content LONGTEXT DEFAULT NULL');
+        $columns = array_change_key_case($this->connection->createSchemaManager()->listTableColumns('cartage_registration'), CASE_LOWER);
+        if (!isset($columns['internal_rules_accepted_at'])) {
+            $this->addSql("ALTER TABLE cartage_registration ADD internal_rules_accepted_at DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime_immutable)'");
+        }
+        if (!isset($columns['internal_rules_title'])) {
+            $this->addSql('ALTER TABLE cartage_registration ADD internal_rules_title VARCHAR(180) DEFAULT NULL');
+        }
+        if (!isset($columns['internal_rules_content'])) {
+            $this->addSql('ALTER TABLE cartage_registration ADD internal_rules_content LONGTEXT DEFAULT NULL');
+        }
 
         $pages = [
             [

@@ -16,11 +16,22 @@ final class Version20260316120000 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE group_page ADD histoire_text LONGTEXT DEFAULT NULL');
-        $this->addSql('ALTER TABLE group_page ADD mentalite_text LONGTEXT DEFAULT NULL');
-        $this->addSql('ALTER TABLE group_page ADD fonctionnement_text LONGTEXT DEFAULT NULL');
-        $this->addSql('ALTER TABLE group_page ADD rejoindre_text LONGTEXT DEFAULT NULL');
-        $this->addSql('ALTER TABLE group_page ADD se_carter_text LONGTEXT DEFAULT NULL');
+        $columns = array_change_key_case($this->connection->createSchemaManager()->listTableColumns('group_page'), CASE_LOWER);
+        if (!isset($columns['histoire_text'])) {
+            $this->addSql('ALTER TABLE group_page ADD histoire_text LONGTEXT DEFAULT NULL');
+        }
+        if (!isset($columns['mentalite_text'])) {
+            $this->addSql('ALTER TABLE group_page ADD mentalite_text LONGTEXT DEFAULT NULL');
+        }
+        if (!isset($columns['fonctionnement_text'])) {
+            $this->addSql('ALTER TABLE group_page ADD fonctionnement_text LONGTEXT DEFAULT NULL');
+        }
+        if (!isset($columns['rejoindre_text'])) {
+            $this->addSql('ALTER TABLE group_page ADD rejoindre_text LONGTEXT DEFAULT NULL');
+        }
+        if (!isset($columns['se_carter_text'])) {
+            $this->addSql('ALTER TABLE group_page ADD se_carter_text LONGTEXT DEFAULT NULL');
+        }
     }
 
     public function down(Schema $schema): void

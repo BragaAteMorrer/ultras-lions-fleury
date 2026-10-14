@@ -16,7 +16,10 @@ final class Version20260506023500 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE site_config ADD google_analytics_id VARCHAR(40) DEFAULT NULL');
+        $columns = array_change_key_case($this->connection->createSchemaManager()->listTableColumns('site_config'), CASE_LOWER);
+        if (!isset($columns['google_analytics_id'])) {
+            $this->addSql('ALTER TABLE site_config ADD google_analytics_id VARCHAR(40) DEFAULT NULL');
+        }
     }
 
     public function down(Schema $schema): void
