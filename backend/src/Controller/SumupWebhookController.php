@@ -162,14 +162,14 @@ class SumupWebhookController extends AbstractController
                 foreach ($cart as $line) {
                     if (($line['type'] ?? '') !== 'refreshment' || !isset($line['ticket_id'], $line['refreshment_product_id'], $line['unit_price_cents'])) {
                         $checkout->setStatus('paid_stock_review');
-                        $checkout->setProcessedAt(new \\DateTime());
+                        $checkout->setProcessedAt(new \DateTime());
                         $em->flush();
                         return new Response('ok', 200);
                     }
                     $ticketId = (int) $line['ticket_id'];
                     if ($matchId !== null && $ticketId !== $matchId) {
                         $checkout->setStatus('paid_stock_review');
-                        $checkout->setProcessedAt(new \\DateTime());
+                        $checkout->setProcessedAt(new \DateTime());
                         $em->flush();
                         return new Response('ok', 200);
                     }
@@ -178,7 +178,7 @@ class SumupWebhookController extends AbstractController
                     $product = $em->getRepository(RefreshmentProduct::class)->find((int) $line['refreshment_product_id']);
                     if (!$product || $quantity < 1 || $quantity > 30 || (int) $line['unit_price_cents'] < 1) {
                         $checkout->setStatus('paid_stock_review');
-                        $checkout->setProcessedAt(new \\DateTime());
+                        $checkout->setProcessedAt(new \DateTime());
                         $em->flush();
                         return new Response('ok', 200);
                     }
@@ -186,9 +186,9 @@ class SumupWebhookController extends AbstractController
                 }
                 $match = $matchId ? $ticketRepository->find($matchId) : null;
                 // Do not add prepaid quantities after the H-24 report cutoff.
-                if (!$match || !$match->getMatchDate() || new \\DateTimeImmutable() >= \\DateTimeImmutable::createFromInterface($match->getMatchDate())->modify('-24 hours')) {
+                if (!$match || !$match->getMatchDate() || new \DateTimeImmutable() >= \DateTimeImmutable::createFromInterface($match->getMatchDate())->modify('-24 hours')) {
                     $checkout->setStatus('paid_stock_review');
-                    $checkout->setProcessedAt(new \\DateTime());
+                    $checkout->setProcessedAt(new \DateTime());
                     $em->flush();
                     return new Response('ok', 200);
                 }
@@ -198,7 +198,7 @@ class SumupWebhookController extends AbstractController
                         ->setCustomerEmail($checkout->getEmail())->setStatus('confirmed');
                     $em->persist($order);
                 }
-                $checkout->setProcessedAt(new \\DateTime());
+                $checkout->setProcessedAt(new \DateTime());
                 $em->flush();
                 return new Response('ok', 200);
             }
