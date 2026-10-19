@@ -32,8 +32,12 @@ security:
             remember_me:
                 secret: '%kernel.secret%'
 
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_BUVETTE]
+
     access_control:
         # Admin uniquement
+        - { path: ^/admin/buvette/preparation(?:/|$), roles: ROLE_BUVETTE }
         - { path: ^/admin, roles: ROLE_ADMIN }
 
         # Accès réservé aux membres connectés
