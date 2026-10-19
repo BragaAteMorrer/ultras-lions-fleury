@@ -3,10 +3,26 @@
 {% block body %}
 <main class="container" style="max-width:1100px;margin:2rem auto;padding:1rem">
 <h1>Préparation des précommandes</h1>
+<form method="get" action="{{ path('admin_refreshment_fulfillment') }}">
+<label for="match">Match</label>
+<select name="match" id="match">
+<option value="0">Tous les matchs (500 lignes maximum)</option>
+{% for match in matches %}<option value="{{ match.id }}" {% if selectedMatch == match.id %}selected{% endif %}>{{ match.matchLabel }}</option>{% endfor %}
+</select>
+<button type="submit">Filtrer</button>
+</form>
+{% for matchId, stats in summary %}
+<section style="border:1px solid #888;border-radius:8px;margin:1rem 0;padding:1rem">
+<h2>{{ stats.label }}</h2>
+<p>{{ stats.total }} unités confirmées · {{ stats.prepared }} préparées · {{ stats.collected }} remises · {{ stats.total - stats.collected }} restant à remettre</p>
+<ul>{% for product in stats.products %}<li>{{ product.name }} : {{ product.quantity }}</li>{% endfor %}</ul>
+</section>
+{% endfor %}
 <p>Seules les commandes confirmées et non retirées apparaissent ici. Le retrait ne décrémente pas une seconde fois le stock.</p>
 {% for type, messages in app.flashes %}{% for message in messages %}<p role="status">{{ message }}</p>{% endfor %}{% endfor %}
 {% if orders is empty %}<p>Aucune préparation en attente.</p>{% endif %}
 {% for order in orders %}
+{% if not order.collectedAt %}
 <section style="padding:1rem;margin:1rem 0;border:1px solid #888;border-radius:8px">
 <h2>#{{ order.id }} — {{ order.product.name }} × {{ order.quantity }}</h2>
 <p>Match : {{ order.ticket.matchLabel }} · Contact : {{ order.customerEmail ?: 'non renseigné' }}</p>
@@ -16,7 +32,8 @@
 <input type="hidden" name="_token" value="{{ csrf_token('buvette-' ~ order.id ~ '-' ~ action) }}">
 <button type="submit">{{ order.preparedAt ? 'Confirmer le retrait' : 'Marquer préparée' }}</button>
 </form></section>
+{% endif %}
 {% endfor %}
-{% if orders|length == 200 %}<p>Affichage limité aux 200 plus anciennes lignes.</p>{% endif %}
+{% if orders|length == 500 %}<p>Affichage limité aux 500 plus anciennes lignes.</p>{% endif %}
 </main>
 {% endblock %}
