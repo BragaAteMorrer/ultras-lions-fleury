@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% block title %}Régularisation des paiements{% endblock %}
+{% block body %}
+<main class="container" style="max-width:1100px;margin:2rem auto;padding:1rem">
+  <h1>Paiements à régulariser</h1>
+  <p>Vérifier chaque paiement et sa preuve dans SumUp avant de l'enregistrer ici. Cette interface n'effectue aucun remboursement.</p>
+  {% for type, messages in app.flashes %}
+    {% for message in messages %}<p role="status">{{ message }}</p>{% endfor %}
+  {% endfor %}
+  {% if pending is empty %}<p>Aucun paiement en attente de régularisation.</p>{% endif %}
+  {% for payment in pending %}
+    <section style="border:1px solid #888;border-radius:8px;padding:1rem;margin:1rem 0">
+      <h2>Commande #{{ payment.id }} — {{ payment.amount|number_format(2, ',', ' ') }} {{ payment.currency }}</h2>
+      <p>Référence : {{ payment.checkoutReference }} · Type : {{ payment.type }} · Créée le {{ payment.createdAt|date('d/m/Y H:i') }}</p>
+      <p>Référence SumUp : {{ payment.sumupCheckoutId ?: 'non renseignée' }}</p>
+      <form method="post" action="{{ path('admin_payment_review_resolve', {id: payment.id}) }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('payment-review-' ~ payment.id) }}">
+        <label>Décision
+          <select name="resolution" required>
+            <option value="refunded">Remboursement effectué</option>
+            <option value="fulfilled">Commande honorée</option>
+          </select>
+        </label>
+        <label>Référence de preuve <input name="reference" minlength="5" maxlength="180" required></label>
+        <button type="submit">Enregistrer la régularisation</button>
+      </form>
+    </section>
+  {% endfor %}
+  {% if pending|length == 100 %}<p>Seuls les 100 plus anciens paiements sont affichés. Traiter ceux-ci pour afficher les suivants.</p>{% endif %}
+</main>
+{% endblock %}
