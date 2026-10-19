@@ -20,3 +20,9 @@
 
 # Runtime media are persisted/backed up outside Git.
 /public/uploads/
+
+# Never version database exports or real customer/member records
+/migrations/*.sql
+*.sql.gz
+*.sql.zip
+*.dump
