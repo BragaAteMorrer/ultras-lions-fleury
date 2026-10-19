@@ -62,6 +62,7 @@ class AdminNavigationBuilder
                     $this->crud('Categories buvette', 'bi bi-tags', 'buvette-categories'),
                     $this->crud('Produits buvette', 'bi bi-cup-straw', 'buvette-produits'),
                     $this->crud('Precommandes buvette', 'bi bi-cart-check', 'buvette-commandes'),
+                    $this->route('Préparation buvette', 'bi bi-clipboard-check', 'admin_refreshment_fulfillment'),
                     $this->crud('Envois buvette 24h', 'bi bi-envelope-check', 'buvette-rapports'),
                     $this->crud('Categories billets', 'bi bi-list-ul', 'categories-billetterie'),
                     $this->crud('Commandes billets', 'bi bi-receipt', 'commandes-billets'),

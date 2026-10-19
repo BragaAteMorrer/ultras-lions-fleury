@@ -38,6 +38,27 @@ class RefreshmentOrder
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $preparedAt = null;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $collectedAt = null;
+
+    public function getPreparedAt(): ?\DateTimeImmutable { return $this->preparedAt; }
+    public function getCollectedAt(): ?\DateTimeImmutable { return $this->collectedAt; }
+    public function markPrepared(): void {
+        if ($this->status !== 'confirmed' || $this->collectedAt !== null) {
+            throw new \LogicException('Commande non eligible a la preparation.');
+        }
+        $this->preparedAt ??= new \DateTimeImmutable();
+    }
+    public function markCollected(): void {
+        if ($this->status !== 'confirmed' || $this->preparedAt === null || $this->collectedAt !== null) {
+            throw new \LogicException('Commande non eligible au retrait.');
+        }
+        $this->collectedAt = new \DateTimeImmutable();
+    }
+
     public function __construct() { $this->createdAt = new \DateTimeImmutable(); }
     public function getPaymentCheckout(): ?PaymentCheckout { return $this->paymentCheckout; }
     public function setPaymentCheckout(?PaymentCheckout $value): self { $this->paymentCheckout = $value; return $this; }
