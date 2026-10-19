@@ -1,9 +1,28 @@
 {% extends 'base.html.twig' %}
 {% block title %}Préparation buvette{% endblock %}
 {% block body %}
-<main class="container" style="max-width:1100px;margin:2rem auto;padding:1rem">
+<style>
+.buvette-board { max-width: 1100px; margin: 1rem auto; padding: 1rem; }
+.buvette-board .filter-row { display: flex; flex-wrap: wrap; gap: .75rem; align-items: end; }
+.buvette-board select, .buvette-board button { min-height: 44px; padding: .65rem .8rem; font: inherit; }
+.buvette-board .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1rem; margin: 1rem 0; }
+.buvette-board .summary-card, .buvette-board .order-card { border: 1px solid #888; border-radius: 10px; padding: 1rem; margin-bottom: 1rem; }
+.buvette-board .order-lines { list-style: none; padding: 0; margin: 0; }
+.buvette-board .order-lines li { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .75rem; padding: .75rem 0; border-top: 1px solid #9995; }
+.buvette-board .order-lines form { margin: 0; }
+.buvette-board .order-lines button { font-weight: 700; border-radius: 8px; cursor: pointer; }
+.buvette-board .action-collect { background: #135e39; color: white; border: 1px solid #135e39; }
+.buvette-board .status { font-weight: 600; }
+@media(max-width: 600px) {
+  .buvette-board { padding: .75rem; margin: 0 auto; }
+  .buvette-board .filter-row select, .buvette-board .filter-row button { width: 100%; }
+  .buvette-board .order-lines li { display: block; }
+  .buvette-board .order-lines form, .buvette-board .order-lines button { display: block; width: 100%; margin-top: .75rem; }
+}
+</style>
+<main class="container buvette-board">
 <h1>Préparation des précommandes</h1>
-<form method="get" action="{{ path('admin_refreshment_fulfillment') }}">
+<form class="filter-row" method="get" action="{{ path('admin_refreshment_fulfillment') }}">
 <label for="match">Match</label>
 <select name="match" id="match">
 <option value="0">Tous les matchs (500 lignes maximum)</option>
@@ -11,30 +30,32 @@
 </select>
 <button type="submit">Filtrer</button>
 </form>
+<div class="summary-grid">
 {% for matchId, stats in summary %}
-<section style="border:1px solid #888;border-radius:8px;margin:1rem 0;padding:1rem">
+<section class="summary-card">
 <h2>{{ stats.label }}</h2>
 <p>{{ stats.total }} unités confirmées · {{ stats.prepared }} préparées · {{ stats.collected }} remises · {{ stats.total - stats.collected }} restant à remettre</p>
 <ul>{% for product in stats.products %}<li>{{ product.name }} : {{ product.quantity }}</li>{% endfor %}</ul>
 </section>
 {% endfor %}
+</div>
 <p>Seules les commandes confirmées et non retirées apparaissent ici. Le retrait ne décrémente pas une seconde fois le stock.</p>
 {% for type, messages in app.flashes %}{% for message in messages %}<p role="status">{{ message }}</p>{% endfor %}{% endfor %}
 {% if orders is empty %}<p>Aucune préparation en attente.</p>{% endif %}
 <h2>Commandes à préparer ou remettre</h2>
 {% for group in groups %}
-<section style="padding:1rem;margin:1rem 0;border:1px solid #888;border-radius:8px">
+<section class="order-card">
 <h3>Commande {{ group.reference }} — {{ group.match }}</h3>
 <p>Contact : {{ group.email ?: 'non renseigné' }}</p>
-<ul>
+<ul class="order-lines">
 {% for order in group.lines %}
 <li>
 <strong>{{ order.product.name }} × {{ order.quantity }}</strong>
-— {{ order.preparedAt ? 'Prête' : 'À préparer' }}
-<form style="display:inline-block;margin-left:1rem" method="post" action="{{ path('admin_refreshment_fulfillment_action', {id: order.id, action: order.preparedAt ? 'collect' : 'prepare'}) }}">
+<span class="status">— {{ order.preparedAt ? 'Prête' : 'À préparer' }}</span>
+<form method="post" action="{{ path('admin_refreshment_fulfillment_action', {id: order.id, action: order.preparedAt ? 'collect' : 'prepare'}) }}">
 {% set action = order.preparedAt ? 'collect' : 'prepare' %}
 <input type="hidden" name="_token" value="{{ csrf_token('buvette-' ~ order.id ~ '-' ~ action) }}">
-<button type="submit">{{ order.preparedAt ? 'Confirmer le retrait' : 'Marquer préparée' }}</button>
+<button type="submit" class="{{ order.preparedAt ? 'action-collect' : 'action-prepare' }}">{{ order.preparedAt ? 'Confirmer le retrait' : 'Marquer préparée' }}</button>
 </form>
 </li>
 {% endfor %}
