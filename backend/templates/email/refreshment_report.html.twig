@@ -9,3 +9,11 @@
 <ul>{% for line in refreshments %}<li>{{ line.name }} : {{ line.quantity }}</li>{% endfor %}</ul>
 {% endif %}
 <p>Ce rapport est genere a partir des donnees saisies et confirmees dans le site.</p>
+
+<h2>Détail des commandes payées pour la remise au stade</h2>
+<p>Chaque référence correspond à un paiement confirmé sur le site Ultras Lions. La préparation et la remise sont assurées par le club.</p>
+{% for order in customerOrders %}
+<h3>Référence : {{ order.reference }}</h3>
+<p>Nom : {{ order.name ?: 'Non renseigné' }}</p>
+<ul>{% for line in order.lines %}<li>{{ line.product }} — {{ line.quantity }}</li>{% endfor %}</ul>
+{% else %}<p>Aucune commande payée à transmettre.</p>{% endfor %}
