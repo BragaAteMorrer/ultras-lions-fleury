@@ -415,6 +415,9 @@ class CartController extends AbstractController
         $cartService->setMerchEmail($session, $email);
         $cartService->setTicketEmail($session, $email);
 
+        // Protect cash/free orders from concurrent purchases of the same inventory.
+        $em->getConnection()->beginTransaction();
+        try {
         $lines = [];
         $total = 0.0;
 
@@ -437,6 +440,10 @@ class CartController extends AbstractController
             $qty = (int) $row['quantity'];
             $size = (string) $row['size'];
             $stock = $product->getStockForSize($size);
+            if ($stock !== null) {
+                $em->lock($stock, \Doctrine\DBAL\LockMode::PESSIMISTIC_WRITE);
+                $em->refresh($stock);
+            }
             $available = $stock?->getQuantity() ?? 0;
             if ($available < $qty) {
                 $this->addFlash('danger', sprintf('Stock insuffisant pour %s (%s).', $product->getTitle(), $size));
@@ -457,7 +464,7 @@ class CartController extends AbstractController
             ];
 
             if ($stock) {
-                $stock->setQuantity(max(0, $available - $qty));
+                $stock->setQuantity($available - $qty);
                 $em->persist($stock);
             }
 
@@ -498,6 +505,8 @@ class CartController extends AbstractController
                 return $this->redirectToRoute('cart_index');
             }
             $qty = (int) $row['quantity'];
+            $em->lock($ticket, \Doctrine\DBAL\LockMode::PESSIMISTIC_WRITE);
+            $em->refresh($ticket);
             $available = (int) $ticket->getStock();
             if ($available < $qty) {
                 $this->addFlash('danger', sprintf('Stock insuffisant pour %s.', $ticket->getOpponent()));
@@ -517,7 +526,7 @@ class CartController extends AbstractController
                 'total' => $lineTotal,
             ];
 
-            $ticket->setStock(max(0, $available - $qty));
+            $ticket->setStock($available - $qty);
             $em->persist($ticket);
 
             $order = new \App\Entity\TicketOrder();
@@ -562,6 +571,12 @@ class CartController extends AbstractController
         $em->persist($checkout);
 
         $em->flush();
+        $em->getConnection()->commit();
+        } finally {
+            if ($em->getConnection()->isTransactionActive()) {
+                $em->getConnection()->rollBack();
+            }
+        }
 
         $cartService->clearMerch($session);
         $cartService->clearTicket($session);
