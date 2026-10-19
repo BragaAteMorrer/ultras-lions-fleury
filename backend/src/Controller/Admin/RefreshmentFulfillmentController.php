@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\RefreshmentOrder;
+use App\Entity\Ticket;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,11 +17,35 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class RefreshmentFulfillmentController extends AbstractController
 {
     #[Route('', name: 'admin_refreshment_fulfillment', methods: ['GET'])]
-    public function index(EntityManagerInterface $em): Response
+    public function index(EntityManagerInterface $em, Request $request): Response
     {
+        $matchId = max(0, $request->query->getInt('match'));
+        $matches = $em->getRepository(Ticket::class)->findBy([], ['matchDate' => 'DESC'], 50);
+        $criteria = ['status' => 'confirmed'];
+        if ($matchId > 0) {
+            $match = $em->getRepository(Ticket::class)->find($matchId);
+            if (!$match) { throw $this->createNotFoundException('Match introuvable.'); }
+            $criteria['ticket'] = $match;
+        }
         $orders = $em->getRepository(RefreshmentOrder::class)
-            ->findBy(['status' => 'confirmed', 'collectedAt' => null], ['createdAt' => 'ASC'], 200);
-        return $this->render('admin/refreshment_fulfillment.html.twig', ['orders' => $orders]);
+            ->findBy($criteria, ['createdAt' => 'ASC'], 500);
+        $summary = [];
+        foreach ($orders as $order) {
+            $match = $order->getTicket();
+            $id = $match?->getId() ?? 0;
+            $summary[$id] ??= ['label' => $match?->getMatchLabel() ?? 'Match inconnu', 'total' => 0, 'prepared' => 0, 'collected' => 0, 'products' => []];
+            $quantity = $order->getQuantity();
+            $summary[$id]['total'] += $quantity;
+            if ($order->getPreparedAt() !== null) { $summary[$id]['prepared'] += $quantity; }
+            if ($order->getCollectedAt() !== null) { $summary[$id]['collected'] += $quantity; }
+            $product = $order->getProduct();
+            $productId = $product?->getId() ?? 0;
+            $summary[$id]['products'][$productId] ??= ['name' => $product?->getName() ?? 'Produit supprimé', 'quantity' => 0];
+            $summary[$id]['products'][$productId]['quantity'] += $quantity;
+        }
+        return $this->render('admin/refreshment_fulfillment.html.twig', [
+            'orders' => $orders, 'matches' => $matches, 'selectedMatch' => $matchId, 'summary' => $summary,
+        ]);
     }
 
     #[Route('/{id<\\d+>}/{action}', name: 'admin_refreshment_fulfillment_action', methods: ['POST'], requirements: ['action' => 'prepare|collect'])]
