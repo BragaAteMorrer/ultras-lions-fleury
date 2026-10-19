@@ -48,7 +48,21 @@ final class SendRefreshmentReportsCommand extends Command
             $ticketQuantity = array_sum(array_map(static fn (TicketOrder $row): int => $row->getQuantity(), $tickets));
             $orders = $this->entityManager->getRepository(RefreshmentOrder::class)->findBy(['ticket' => $match, 'status' => 'confirmed']);
             $summary = [];
+            $customerOrders = [];
             foreach ($orders as $order) {
+                // A confirmed pre-order must belong to a settled checkout.
+                $checkout = $order->getPaymentCheckout();
+                if (!$checkout || $checkout->getStatus() !== 'paid') { continue; }
+                $reference = $checkout->getCheckoutReference() ?: 'CHECKOUT-'.$checkout->getId();
+                $customerOrders[$reference] ??= [
+                    'reference' => $reference,
+                    'name' => trim((string) $checkout->getCustomerFirstName().' '.(string) $checkout->getCustomerLastName()),
+                    'lines' => [],
+                ];
+                $customerOrders[$reference]['lines'][] = [
+                    'product' => $order->getProduct()?->getName() ?? 'Produit',
+                    'quantity' => $order->getQuantity(),
+                ];
                 $product = $order->getProduct();
                 if (!$product) { continue; }
                 $id = $product->getId();
@@ -61,6 +75,7 @@ final class SendRefreshmentReportsCommand extends Command
             $snapshot = [
                 'ticketQuantity' => $ticketQuantity,
                 'refreshments' => array_values($summary),
+                'customerOrders' => array_values($customerOrders),
                 'recipient' => $report->getRecipient(),
                 'matchId' => $match->getId(),
             ];
@@ -72,7 +87,7 @@ final class SendRefreshmentReportsCommand extends Command
                     $snapshot['recipient'],
                     'Recapitulatif billets et buvette - '.$match->getMatchLabel(),
                     'email/refreshment_report.html.twig',
-                    ['match' => $match, 'ticketQuantity' => $snapshot['ticketQuantity'], 'refreshments' => $snapshot['refreshments']]
+                    ['match' => $match, 'ticketQuantity' => $snapshot['ticketQuantity'], 'refreshments' => $snapshot['refreshments'], 'customerOrders' => $snapshot['customerOrders']]
                 );
                 $report->setSentAt(new \DateTimeImmutable());
                 $report->setDeliveryStatus('sent');
