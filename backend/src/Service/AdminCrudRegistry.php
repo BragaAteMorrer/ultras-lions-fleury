@@ -725,7 +725,7 @@ class AdminCrudRegistry
                 'fields' => [
                     'email' => ['type' => EmailType::class, 'label' => 'Email'],
                     'plainPassword' => ['type' => PasswordType::class, 'label' => 'Nouveau mot de passe', 'required' => false, 'mapped' => true],
-                    'roles' => ['type' => ChoiceType::class, 'label' => 'Roles', 'multiple' => true, 'expanded' => true, 'choices' => ['Utilisateur' => 'ROLE_USER', 'Admin' => 'ROLE_ADMIN']],
+                    'roles' => ['type' => ChoiceType::class, 'label' => 'Roles', 'multiple' => true, 'expanded' => true, 'choices' => ['Utilisateur' => 'ROLE_USER', 'Bénévole buvette' => 'ROLE_BUVETTE', 'Admin' => 'ROLE_ADMIN']],
                     'prenom' => ['type' => TextType::class, 'label' => 'Prenom', 'required' => false],
                     'nom' => ['type' => TextType::class, 'label' => 'Nom', 'required' => false],
                     'telephone' => ['type' => TextType::class, 'label' => 'Telephone', 'required' => false],
