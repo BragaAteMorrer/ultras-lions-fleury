@@ -21,18 +21,25 @@
 <p>Seules les commandes confirmées et non retirées apparaissent ici. Le retrait ne décrémente pas une seconde fois le stock.</p>
 {% for type, messages in app.flashes %}{% for message in messages %}<p role="status">{{ message }}</p>{% endfor %}{% endfor %}
 {% if orders is empty %}<p>Aucune préparation en attente.</p>{% endif %}
-{% for order in orders %}
-{% if not order.collectedAt %}
+<h2>Commandes à préparer ou remettre</h2>
+{% for group in groups %}
 <section style="padding:1rem;margin:1rem 0;border:1px solid #888;border-radius:8px">
-<h2>#{{ order.id }} — {{ order.product.name }} × {{ order.quantity }}</h2>
-<p>Match : {{ order.ticket.matchLabel }} · Contact : {{ order.customerEmail ?: 'non renseigné' }}</p>
-<p>{% if order.preparedAt %}Préparée le {{ order.preparedAt|date('d/m/Y H:i') }}{% else %}À préparer{% endif %}</p>
-<form method="post" action="{{ path('admin_refreshment_fulfillment_action', {id: order.id, action: order.preparedAt ? 'collect' : 'prepare'}) }}">
+<h3>Commande {{ group.reference }} — {{ group.match }}</h3>
+<p>Contact : {{ group.email ?: 'non renseigné' }}</p>
+<ul>
+{% for order in group.lines %}
+<li>
+<strong>{{ order.product.name }} × {{ order.quantity }}</strong>
+— {{ order.preparedAt ? 'Prête' : 'À préparer' }}
+<form style="display:inline-block;margin-left:1rem" method="post" action="{{ path('admin_refreshment_fulfillment_action', {id: order.id, action: order.preparedAt ? 'collect' : 'prepare'}) }}">
 {% set action = order.preparedAt ? 'collect' : 'prepare' %}
 <input type="hidden" name="_token" value="{{ csrf_token('buvette-' ~ order.id ~ '-' ~ action) }}">
 <button type="submit">{{ order.preparedAt ? 'Confirmer le retrait' : 'Marquer préparée' }}</button>
-</form></section>
-{% endif %}
+</form>
+</li>
+{% endfor %}
+</ul>
+</section>
 {% endfor %}
 {% if orders|length == 500 %}<p>Affichage limité aux 500 plus anciennes lignes.</p>{% endif %}
 </main>
