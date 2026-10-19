@@ -43,8 +43,22 @@ final class RefreshmentFulfillmentController extends AbstractController
             $summary[$id]['products'][$productId] ??= ['name' => $product?->getName() ?? 'Produit supprimé', 'quantity' => 0];
             $summary[$id]['products'][$productId]['quantity'] += $quantity;
         }
+        $groups = [];
+        foreach ($orders as $order) {
+            if ($order->getCollectedAt() !== null) { continue; }
+            $checkoutId = $order->getPaymentCheckout()?->getId();
+            // Do not merge independent cash orders sharing an email address.
+            $groupKey = $checkoutId !== null ? 'checkout-'.$checkoutId : 'line-'.$order->getId();
+            $groups[$groupKey] ??= [
+                'reference' => $order->getPaymentCheckout()?->getCheckoutReference() ?: '#'.$order->getId(),
+                'email' => $order->getCustomerEmail(),
+                'match' => $order->getTicket()?->getMatchLabel() ?? 'Match inconnu',
+                'lines' => [],
+            ];
+            $groups[$groupKey]['lines'][] = $order;
+        }
         return $this->render('admin/refreshment_fulfillment.html.twig', [
-            'orders' => $orders, 'matches' => $matches, 'selectedMatch' => $matchId, 'summary' => $summary,
+            'orders' => $orders, 'groups' => $groups, 'matches' => $matches, 'selectedMatch' => $matchId, 'summary' => $summary,
         ]);
     }
 
