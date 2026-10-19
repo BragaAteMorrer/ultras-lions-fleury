@@ -23,8 +23,8 @@ final class Version20260424120000 extends AbstractMigration
         $this->addSql('ALTER TABLE event ADD CONSTRAINT FK_EVENT_CATEGORY_ID FOREIGN KEY (category_id) REFERENCES event_category (id) ON DELETE SET NULL');
 
         $this->addSql('ALTER TABLE post DROP FOREIGN KEY FK_5A8A6C8D12469DE2');
-        $this->addSql('DROP INDEX IDX_5A8A6C8D12469DE2 ON post');
-        $this->addSql('CREATE INDEX IDX_POST_EVENT_CATEGORY_ID ON post (category_id)');
+        // Preserve the index: MariaDB may require it for another foreign key.\n        // Dropping it causes SQLSTATE 1553 on a clean migration chain.
+        // The existing category_id index supports the replacement foreign key.
         $this->addSql('ALTER TABLE post ADD CONSTRAINT FK_POST_EVENT_CATEGORY_ID FOREIGN KEY (category_id) REFERENCES event_category (id) ON DELETE SET NULL');
 
         $this->addSql('ALTER TABLE media ADD post_id INT DEFAULT NULL');
