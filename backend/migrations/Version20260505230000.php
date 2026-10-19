@@ -25,7 +25,11 @@ final class Version20260505230000 extends AbstractMigration
         if (!$schemaManager->tablesExist(['cartage_registration'])) {
             $this->addSql("CREATE TABLE cartage_registration (id INT AUTO_INCREMENT NOT NULL, qr_token_id INT DEFAULT NULL, first_name VARCHAR(120) NOT NULL, last_name VARCHAR(120) NOT NULL, email VARCHAR(180) NOT NULL, phone VARCHAR(40) NOT NULL, birth_date DATE DEFAULT NULL COMMENT '(DC2Type:date_immutable)', address VARCHAR(255) DEFAULT NULL, postal_code VARCHAR(20) DEFAULT NULL, city VARCHAR(120) DEFAULT NULL, shirt_size VARCHAR(30) DEFAULT NULL, polo_size VARCHAR(30) DEFAULT NULL, pull_size VARCHAR(30) DEFAULT NULL, sweat_size VARCHAR(30) DEFAULT NULL, jacket_size VARCHAR(30) DEFAULT NULL, short_size VARCHAR(30) DEFAULT NULL, password VARCHAR(255) DEFAULT NULL, amount DOUBLE PRECISION NOT NULL, payment_method VARCHAR(20) NOT NULL, status VARCHAR(30) NOT NULL, season VARCHAR(9) NOT NULL, checkout_reference VARCHAR(80) DEFAULT NULL, sumup_checkout_id VARCHAR(180) DEFAULT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)', paid_at DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime_immutable)', validated_at DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime_immutable)', INDEX IDX_CARTAGE_REGISTRATION_QR (qr_token_id), PRIMARY KEY(id), CONSTRAINT FK_CARTAGE_REGISTRATION_QR FOREIGN KEY (qr_token_id) REFERENCES cartage_qr_token (id) ON DELETE SET NULL) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB");
         }
-        $columns = array_change_key_case($schemaManager->listTableColumns('cartage_registration'), CASE_LOWER);
+        // DDL added through addSql() is queued until after up() returns.
+        // Do not inspect columns of a table that has not been created yet.
+        $columns = $schemaManager->tablesExist(['cartage_registration'])
+            ? array_change_key_case($schemaManager->listTableColumns('cartage_registration'), CASE_LOWER)
+            : [];
         if (!isset($columns['internal_rules_accepted_at'])) {
             $this->addSql("ALTER TABLE cartage_registration ADD internal_rules_accepted_at DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime_immutable)'");
         }
