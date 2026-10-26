@@ -325,16 +325,16 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "2.19.1",
+            "version": "2.19.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "72b53688c30451a7c65addd50b2167d31459724a"
+                "reference": "d12ccf37ef6590d3d92a79c8ef550cab20db2754"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/72b53688c30451a7c65addd50b2167d31459724a",
-                "reference": "72b53688c30451a7c65addd50b2167d31459724a",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/d12ccf37ef6590d3d92a79c8ef550cab20db2754",
+                "reference": "d12ccf37ef6590d3d92a79c8ef550cab20db2754",
                 "shasum": ""
             },
             "require": {
@@ -429,7 +429,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/DoctrineBundle/issues",
-                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.19.1"
+                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.19.2"
             },
             "funding": [
                 {
@@ -445,7 +445,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-09-08T11:48:41+00:00"
+            "time": "2026-10-21T10:23:14+00:00"
         },
         {
             "name": "doctrine/doctrine-migrations-bundle",
@@ -633,23 +633,23 @@
         },
         {
             "name": "doctrine/inflector",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "6d6c96277ea252fc1304627204c3d5e6e15faa3b"
+                "reference": "46351b6812b7b6d52b82c3efa5dfb786a198ec88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/6d6c96277ea252fc1304627204c3d5e6e15faa3b",
-                "reference": "6d6c96277ea252fc1304627204c3d5e6e15faa3b",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/46351b6812b7b6d52b82c3efa5dfb786a198ec88",
+                "reference": "46351b6812b7b6d52b82c3efa5dfb786a198ec88",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^12.0 || ^13.0",
+                "doctrine/coding-standard": "^12.0 || ^14.0",
                 "phpstan/phpstan": "^1.12 || ^2.0",
                 "phpstan/phpstan-phpunit": "^1.4 || ^2.0",
                 "phpstan/phpstan-strict-rules": "^1.6 || ^2.0",
@@ -703,7 +703,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/inflector/issues",
-                "source": "https://github.com/doctrine/inflector/tree/2.1.0"
+                "source": "https://github.com/doctrine/inflector/tree/2.1.1"
             },
             "funding": [
                 {
@@ -719,7 +719,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-10T19:31:58+00:00"
+            "time": "2026-10-26T08:14:14+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -1365,16 +1365,16 @@
         },
         {
             "name": "easycorp/easyadmin-bundle",
-            "version": "v5.7.0",
+            "version": "v5.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EasyCorp/EasyAdminBundle.git",
-                "reference": "ce1d6a5b8b2cbabc87ca63545b83b5430d9167ad"
+                "reference": "e8c726f0273c1d2dee691f6bb19ac4a48b4e4823"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/ce1d6a5b8b2cbabc87ca63545b83b5430d9167ad",
-                "reference": "ce1d6a5b8b2cbabc87ca63545b83b5430d9167ad",
+                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/e8c726f0273c1d2dee691f6bb19ac4a48b4e4823",
+                "reference": "e8c726f0273c1d2dee691f6bb19ac4a48b4e4823",
                 "shasum": ""
             },
             "require": {
@@ -1409,8 +1409,8 @@
                 "twig/twig": "^3.23"
             },
             "require-dev": {
+                "brianium/paratest": "^7.6.1",
                 "dama/doctrine-test-bundle": "^8.2",
-                "doctrine/doctrine-fixtures-bundle": "^3.4|3.5.x-dev|^4.0",
                 "league/flysystem": "^3.10",
                 "moneyphp/money": "^4.8",
                 "phpstan/extension-installer": "^1.4",
@@ -1418,17 +1418,17 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpstan/phpstan-strict-rules": "^2.0",
                 "phpstan/phpstan-symfony": "^2.0",
+                "phpunit/phpunit": "^11.5.24",
                 "psr/log": "^1.0|^2.0|^3.0",
                 "symfony/browser-kit": "^6.4.32|^7.0|^8.0",
                 "symfony/css-selector": "^6.4.24|^7.0|^8.0",
                 "symfony/debug-bundle": "^6.4.27|^7.0|^8.0",
                 "symfony/dom-crawler": "^6.4.32|^7.0|^8.0",
                 "symfony/expression-language": "^6.4.32|^7.0|^8.0",
-                "symfony/phpunit-bridge": "^6.4.26|^7.0|^8.0",
                 "symfony/process": "^6.4.33|^7.0|^8.0",
                 "symfony/web-link": "^6.4.32|^7.0|^8.0",
                 "vincentlanglet/twig-cs-fixer": "^4.1",
-                "zenstruck/foundry": "^2.3"
+                "zenstruck/foundry": "^2.11"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -1463,7 +1463,7 @@
             ],
             "support": {
                 "issues": "https://github.com/EasyCorp/EasyAdminBundle/issues",
-                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v5.7.0"
+                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v5.8.0"
             },
             "funding": [
                 {
@@ -1471,7 +1471,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-14T06:20:50+00:00"
+            "time": "2026-10-22T20:25:46+00:00"
         },
         {
             "name": "egulias/email-validator",
